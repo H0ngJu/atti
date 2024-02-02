@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1017190386757",
+    "project_id": "atti-44a56",
+    "storage_bucket": "atti-44a56.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1017190386757:android:f09064106be240dc46272c",
+        "android_client_info": {
+          "package_name": "com.example.atti"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkwCjKfvLsXaKBnFxl7p-AHjK1AGRWGM8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
