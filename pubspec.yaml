@@ -49,6 +49,7 @@ dependencies:
   day_picker: ^2.2.0
   timelines: ^0.1.0
   flutter_local_notifications: ^16.3.2
+  step_progress_indicator: ^1.0.2
 
 dev_dependencies:
   flutter_test:
