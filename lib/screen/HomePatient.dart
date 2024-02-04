@@ -1,3 +1,4 @@
+import 'package:atti/commons/AttiAppBar.dart';
 import 'package:flutter/material.dart';
 
 class HomePatient extends StatelessWidget {
@@ -7,24 +8,13 @@ class HomePatient extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          title: Image.asset('lib/assets/logo.png', fit: BoxFit.cover),
-          actions: <Widget>[
-            IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.notifications,
-                  color: Colors.black,
-                )),
-            IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.person,
-                  color: Colors.black,
-                ))
-          ],
+        appBar: AttiAppBar(
+          title: Image.asset(
+            'lib/assets/logo2.png',
+            width: 150,
+          ),
+          showNotificationsIcon: true,
+          showPersonIcon: true,
         ),
         body: Container(
             child: Text('Hello',
