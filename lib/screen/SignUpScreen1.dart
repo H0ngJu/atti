@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 
 
-class SignUpScreen extends StatefulWidget {
-  SignUpScreen({super.key});
+class SignUpScreen1 extends StatefulWidget {
+  SignUpScreen1({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<SignUpScreen1> createState() => _SignUpScreen1State();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreen1State extends State<SignUpScreen1> {
   Color borderColor = Color(0xffB3B3B3);
   Color pressedBorderColor = Color(0xffFFC215);
   int isPressed = 0;
