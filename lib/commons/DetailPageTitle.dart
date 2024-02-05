@@ -1,4 +1,12 @@
 // 상세 페이지 윗부분 (뒤로가기 아이콘, 제목과 설명, 진행도)
+// 사용법 :
+// DetailPageTitle(
+//                   title: '일정 등록하기',
+//                   description: '일정 이름을 입력해주세요',
+//                   totalStep: 6,
+//                   currentStep: 1,
+//                 ),
+
 import 'package:flutter/material.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
@@ -23,7 +31,9 @@ class _DetailPageTitleState extends State<DetailPageTitle> {
         children: [
           Container( // 뒤로가기 아이콘
             margin: EdgeInsets.only(top: 50, left: 5),
-              child: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios_outlined, size: 25))),
+              child: IconButton(onPressed: (){
+                Navigator.of(context).pop();
+              }, icon: Icon(Icons.arrow_back_ios_outlined, size: 25))),
           SizedBox(height: 30.0),
 
           Container(
