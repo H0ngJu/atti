@@ -1,6 +1,6 @@
 // 세부 기능 완료 화면
 // 사용법 :
-//
+// FinishScreen(title: '일정 등록하기', description: '손주 생일', content: '일정을 성공적으로 등록했어요!',)
 import 'package:flutter/material.dart';
 
 class FinishScreen extends StatelessWidget {

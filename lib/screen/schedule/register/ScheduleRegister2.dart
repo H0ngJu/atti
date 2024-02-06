@@ -40,7 +40,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
       setState(() {
         selectedDate = picked;
         _dateController.text = DateFormat('yyyy-MM-dd').format(selectedDate!);
-        scheduleController.date.value = _dateController.text;
+        scheduleController.date.value = _dateController.text as DateTime;
       });
     }
   }

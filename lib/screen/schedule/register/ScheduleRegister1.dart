@@ -22,44 +22,49 @@ class _ScheduleRegister1State extends State<ScheduleRegister1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                DetailPageTitle(
-                  title: '일정 등록하기',
-                  description: '일정 이름을 입력해주세요',
-                  totalStep: 6,
-                  currentStep: 1,
-                ),
-                SizedBox(height: 40),
-
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: TextField(
-                    onChanged: (value) {
-                      scheduleController.name.value = value;
-                      //print(scheduleController.name.value);
-                    },
-                    cursorColor: Colors.black,
-                    style: TextStyle(fontSize: 24),
-                    decoration: InputDecoration(
-                      hintText: '예정된 일정이 무엇인가요?',
-                      hintStyle: TextStyle(fontSize: 24),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
+      body: GestureDetector(
+        onTap: (){
+          FocusScope.of(context).unfocus();
+        },
+        child: Column(children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  DetailPageTitle(
+                    title: '일정 등록하기',
+                    description: '일정 이름을 입력해주세요',
+                    totalStep: 6,
+                    currentStep: 1,
+                  ),
+                  SizedBox(height: 40),
+        
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: TextField(
+                      onChanged: (value) {
+                        scheduleController.name.value = value;
+                        //print(scheduleController.name.value);
+                      },
+                      cursorColor: Colors.black,
+                      style: TextStyle(fontSize: 24),
+                      decoration: InputDecoration(
+                        hintText: '예정된 일정이 무엇인가요?',
+                        hintStyle: TextStyle(fontSize: 24),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-
-       NextButton(next: ScheduleRegister2(), content: '다음', isEnabled: scheduleController.name.isNotEmpty,),
-      ]),
+        
+         NextButton(next: ScheduleRegister2(), content: '다음', isEnabled: scheduleController.name.isNotEmpty,),
+        ]),
+      ),
     );
   }
 }

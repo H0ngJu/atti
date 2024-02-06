@@ -21,44 +21,49 @@ class _ScheduleRegister4State extends State<ScheduleRegister4> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                DetailPageTitle(
-                  title: '일정 등록하기',
-                  description: '일정 메모를 입력해주세요',
-                  totalStep: 6,
-                  currentStep: 4,
-                ),
-                SizedBox(height: 40),
+      body: GestureDetector(
+        onTap: (){
+          FocusScope.of(context).unfocus();
+        },
+        child: Column(children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  DetailPageTitle(
+                    title: '일정 등록하기',
+                    description: '일정 메모를 입력해주세요',
+                    totalStep: 6,
+                    currentStep: 4,
+                  ),
+                  SizedBox(height: 40),
 
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: TextField(
-                    onChanged: (value) {
-                      scheduleController.memo.value = value;
-                      //print(scheduleController.name.value);
-                    },
-                    cursorColor: Colors.black,
-                    style: TextStyle(fontSize: 24),
-                    decoration: InputDecoration(
-                      hintText: '추가로 기록할 내용이 있나요?',
-                      hintStyle: TextStyle(fontSize: 24),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: TextField(
+                      onChanged: (value) {
+                        scheduleController.memo.value = value;
+                        //print(scheduleController.name.value);
+                      },
+                      cursorColor: Colors.black,
+                      style: TextStyle(fontSize: 24),
+                      decoration: InputDecoration(
+                        hintText: '추가로 기록할 내용이 있나요?',
+                        hintStyle: TextStyle(fontSize: 24),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
 
-        NextButton(next: ScheduleRegisterCheck(), content: '다음', isEnabled: true,),
-      ]),
+          NextButton(next: ScheduleRegisterCheck(), content: '다음', isEnabled: true,),
+        ]),
+      ),
     );
   }
 }

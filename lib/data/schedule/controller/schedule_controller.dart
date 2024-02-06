@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // 일정 등록 컨트롤러
 class ScheduleController extends GetxController {
   var name = ''.obs;
-  var date = ''.obs;
+  var date = DateTime.now().obs;
   var time = ''.obs;
   var location = ''.obs;
   var memo = ''.obs;
@@ -29,8 +29,8 @@ void addScheduleToFirestore(ScheduleController scheduleController) async {
 
     await firestore.collection('schedule').add(scheduleData); // 데이터 추가
 
-    print('Schedule data saved to Firestore successfully!');
+    print('일정 등록 완료');
   } catch (error) {
-    print('Failed to save schedule data to Firestore: $error');
+    print('Error: $error');
   }
 }
