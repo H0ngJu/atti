@@ -1,3 +1,4 @@
+import 'package:atti/screen/SignUpScreen1.dart';
 import 'package:atti/screen/SignUpScreen3.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,6 +26,29 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          padding: EdgeInsets.all(5),
+            onPressed: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                      return SignUpScreen1();
+                    }
+                  )
+              );
+            },
+            icon: const Icon(Icons.navigate_before,
+            size: 40,
+            )
+        ),
+        title: Text('회원가입',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+      ),
       body: GestureDetector(
         onTap: (){
           FocusScope.of(context).unfocus();
@@ -32,18 +56,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
         child: Stack(
           children: [
             Container(
-              margin: EdgeInsets.only(top: 90, left: 20),
-              child: Text(
-                '회원가입',
-                style: TextStyle(
-                  letterSpacing: 1.0,
-                  fontSize: 30,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 200, left: 20, right: 20),
+              margin: EdgeInsets.only(top: 50, left: 20, right: 20),
               child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(
@@ -167,7 +180,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 250,),
+                      SizedBox(height: 100,),
                       Container(
                         child: ElevatedButton(
                             onPressed: () async {

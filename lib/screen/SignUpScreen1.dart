@@ -1,3 +1,5 @@
+import 'package:atti/screen/LogInSignUpMainScreen.dart';
+import 'package:atti/screen/SignUpScreen2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 
@@ -26,30 +28,49 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+            padding: EdgeInsets.all(5),
+            onPressed: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return LogInSignUpMainScreen();
+                  }
+                  )
+              );
+            },
+            icon: const Icon(Icons.navigate_before,
+              size: 40,
+            )
+        ),
+        title: Text('회원가입',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
       body: Stack(
         children: [
           Container(
-            padding: EdgeInsets.only(top: 90, left: 20),
+            padding: EdgeInsets.only(top: 10, left: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                    Text(
-                      '회원가입',
-                      style: TextStyle(
-                        letterSpacing: 1.0,
-                        fontSize: 30,
-                        fontWeight: FontWeight.w700,
-                      ),
-                ),
                 Container(
                   margin: EdgeInsets.only(top: 25),
-                  child: Text(
-                    '회원선택',
-                    style: TextStyle(
-                      letterSpacing: 1.0,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  child: Column(
+                    children: [
+                      Text(
+                        '회원선택',
+                        style: TextStyle(
+                          letterSpacing: 1.0,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Text(
@@ -59,135 +80,142 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                     fontSize: 20,
                   ),
                 ),
+                Container(
+                  child: Column(
+                    children: [
+                      ElevatedButton(onPressed: ()=>{
+                        topBtnPressed()
+                      },
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            side: BorderSide(width: 2, color: isPressed == 1 ? pressedBorderColor : borderColor),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: Container(
+                            width: 350,
+                            height: 220,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('lib/assets/images/membershipType_patient_bg.png'),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Container(
+                              margin: EdgeInsets.all(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '피보호자',
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      color: Color(0xff000000),
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  Text(
+                                    '치매 증상을 지니셨나요?',
+                                    style: TextStyle(
+                                      color: Color(0xff000000),
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )),
+                      SizedBox(height: 20,),
+                      ElevatedButton(onPressed: ()=>{
+                        botBtnPressed()
+                      },
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            side: BorderSide(width: 2, color: isPressed == 2 ? pressedBorderColor : borderColor),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: Container(
+                            width: 350,
+                            height: 220,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('lib/assets/images/membershipType_carer_bg.png'),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Container(
+                              margin: EdgeInsets.all(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '보호자',
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      color: Color(0xff000000),
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  Text(
+                                    '치매 환자의 보호자이신가요?',
+                                    style: TextStyle(
+                                      color: Color(0xff000000),
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )),
+                      SizedBox(
+                        height: 20,),
+                      Visibility(
+                          visible: isPressed != 0,
+                          child: ElevatedButton(
+                              onPressed: () async {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return SignUpScreen2();
+                                    }
+                                    )
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xffFFC215),
+                              ),
+                              child: Container(
+                                width: 300,
+                                height: 60,
+                                alignment: Alignment.center,
+                                child: Text('다음',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    color: Color(0xff000000),
+                                  ),
+                                ),
+                              )
+                          )
+                      )
+                    ],
+                  ),
+                )
               ],
             )
-            ),
-          Container(
-            margin: EdgeInsets.only(top: 250, left: 20),
-            child: Column(
-              children: [
-                ElevatedButton(onPressed: ()=>{
-                  topBtnPressed()
-                },
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    side: BorderSide(width: 2, color: isPressed == 1 ? pressedBorderColor : borderColor),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                        ),
-                      ),
-                    elevation: 0,
-                    ),
-                    child: Container(
-                      width: 400,
-                      height: 250,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('lib/assets/images/membershipType_patient_bg.png'),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Container(
-                        margin: EdgeInsets.all(20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '피보호자',
-                              style: TextStyle(
-                                fontSize: 30,
-                                color: Color(0xff000000),
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Text(
-                              '치매 증상을 지니셨나요?',
-                              style: TextStyle(
-                                color: Color(0xff000000),
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )),
-                SizedBox(height: 20,),
-                ElevatedButton(onPressed: ()=>{
-                  botBtnPressed()
-                },
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      side: BorderSide(width: 2, color: isPressed == 2 ? pressedBorderColor : borderColor),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: Container(
-                      width: 400,
-                      height: 250,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('lib/assets/images/membershipType_carer_bg.png'),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Container(
-                        margin: EdgeInsets.all(20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '보호자',
-                              style: TextStyle(
-                                fontSize: 30,
-                                color: Color(0xff000000),
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Text(
-                              '치매 환자의 보호자이신가요?',
-                              style: TextStyle(
-                                color: Color(0xff000000),
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )),
-                SizedBox(
-                  height: 20,),
-                Visibility(
-                  visible: isPressed != 0,
-                  child: ElevatedButton(
-                    onPressed: ()=>{},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xffFFC215),
-                    ),
-                    child: Container(
-                      width: 350,
-                      height: 60,
-                      alignment: Alignment.center,
-                      child: Text('다음',
-                        style: TextStyle(
-                        fontSize: 24,
-                        color: Color(0xff000000),
-                        ),
-                      ),
-                    )
-                )
-                )
-              ],
-            ),
-          )
+          ),
         ],
       ),
     );

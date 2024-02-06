@@ -1,4 +1,5 @@
 import 'package:atti/screen/HomePatient.dart';
+import 'package:atti/screen/LogInSignUpMainScreen.dart';
 import 'package:atti/screen/SignUpScreen2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: SignUpScreen2(),
+      home: LogInSignUpMainScreen(),
     );
   }
 }
