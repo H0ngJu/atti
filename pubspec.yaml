@@ -54,6 +54,8 @@ dependencies:
 
   flutter_localizations:
     sdk: flutter
+  firebase_storage: ^11.6.4
+  cloud_firestore: ^4.15.3
 
 dev_dependencies:
   flutter_test:

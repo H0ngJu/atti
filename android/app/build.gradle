@@ -48,7 +48,7 @@ android {
         applicationId "com.example.atti"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 19 //minSdkVersion 수정
+        minSdkVersion 21 //minSdkVersion 수정
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

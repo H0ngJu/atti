@@ -6,7 +6,7 @@ import 'package:atti/data/schedule/controller/schedule_controller.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 
-import 'package:atti/screen/schedule/ScheduleRegisterFinish.dart';
+import 'package:atti/screen/schedule/register/ScheduleRegisterFinish.dart';
 
 class ScheduleRegisterCheck extends StatefulWidget {
   const ScheduleRegisterCheck({super.key});
@@ -39,14 +39,28 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
                   currentStep: 5,
                 ),
                 SizedBox(height: 40),
-
-
               ],
             ),
           ),
         ),
-
-        NextButton(next: ScheduleRegisterFinish(), content: '등록하기', isEnabled: true),
+        Container(
+          margin: EdgeInsets.only(bottom: 20),
+          child: TextButton(
+            onPressed: () {
+              addScheduleToFirestore(scheduleController);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ScheduleRegisterFinish()),
+              );
+            },
+            child: Text('등록하기', style: TextStyle(color: Colors.black, fontSize: 20),),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.grey),
+              minimumSize: MaterialStateProperty.all(
+                  Size(MediaQuery.of(context).size.width * 0.9, 50)),
+            ),
+          ),
+        ),
       ]),
     );
   }

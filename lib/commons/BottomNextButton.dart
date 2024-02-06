@@ -5,7 +5,8 @@
 import 'package:flutter/material.dart';
 
 class NextButton extends StatelessWidget {
-  const NextButton({super.key, this.next, this.content, required this.isEnabled});
+  const NextButton(
+      {super.key, this.next, this.content, required this.isEnabled});
 
   final next;
   final content;
@@ -13,25 +14,28 @@ class NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: isEnabled
-          ? () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => next),
-              );
-            }
-          : null,
-      child: Text(
-        content,
-        style: TextStyle(color: Colors.black, fontSize: 20),
+    return Container(
+      margin: EdgeInsets.only(bottom: 20),
+      child: TextButton(
+        onPressed: isEnabled
+            ? () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => next),
+                );
+              }
+            : null,
+        child: Text(
+          content,
+          style: TextStyle(color: Colors.black, fontSize: 20),
+        ),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+              isEnabled ? Colors.grey : Colors.grey.withOpacity(0.5)), // 비활성화일 때 색상을 조절
+          minimumSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width * 0.9, 50)),
+
+        ),
       ),
-      style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(isEnabled ? Colors.grey : Colors.grey.withOpacity(0.5)), // 비활성화일 때 색상을 조절
-          minimumSize: MaterialStateProperty.all(Size(double.infinity, 50)),
-          shape: MaterialStateProperty.all(RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ))),
     );
   }
 }

@@ -6,7 +6,7 @@ import 'package:atti/data/schedule/controller/schedule_controller.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 
-import 'package:atti/screen/schedule/ScheduleRegister4.dart';
+import 'package:atti/screen/schedule/register/ScheduleRegister4.dart';
 
 class ScheduleRegister3 extends StatefulWidget {
   const ScheduleRegister3({super.key});
