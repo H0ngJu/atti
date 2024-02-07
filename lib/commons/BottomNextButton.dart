@@ -15,6 +15,7 @@ class NextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
       margin: EdgeInsets.only(bottom: 20),
       child: TextButton(
         onPressed: isEnabled

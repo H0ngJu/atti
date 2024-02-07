@@ -1,4 +1,4 @@
-// 피그마 '일정 등록하기 3' 화면
+// 피그마 '일정 등록하기 3 - 일정 장소' 화면
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -33,10 +33,10 @@ class _ScheduleRegister3State extends State<ScheduleRegister3> {
                   DetailPageTitle(
                     title: '일정 등록하기',
                     description: '일정 장소를 입력해주세요',
-                    totalStep: 6,
+                    totalStep: 5,
                     currentStep: 3,
                   ),
-                  SizedBox(height: 40),
+                  SizedBox(height: 10),
 
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,

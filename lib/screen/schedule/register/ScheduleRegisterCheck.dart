@@ -1,4 +1,4 @@
-// 피그마 '일정 등록하기 5' 화면
+// 피그마 '일정 등록하기 5 - 입력한 일정 확인' 화면
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -37,13 +37,13 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
                 DetailPageTitle(
                   title: '일정 등록하기',
                   description: '이대로 등록할까요?',
-                  totalStep: 6,
+                  totalStep: 5,
                   currentStep: 5,
                 ),
-                SizedBox(height: 40),
+                SizedBox(height: 20),
 
                 Container(
-                  padding: EdgeInsets.only(left: 15),
+                  padding: EdgeInsets.only(left: 10),
                   width: MediaQuery.of(context).size.width * 0.9,
                     child: Text(formattedDate, style: TextStyle(fontSize: 24,),)
                 ),

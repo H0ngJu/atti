@@ -29,39 +29,51 @@ class _DetailPageTitleState extends State<DetailPageTitle> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container( // 뒤로가기 아이콘
-            margin: EdgeInsets.only(top: 50, left: 5),
-              child: IconButton(onPressed: (){
-                Navigator.of(context).pop();
-              }, icon: Icon(Icons.arrow_back_ios_outlined, size: 25))),
-          SizedBox(height: 30.0),
-
           Container(
-            margin: EdgeInsets.only(left: 15),
-            child: Text(widget.title, style: TextStyle(
-              fontSize: 24, fontWeight: FontWeight.w500
-            ),),
+            margin: EdgeInsets.only(top: 50),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container( // 뒤로가기 아이콘
+                    //margin: EdgeInsets.only(top: 50, left: 5),
+                    child: IconButton(onPressed: (){
+                      Navigator.of(context).pop();
+                    }, icon: Icon(Icons.arrow_back_ios_outlined, size: 25))),
+                //SizedBox(height: 30.0),
+                Container(
+                  margin: EdgeInsets.only(left: 15),
+                  child: Text(widget.title, style: TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.w500
+                  ),),
+                ),
+
+                if (widget.totalStep != 0)
+                Container(
+                  margin: EdgeInsets.only(right: 15),
+                  width: 12.toDouble() * widget.totalStep,
+                  child: StepProgressIndicator(
+                    totalSteps: widget.totalStep,
+                    currentStep: widget.currentStep,
+                    size: 6,
+                    padding: 3,
+                    selectedColor: Color(0xffFFC215),
+                    unselectedColor: Color(0xffCDCDCD)
+                  ),
+                )
+                else SizedBox(width: 60,),
+              ],
+            ),
           ),
-
+          SizedBox(height: 40,),
           Container(
+            //width: MediaQuery.of(context).size.width * 0.9,
             margin: EdgeInsets.only(left: 15),
             child: Text(widget.description, style: TextStyle(
               fontSize: 30, fontWeight: FontWeight.w600
             ),),
           ),
-          SizedBox(height: 30.0),
-          Container(
-            margin: EdgeInsets.only(left: 15),
-            width: 15.toDouble() * widget.totalStep,
-            child: StepProgressIndicator(
-              totalSteps: widget.totalStep,
-              currentStep: widget.currentStep,
-              size: 8,
-              padding: 3,
-              selectedColor: Colors.black,
-              unselectedColor: Colors.grey,
-            ),
-          ),
+          //SizedBox(height: 30.0),
+
         ],
       ),
     );

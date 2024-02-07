@@ -1,4 +1,4 @@
-// 피그마 '일정 등록하기 2' 화면
+// 피그마 '일정 등록하기 2 - 일정 날짜, 시간' 화면
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -72,10 +72,10 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
                   DetailPageTitle(
                     title: '일정 등록하기',
                     description: '일정 시간을 선택해주세요',
-                    totalStep: 6,
+                    totalStep: 5,
                     currentStep: 2,
                   ),
-                  SizedBox(height: 50),
+                  SizedBox(height: 20),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: TextField(
