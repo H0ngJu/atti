@@ -79,21 +79,29 @@ class _HomePatientState extends State<HomePatient> {
         showNotificationsIcon: true,
         showPersonIcon: true,
       ),
-      body: Column(
-        children: [
-          Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30))),
-              child: HomePatientTop(dummy: dummy)),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30))),
+                child: HomePatientTop(dummy: dummy)),
+            Container(margin: EdgeInsets.all(16), child: HomeTodaySummary()),
+            Container(
+              margin: EdgeInsets.all(16),
+              child: HomeSchedule(),
+            )
+          ],
+        ),
       ),
     );
   }
 }
 
+// 메인 첫 화면
 class HomePatientTop extends StatefulWidget {
   final List<User> dummy; // 수정된 부분: dummy 데이터를 받기 위한 변수 선언
 
@@ -182,5 +190,156 @@ class _HomePatientTopState extends State<HomePatientTop> {
       default:
         return '';
     }
+  }
+}
+
+// 오늘의 일정, 일과
+class HomeTodaySummary extends StatefulWidget {
+  const HomeTodaySummary({Key? key}) : super(key: key);
+
+  @override
+  State<HomeTodaySummary> createState() => _HomeTodaySummaryState();
+}
+
+class _HomeTodaySummaryState extends State<HomeTodaySummary> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 132,
+            // 정적으로 고정할 것인가?
+            margin: EdgeInsets.only(right: 8),
+            padding: EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1), // 그림자 색상 및 불투명도 설정
+                  spreadRadius: 2, // 그림자의 확산 범위
+                  blurRadius: 7, // 그림자의 흐림 정도
+                  offset: Offset(2, 2), // 그림자의 위치 (가로, 세로)
+                ),
+              ], // 테두리 추가
+            ),
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                style:
+                    TextStyle(color: Colors.black, fontSize: 24, height: 1.5),
+                children: [
+                  TextSpan(text: '예정된 일정\n'),
+                  TextSpan(
+                      text: '2개',
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xffFFC215))),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            height: 132,
+            // 정적으로 고정할 것인가?
+            margin: EdgeInsets.only(left: 8),
+            padding: EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1), // 그림자 색상 및 불투명도 설정
+                  spreadRadius: 2, // 그림자의 확산 범위
+                  blurRadius: 7, // 그림자의 흐림 정도
+                  offset: Offset(2, 2), // 그림자의 위치 (가로, 세로)
+                ),
+              ], // 테두리 추가
+            ),
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                style:
+                    TextStyle(color: Colors.black, fontSize: 24, height: 1.5),
+                children: [
+                  TextSpan(text: '오늘의 일과\n'),
+                  TextSpan(
+                      text: '4개',
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xffFFC215))),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// 일정이 있어요
+class HomeSchedule extends StatefulWidget {
+  const HomeSchedule({Key? key}) : super(key: key);
+
+  @override
+  State<HomeSchedule> createState() => _HomeScheduleState();
+}
+
+class _HomeScheduleState extends State<HomeSchedule> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                '일정이 있어요',
+                style: TextStyle(fontSize: 30),
+                textAlign: TextAlign.left, // 왼쪽 정렬
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              child: Text(
+                '전체보기',
+                style: TextStyle(fontSize: 20),
+              ),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xffFFC215),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)) // 버튼의 가로 여백 조정
+                  ),
+            ),
+          ],
+        ),
+        Container(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(color: Color(0xffFFF5DB)),
+                    child: Text('오후 1:00'),
+                  )),
+                  Expanded(
+                      child: Container(
+                    child: Text('가족 모임'),
+                  )),
+                ],
+              )
+            ],
+          ),
+        )
+      ],
+    );
   }
 }
