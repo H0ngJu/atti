@@ -257,6 +257,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.3"
+  firebase_storage:
+    dependency: "direct main"
+    description:
+      name: firebase_storage
+      sha256: "38fc2e0619920c28464d4222198b55fe0326b11264079c10faec9133b3b932b7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.6.4"
+  firebase_storage_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_storage_platform_interface
+      sha256: "810c63afb9e41b06353088603424bbf09b3b5cd7913568981b7c72f6e713b914"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.7"
+  firebase_storage_web:
+    dependency: transitive
+    description:
+      name: firebase_storage_web
+      sha256: "766be7cc58b02f33a6f21fc00d1224daa1a7aef3627a9c546b5dfa50d649d7e2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.6.21"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -470,7 +494,7 @@ packages:
     source: hosted
     version: "0.2.1+1"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
@@ -625,7 +649,15 @@ packages:
       sha256: c3c7d8edb15bee7f0f74debd4b9c5f3c2ea86766fe4178eb2a18eb30a0bdaed5
       url: "https://pub.dev"
     source: hosted
-    version: "1.11.0"
+    version: "1.11.1"
+  step_progress_indicator:
+    dependency: "direct main"
+    description:
+      name: step_progress_indicator
+      sha256: b51bb1fcfc78454359f0658c5a2c21548c3825ebf76e826308e9ca10f383bbb8
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   stream_channel:
     dependency: transitive
     description:
@@ -828,4 +860,4 @@ packages:
     version: "6.5.0"
 sdks:
   dart: ">=3.2.0 <4.0.0"
-  flutter: ">=3.16.0"
+  flutter: ">=3.10.0"
