@@ -4,23 +4,16 @@ import 'package:table_calendar/table_calendar.dart';
 
 class User {
   final String? name;
-  final int? routine;
+  final int? routineCount; // Changed the name to routineCount
   final List<Schedule>? schedule;
-  final String? routineName;
-  final String? routineTime;
-  final String? routineImgUrl;
-  final String? scheduleName;
-  final String? scheduleTime;
+  final List<Routine>? routines; // Changed the name to routines
 
-  User(
-      {this.name,
-      this.routine,
-      this.routineImgUrl,
-      this.routineName,
-      this.routineTime,
-      this.schedule,
-      this.scheduleName,
-      this.scheduleTime});
+  User({
+    this.name,
+    this.routineCount,
+    this.schedule,
+    this.routines,
+  });
 }
 
 class Schedule {
@@ -31,6 +24,20 @@ class Schedule {
   Schedule({
     this.name,
     this.time,
+    this.done,
+  });
+}
+
+class Routine {
+  final String? name;
+  final String? time;
+  final String? url;
+  final bool? done;
+
+  Routine({
+    this.name,
+    this.time,
+    this.url,
     this.done,
   });
 }
@@ -47,11 +54,36 @@ class _HomePatientState extends State<HomePatient> {
   final List<User> dummy = [
     User(
       name: '최한별',
-      routine: 4,
-      routineName: '약 복용하기',
-      routineTime: '8:00 AM',
-      routineImgUrl:
-          'https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfNTMg/MDAxNTI4MDMzMDg3Mjk3.uawygqJVJ63TIzibG82yUkZxIUNpRKbpuM-0O1kl6oAg.iTqCtuOrXnj7OjOdz5K-wyVAwhO5dOBn2JKXSU-9S4og.JPEG.hanulmom84/image_5521562981528032119580.jpg?type=w800',
+      routines: [
+        Routine(
+          name: '아침 식사 후 약 복용',
+          time: '오전 7시',
+          url:
+              'https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfNTMg/MDAxNTI4MDMzMDg3Mjk3.uawygqJVJ63TIzibG82yUkZxIUNpRKbpuM-0O1kl6oAg.iTqCtuOrXnj7OjOdz5K-wyVAwhO5dOBn2JKXSU-9S4og.JPEG.hanulmom84/image_5521562981528032119580.jpg?type=w800',
+          done: true,
+        ),
+        Routine(
+          name: '아침 식사 후 약 복용',
+          time: '오전 7시',
+          url:
+              'https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfNTMg/MDAxNTI4MDMzMDg3Mjk3.uawygqJVJ63TIzibG82yUkZxIUNpRKbpuM-0O1kl6oAg.iTqCtuOrXnj7OjOdz5K-wyVAwhO5dOBn2JKXSU-9S4og.JPEG.hanulmom84/image_5521562981528032119580.jpg?type=w800',
+          done: false,
+        ),
+        Routine(
+          name: '아침 식사 후 약 복용',
+          time: '오전 7시',
+          url:
+              'https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfNTMg/MDAxNTI4MDMzMDg3Mjk3.uawygqJVJ63TIzibG82yUkZxIUNpRKbpuM-0O1kl6oAg.iTqCtuOrXnj7OjOdz5K-wyVAwhO5dOBn2JKXSU-9S4og.JPEG.hanulmom84/image_5521562981528032119580.jpg?type=w800',
+          done: false,
+        ),
+        Routine(
+          name: '아침 식사 후 약 복용',
+          time: '오전 7시',
+          url:
+              'https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfNTMg/MDAxNTI4MDMzMDg3Mjk3.uawygqJVJ63TIzibG82yUkZxIUNpRKbpuM-0O1kl6oAg.iTqCtuOrXnj7OjOdz5K-wyVAwhO5dOBn2JKXSU-9S4og.JPEG.hanulmom84/image_5521562981528032119580.jpg?type=w800',
+          done: false,
+        ),
+      ],
       schedule: [
         Schedule(
           name: '마을회관',
@@ -93,6 +125,10 @@ class _HomePatientState extends State<HomePatient> {
             Container(
               margin: EdgeInsets.all(16),
               child: HomeSchedule(dummy: dummy),
+            ),
+            Container(
+              margin: EdgeInsets.all(16),
+              child: HomeRoutine(dummy: dummy),
             )
           ],
         ),
@@ -337,6 +373,7 @@ class IncompleteScheduleWidget extends StatelessWidget {
     );
   }
 }
+
 //완료 스케줄 위젯
 class CompleteScheduleWidget extends StatelessWidget {
   final String? time;
@@ -445,3 +482,126 @@ class _HomeScheduleState extends State<HomeSchedule> {
     );
   }
 }
+
+// 이 일은 하셨나요? 가로 스크롤
+// 루틴 위젯
+class RoutineWidget extends StatelessWidget {
+  final String? time;
+  final String? name;
+  final String? url;
+  final bool? done;
+
+  const RoutineWidget({Key? key, this.time, this.name, this.url, this.done}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Color iconColor = done == true ? Colors.green : Colors.grey; // done이 true이면 초록색, 아니면 회색
+    return Container(
+      margin: EdgeInsets.all(15),
+      padding: EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Image.network(
+              url ?? '',
+              width: 292,
+              fit: BoxFit.cover,
+            ),
+          ),
+          SizedBox(height: 20),
+          Row(
+            children: [
+              Text(
+                time ?? '',
+                style: TextStyle(fontSize: 24),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.check_circle,
+                  color: iconColor,
+                ),
+              )
+            ],
+          ),
+          Text(
+            name ?? '',
+            style: TextStyle(fontSize: 24),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HomeRoutine extends StatefulWidget {
+  final List<User> dummy;
+
+  const HomeRoutine({Key? key, required this.dummy}) : super(key: key);
+
+  @override
+  State<HomeRoutine> createState() => _HomeRoutineState();
+}
+
+class _HomeRoutineState extends State<HomeRoutine> {
+  @override
+  Widget build(BuildContext context) {
+    User user = widget.dummy[0];
+    List<Routine>? routines = user.routines;
+
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                '이 일은 하셨나요?',
+                style: TextStyle(fontSize: 30),
+                textAlign: TextAlign.left,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              child: Text(
+                '전체보기',
+                style: TextStyle(fontSize: 20),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xffFFC215),
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 11),
+        Container(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: routines?.map((routine) {
+                return RoutineWidget(
+                  time: routine.time,
+                  name: routine.name,
+                  url: routine.url,
+                  done: routine.done,
+                );
+              }).toList() ??
+                  [],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
