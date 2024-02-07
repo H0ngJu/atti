@@ -19,26 +19,45 @@ class AttiAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      centerTitle: true,
-      title: title,
-      actions: <Widget>[
-        if (showNotificationsIcon)
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.notifications,
-                color: Colors.black,
-              )),
-        if (showPersonIcon)
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.person,
-                color: Colors.black,
-              ))
-      ]..addAll(actions ?? []),
+    List<Widget> appBarActions = [];
+    if (showPersonIcon) {
+      appBarActions.add(
+        Container(
+          margin: EdgeInsets.only(right: 16),
+          child : IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.person,
+            color: Colors.grey,
+            size: 40,
+          ),
+          ),
+        ),
+      );
+    }
+    appBarActions.addAll(actions ?? []);
+
+    return PreferredSize(
+      preferredSize: Size.fromHeight(412),
+      child: AppBar(
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: title,
+        leading: showNotificationsIcon
+            ? Container(
+          margin: EdgeInsets.only(left: 16),
+                child: IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.notifications,
+                    color: Colors.grey,
+                    size: 40,
+                  ),
+                ),
+              )
+            : null,
+        actions: appBarActions,
+      ),
     );
   }
 }
