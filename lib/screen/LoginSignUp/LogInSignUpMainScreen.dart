@@ -1,5 +1,5 @@
-import 'package:atti/screen/LogInScreen.dart';
-import 'package:atti/screen/SignUpScreen1.dart';
+import 'package:atti/screen/LogInSignUp/LogInScreen.dart';
+import 'package:atti/screen/LogInSignUp/SignUpScreen1.dart';
 import 'package:flutter/material.dart';
 
 class LogInSignUpMainScreen extends StatefulWidget {

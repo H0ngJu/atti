@@ -51,6 +51,9 @@ dependencies:
   flutter_local_notifications: ^16.3.2
   cloud_firestore: ^4.15.3
   firebase_auth: ^4.17.3
+  flutter_localizations:
+    sdk: flutter
+  bottom_picker:
 
 dev_dependencies:
   flutter_test:

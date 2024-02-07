@@ -1,6 +1,11 @@
-import 'package:atti/screen/FinishSignUpScreen.dart';
+import 'package:atti/data/SignUpController.dart';
+import 'package:atti/screen/LoginSignUp/FinishSignUpScreen.dart';
+import 'package:bottom_picker/bottom_picker.dart';
+import 'package:bottom_picker/resources/arrays.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
 class SignUpScreen3 extends StatefulWidget {
   SignUpScreen3({super.key});
@@ -10,6 +15,7 @@ class SignUpScreen3 extends StatefulWidget {
 }
 
 class _SignUpScreen3State extends State<SignUpScreen3> {
+  final SignUpController signUpController = Get.put(SignUpController());
   final _authentication = FirebaseAuth.instance;
   User? loggedUser;
 
@@ -29,7 +35,23 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
       print(e);
     }
   }
-
+  void _openDatePicker(BuildContext context) {
+    BottomPicker.date(
+      title: '생년월일을 입력해 주세요',
+      dateOrder: DatePickerDateOrder.ymd,
+      pickerTextStyle: const TextStyle(
+        color: Colors.black,
+        fontSize: 24,
+      ),
+      onSubmit: (value) {
+        if (value != null) {
+          signUpController.userBirthDate = value; // check
+        }
+      },
+      bottomPickerTheme: BottomPickerTheme.plumPlate,
+    ).show(context);
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,9 +89,9 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                   fontSize: 24
                               ),),
                             TextFormField(
-                                // onChanged: (value){
-                                //   userId = value;
-                                // },
+                                onChanged: (value){
+                                  signUpController.userName.value = value;
+                                },
                                 validator: (value){
                                   if (value!.isEmpty || value.length < 4) {
                                     return "n글자 이상을 입력해 주세요";
@@ -98,41 +120,24 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('생년월일',
+                            TextButton(
+                               onPressed: () { _openDatePicker(context);},
+                               child: Text("생년월일",
+                                   style: TextStyle(
+                                     fontSize: 24,
+                                     color: Colors.black,
+                                   ),
+                               ),
+                            ),
+                            const SizedBox(height: 20,),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(signUpController.userBirthDate.toString().split(" ")[0] ?? "",
                               style: TextStyle(
-                                  fontSize: 24
+                                fontSize: 30,
+                                color: Colors.black,
                               ),),
-                            TextFormField(
-                                // onChanged: (value){
-                                //   userPw = value;
-                                // },
-                                validator: (value){
-                                  if (value!.isEmpty || value.length < 6) {
-                                    return "n글자 이상을 입력해 주세요";
-                                  }
-                                  return null;
-                                },
-                                // onSaved: (value){
-                                //   userPw = value!;
-                                // },
-                                // keyboardType: TextInputType.emailAddress,
-                                // validator: (value) {
-                                //   if (value!.isEmpty || !value.contains('@')) {
-                                //     return "유효한 이메일 주소를 입력해 주세요";
-                                //   }
-                                //   return null;
-                                // },
-                                style: TextStyle(
-                                    fontSize: 30
-                                ),
-                                decoration: InputDecoration(
-                                  hintText: "연월일",
-                                  hintStyle: TextStyle(
-                                      fontSize: 30,
-                                      color: const Color(0xffB3B3B3)
-                                  ),
-                                )
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -148,18 +153,9 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                             ),
                             TextFormField(
                                 obscureText: true,
-                                // onChanged: (value){
-                                //   userPwCheck = value;
-                                // },
-                                validator: (value){
-                                  if (value!.isEmpty || value.length < 6) {
-                                    return "n글자 이상을 입력해 주세요";
-                                  }
-                                  return null;
+                                onSaved: (value){
+                                  signUpController.userFamily.value = value.toString().split(" ");
                                 },
-                                // onSaved: (value){
-                                //   userPwCheck = value!;
-                                // },
                                 style: TextStyle(
                                     fontSize: 30
                                 ),

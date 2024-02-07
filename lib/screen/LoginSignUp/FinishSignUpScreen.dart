@@ -1,4 +1,4 @@
-import 'package:atti/screen/LogInScreen.dart';
+import 'package:atti/screen/LogInSignUp/LogInScreen.dart';
 import 'package:flutter/material.dart';
 
 class FinishSignUpScreen extends StatefulWidget {

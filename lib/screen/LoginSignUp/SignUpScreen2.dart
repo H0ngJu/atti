@@ -1,7 +1,9 @@
-import 'package:atti/screen/SignUpScreen1.dart';
-import 'package:atti/screen/SignUpScreen3.dart';
+import 'package:atti/data/SignUpController.dart';
+import 'package:atti/screen/LogInSignUp/SignUpScreen1.dart';
+import 'package:atti/screen/LogInSignUp/SignUpScreen3.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
 class SignUpScreen2 extends StatefulWidget {
   SignUpScreen2({super.key});
@@ -11,6 +13,7 @@ class SignUpScreen2 extends StatefulWidget {
 }
 
 class _SignUpScreen2State extends State<SignUpScreen2> {
+  final SignUpController signUpController = Get.put(SignUpController());
   final _authentication = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   String userId = "";
@@ -109,9 +112,9 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                               ),),
                             TextFormField(
                                 obscureText: true,
-                              onChanged: (value){
-                                userPw = value;
-                              },
+                                onChanged: (value) {
+                                  signUpController.userEmail.value = value;
+                                },
                                 validator: (value){
                                   if (value!.isEmpty || value.length < 6) {
                                     return "n글자 이상을 입력해 주세요";
@@ -155,7 +158,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                             TextFormField(
                               obscureText: true,
                               onChanged: (value){
-                                userPwCheck = value;
+                                signUpController.userPassword.value = value;
                               },
                                 validator: (value){
                                   if (value!.isEmpty || value.length < 6) {

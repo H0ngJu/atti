@@ -1,7 +1,8 @@
-import 'package:atti/screen/LogInSignUpMainScreen.dart';
-import 'package:atti/screen/SignUpScreen2.dart';
+import 'package:atti/data/SignUpController.dart';
+import 'package:atti/screen/LoginSignUp/LogInSignUpMainScreen.dart';
+import 'package:atti/screen/LogInSignUp/SignUpScreen2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:get/get.dart';
 
 
 class SignUpScreen1 extends StatefulWidget {
@@ -12,6 +13,7 @@ class SignUpScreen1 extends StatefulWidget {
 }
 
 class _SignUpScreen1State extends State<SignUpScreen1> {
+  final SignUpController signUpController = Get.put(SignUpController());
   Color borderColor = Color(0xffB3B3B3);
   Color pressedBorderColor = Color(0xffFFC215);
   int isPressed = 0;
