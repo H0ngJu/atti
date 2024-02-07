@@ -129,6 +129,10 @@ class _HomePatientState extends State<HomePatient> {
             Container(
               margin: EdgeInsets.all(16),
               child: HomeRoutine(dummy: dummy),
+            ),
+            Container(
+              margin: EdgeInsets.all(16),
+              child: HomeMemory(),
             )
           ],
         ),
@@ -491,11 +495,13 @@ class RoutineWidget extends StatelessWidget {
   final String? url;
   final bool? done;
 
-  const RoutineWidget({Key? key, this.time, this.name, this.url, this.done}) : super(key: key);
+  const RoutineWidget({Key? key, this.time, this.name, this.url, this.done})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Color iconColor = done == true ? Colors.green : Colors.grey; // done이 true이면 초록색, 아니면 회색
+    Color iconColor =
+        done == true ? Colors.green : Colors.grey; // done이 true이면 초록색, 아니면 회색
     return Container(
       margin: EdgeInsets.all(15),
       padding: EdgeInsets.all(14),
@@ -589,13 +595,13 @@ class _HomeRoutineState extends State<HomeRoutine> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: routines?.map((routine) {
-                return RoutineWidget(
-                  time: routine.time,
-                  name: routine.name,
-                  url: routine.url,
-                  done: routine.done,
-                );
-              }).toList() ??
+                    return RoutineWidget(
+                      time: routine.time,
+                      name: routine.name,
+                      url: routine.url,
+                      done: routine.done,
+                    );
+                  }).toList() ??
                   [],
             ),
           ),
@@ -605,3 +611,95 @@ class _HomeRoutineState extends State<HomeRoutine> {
   }
 }
 
+class HomeMemory extends StatelessWidget {
+  const HomeMemory({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      Text(
+        '오늘을 내 기억에 남겨보세요!',
+        style: TextStyle(fontSize: 28),
+        textAlign: TextAlign.left,
+      ),
+      SizedBox(height: 11),
+      Container(
+        padding: EdgeInsets.all(17),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15), color: Colors.white),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(child: Container(
+                  width: (MediaQuery.of(context).size.width - 66) / 2,
+                  height: 260,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage('https://img.freepik.com/premium-photo/happy-woman-sitting-in-the-car-and-traveling-summer-season-on-the-sea-resting-and-special-day-to-vacation_36577-127.jpg'),
+                        fit: BoxFit.cover, // 이미지가 Container에 맞게 잘리지 않도록 적절하게 조정
+                        opacity: 0.4
+                      ),
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Center(
+                    child: Text(
+                      '15일 전\n제주도 여행',
+                      style: TextStyle(fontSize: 20, color: Color(0xff737373)),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),),
+                SizedBox(
+                  width: 16,),
+               Expanded(child: Container(
+                  width: (MediaQuery.of(context).size.width - 66) / 2,
+                  height: 260,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage('https://img.freepik.com/premium-photo/happy-woman-sitting-in-the-car-and-traveling-summer-season-on-the-sea-resting-and-special-day-to-vacation_36577-127.jpg'),
+                          fit: BoxFit.cover, // 이미지가 Container에 맞게 잘리지 않도록 적절하게 조정
+                          opacity: 0.4
+                      ),
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Center(
+                    child: Text(
+                      '15일 전\n제주도 여행',
+                      style: TextStyle(fontSize: 20, color: Color(0xff737373)),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+               )
+              ],
+            ),
+            SizedBox(
+              height: 17,
+            ),
+            Text(
+              '오늘 하루를 보내며서 기억하고 싶은 특별한 순간이 있나요?',
+              style: TextStyle(fontSize: 24),
+            ),
+            SizedBox(
+              height: 17,
+            ),
+            SizedBox(
+              width: 380,
+              height: 60,
+              child: FilledButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Color(0xffFFC215)),
+                ),
+                onPressed: () {},
+                child: Text(
+                  '내 기억에 담기',
+                  style: TextStyle(fontSize: 24, color: Colors.black),
+                ),
+              ),
+            )
+          ],
+        ),
+      )
+    ]);
+  }
+}
