@@ -1,4 +1,5 @@
 import 'package:atti/commons/AttiAppBar.dart';
+import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -50,6 +51,16 @@ class HomePatient extends StatefulWidget {
 }
 
 class _HomePatientState extends State<HomePatient> {
+  // bottom Navi logic
+  int _selectedIndex = 2;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      // 해당 인덱스로 페이지 변경
+    });
+  }
+
   // 사용자 dummy
   final List<User> dummy = [
     User(
@@ -136,6 +147,10 @@ class _HomePatientState extends State<HomePatient> {
             )
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
     );
   }
