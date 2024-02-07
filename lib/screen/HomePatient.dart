@@ -12,15 +12,14 @@ class User {
   final String? scheduleName;
   final String? scheduleTime;
 
-  User(
-      {this.name,
-      this.routine,
-      this.routineImgUrl,
-      this.routineName,
-      this.routineTime,
-      this.schedule,
-      this.scheduleName,
-      this.scheduleTime});
+  User({this.name,
+    this.routine,
+    this.routineImgUrl,
+    this.routineName,
+    this.routineTime,
+    this.schedule,
+    this.scheduleName,
+    this.scheduleTime});
 }
 
 class Schedule {
@@ -51,7 +50,7 @@ class _HomePatientState extends State<HomePatient> {
       routineName: '약 복용하기',
       routineTime: '8:00 AM',
       routineImgUrl:
-          'https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfNTMg/MDAxNTI4MDMzMDg3Mjk3.uawygqJVJ63TIzibG82yUkZxIUNpRKbpuM-0O1kl6oAg.iTqCtuOrXnj7OjOdz5K-wyVAwhO5dOBn2JKXSU-9S4og.JPEG.hanulmom84/image_5521562981528032119580.jpg?type=w800',
+      'https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfNTMg/MDAxNTI4MDMzMDg3Mjk3.uawygqJVJ63TIzibG82yUkZxIUNpRKbpuM-0O1kl6oAg.iTqCtuOrXnj7OjOdz5K-wyVAwhO5dOBn2JKXSU-9S4og.JPEG.hanulmom84/image_5521562981528032119580.jpg?type=w800',
       schedule: [
         Schedule(
           name: '가족모임',
@@ -92,7 +91,7 @@ class _HomePatientState extends State<HomePatient> {
             Container(margin: EdgeInsets.all(16), child: HomeTodaySummary()),
             Container(
               margin: EdgeInsets.all(16),
-              child: HomeSchedule(),
+              child: HomeSchedule(dummy: dummy),
             )
           ],
         ),
@@ -159,7 +158,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
                 TextSpan(
                     text: '${now.year}년 ${now.month}월 ${now.day}일 ${weekday}',
                     style:
-                        TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+                    TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
                 TextSpan(text: ' 이에요.'),
               ],
             ),
@@ -228,7 +227,7 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
               textAlign: TextAlign.center,
               text: TextSpan(
                 style:
-                    TextStyle(color: Colors.black, fontSize: 24, height: 1.5),
+                TextStyle(color: Colors.black, fontSize: 24, height: 1.5),
                 children: [
                   TextSpan(text: '예정된 일정\n'),
                   TextSpan(
@@ -264,7 +263,7 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
               textAlign: TextAlign.center,
               text: TextSpan(
                 style:
-                    TextStyle(color: Colors.black, fontSize: 24, height: 1.5),
+                TextStyle(color: Colors.black, fontSize: 24, height: 1.5),
                 children: [
                   TextSpan(text: '오늘의 일과\n'),
                   TextSpan(
@@ -285,7 +284,9 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
 
 // 일정이 있어요
 class HomeSchedule extends StatefulWidget {
-  const HomeSchedule({Key? key}) : super(key: key);
+  final List<User> dummy; // 수정된 부분: dummy 데이터를 받기 위한 변수 선언
+
+  const HomeSchedule({Key? key, required this.dummy}) : super(key: key);
 
   @override
   State<HomeSchedule> createState() => _HomeScheduleState();
@@ -294,6 +295,9 @@ class HomeSchedule extends StatefulWidget {
 class _HomeScheduleState extends State<HomeSchedule> {
   @override
   Widget build(BuildContext context) {
+    User user = widget.dummy[0]; // user dummy 전달
+    List<Schedule>? schedules = user.schedule; // 사용자의 일정 목록
+
     return Column(
       children: [
         Row(
@@ -316,30 +320,71 @@ class _HomeScheduleState extends State<HomeSchedule> {
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15)) // 버튼의 가로 여백 조정
-                  ),
+              ),
             ),
           ],
         ),
+        SizedBox(height: 11),
         Container(
+          padding: EdgeInsets.all(17),
+          color: Colors.white,
           child: Column(
             children: [
-              Row(
-                children: [
-                  Expanded(
+              // ListView.builder를 사용하여 사용자의 일정을 동적으로 표시
+              ListView.builder(
+                shrinkWrap: true, // ListView가 필요한 만큼만 공간을 차지하도록 설정
+                physics: NeverScrollableScrollPhysics(), // 스크롤 금지
+                itemCount: schedules?.length ?? 0,
+                itemBuilder: (BuildContext context, int index) {
+                  Schedule? schedule = schedules?[index];
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        color: Color(0xffFFC215), // 테두리 색상
+                        width: 2, // 테두리 두께
+                      ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
                       child: Container(
-                        decoration: BoxDecoration(color: Color(0xffFFF5DB)),
-                    child: Text('오후 1:00'),
-                  )),
-                  Expanded(
-                      child: Container(
-                    child: Text('가족 모임'),
-                  )),
-                ],
-              )
+                        color: Color(0xffFFF5DB), // 배경색을 여기에 설정
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(17),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  schedule?.time ?? '',
+                                  style: TextStyle(fontSize: 24),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(17),
+                                alignment: Alignment.center,
+                                color: Colors.white,
+                                child: Text(
+                                  schedule?.name ?? '',
+                                  style: TextStyle(fontSize: 24),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
-        )
+        ),
       ],
     );
   }
 }
+
