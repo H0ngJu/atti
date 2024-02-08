@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:textfield_tags/textfield_tags.dart';
 
 class SignUpScreen3 extends StatefulWidget {
   SignUpScreen3({super.key});
@@ -17,9 +19,19 @@ class SignUpScreen3 extends StatefulWidget {
 
 class _SignUpScreen3State extends State<SignUpScreen3> {
   final SignUpController signUpController = Get.put(SignUpController());
+  final _formKey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
   User? loggedUser;
+  String userName = "";
+  DateTime userBirthDate = DateTime.now();
+  late String formattedDate = DateFormat('yyyy년 MM월 dd일').format(userBirthDate);
 
+  void _tryValidation() {
+    final isValid = _formKey.currentState!.validate();
+    if (isValid) {
+      _formKey.currentState!.save();
+    }
+  }
 
   void initState() {
     super.initState();
@@ -47,6 +59,10 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
       onSubmit: (value) {
         if (value != null) {
           signUpController.userBirthDate = value; // check
+          setState(() {
+            userBirthDate = value;
+            formattedDate = DateFormat('yyyy년 MM월 dd일').format(userBirthDate);
+          });
         }
       },
       bottomPickerTheme: BottomPickerTheme.plumPlate,
@@ -72,20 +88,9 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
             currentStep: 3,
           ),
             Container(
-              margin: EdgeInsets.only(top: 90, left: 20),
-              child: Text(
-                '회원가입',
-                style: TextStyle(
-                  letterSpacing: 1.0,
-                  fontSize: 30,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 200, left: 20, right: 20),
+              margin: EdgeInsets.only(top: height*0.2, left: 20, right: 20),
               child: Form(
-                // key: _formKey,
+                key: _formKey,
                 child: SingleChildScrollView(
                   padding: EdgeInsets.only(bottom: 20),
                   child: Column(
@@ -101,10 +106,13 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                             TextFormField(
                                 onChanged: (value){
                                   signUpController.userName.value = value;
+                                  setState(() {
+                                    userName = value;
+                                  });
                                 },
                                 validator: (value){
-                                  if (value!.isEmpty || value.length < 4) {
-                                    return "n글자 이상을 입력해 주세요";
+                                  if (value!.isEmpty || value.length < 2) {
+                                    return "2글자 이상을 입력해 주세요";
                                   }
                                   return null;
                                 },
@@ -117,38 +125,38 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                       fontSize: 30,
                                       color: Color(0xffB3B3B3)
                                   ),
+                                  errorText: userName.length < 2 ? '2글자 이상의 이름을 입력해 주세요' : null,
                                 )
                             )
                           ],
                         ),
                       ),
-                      SizedBox(height: 40,),
+                      SizedBox(height: height*0.05,),
                       Container(
+                        alignment: Alignment.topLeft,
+                        child: Text('생년월일',
+                          style: TextStyle(
+                              fontSize: 24
+                          ),),
+                      ),
+                      Container(
+                        alignment: Alignment.topLeft,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextButton(
                                onPressed: () { _openDatePicker(context);},
-                               child: Text("생년월일",
+                               child: Text("${formattedDate}",
                                    style: TextStyle(
-                                     fontSize: 24,
-                                     color: Colors.black,
+                                     fontSize: 30,
+                                     color: Color(0xffB3B3B3),
                                    ),
                                ),
-                            ),
-                            const SizedBox(height: 20,),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              child: Text(signUpController.userBirthDate.toString().split(" ")[0] ?? "",
-                              style: TextStyle(
-                                fontSize: 30,
-                                color: Colors.black,
-                              ),),
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(height: 40,),
+                      SizedBox(height: height*0.05,),
                       Container(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,33 +188,38 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                       Container(
                         child: ElevatedButton(
                             onPressed: () async {
-                              // _tryValidation();
-                              // if(isSignUpScreen)
-                              // try {
-                                // final newUser = await _authentication.createUserWithEmailAndPassword(
-                                //     email: userId,
-                                //     password: userPw);
-                                // if (newUser.user != null) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) {
-                                        return FinishSignUpScreen();
+                                _tryValidation();
+                                try {
+                                  final newUser = await _authentication.createUserWithEmailAndPassword(
+                                      email: signUpController.userEmail.value,
+                                      password: signUpController.userPassword.value);
+                                  if (newUser.user != null) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) {
+                                          return FinishSignUpScreen();
                                         }
+                                        )
+                                    );
+                                  }
+                                }
+                                catch (e) {
+                                  print(e);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                        Text('이메일 또는 패스워드를 확인해 주세요',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        backgroundColor: Color(0xffFFC215),
                                       )
                                   );
-                                },
-                              // }
-                              // catch (e) {
-                              //   print(e);
-                                // ScaffoldMessenger.of(context).showSnackBar(
-                                //     SnackBar(
-                                //       content:
-                                //       Text('이메일 또는 패스워드를 확인해 주세요'),
-                                //       backgroundColor: Colors.blue,
-                                //     )
-                                // );
-                              // }
-                            // },
+                                }
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xffFFC215),
                             ),
@@ -234,3 +247,4 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
     );
   }
 }
+

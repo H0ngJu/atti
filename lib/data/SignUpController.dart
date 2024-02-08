@@ -8,5 +8,5 @@ class SignUpController extends GetxController {
   var userPassword = "".obs;
   var userName = "".obs;
   DateTime? userBirthDate;
-  RxList<String> userFamily = [""].obs;
+  late RxList<String> userFamily = <String>[].obs;
 }

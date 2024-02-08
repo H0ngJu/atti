@@ -14,12 +14,10 @@ class SignUpScreen2 extends StatefulWidget {
 
 class _SignUpScreen2State extends State<SignUpScreen2> {
   final SignUpController signUpController = Get.put(SignUpController());
-  final _authentication = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   String userId = "";
   String userPw = "";
   String userPwCheck = "";
-  String? _errorMessage;
 
   void _tryValidation(){
     final isValid = _formKey.currentState!.validate();
@@ -179,31 +177,26 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                             onPressed: () async {
                               _tryValidation();
                               try {
-                                final newUser = await _authentication.createUserWithEmailAndPassword(
-                                    email: userId,
-                                    password: userPw);
-                                if (newUser.user != null) {
-                                  Navigator.push(
+                                Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) {
                                       return SignUpScreen3();
                                     }
                                     )
-                                  );
-                                }
+                                );
                               }
                               catch (e) {
                                 print(e);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                        content:
-                                    Text('이메일 또는 패스워드를 확인해 주세요',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                      content:
+                                      Text('이메일 또는 패스워드를 확인해 주세요',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
                                       backgroundColor: Color(0xffFFC215),
                                     )
                                 );
