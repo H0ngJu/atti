@@ -28,7 +28,6 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
       final user = _authentication.currentUser;
       if (user != null){
         loggedUser = user;
-        print(loggedUser!.email);
       };
     }
     catch (e) {
