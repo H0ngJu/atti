@@ -18,15 +18,16 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
       body: Stack(
         children: [
           Positioned(
-            top: 270,
-            left: 130,
+            top: height*0.3,
+            left: width*0.3,
+            width: width*0.4,
             child: Image.asset('lib/assets/images/LogInSignUpMainATTI.png'),
           ),
           Positioned(
             bottom: 0,
             child: Container(
               padding: EdgeInsets.only(top: 20),
-              height: height*0.35,
+              height: height*0.4,
               width: width,
               decoration: BoxDecoration(
                 color: Color(0xffFFE9B3)

@@ -152,7 +152,6 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                               ),
                             ),
                             TextFormField(
-                                obscureText: true,
                                 onSaved: (value){
                                   signUpController.userFamily.value = value.toString().split(" ");
                                 },

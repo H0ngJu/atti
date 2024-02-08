@@ -20,6 +20,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
   String userPw = "";
   String userPwCheck = "";
 
+
   void _tryValidation(){
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
@@ -161,8 +162,8 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                                 signUpController.userPassword.value = value;
                               },
                                 validator: (value){
-                                  if (value!.isEmpty || value.length < 6) {
-                                    return "n글자 이상을 입력해 주세요";
+                                  if (value!.isEmpty || value != signUpController.userPassword.value) {
+                                    return "비밀번호가 일치하지 않습니다.";
                                   }
                                   return null;
                                 },

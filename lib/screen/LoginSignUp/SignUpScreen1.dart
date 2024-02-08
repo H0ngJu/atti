@@ -85,8 +85,10 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                 Container(
                   child: Column(
                     children: [
-                      ElevatedButton(onPressed: ()=>{
-                        topBtnPressed()
+                      ElevatedButton(onPressed: (){
+                        topBtnPressed();
+                        signUpController.isPatient.value = true;
+                        print(signUpController.isPatient.value);
                       },
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.zero,
@@ -134,8 +136,10 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                             ),
                           )),
                       SizedBox(height: 20,),
-                      ElevatedButton(onPressed: ()=>{
-                        botBtnPressed()
+                      ElevatedButton(onPressed: (){
+                        botBtnPressed();
+                        signUpController.isPatient.value = false;
+                        print(signUpController.isPatient.value);
                       },
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.zero,
