@@ -1,3 +1,4 @@
+import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/data/SignUpController.dart';
 import 'package:atti/screen/LoginSignUp/FinishSignUpScreen.dart';
 import 'package:bottom_picker/bottom_picker.dart';
@@ -18,6 +19,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
   final SignUpController signUpController = Get.put(SignUpController());
   final _authentication = FirebaseAuth.instance;
   User? loggedUser;
+
 
   void initState() {
     super.initState();
@@ -53,6 +55,9 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
   
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: GestureDetector(
         onTap: (){
@@ -60,6 +65,12 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
         },
         child: Stack(
           children: [
+            DetailPageTitle(
+            title: '회원가입',
+            description: '',
+            totalStep: 3,
+            currentStep: 3,
+          ),
             Container(
               margin: EdgeInsets.only(top: 90, left: 20),
               child: Text(
@@ -97,9 +108,6 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                   }
                                   return null;
                                 },
-                                // onSaved: (value){
-                                //   userId = value!;
-                                // },
                                 style: TextStyle(
                                     fontSize: 30
                                 ),
@@ -204,7 +212,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                             ),
                             child: Container(
                                 width: 350,
-                                height: 60,
+                                height: height*0.07,
                                 alignment: Alignment.center,
                                 child: Text('가입하기',
                                     style: TextStyle(
