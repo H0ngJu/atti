@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:textfield_tags/textfield_tags.dart';
 
 class SignUpScreen3 extends StatefulWidget {
   SignUpScreen3({super.key});
@@ -190,6 +189,8 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                             onPressed: () async {
                                 _tryValidation();
                                 try {
+                                  print(signUpController.userEmail.value);
+                                  print(signUpController.userPassword.value);
                                   final newUser = await _authentication.createUserWithEmailAndPassword(
                                       email: signUpController.userEmail.value,
                                       password: signUpController.userPassword.value);
@@ -204,6 +205,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                   }
                                 }
                                 catch (e) {
+                                  print("에러:");
                                   print(e);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
