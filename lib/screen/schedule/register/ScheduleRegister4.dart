@@ -36,7 +36,7 @@ class _ScheduleRegister4State extends State<ScheduleRegister4> {
                     totalStep: 5,
                     currentStep: 4,
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 20),
 
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
@@ -49,10 +49,14 @@ class _ScheduleRegister4State extends State<ScheduleRegister4> {
                       style: TextStyle(fontSize: 24),
                       decoration: InputDecoration(
                         hintText: '추가로 기록할 내용이 있나요?',
-                        hintStyle: TextStyle(fontSize: 24),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
+                        hintStyle: TextStyle(fontSize: 24, color: Color(0xffA38130)),
+                        filled: true, // 배경을 채움
+                        fillColor: Color(0xffFFE9B3),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide.none,
                         ),
+                        contentPadding: EdgeInsets.all(15),
                       ),
                     ),
                   ),

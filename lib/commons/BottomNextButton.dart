@@ -28,13 +28,13 @@ class NextButton extends StatelessWidget {
             : null,
         child: Text(
           content,
-          style: TextStyle(color: Colors.black, fontSize: 20),
+          style: TextStyle(fontSize: 20,
+          color: isEnabled ? Colors.white : Color(0xffA38130)),
         ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(
-              isEnabled ? Colors.grey : Colors.grey.withOpacity(0.5)), // 비활성화일 때 색상을 조절
+              isEnabled ? Color(0xffFFC215) : Color(0xffFFF5DB)), // 비활성화일 때 색상을 조절
           minimumSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width * 0.9, 50)),
-
         ),
       ),
     );

@@ -34,6 +34,24 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
       initialDate: selectedDate ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              //surface: Color(0xffFFF5DB), // 배경 색
+              onSurface: Colors.black, // 달력 숫자 색
+              primary: Color(0xffFFE9B3), // 선택된 영역 색
+              onPrimary: Color(0xffA38130), // 선택된 날짜 숫자 색
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.black // button text color
+              )
+            )
+          ),
+          child: child!,
+        );
+      }
     );
 
     if (picked != null) {
@@ -49,6 +67,28 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: selectedTime ?? TimeOfDay.now(),
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+                colorScheme: ColorScheme.light(
+                  primary: Color(0xffFFE9B3), // 선택된 영역
+                  onPrimary: Color(0xffA38130), // 선택된 곳 숫자
+                  //surface: Color(0xffFFF5DB), // 전체 배경
+                  onSurface: Colors.black, // 시, 분, 오전/오후 숫자
+                  secondary: Color(0xffFFF5DB), // 오전/오후 선택된 영역
+                  onSecondary: Color(0xffA38130), // 오전/오후 선택된 영역의 글자
+                  outline: Color(0xffA38130),
+
+                ),
+                textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                        foregroundColor: Colors.black // button text color
+                    )
+                )
+            ),
+            child: child!,
+          );
+        }
     );
 
     if (picked != null) {
@@ -84,16 +124,21 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
                       onTap: () => _selectDate(context),
                       style: TextStyle(fontSize: 24),
                       decoration: InputDecoration(
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
+                        filled: true, // 배경을 채움
+                        fillColor: Color(0xffFFE9B3),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide.none,
                         ),
-                        labelText: '날짜 선택',
-                        labelStyle: TextStyle(color: Colors.black),
-                        suffixIcon: Icon(Icons.calendar_today),
+                        hintText: '날짜 선택',
+                        hintStyle: TextStyle(color: Color(0xffA38130)),
+                        suffixIcon: Icon(Icons.calendar_today, color: Color(0xffA38130)),
+                        contentPadding: EdgeInsets.all(15),
+
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 25),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: TextField(
@@ -102,12 +147,16 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
                       onTap: () => _selectTime(context),
                       style: TextStyle(fontSize: 24),
                       decoration: InputDecoration(
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
+                        filled: true, // 배경을 채움
+                        fillColor: Color(0xffFFE9B3),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide.none,
                         ),
-                        labelText: '시간 선택',
-                        labelStyle: TextStyle(color: Colors.black),
-                        suffixIcon: Icon(Icons.access_time),
+                        hintText: '시간 선택',
+                        hintStyle: TextStyle(color: Color(0xffA38130)),
+                        suffixIcon: Icon(Icons.access_time, color: Color(0xffA38130),),
+                        contentPadding: EdgeInsets.all(15),
                       ),
                     ),
                   ),

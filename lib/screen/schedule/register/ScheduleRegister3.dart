@@ -36,7 +36,7 @@ class _ScheduleRegister3State extends State<ScheduleRegister3> {
                     totalStep: 5,
                     currentStep: 3,
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 20),
 
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
@@ -49,10 +49,14 @@ class _ScheduleRegister3State extends State<ScheduleRegister3> {
                       style: TextStyle(fontSize: 24),
                       decoration: InputDecoration(
                         hintText: '예정된 장소가 어디인가요?',
-                        hintStyle: TextStyle(fontSize: 24),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
+                        hintStyle: TextStyle(fontSize: 24, color: Color(0xffA38130)),
+                        filled: true, // 배경을 채움
+                        fillColor: Color(0xffFFE9B3),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide.none,
                         ),
+                        contentPadding: EdgeInsets.all(15),
                       ),
                     ),
                   ),
