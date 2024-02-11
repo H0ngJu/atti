@@ -216,7 +216,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                     color: formattedDate == "연도 / 월 / 일을 선택해 주세요" ? colorPallet.textColor : Colors.black,
                                   ),
                                 ),
-                              ),git
+                              ),
                             ],
                           ),
                         ),

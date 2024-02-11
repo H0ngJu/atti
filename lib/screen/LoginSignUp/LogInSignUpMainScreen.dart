@@ -100,7 +100,7 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 20,),
+                                SizedBox(height: height*0.025,),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -157,7 +157,8 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                           ),),
                                         ))
                                   ],
-                                )
+                                ),
+                                SizedBox(height: height*0.5,)
                               ],
                             ),
                           ),
