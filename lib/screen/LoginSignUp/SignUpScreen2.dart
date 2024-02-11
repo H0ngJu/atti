@@ -95,6 +95,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                           ],
                         ),
                       ),
+                      // 아이디
                       SizedBox(height: height*0.05,),
                       Container(
                         child: Column(
@@ -130,6 +131,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                           ],
                         ),
                       ),
+                      // 비밀번호
                       SizedBox(height: height*0.05,),
                       Container(
                         child: Column(
@@ -171,6 +173,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                           ],
                         ),
                       ),
+                      // 비밀번호 확인
                       SizedBox(height: height*0.05),
                       Container(
                         child: ElevatedButton(
@@ -218,6 +221,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                             )
                         ),
                       )
+                      // 다음 버튼
                     ],
                   ),
                 ),
