@@ -297,7 +297,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xffFFC215),
+                              backgroundColor: const Color(0xffFFF5DB),
                             ),
                             child: Container(
                                 width: 350,
@@ -306,7 +306,8 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                                 child: Text('다음',
                                     style: TextStyle(
                                       fontSize: 24,
-                                      color:  Color(0xff000000),
+                                      color: boxFocusedColor,
+                                      fontWeight: FontWeight.bold,
                                     )
                                 )
                             )
