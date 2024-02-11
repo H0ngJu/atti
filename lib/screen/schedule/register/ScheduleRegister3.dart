@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:atti/data/schedule/controller/schedule_controller.dart';
+import 'package:atti/data/schedule/schedule_controller.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 

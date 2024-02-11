@@ -549,6 +549,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.0"
+  material_tag_editor:
+    dependency: "direct main"
+    description:
+      name: material_tag_editor
+      sha256: "02582fad5f2f4e761ae089b1b63156827612bc720e1c229ca887f99c22ada0b9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.2"
   meta:
     dependency: transitive
     description:

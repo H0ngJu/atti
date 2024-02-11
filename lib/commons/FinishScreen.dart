@@ -34,7 +34,7 @@ class FinishScreen extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.9,
           margin: EdgeInsets.only(left: 15),
           child: Text(content, style: TextStyle(
-              fontSize: 40, fontWeight: FontWeight.w600, color: Colors.white
+              fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
           ),),
         ),
 

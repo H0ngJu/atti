@@ -10,7 +10,7 @@ class RegisterNo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xffFFC215),
+        backgroundColor: Color(0xffFFEEBC),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

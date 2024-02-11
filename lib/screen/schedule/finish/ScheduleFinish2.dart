@@ -32,8 +32,36 @@ class ScheduleFinish2 extends StatelessWidget {
               ),
             ],
           )),
-          NextButton(next: MemoryRegister1(), content: '네, 남깁니다', isEnabled: true,),
-          NextButton(next: RegisterNo(), content: '아니요, 남기지 않습니다', isEnabled: true,),
+
+          Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            margin: EdgeInsets.only(bottom: 20),
+            alignment: Alignment.center,
+            child: Row(
+              children: [
+                TextButton(onPressed: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MemoryRegister1()),
+                  );
+                }, child: Text('네', style: TextStyle(color: Colors.white, fontSize: 20),),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
+                    minimumSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width * 0.43, 50)),
+                  ),), SizedBox(width: MediaQuery.of(context).size.width * 0.04,),
+                TextButton(onPressed: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RegisterNo()),
+                  );
+                }, child: Text('아니요', style: TextStyle(color: Color(0xffA38130), fontSize: 20),),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Color(0xffFFF5DB)),
+                    minimumSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width * 0.43, 50)),
+                  ),),
+              ],
+            ),
+          ),
         ],
       )
     );

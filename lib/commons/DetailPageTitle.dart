@@ -66,10 +66,11 @@ class _DetailPageTitleState extends State<DetailPageTitle> {
           ),
           SizedBox(height: 40,),
           Container(
-            //width: MediaQuery.of(context).size.width * 0.9,
+            width: MediaQuery.of(context).size.width * 0.9,
             margin: EdgeInsets.only(left: 15),
+            //alignment: Alignment.centerLeft,
             child: Text(widget.description, style: TextStyle(
-              fontSize: 24, fontWeight: FontWeight.w500
+              fontSize: 30, fontWeight: FontWeight.w500
             ),),
           ),
           //SizedBox(height: 30.0),
