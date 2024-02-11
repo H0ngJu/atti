@@ -187,6 +187,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                           children: [
                             Text('전화번호',
                               style: TextStyle(
+                                fontWeight: FontWeight.bold,
                                   fontSize: 24
                               ),),
                             TextFormField(
@@ -206,7 +207,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                               decoration: InputDecoration(
                                 hintText: '010-0000-0000',
                                 hintStyle: TextStyle(
-                                    fontSize: 30,
+                                    fontSize: 24,
                                     color: const Color(0xffB3B3B3)
                                 ),
                                 errorText: !userPhoneNumber.contains('-') ||
@@ -253,7 +254,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                 decoration: InputDecoration(
                                   hintText: '이메일을 입력해 주세요',
                                   hintStyle: TextStyle(
-                                      fontSize: 30,
+                                      fontSize: 24,
                                       color: const Color(0xffB3B3B3)
                                   ),
                                   errorText: !userPatientEmail.contains('@') ||
