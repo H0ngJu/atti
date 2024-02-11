@@ -15,8 +15,8 @@ class SignUpScreen1 extends StatefulWidget {
 
 class _SignUpScreen1State extends State<SignUpScreen1> {
   final SignUpController signUpController = Get.put(SignUpController());
-  Color borderColor = Color(0xffB3B3B3);
-  Color pressedBorderColor = Color(0xffFFC215);
+  Color borderColor = const Color(0xffFFF5DB);
+  Color pressedBorderColor = const Color(0xffFFC215);
   int isPressed = 0;
   void topBtnPressed() {
     setState(() {
@@ -67,7 +67,7 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                   Text(
                     '서비스 이용이 구분되니 신중히 선택해주세요',
                     style: TextStyle(
-                      color: Color(0xffB3B3B3),
+                      color: Color(0xff7E7E7E),
                       fontSize: 20,
                     ),
                   ),
@@ -93,6 +93,7 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                               width: 350,
                               height: height*0.27,
                               decoration: BoxDecoration(
+                                color: Color(0xffFFF5DB),
                                 image: DecorationImage(
                                   image: AssetImage('lib/assets/images/membershipType_patient_bg.png'),
                                   fit: BoxFit.cover,
@@ -109,14 +110,14 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                                       '피보호자',
                                       style: TextStyle(
                                         fontSize: 30,
-                                        color: Color(0xff000000),
+                                        color: isPressed == 1 ? Colors.black : Color(0xffA38130),
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                     Text(
                                       '치매 증상을 지니셨나요?',
                                       style: TextStyle(
-                                        color: Color(0xff000000),
+                                        color: isPressed == 1 ? Colors.black : Color(0xffA38130),
                                         fontSize: 20,
                                       ),
                                     ),
@@ -143,6 +144,7 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                               width: 350,
                               height: height*0.27,
                               decoration: BoxDecoration(
+                                color: Color(0xffFFF5DB),
                                 image: DecorationImage(
                                   image: AssetImage('lib/assets/images/membershipType_carer_bg.png'),
                                   fit: BoxFit.cover,
@@ -159,14 +161,14 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                                       '보호자',
                                       style: TextStyle(
                                         fontSize: 30,
-                                        color: Color(0xff000000),
+                                        color: isPressed == 2 ? Colors.black : Color(0xffA38130),
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                     Text(
                                       '치매 환자의 보호자이신가요?',
                                       style: TextStyle(
-                                        color: Color(0xff000000),
+                                        color: isPressed == 2 ? Colors.black : Color(0xffA38130),
                                         fontSize: 20,
                                       ),
                                     ),

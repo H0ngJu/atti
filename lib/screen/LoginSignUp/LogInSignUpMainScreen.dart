@@ -123,7 +123,7 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                           height: 60,
                                           child: Text('로그인',
                                           style: TextStyle(
-                                            color: Colors.black,
+                                            color: Colors.white,
                                               fontSize: 24,
                                               fontWeight: FontWeight.bold
                                           ),),
@@ -146,9 +146,12 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                           alignment: Alignment.center,
                                           width: width*0.32,
                                           height: 60,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffFFF5DB),
+                                          ),
                                           child: Text('회원가입',
                                           style: TextStyle(
-                                            color: Colors.black,
+                                            color: Color(0xffA38130),
                                             fontSize: 24,
                                             fontWeight: FontWeight.bold
                                           ),),
