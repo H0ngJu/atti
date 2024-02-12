@@ -209,8 +209,34 @@ class _LogInScreenState extends State<LogInScreen> {
                                 }
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'user-not-found') {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                        Text('일치하는 아이디가 존재하지 않습니다',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        backgroundColor: Color(0xffFFC215),
+                                      )
+                                  );
                                   print('일치하는 아이디가 존재하지 않습니다');
                                 } else if (e.code == 'wrong-password') {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                        Text('비밀번호가 일지하지 않습니다',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        backgroundColor: Color(0xffFFC215),
+                                      )
+                                  );
                                   print('비밀번호가 일지하지 않습니다.');
                                 }
                               }
