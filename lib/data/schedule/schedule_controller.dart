@@ -1,36 +1,24 @@
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:atti/data/schedule/schedule_service.dart';
+import 'package:atti/data/schedule/schedule_model.dart';
 
-// 일정 등록 컨트롤러
 class ScheduleController extends GetxController {
-  var name = ''.obs;
-  var date = DateTime.now().obs;
-  var time = ''.obs;
-  var location = ''.obs;
-  var memo = ''.obs;
-}
+  final ScheduleService scheduleService = ScheduleService();
+  var schedule = ScheduleModel().obs;
+  var tmpScheduleName = ''.obs;
 
-void addScheduleToFirestore(ScheduleController scheduleController) async {
-  FirebaseFirestore firestore = FirebaseFirestore.instance; // Firestore 인스턴스
-
-  try {
-    DateTime now = DateTime.now(); // 현재 날짜와 시간
-
-    Map<String, dynamic> scheduleData = {
-      "createdAt": now,
-      "isFinished": false,
-      "memo": scheduleController.memo.value,
-      "name": scheduleController.name.value,
-      "patientId": "",
-      "location": scheduleController.location.value,
-      "time": scheduleController.time.value,
-      "date": scheduleController.date.value,
-    };
-
-    await firestore.collection('schedule').add(scheduleData); // 데이터 추가
-
-    print('일정 등록 완료');
-  } catch (error) {
-    print('Error: $error');
+  void addSchedule() async {
+    try {
+      await scheduleService.addSchedule(schedule.value);
+      clear();
+    } catch (e) {
+      print('Error adding schedule: $e');
+    }
   }
+
+  void clear() {
+    schedule.value = ScheduleModel();
+  }
+
 }

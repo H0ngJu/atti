@@ -2,8 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atti/commons/BottomNextButton.dart';
-import 'package:atti/screen/HomePatient.dart';
 import 'package:atti/data/schedule/schedule_controller.dart';
+
+import '../ScheduleMain.dart';
 
 class ScheduleRegisterFinish extends StatelessWidget {
   const ScheduleRegisterFinish({super.key});
@@ -22,7 +23,7 @@ class ScheduleRegisterFinish extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.only(left: 15),
-                  child: Text('\'${scheduleController.name.value}\'\n일정을 등록했어요!',
+                  child: Text('\'${scheduleController.schedule.value.name}\'\n일정을 등록했어요!',
                     style: TextStyle(
                       fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
                   ),),
@@ -45,7 +46,7 @@ class ScheduleRegisterFinish extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ScheduleRegisterFinish()),
+                  MaterialPageRoute(builder: (context) => ScheduleMain()),
                 );
               },
               child: Text('일정으로 돌아가기', style: TextStyle(color: Colors.black, fontSize: 20),),

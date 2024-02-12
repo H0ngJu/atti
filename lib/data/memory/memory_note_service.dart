@@ -32,7 +32,11 @@ class MemoryNoteService {
 
       // Firestore에 데이터 추가
       memoryNote.img = imageUrl; // img 필드를 업로드된 이미지의 URL로 업데이트
-      await firestore.collection('memoryNote').add(memoryNote.toJson());
+      memoryNote.createdAt = DateTime.now() as Timestamp?;
+
+      DocumentReference docRef = await firestore.collection('memoryNote').add(memoryNote.toJson()); // 도큐먼트 추가하고 레퍼런스 받기
+      memoryNote.reference = docRef; // 도큐먼트 ID 저장
+      await docRef.update(memoryNote.toJson()); // 도큐먼트 업데이트
     } catch (e) {
       print('Error adding memory note: $e');
     }

@@ -26,7 +26,10 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
     // print('일정 시간: ${scheduleController.time.value}');
     // print('일정 장소: ${scheduleController.location.value}');
     // print('일정 메모: ${scheduleController.memo.value}');
-    String formattedDate = DateFormat('yyyy년 MM월 dd일 EEEE', 'ko_KR').format(scheduleController.date.value);
+    DateTime dateTime = scheduleController.schedule.value.time!.toDate();
+    String formattedDate = DateFormat('yyyy년 MM월 dd일', 'ko_KR').format(dateTime);
+    String formattedTime = DateFormat('HH시 mm분', 'ko_KR').format(dateTime);
+
 
     return Scaffold(
       body: Column(children: [
@@ -71,9 +74,9 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
                 ),
                 SizedBox(height: 10,),
                 ScheduleBox(
-                  time: scheduleController.time.value,
-                  name: scheduleController.name.value,
-                  location: scheduleController.location.value,
+                  time: formattedTime,
+                  name: scheduleController.schedule.value.name,
+                  location: scheduleController.schedule.value.location,
                 ),
                 SizedBox(height: 20,),
 
@@ -99,7 +102,7 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
                           ),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(scheduleController.memo.value,
+                            child: Text(scheduleController.schedule.value.memo!,
                               style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.normal,),
                               textAlign: TextAlign.left,
                             ),
@@ -118,7 +121,8 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
           margin: EdgeInsets.only(bottom: 20),
           child: TextButton(
             onPressed: () {
-              addScheduleToFirestore(scheduleController);
+              scheduleController.tmpScheduleName.value = scheduleController.schedule.value.name!;
+              scheduleController.addSchedule();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ScheduleRegisterFinish()),

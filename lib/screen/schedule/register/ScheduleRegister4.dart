@@ -42,7 +42,7 @@ class _ScheduleRegister4State extends State<ScheduleRegister4> {
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: TextField(
                       onChanged: (value) {
-                        scheduleController.memo.value = value;
+                        scheduleController.schedule.value.memo = value;
                         //print(scheduleController.name.value);
                       },
                       cursorColor: Colors.black,

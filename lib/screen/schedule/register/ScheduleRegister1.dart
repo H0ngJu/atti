@@ -43,7 +43,7 @@ class _ScheduleRegister1State extends State<ScheduleRegister1> {
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: TextField(
                       onChanged: (value) {
-                        scheduleController.name.value = value;
+                        scheduleController.schedule.value.name = value;
                         //print(scheduleController.name.value);
                       },
                       cursorColor: Colors.black,
@@ -66,7 +66,7 @@ class _ScheduleRegister1State extends State<ScheduleRegister1> {
             ),
           ),
         
-         NextButton(next: ScheduleRegister2(), content: '다음', isEnabled: scheduleController.name.isNotEmpty,),
+         NextButton(next: ScheduleRegister2(), content: '다음', isEnabled: scheduleController.schedule.value.name != null,),
         ]),
       ),
     );
