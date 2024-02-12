@@ -1,4 +1,6 @@
+import 'package:atti/screen/HomePatient.dart';
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:atti/commons/colorPallet.dart';
 import 'package:get/get.dart';
@@ -12,9 +14,11 @@ class LogInScreen extends StatefulWidget {
 
 class _LogInScreenState extends State<LogInScreen> {
   final ColorPallet colorPallet = Get.put(ColorPallet());
+  final _authentication = FirebaseAuth.instance;
   var isPressed = 0;
   String userId = "";
   String userPassword = "";
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery
@@ -93,15 +97,9 @@ class _LogInScreenState extends State<LogInScreen> {
                                       userId = value;
                                     });
                                   },
-                                  validator: (value){
-                                    if (value!.isEmpty || value.length < 4) {
-                                      return "n글자 이상을 입력해 주세요";
-                                    }
-                                    return null;
+                                  onSaved: (value){
+                                    userId = value!;
                                   },
-                                  // onSaved: (value){
-                                  //   userId = value!;
-                                  // },
                                   style: TextStyle(
                                       fontSize: 24
                                   ),
@@ -115,15 +113,15 @@ class _LogInScreenState extends State<LogInScreen> {
                                   )
                               ),
                             ),
-                            // if (!userId.contains('@') || !userId.contains('.'))
-                            //   Container(
-                            //     child: Text(
-                            //       '올바른 이메일 형식을 입력해 주세요',
-                            //       style: TextStyle(
-                            //         color: colorPallet.alertColor,
-                            //       ),
-                            //     ),
-                            //   )
+                            if (!userId.contains('@') || !userId.contains('.'))
+                              Container(
+                                child: Text(
+                                  '올바른 이메일 형식을 입력해 주세요',
+                                  style: TextStyle(
+                                    color: colorPallet.alertColor,
+                                  ),
+                                ),
+                              )
                           ],
                         ),
                       ),
@@ -159,22 +157,10 @@ class _LogInScreenState extends State<LogInScreen> {
                                       userPassword = value;
                                     });
                                   },
-                                  validator: (value){
-                                    if (value!.isEmpty || value.length < 6) {
-                                      return "6글자 이상을 입력해 주세요";
-                                    }
-                                    return null;
+                                  onSaved: (value){
+                                    userPassword = value!;
                                   },
-                                  // onSaved: (value){
-                                  //   userPw = value!;
-                                  // },
                                   keyboardType: TextInputType.emailAddress,
-                                  // validator: (value) {
-                                  //   if (value!.isEmpty || !value.contains('@')) {
-                                  //     return "유효한 이메일 주소를 입력해 주세요";
-                                  //   }
-                                  //   return null;
-                                  // },
                                   style: TextStyle(
                                       fontSize: 24
                                   ),
@@ -188,15 +174,15 @@ class _LogInScreenState extends State<LogInScreen> {
                                   )
                               ),
                             ),
-                            // if (userPassword.length < 6)
-                            //   Container(
-                            //     child: Text(
-                            //       '6글자 이상의 비밀번호를 입력해 주세요',
-                            //       style: TextStyle(
-                            //         color: colorPallet.alertColor,
-                            //       ),
-                            //     ),
-                            //   )
+                            if (userPassword.length < 6)
+                              Container(
+                                child: Text(
+                                  '6글자 이상의 비밀번호를 입력해 주세요',
+                                  style: TextStyle(
+                                    color: colorPallet.alertColor,
+                                  ),
+                                ),
+                              )
                           ],
                         ),
                       ),
@@ -204,32 +190,30 @@ class _LogInScreenState extends State<LogInScreen> {
                       Container(
                         child: ElevatedButton(
                             onPressed: () async {
-                              // _tryValidation();
-                              // if(isSignUpScreen)
-                              // try {
-                              //   final newUser = await _authentication.createUserWithEmailAndPassword(
-                              //       email: userId,
-                              //       password: userPw);
-                              //   if (newUser.user != null) {
-                              //     Navigator.push(
-                              //         context,
-                              //         MaterialPageRoute(builder: (context) {
-                              //           return SignUpScreen3();
-                              //           }
-                              //         )
-                              //     );
-                                // }
-                              // }
-                              // catch (e) {
-                              //   print(e);
-                              //   ScaffoldMessenger.of(context).showSnackBar(
-                              //       SnackBar(
-                              //         content:
-                              //         Text('이메일 또는 패스워드를 확인해 주세요'),
-                              //         backgroundColor: Colors.blue,
-                              //       )
-                              //   );
-                              // }
+                              try {
+                                if (!userId.contains('@') || !userId.contains('.') || userPassword.length < 6) {
+                                  throw ("이메일과 비밀번호를 확인해 주세요");
+                                }
+                                final credential = await _authentication.signInWithEmailAndPassword(
+                                  email: userId,
+                                  password: userPassword,
+                                );
+                                if (credential.user != null) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) {
+                                        return HomePatient();
+                                      }
+                                      )
+                                  );
+                                }
+                              } on FirebaseAuthException catch (e) {
+                                if (e.code == 'user-not-found') {
+                                  print('일치하는 아이디가 존재하지 않습니다');
+                                } else if (e.code == 'wrong-password') {
+                                  print('비밀번호가 일지하지 않습니다.');
+                                }
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: colorPallet.lightYellow,
