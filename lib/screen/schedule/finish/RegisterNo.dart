@@ -1,6 +1,5 @@
 // 피그마 '사진 등록 No' 화면
 import 'package:flutter/material.dart';
-import 'package:atti/commons/FinishScreen.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/screen/HomePatient.dart';
 
@@ -17,7 +16,14 @@ class RegisterNo extends StatelessWidget {
             Expanded(
               child: Column(
                 children: [
-                  FinishScreen(content: '기억을 등록하지\n않았어요.'),
+                  SizedBox(height: 100.0),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    margin: EdgeInsets.only(left: 15),
+                    child: Text('기억을 등록하지\n않았어요.', style: TextStyle(
+                        fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
+                    ),),
+                  ),
                   SizedBox(height: 80,),
                   Container(
                     //margin: EdgeInsets.only(left: 50),

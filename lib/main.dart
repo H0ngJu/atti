@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: ScheduleFinish1(),
+      home: ScheduleRegister1(),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:atti/data/memory/memory_note_service.dart';
 class MemoryNoteController extends GetxController {
   final MemoryNoteService memoryNoteService = MemoryNoteService();
   var memoryNote = MemoryNoteModel().obs;
+  var tmpImgTitle = ''.obs;
 
   void addMemoryNote() async {
     try {

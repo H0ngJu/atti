@@ -85,6 +85,7 @@ class _MemoryRegisterCheckState extends State<MemoryRegisterCheck> {
             margin: EdgeInsets.only(bottom: 20),
             child: TextButton(
               onPressed: () {
+                memoryNoteController.tmpImgTitle.value = memoryNoteController.memoryNote.value.imgTitle!;
                 memoryNoteController.addMemoryNote();
                 Navigator.push(
                   context,
