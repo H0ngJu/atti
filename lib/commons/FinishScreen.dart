@@ -23,7 +23,6 @@ class FinishScreen extends StatelessWidget {
               fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
           ),),
         ),
-
       ],
     );
   }
