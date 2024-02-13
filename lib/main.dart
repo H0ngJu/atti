@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: ScheduleMain(),
+      home: LogInSignUpMainScreen(),
     );
   }
 }
