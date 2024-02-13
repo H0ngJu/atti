@@ -1,17 +1,21 @@
-// 피그마 '일정 등록 완료' 화면
+import 'package:atti/screen/HomePatient.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:atti/data/memory/memory_note_controller.dart';
 import 'package:atti/commons/BottomNextButton.dart';
-import 'package:atti/data/schedule/schedule_controller.dart';
 
-import '../ScheduleMain.dart';
+class MemoryRegisterFinish extends StatefulWidget {
+  const MemoryRegisterFinish({super.key});
 
-class ScheduleRegisterFinish extends StatelessWidget {
-  const ScheduleRegisterFinish({super.key});
+  @override
+  State<MemoryRegisterFinish> createState() => _MemoryRegisterFinishState();
+}
+
+class _MemoryRegisterFinishState extends State<MemoryRegisterFinish> {
+  final MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
 
   @override
   Widget build(BuildContext context) {
-    final ScheduleController scheduleController = Get.put(ScheduleController());
     return Scaffold(
       backgroundColor: Color(0xffFFEEBC),
       body: Column(
@@ -23,16 +27,16 @@ class ScheduleRegisterFinish extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.only(left: 15),
-                  child: Text('\'${scheduleController.schedule.value.name}\'\n일정을 등록했어요!',
+                  child: Text('\'${memoryNoteController.tmpImgTitle.value}\'\n기억을 등록했어요!',
                     style: TextStyle(
-                      fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
-                  ),),
+                        fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
+                    ),),
                 ),
-                SizedBox(height: 30,),
+                //SizedBox(height: 10,),
                 Container(
                   //margin: EdgeInsets.only(left: 50),
-                  child: Image.asset('lib/assets/images/schedule_atti.png',
-                    width: MediaQuery.of(context).size.width * 0.8,
+                  child: Image.asset('lib/assets/images/memory_atti.png',
+                    width: MediaQuery.of(context).size.width,
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -40,16 +44,15 @@ class ScheduleRegisterFinish extends StatelessWidget {
             ),
           ),
           Container(
-            alignment: Alignment.bottomCenter,
             margin: EdgeInsets.only(bottom: 20),
             child: TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ScheduleMain()),
+                  MaterialPageRoute(builder: (context) => HomePatient()),
                 );
               },
-              child: Text('일정으로 돌아가기', style: TextStyle(color: Colors.black, fontSize: 20),),
+              child: Text('내 기억으로 가기', style: TextStyle(color: Colors.black, fontSize: 20),),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.white),
                 minimumSize: MaterialStateProperty.all(
@@ -62,3 +65,4 @@ class ScheduleRegisterFinish extends StatelessWidget {
     );
   }
 }
+

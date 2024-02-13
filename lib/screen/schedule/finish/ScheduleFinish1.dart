@@ -1,7 +1,5 @@
 // 피그마 '일정 완료하기 1' 화면
 import 'package:flutter/material.dart';
-import 'package:atti/commons/DetailPageTitle.dart';
-import 'package:atti/commons/ScheduleBox.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/screen/schedule/finish/ScheduleFinish2.dart';
 
@@ -11,28 +9,33 @@ class ScheduleFinish1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffFFEEBC),
       body: Column(
         children: [
           Expanded(
-            child: Container(
-              //width: MediaQuery.of(context).size.width * 0.9,
-              child: Column(
-                children: [
-                  DetailPageTitle(
-                    title: '일정 완료하기',
-                    description: '\'마을회관 방문\' 일정을 \n완료하셨나요?',
-                    totalStep: 0,
-                    currentStep: 0,
+            child: Column(
+              children: [
+                SizedBox(height: MediaQuery.of(context).size.height * 0.12),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  margin: EdgeInsets.only(left: 15),
+                  child: Text('\'추후 수정\'\n일정을 완료했어요!',
+                    style: TextStyle(
+                        fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
+                    ),),
+                ),
+                SizedBox(height: 20,),
+                Container(
+                  //margin: EdgeInsets.only(left: 50),
+                  child: Image.asset('lib/assets/images/finish_atti.png',
+                    width: MediaQuery.of(context).size.width * 0.85,
+                    fit: BoxFit.fitWidth,
                   ),
-                  SizedBox(height: 30,),
-                  ScheduleBox(time: '오후 1:20', name: '마을회관 방문', location: '우암 3동 마을회관',),
-
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-          NextButton(next: ScheduleFinish2(), content: '네', isEnabled: true,),
-          NextButton(next: ScheduleFinish2(), content: '아니요', isEnabled: true,),
+          NextButton(next: ScheduleFinish2(), content: '다음',isEnabled: true),
         ],
       ),
     );
