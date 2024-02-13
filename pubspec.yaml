@@ -58,6 +58,9 @@ dependencies:
     sdk: flutter
   bottom_picker:
   flutter_svg: ^2.0.9
+  material_tag_editor: ^0.1.2
+  toggle_switch: ^2.1.0
+  timeline_tile: ^2.0.0
   http: ^1.2.0
 
 dev_dependencies:
@@ -80,6 +83,7 @@ flutter:
     - lib/assets/images/
     - lib/assets/icons/
     - lib/assets/
+    - lib/assets/icons/
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
