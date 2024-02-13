@@ -59,6 +59,8 @@ dependencies:
   bottom_picker:
   flutter_svg: ^2.0.9
   material_tag_editor: ^0.1.2
+  toggle_switch: ^2.1.0
+  timeline_tile: ^2.0.0
 
 dev_dependencies:
   flutter_test:

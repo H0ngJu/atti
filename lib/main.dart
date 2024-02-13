@@ -1,4 +1,5 @@
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
+import 'package:atti/screen/schedule/ScheduleMain.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: ScheduleRegister1(),
+      home: ScheduleMain(),
     );
   }
 }

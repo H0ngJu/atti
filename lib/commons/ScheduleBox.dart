@@ -37,7 +37,7 @@ class _ScheduleBoxState extends State<ScheduleBox> {
           Text(widget.name, style: TextStyle(
             fontSize: 30,
           ),),
-          SizedBox(height: 10,),
+          SizedBox(height: 5,),
           Row(
             children: [
               Icon(Icons.location_on_outlined, color: Color(0xffA38130),),
