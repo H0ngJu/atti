@@ -8,6 +8,7 @@ class MemoryDetail extends StatelessWidget {
   const MemoryDetail({Key? key}) : super(key: key);
 
   Widget MemoryDetailTitle(){
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
