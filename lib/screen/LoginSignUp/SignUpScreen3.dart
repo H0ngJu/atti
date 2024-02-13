@@ -418,17 +418,19 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                             onPressed: () async {
                               _tryValidation();
                               try {
-                                QuerySnapshot snapshot = await _db
-                                    .collection('user')
-                                    .where('userEmail', isEqualTo: userPatientEmail)
-                                    .where('isPatient', isEqualTo: true)
-                                    .get();
-                                if (snapshot.docs.length > 0) {
-                                  DocumentSnapshot document = snapshot.docs[0];
-                                  patientDocId = await (document.data() as Map<String, dynamic>)["userId"];
-                                } else {
-                                  print('일치하는 피보호자가 없습니다');
-                                  throw ("일치하는 피보호자가 없습니다");
+                                if (!signUpController.isPatient.value) {
+                                  QuerySnapshot snapshot = await _db
+                                      .collection('user')
+                                      .where('userEmail', isEqualTo: userPatientEmail)
+                                      .where('isPatient', isEqualTo: true)
+                                      .get();
+                                  if (snapshot.docs.length > 0) {
+                                    DocumentSnapshot document = snapshot.docs[0];
+                                    patientDocId = await (document.data() as Map<String, dynamic>)["userId"];
+                                  } else {
+                                    print('일치하는 피보호자가 없습니다');
+                                    throw ("일치하는 피보호자가 없습니다");
+                                  }
                                 }
                                 print(signUpController.userEmail.value);
                                 print(signUpController.userPassword.value);
