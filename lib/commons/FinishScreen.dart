@@ -15,29 +15,14 @@ class FinishScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // SizedBox(height: 30.0),
-        // Container(
-        //   margin: EdgeInsets.only(left: 15, top: 100),
-        //   child: Text(title, style: TextStyle(
-        //       fontSize: 24, fontWeight: FontWeight.w500
-        //   ),),
-        // ),
-        //
-        // Container(
-        //   margin: EdgeInsets.only(left: 15),
-        //   child: Text(description, style: TextStyle(
-        //       fontSize: 30, fontWeight: FontWeight.w600
-        //   ),),
-        // ),
         SizedBox(height: 100.0),
         Container(
           width: MediaQuery.of(context).size.width * 0.9,
           margin: EdgeInsets.only(left: 15),
           child: Text(content, style: TextStyle(
-              fontSize: 40, fontWeight: FontWeight.w600, color: Colors.white
+              fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
           ),),
         ),
-
       ],
     );
   }

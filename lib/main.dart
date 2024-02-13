@@ -1,5 +1,6 @@
 import 'package:atti/screen/HomeCarer.dart';
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
+import 'package:atti/screen/schedule/ScheduleMain.dart';
 import 'package:atti/screen/memory/gallery/MainGallery.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'firebase_options.dart';
 import 'package:atti/screen/HomePatient.dart';
+import 'package:atti/screen/schedule/finish/ScheduleFinish1.dart';
+import 'package:atti/screen/schedule/register/ScheduleRegister1.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +35,7 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: MainGallery(),
+      home: LogInSignUpMainScreen(),
     );
   }
 }
