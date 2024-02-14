@@ -1,5 +1,6 @@
 import 'package:atti/screen/HomeCarer.dart';
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
+import 'package:atti/screen/memory/chat/Chat.dart';
 import 'package:atti/screen/memory/gallery/GalleryOption.dart';
 import 'package:atti/screen/memory/register/MemoryRegister1.dart';
 import 'package:atti/screen/memory/register/MemoryRegister2.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: MainGallery(),
+      home: Chat(),
     );
   }
 }
