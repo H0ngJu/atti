@@ -1,5 +1,7 @@
+import 'package:atti/screen/HomeCarer.dart';
 import 'package:atti/screen/HomePatient.dart';
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:atti/commons/colorPallet.dart';
@@ -15,6 +17,8 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   final ColorPallet colorPallet = Get.put(ColorPallet());
   final _authentication = FirebaseAuth.instance;
+  final _db = FirebaseFirestore.instance;
+  late bool isPatient;
   var isPressed = 0;
   String userId = "";
   String userPassword = "";
@@ -87,6 +91,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                 ),
                               ),
                               child: TextFormField(
+                                keyboardType: TextInputType.emailAddress,
                                   onTap: (){
                                     setState(() {
                                       isPressed = 1;
@@ -199,13 +204,31 @@ class _LogInScreenState extends State<LogInScreen> {
                                   password: userPassword,
                                 );
                                 if (credential.user != null) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) {
-                                        return HomePatient();
-                                      }
-                                      )
-                                  );
+                                  print(credential.user!.uid);
+                                  QuerySnapshot snapshot = await _db
+                                      .collection('user')
+                                      .where('userId', isEqualTo: credential.user!.uid)
+                                      .get();
+                                  DocumentSnapshot document = snapshot.docs[0];
+                                  isPatient = await (document.data() as Map<String, dynamic>)["isPatient"];
+                                  if (isPatient) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) {
+                                          return HomePatient();
+                                        }
+                                        )
+                                    );
+                                  }
+                                  else {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) {
+                                          return HomeCarer();
+                                        }
+                                        )
+                                    );
+                                  }
                                 }
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'user-not-found') {

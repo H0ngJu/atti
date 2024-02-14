@@ -156,9 +156,6 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                           alignment: Alignment.center,
                                           width: width*0.32,
                                           height: 60,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xffFFF5DB),
-                                          ),
                                           child: Text('회원가입',
                                           style: TextStyle(
                                             color: Color(0xffA38130),
