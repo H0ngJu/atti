@@ -1,5 +1,7 @@
+import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/screen/LogInSignUp/LogInScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class FinishSignUpScreen extends StatefulWidget {
   const FinishSignUpScreen({super.key});
@@ -13,6 +15,8 @@ class _FinishSignUpScreenState extends State<FinishSignUpScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    final ColorPallet colorPallet = Get.put(ColorPallet());
+
     return Scaffold(
       backgroundColor: Color(0xffFFC215),
       body: Stack(
@@ -24,7 +28,6 @@ class _FinishSignUpScreenState extends State<FinishSignUpScreen> {
               style: TextStyle(
                 letterSpacing: 1.0,
                 fontSize: 40,
-                fontWeight: FontWeight.w700,
                 color: Colors.white,
               ),
             ),
@@ -34,9 +37,9 @@ class _FinishSignUpScreenState extends State<FinishSignUpScreen> {
             child: Text(
               '방금 생성한 계정으로 로그인해서\n아띠를 만나러 가볼게요!',
               style: TextStyle(
+                color: colorPallet.textColor,
                 letterSpacing: 1.0,
                 fontSize: 23,
-                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -47,7 +50,7 @@ class _FinishSignUpScreenState extends State<FinishSignUpScreen> {
           ),
           Container(
             alignment: Alignment.center,
-            margin: EdgeInsets.only(top: height*0.8, left: 10, right: 10),
+            margin: EdgeInsets.only(top: height*0.85, left: 10, right: 10),
             child: ElevatedButton(
                 onPressed: () async {
                   Navigator.push(

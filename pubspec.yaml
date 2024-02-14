@@ -63,6 +63,8 @@ dependencies:
   timeline_tile: ^2.0.0
   http: ^1.2.0
   firebase_app_check: ^0.2.1+13
+  flutter_dotenv: ^5.1.0
+  dart_openai: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +87,7 @@ flutter:
     - lib/assets/icons/
     - lib/assets/
     - lib/assets/icons/
+    - .env
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
