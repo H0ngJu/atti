@@ -162,7 +162,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                   )
                               ),
                             ),
-                            if (userName.length < 2)
+                            if (isPressed == 1 && userName.length < 2)
                               Container(
                                 child: Text(
                                   "2글자 이상의 이름을 입력해 주세요",
@@ -254,15 +254,14 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                   });
                                 },
                                 validator: (value) {
-                                  if (value!.length < 10 ||
-                                      !value.contains('-')) {
+                                  if (value!.length < 10) {
                                     return "유효한 전화번호를 입력해 주세요";
                                   }
                                   return null; // 유효성 검사에 성공한 경우 null 반환
                                 },
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: '010-0000-0000',
+                                  hintText: '01012345678',
                                   hintStyle: TextStyle(
                                       fontSize: 24,
                                       color: colorPallet.textColor,
@@ -276,8 +275,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                 ),
                               ),
                             ),
-                            if (!userPhoneNumber.contains('-') ||
-                                userPhoneNumber.length < 12)
+                            if (isPressed == 3 && userPhoneNumber.length < 10)
                               Container(
                                 child: Text(
                                   "유효한 전화번호를 입력해 주세요",
@@ -348,8 +346,8 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                   ),
                                 ),
                               ),
-                              if (!userPatientEmail.contains('@') ||
-                                  !userPatientEmail.contains('.'))
+                              if (isPressed == 4 && (!userPatientEmail.contains('@') ||
+                                  !userPatientEmail.contains('.')))
                                 Container(
                                   child: Text(
                                     "올바른 이메일 형식을 입력해 주세요",
@@ -418,17 +416,19 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                             onPressed: () async {
                               _tryValidation();
                               try {
-                                QuerySnapshot snapshot = await _db
-                                    .collection('user')
-                                    .where('userEmail', isEqualTo: userPatientEmail)
-                                    .where('isPatient', isEqualTo: true)
-                                    .get();
-                                if (snapshot.docs.length > 0) {
-                                  DocumentSnapshot document = snapshot.docs[0];
-                                  patientDocId = await (document.data() as Map<String, dynamic>)["userId"];
-                                } else {
-                                  print('일치하는 피보호자가 없습니다');
-                                  throw ("일치하는 피보호자가 없습니다");
+                                if (!signUpController.isPatient.value) {
+                                  QuerySnapshot snapshot = await _db
+                                      .collection('user')
+                                      .where('userEmail', isEqualTo: userPatientEmail)
+                                      .where('isPatient', isEqualTo: true)
+                                      .get();
+                                  if (snapshot.docs.length > 0) {
+                                    DocumentSnapshot document = snapshot.docs[0];
+                                    patientDocId = await (document.data() as Map<String, dynamic>)["userId"];
+                                  } else {
+                                    print('일치하는 피보호자가 없습니다');
+                                    throw ("일치하는 피보호자가 없습니다");
+                                  }
                                 }
                                 print(signUpController.userEmail.value);
                                 print(signUpController.userPassword.value);

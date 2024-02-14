@@ -113,7 +113,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                   )
                               ),
                             ),
-                            if (!userId.contains('@') || !userId.contains('.'))
+                            if (isPressed == 1 && (!userId.contains('@') || !userId.contains('.')))
                               Container(
                                 child: Text(
                                   '올바른 이메일 형식을 입력해 주세요',
@@ -174,7 +174,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                   )
                               ),
                             ),
-                            if (userPassword.length < 6)
+                            if (isPressed == 2 && userPassword.length < 6)
                               Container(
                                 child: Text(
                                   '6글자 이상의 비밀번호를 입력해 주세요',

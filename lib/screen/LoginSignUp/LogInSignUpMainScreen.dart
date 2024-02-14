@@ -50,6 +50,16 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                       width: width*0.4,
                       child: Image.asset('lib/assets/images/LogInSignUpMainATTI.png'),
                     ),
+                    Positioned.fill(child:
+                    GestureDetector(
+                      onTap: () {
+                        bottombarToggle();
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                      ),
+                    )
+                    ),
                     // if (loggedUser == null)
                     Positioned(
                       bottom: 0,
@@ -140,7 +150,7 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.white,
+                                            backgroundColor: Color(0xffFFF5DB),
                                         ),
                                         child: Container(
                                           alignment: Alignment.center,
