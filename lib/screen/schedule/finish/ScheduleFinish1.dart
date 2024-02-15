@@ -4,7 +4,8 @@ import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/screen/schedule/finish/ScheduleFinish2.dart';
 
 class ScheduleFinish1 extends StatelessWidget {
-  const ScheduleFinish1({super.key});
+  const ScheduleFinish1({super.key, required this.name});
+  final name;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class ScheduleFinish1 extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.only(left: 15),
-                  child: Text('\'추후 수정\'\n일정을 완료했어요!',
+                  child: Text('\'${name}\'\n일정을 완료했어요!',
                     style: TextStyle(
                         fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
                     ),),
@@ -35,7 +36,7 @@ class ScheduleFinish1 extends StatelessWidget {
               ],
             ),
           ),
-          NextButton(next: ScheduleFinish2(), content: '다음',isEnabled: true),
+          NextButton(next: ScheduleFinish2(name: name), content: '다음',isEnabled: true),
         ],
       ),
     );

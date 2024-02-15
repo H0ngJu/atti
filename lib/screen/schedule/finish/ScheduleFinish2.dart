@@ -1,13 +1,12 @@
 // 피그마 '일정 완료하기 2' 화면
-import 'package:atti/screen/HomePatient.dart';
 import 'package:atti/screen/memory/register/MemoryRegister1.dart';
 import 'package:flutter/material.dart';
-import 'package:atti/commons/DetailPageTitle.dart';
-import 'package:atti/commons/BottomNextButton.dart';
+import '../ScheduleMain.dart';
 
 
 class ScheduleFinish2 extends StatelessWidget {
-  const ScheduleFinish2({super.key});
+  const ScheduleFinish2({super.key, required this.name});
+  final name;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class ScheduleFinish2 extends StatelessWidget {
                     width: MediaQuery.of(context).size.width * 0.7,
                     margin: EdgeInsets.only(left: 15),
                     //alignment: Alignment.centerLeft,
-                    child: Text('\'추후 수정\' 기억을\n내 기억에 남길까요?',
+                    child: Text('\'${name}\' 기억을\n내 기억에 남길까요?',
                       style: TextStyle(
                         fontSize: 30, fontWeight: FontWeight.w500
                     ),),
@@ -61,7 +60,7 @@ class ScheduleFinish2 extends StatelessWidget {
                 TextButton(onPressed: (){
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePatient()),
+                    MaterialPageRoute(builder: (context) => ScheduleMain()),
                   );
                 }, child: Text('아니요', style: TextStyle(color: Color(0xffA38130), fontSize: 20),),
                   style: ButtonStyle(

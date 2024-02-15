@@ -47,7 +47,7 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
                         cursorColor: Colors.black,
                         style: TextStyle(fontSize: 24),
                         decoration: InputDecoration(
-                          hintText: '나중에 일정 이름으로 바꾸기',
+                          hintText: '사진 제목을 뭐라고 할까요?',
                           hintStyle: TextStyle(fontSize: 24, color: Color(0xffA38130)),
                           filled: true, // 배경을 채움
                           fillColor: Color(0xffFFE9B3),

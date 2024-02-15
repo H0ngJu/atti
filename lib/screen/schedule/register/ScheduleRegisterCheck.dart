@@ -21,15 +21,9 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
 
   @override
   Widget build(BuildContext context) {
-    // print('일정 이름: ${scheduleController.name.value}');
-    // print('일정 날짜: ${scheduleController.date.value}');
-    // print('일정 시간: ${scheduleController.time.value}');
-    // print('일정 장소: ${scheduleController.location.value}');
-    // print('일정 메모: ${scheduleController.memo.value}');
-    DateTime dateTime = scheduleController.schedule.value.time!.toDate();
-    String formattedDate = DateFormat('yyyy년 MM월 dd일', 'ko_KR').format(dateTime);
-    String formattedTime = DateFormat('HH시 mm분', 'ko_KR').format(dateTime);
-
+    DateTime? dateTime = scheduleController.schedule.value.time?.toDate();
+    String formattedDate = dateTime != null ? DateFormat('yyyy년 MM월 dd일', 'ko_KR').format(dateTime) : '';
+    String formattedTime = dateTime != null ? DateFormat('HH시 mm분', 'ko_KR').format(dateTime) : '';
 
     return Scaffold(
       body: Column(children: [
@@ -45,13 +39,6 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
                 ),
                 SizedBox(height: 20),
 
-                // Container(
-                //   alignment: Alignment.centerLeft,
-                //   color: Color(0xffFFF5DB),
-                //   padding: EdgeInsets.only(left: 10),
-                //   //width: MediaQuery.of(context).size.width * 0.9,
-                //     child: Text(formattedDate, style: TextStyle(fontSize: 24,),)
-                // ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: Row(
@@ -102,7 +89,7 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
                           ),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(scheduleController.schedule.value.memo!,
+                            child: Text(scheduleController.schedule.value.memo ?? '',
                               style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.normal,),
                               textAlign: TextAlign.left,
                             ),

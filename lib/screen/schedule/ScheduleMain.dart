@@ -1,17 +1,20 @@
 // 일정 메인 화면
 import 'package:atti/screen/schedule/register/ScheduleRegister1.dart';
+import 'package:atti/screen/schedule/finish/ScheduleFinish1.dart';
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:atti/data/schedule/schedule_controller.dart';
+import 'package:atti/data/schedule/schedule_service.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import '../../commons/ScheduleBox.dart';
+import '../../commons/ScheduleModal.dart';
 import '../../data/memory/memory_note_controller.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:timelines/timelines.dart';
+import '../../data/schedule/schedule_model.dart';
 
 class ScheduleMain extends StatefulWidget {
   const ScheduleMain({super.key});
@@ -29,10 +32,27 @@ class _ScheduleMainState extends State<ScheduleMain> {
       // 해당 인덱스로 페이지 변경
     });
   }
+
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
   CalendarFormat _calendarFormat = CalendarFormat.week;
-  int _itemCount = 3; // 임시로 3개만
+
+  List<ScheduleModel> schedulesBySelectedDay = []; // 선택된 날짜의 일정들이 반환되는 리스트
+  int? numberOfSchedules; // 선택된 날짜의 일정 개수
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      await _fetchData();
+    });
+  }
+  Future<void> _fetchData() async {
+    schedulesBySelectedDay = await ScheduleService().getSchedulesByDate(_selectedDay);
+    setState(() {
+      numberOfSchedules = schedulesBySelectedDay.length;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +94,6 @@ class _ScheduleMainState extends State<ScheduleMain> {
               width: MediaQuery.of(context).size.width,
               color: Color(0xffFFFAEF),
               child: Column(
-                //crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
@@ -84,9 +103,16 @@ class _ScheduleMainState extends State<ScheduleMain> {
                       style: TextStyle(fontSize: 24),
                     ),
                   ),
-
-                  ScheduleTimeline(),
-
+                  numberOfSchedules! >= 1
+                  ? ScheduleTimeline()
+                  : Container(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    alignment: Alignment.center,
+                    child: Text('아직 오늘의 일정이 없네요!', style: TextStyle(
+                      fontSize: 30, fontWeight: FontWeight.w600
+                    ),),
+                  ),
+                  SizedBox(height: 10,),
                   NextButton(next: ScheduleRegister1(), content: '일정 등록하기', isEnabled: true),
                 ],
               ),
@@ -94,7 +120,6 @@ class _ScheduleMainState extends State<ScheduleMain> {
           ],
         ),
       ),
-
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -133,11 +158,12 @@ class _ScheduleMainState extends State<ScheduleMain> {
       selectedDayPredicate: (day) {
         return isSameDay(_selectedDay, day);
       },
-      onDaySelected: (selectedDay, focusedDay) {
+      onDaySelected: (selectedDay, focusedDay) async {
         setState(() {
           _selectedDay = selectedDay;
           _focusedDay = focusedDay; // update `_focusedDay` here as well
         });
+        await _fetchData();
       },
       calendarFormat: _calendarFormat,
       onFormatChanged: (format) {
@@ -169,7 +195,10 @@ class _ScheduleMainState extends State<ScheduleMain> {
 
   Widget ScheduleTimeline() {
     return Container(
-      height: _itemCount * 190,
+      height: numberOfSchedules! <= 2
+          ? MediaQuery.of(context).size.height * 0.5
+          : (numberOfSchedules! * MediaQuery.of(context).size.height * 0.25),
+
       width: MediaQuery.of(context).size.width * 0.9,
       child: TimelineTheme(
         data: TimelineThemeData(
@@ -186,10 +215,17 @@ class _ScheduleMainState extends State<ScheduleMain> {
             )
         ),
         child: Timeline.tileBuilder(
-          builder: TimelineTileBuilder.fromStyle(
-            connectorStyle: ConnectorStyle.dashedLine,
+          builder: TimelineTileBuilder.connectedFromStyle(
+            indicatorStyleBuilder: (context, index) {
+              return schedulesBySelectedDay[index].isFinished!
+                  ? IndicatorStyle.dot
+                  : IndicatorStyle.outlined;
+            },
+            //connectorStyle: ConnectorStyle.dashedLine,
+            connectorStyleBuilder: (context, index) => ConnectorStyle.dashedLine,
+            lastConnectorStyle: ConnectorStyle.dashedLine,
             contentsAlign: ContentsAlign.basic,
-            indicatorStyle: IndicatorStyle.dot,
+            //indicatorStyle: IndicatorStyle.dot,
             contentsBuilder: (context, index) => Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
 
@@ -197,61 +233,36 @@ class _ScheduleMainState extends State<ScheduleMain> {
               child: GestureDetector(
                 onTap: () {
                   // 타일 클릭 시 모달창
-                  showDialog(context: context, builder: (BuildContext context) {
-                    return AlertDialog(
-                      backgroundColor: Colors.white,
-                      content: Container(
-                        height: 500,
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(),
-                                IconButton(onPressed: (){
-                                  Navigator.pop(context);
-                                }, icon: Icon(Icons.close, color: Color(0xffB8B8B8),))
-                              ],
-                            ),
-                            Text('마을회관 방문', style: TextStyle(
-                              fontSize: 28, fontWeight: FontWeight.w500
-                            ),),
-                            SizedBox(height: 15,),
-                            Row(
-                              children: [
-                                Text('시간', style: TextStyle(
-                                  fontSize: 24
-                                ),)
-                              ],
-                            )
-
-                          ],
-                        ),
-                      ),
+                  showDialog(context: context, builder: (_) {
+                    return ScheduleModal(
+                      time: DateFormat('HH시 mm분').format(schedulesBySelectedDay[index].time!.toDate()),
+                      location: schedulesBySelectedDay[index].location!,
+                      name: schedulesBySelectedDay[index].name!,
+                      memo: schedulesBySelectedDay[index].memo,
+                      docRef: schedulesBySelectedDay[index].reference!,
                     );
                   });
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('완료됨', textAlign: TextAlign.start,
+                    Text(schedulesBySelectedDay[index].isFinished! ? '완료됨' : '완료되지 않음',
+                      textAlign: TextAlign.start,
                       style: TextStyle(
                         color: Color(0xff737373),
                         fontSize: 18,
                       ), ),
                     SizedBox(height: 10,),
                     ScheduleBox(
-                      time: '오후 1:30',
-                      location: '김치찜 한옥집',
-                      name: '가족 모임',
+                      time: DateFormat('HH시 mm분').format(schedulesBySelectedDay[index].time!.toDate()),
+                      location: schedulesBySelectedDay[index].location,
+                      name: schedulesBySelectedDay[index].name,
                     ),
                   ],
                 ),
               ),
             ),
-            itemCount: 3,
+            itemCount: numberOfSchedules ?? 0,
           ),
           physics: NeverScrollableScrollPhysics(), // 타임라인 빌더 내 스크롤 막기
         ),
