@@ -63,6 +63,8 @@ dependencies:
   timeline_tile: ^2.0.0
   http: ^1.2.0
   speech_to_text: ^6.6.0
+  permission_handler: ^11.3.0
+  flutter_sliding_up_panel: ^2.1.1
 
 dev_dependencies:
   flutter_test:
