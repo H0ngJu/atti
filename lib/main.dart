@@ -27,26 +27,6 @@ void main() async {
     appleProvider: AppleProvider.appAttest,
   );
   await dotenv.load(fileName: '.env');
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('ko', 'KR'), // Korean
-      ],
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(),
-      home: LogInSignUpMainScreen(),
-    );
-  }
+  runApp(MaterialApp(
+      home: LogInSignUpMainScreen()));
 }
