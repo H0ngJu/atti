@@ -4,9 +4,14 @@ import 'package:atti/screen/memory/chat/Chat.dart';
 import 'package:atti/screen/memory/gallery/GalleryOption.dart';
 import 'package:atti/screen/memory/register/MemoryRegister1.dart';
 import 'package:atti/screen/memory/register/MemoryRegister2.dart';
+import 'package:atti/screen/LoginSignUp/FinishSignUpScreen.dart';
+import 'package:atti/screen/LoginSignUp/SignUpFamilyTag.dart';
+import 'package:atti/screen/chatbot/Chatbot.dart';
 import 'package:atti/screen/schedule/ScheduleMain.dart';
 import 'package:atti/screen/memory/gallery/MainGallery.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -20,7 +25,14 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  await FirebaseAppCheck.instance.activate(
+    webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+    androidProvider: AndroidProvider.debug,
+    appleProvider: AppleProvider.appAttest,
+  );
+  await dotenv.load(fileName: '.env');
+  runApp(MaterialApp(
+      home: ScheduleMain()));
 }
 
 class MyApp extends StatelessWidget {
