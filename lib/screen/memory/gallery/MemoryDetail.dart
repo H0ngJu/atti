@@ -81,7 +81,7 @@ class MemoryDetail extends StatelessWidget {
                     width: MediaQuery.of(context).size.width * 0.9,
                     height: 60,
                     child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {Get.to(Chat());},
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xffFFC215)),
                         child: Text(

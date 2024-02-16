@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:atti/commons/SimpleAppBar.dart';
 import 'package:atti/screen/memory/chat/BeforeSave.dart';
 import 'package:atti/screen/memory/chat/ChatBubble.dart';
+import 'package:atti/screen/memory/chat/ChatHistory.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -172,7 +173,7 @@ class _VoiceButtonState extends State<VoiceButton> {
               height: MediaQuery.of(context).size.width * 0.2,
               margin: EdgeInsets.only(top: 20),
               child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {Get.to(ChatHistory());},
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xffFFF5DB),
                       shape: CircleBorder()),
