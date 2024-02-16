@@ -57,6 +57,7 @@ class _HomePatientState extends State<HomePatient> {
   final _db = FirebaseFirestore.instance;
   User? loggedUser;
 
+  @override
   void initState() {
     super.initState();
     getCurrentUser();
