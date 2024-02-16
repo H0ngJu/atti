@@ -50,6 +50,16 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                       width: width*0.4,
                       child: Image.asset('lib/assets/images/LogInSignUpMainATTI.png'),
                     ),
+                    Positioned.fill(child:
+                    GestureDetector(
+                      onTap: () {
+                        bottombarToggle();
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                      ),
+                    )
+                    ),
                     // if (loggedUser == null)
                     Positioned(
                       bottom: 0,
@@ -140,15 +150,12 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.white,
+                                            backgroundColor: Color(0xffFFF5DB),
                                         ),
                                         child: Container(
                                           alignment: Alignment.center,
                                           width: width*0.32,
                                           height: 60,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xffFFF5DB),
-                                          ),
                                           child: Text('회원가입',
                                           style: TextStyle(
                                             color: Color(0xffA38130),
