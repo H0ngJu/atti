@@ -1,6 +1,7 @@
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/data/SignUpController.dart';
 import 'package:atti/screen/LoginSignUp/FinishSignUpScreen.dart';
+import 'package:atti/screen/LoginSignUp/SignUpFamilyTag.dart';
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:bottom_picker/resources/arrays.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -162,7 +163,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                   )
                               ),
                             ),
-                            if (userName.length < 2)
+                            if (isPressed == 1 && userName.length < 2)
                               Container(
                                 child: Text(
                                   "2글자 이상의 이름을 입력해 주세요",
@@ -254,15 +255,14 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                   });
                                 },
                                 validator: (value) {
-                                  if (value!.length < 10 ||
-                                      !value.contains('-')) {
+                                  if (value!.length < 10) {
                                     return "유효한 전화번호를 입력해 주세요";
                                   }
                                   return null; // 유효성 검사에 성공한 경우 null 반환
                                 },
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: '010-0000-0000',
+                                  hintText: '01012345678',
                                   hintStyle: TextStyle(
                                       fontSize: 24,
                                       color: colorPallet.textColor,
@@ -276,8 +276,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                 ),
                               ),
                             ),
-                            if (!userPhoneNumber.contains('-') ||
-                                userPhoneNumber.length < 12)
+                            if (isPressed == 3 && userPhoneNumber.length < 10)
                               Container(
                                 child: Text(
                                   "유효한 전화번호를 입력해 주세요",
@@ -348,8 +347,8 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                   ),
                                 ),
                               ),
-                              if (!userPatientEmail.contains('@') ||
-                                  !userPatientEmail.contains('.'))
+                              if (isPressed == 4 && (!userPatientEmail.contains('@') ||
+                                  !userPatientEmail.contains('.')))
                                 Container(
                                   child: Text(
                                     "올바른 이메일 형식을 입력해 주세요",
@@ -375,37 +374,23 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                     fontSize: 24
                                 ),
                               ),
+                          // TagTest(),
                               Container(
                                 margin: EdgeInsets.only(top: height*0.01),
                                 padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 5.0),
                                 decoration: BoxDecoration(
-                                  color: colorPallet.yellow,
+                                  // color: colorPallet.yellow,
                                   borderRadius: BorderRadius.circular(15.0),
                                   border: Border.all(
                                     color: isPressed == 5? colorPallet.textColor : colorPallet.yellow,
                                   ),
                                 ),
-                                child: TextFormField(
-                                  onTap: (){
-                                    setState(() {
-                                      isPressed = 5;
-                                    });
-                                  },
-                                    onSaved: (value) {
-                                      signUpController.userFamily.value =
-                                          value.toString().split(" ");
-                                    },
-                                    style: TextStyle(
-                                        fontSize: 24
-                                    ),
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: "가족 구성원의 이름을 입력해주세요",
-                                      hintStyle: TextStyle(
-                                          fontSize: 24,
-                                          color: colorPallet.textColor,
-                                      ),
-                                    )
+                                child: Container(
+                                    margin: EdgeInsets.only(top: height*0.01),
+                                    padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 5.0),
+                                    width: width*0.9,
+                                    height: height*0.2,
+                                    child: SignUpFamilyTag()
                                 ),
                               )
                             ],

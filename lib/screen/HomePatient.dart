@@ -1,5 +1,7 @@
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -51,6 +53,28 @@ class HomePatient extends StatefulWidget {
 }
 
 class _HomePatientState extends State<HomePatient> {
+  final _authentication = FirebaseAuth.instance;
+  final _db = FirebaseFirestore.instance;
+  User? loggedUser;
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
+
+  void getCurrentUser() {
+    try {
+      final user = _authentication.currentUser;
+      print("loggedUser: ${user!.uid}");
+      if (user != null) {
+        loggedUser = user as User?;
+      };
+    }
+    catch (e) {
+      print(e);
+    }
+  }
   // bottom Navi logic
   int _selectedIndex = 2;
 
