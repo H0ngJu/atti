@@ -12,7 +12,7 @@ class ScheduleService {
       schedule.reference = docRef;
       await docRef.update(schedule.toJson());
     } catch (e) {
-      print('Error adding task: $e');
+      print('Error adding schedule : $e');
     }
   }
 

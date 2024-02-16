@@ -1,10 +1,10 @@
-// 피그마 '일정 완료하기 1' 화면
 import 'package:flutter/material.dart';
 import 'package:atti/commons/BottomNextButton.dart';
-import 'package:atti/screen/schedule/finish/ScheduleFinish2.dart';
 
-class ScheduleFinish1 extends StatelessWidget {
-  const ScheduleFinish1({super.key, required this.name});
+import 'RoutineMain.dart';
+
+class RoutineFinish extends StatelessWidget {
+  const RoutineFinish({super.key, required this.name});
   final name;
 
   @override
@@ -21,8 +21,8 @@ class ScheduleFinish1 extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.only(left: 15),
                   child: Text(name, style: TextStyle(
-                        fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
-                    ),),
+                      fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
+                  ),),
                 ),
                 SizedBox(height: 20,),
                 Container(
@@ -35,7 +35,24 @@ class ScheduleFinish1 extends StatelessWidget {
               ],
             ),
           ),
-          NextButton(next: ScheduleFinish2(name: name), content: '다음',isEnabled: true),
+          Container(
+            alignment: Alignment.bottomCenter,
+            margin: EdgeInsets.only(bottom: 20),
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RoutineMain()),
+                );
+              },
+              child: Text('하루 일과로 돌아가기', style: TextStyle(color: Colors.black, fontSize: 20),),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                minimumSize: MaterialStateProperty.all(
+                    Size(MediaQuery.of(context).size.width * 0.9, 50)),
+              ),
+            ),
+          ),
         ],
       ),
     );

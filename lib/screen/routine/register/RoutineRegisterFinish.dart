@@ -1,17 +1,22 @@
-// 피그마 '일정 등록 완료' 화면
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:atti/commons/BottomNextButton.dart';
-import 'package:atti/data/schedule/schedule_controller.dart';
+import 'package:atti/data/routine/routine_controller.dart';
 
-import '../ScheduleMain.dart';
+import '../RoutineMain.dart';
 
-class ScheduleRegisterFinish extends StatelessWidget {
-  const ScheduleRegisterFinish({super.key});
+class RoutineRegisterFinish extends StatefulWidget {
+  const RoutineRegisterFinish({super.key});
+
+  @override
+  State<RoutineRegisterFinish> createState() => _RoutineRegisterFinishState();
+}
+
+class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
+  final RoutineController routineController = Get.put(RoutineController());
 
   @override
   Widget build(BuildContext context) {
-    final ScheduleController scheduleController = Get.put(ScheduleController());
+
     return Scaffold(
       backgroundColor: Color(0xffFFEEBC),
       body: Column(
@@ -23,10 +28,10 @@ class ScheduleRegisterFinish extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.only(left: 15),
-                  child: Text('\'${scheduleController.schedule.value.name}\'\n일정을 등록했어요!',
+                  child: Text('\'${routineController.tmpRoutineName.value}\'\n하루 일과를 등록했어요!',
                     style: TextStyle(
-                      fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
-                  ),),
+                        fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
+                    ),),
                 ),
                 SizedBox(height: 30,),
                 Container(
@@ -46,10 +51,10 @@ class ScheduleRegisterFinish extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ScheduleMain()),
+                  MaterialPageRoute(builder: (context) => RoutineMain()),
                 );
               },
-              child: Text('일정으로 돌아가기', style: TextStyle(color: Colors.black, fontSize: 20),),
+              child: Text('하루 일과로 돌아가기', style: TextStyle(color: Colors.black, fontSize: 20),),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.white),
                 minimumSize: MaterialStateProperty.all(

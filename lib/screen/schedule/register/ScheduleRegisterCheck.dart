@@ -34,8 +34,8 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
                 DetailPageTitle(
                   title: '일정 등록하기',
                   description: '이대로 등록할까요?',
-                  totalStep: 5,
-                  currentStep: 5,
+                  totalStep: 0,
+                  currentStep: 0,
                 ),
                 SizedBox(height: 20),
 

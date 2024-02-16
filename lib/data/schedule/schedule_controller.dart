@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:atti/data/schedule/schedule_service.dart';
 import 'package:atti/data/schedule/schedule_model.dart';
 

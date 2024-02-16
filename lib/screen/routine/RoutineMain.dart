@@ -1,33 +1,31 @@
-// 일정 메인 화면
-import 'package:atti/screen/schedule/register/ScheduleRegister1.dart';
+// 하루 일과 메인 화면
+import 'package:atti/screen/routine/register/RoutineRegister1.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:atti/data/schedule/schedule_service.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
-import '../../commons/ScheduleBox.dart';
-import '../../commons/ScheduleModal.dart';
-import '../../data/memory/memory_note_controller.dart';
-import 'package:toggle_switch/toggle_switch.dart';
-import 'package:atti/commons/BottomNextButton.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:timelines/timelines.dart';
-import '../../data/schedule/schedule_model.dart';
+import '../../commons/BottomNextButton.dart';
+import '../../commons/RoutineBox.dart';
+import '../../commons/RoutineModal.dart';
+import '../../data/routine/routine_controller.dart';
+import '../../data/routine/routine_model.dart';
+import '../../data/routine/routine_service.dart';
 
-class ScheduleMain extends StatefulWidget {
-  const ScheduleMain({super.key});
+class RoutineMain extends StatefulWidget {
+  const RoutineMain({super.key});
 
   @override
-  State<ScheduleMain> createState() => _ScheduleMainState();
+  State<RoutineMain> createState() => _RoutineMainState();
 }
 
-class _ScheduleMainState extends State<ScheduleMain> {
-  final MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
-  int _selectedIndex = 4;
+class _RoutineMainState extends State<RoutineMain> {
+  final RoutineController routineController = Get.put(RoutineController());
+  int _selectedIndex = 3;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      // 해당 인덱스로 페이지 변경
     });
   }
 
@@ -35,8 +33,9 @@ class _ScheduleMainState extends State<ScheduleMain> {
   DateTime _focusedDay = DateTime.now();
   CalendarFormat _calendarFormat = CalendarFormat.week;
 
-  List<ScheduleModel> schedulesBySelectedDay = []; // 선택된 날짜의 일정들이 반환되는 리스트
-  int? numberOfSchedules; // 선택된 날짜의 일정 개수
+  List<RoutineModel> routinesBySelectedDay = [];
+  int? numberOfRoutines;
+  String selectedDayInWeek = DateFormat('E', 'ko-KR').format(DateTime.now());
 
   @override
   void initState() {
@@ -46,11 +45,19 @@ class _ScheduleMainState extends State<ScheduleMain> {
     });
   }
   Future<void> _fetchData() async {
-    schedulesBySelectedDay = await ScheduleService().getSchedulesByDate(_selectedDay);
-    setState(() {
-      numberOfSchedules = schedulesBySelectedDay.length;
-    });
+    List<RoutineModel> fetchedRoutines = await RoutineService().getRoutinesByDay(selectedDayInWeek);
+    if (fetchedRoutines != null) {
+      routinesBySelectedDay = fetchedRoutines;
+      setState(() {
+        numberOfRoutines = routinesBySelectedDay.length;
+      });
+    } else {
+      setState(() {
+        numberOfRoutines = 0;
+      });
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,25 +74,16 @@ class _ScheduleMainState extends State<ScheduleMain> {
                   fontSize: 24,
                 ),),
             ),
-            SizedBox(
+            Container(
               width: MediaQuery.of(context).size.width * 0.9,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    //margin: EdgeInsets.only(left: 15),
-                    alignment: Alignment.centerLeft,
-                    child: Text('일정',
-                      style: TextStyle(
-                        fontSize: 30, fontWeight: FontWeight.w600
-                      ),)
-                  ),
-                  ToggleButton(),
-                ],
-              ),
+              alignment: Alignment.centerLeft,
+              child: Text('하루 일과',
+                textAlign: TextAlign.left, style: TextStyle(
+                  fontSize: 30, fontWeight: FontWeight.w600
+                ),),
             ),
             SizedBox(height: 30),
-            ScheduleCalendar(),
+            RoutineCalendar(),
             SizedBox(height: 10),
 
             Container(
@@ -101,20 +99,23 @@ class _ScheduleMainState extends State<ScheduleMain> {
                       style: TextStyle(fontSize: 24),
                     ),
                   ),
-                  numberOfSchedules! >= 1
-                  ? ScheduleTimeline()
+                  numberOfRoutines != null && numberOfRoutines! >= 1
+                  ? RoutineTimeline()
                   : Container(
                     height: MediaQuery.of(context).size.height * 0.5,
                     alignment: Alignment.center,
-                    child: Text('아직 오늘의 일정이 없네요!', style: TextStyle(
-                      fontSize: 30, fontWeight: FontWeight.w600
+                    child: Text('오늘은 일과가 없네요!', style: TextStyle(
+                        fontSize: 30, fontWeight: FontWeight.w600
                     ),),
                   ),
+
                   SizedBox(height: 10,),
-                  NextButton(next: ScheduleRegister1(), content: '일정 등록하기', isEnabled: true),
+                  NextButton(next: RoutineRegister1(), content: '하루 일과 등록하기', isEnabled: true,)
+
                 ],
               ),
             )
+
           ],
         ),
       ),
@@ -125,29 +126,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
     );
   }
 
-  Widget ToggleButton() {
-    return ToggleSwitch(
-      initialLabelIndex: _calendarFormat == CalendarFormat.week ? 0 : 1,
-      totalSwitches: 2,
-      labels: ['주간', '월간'],
-      fontSize: 16,
-      cornerRadius: 20,
-      activeBgColor: [Color(0xffFFC215)],
-      inactiveBgColor: Color(0xffFFF5DB),
-      inactiveFgColor: Color(0xff737373),
-      minWidth: 60,
-      minHeight: 35,
-      onToggle: (index) {
-        setState(() {
-          _calendarFormat = index == 0
-              ? CalendarFormat.week
-              : CalendarFormat.month;
-        });
-      },
-    );
-  }
-
-  Widget ScheduleCalendar() {
+  Widget RoutineCalendar() {
     return TableCalendar(
       locale: 'ko-KR',
       firstDay: DateTime.utc(2020, 1, 1),
@@ -159,7 +138,10 @@ class _ScheduleMainState extends State<ScheduleMain> {
       onDaySelected: (selectedDay, focusedDay) async {
         setState(() {
           _selectedDay = selectedDay;
-          _focusedDay = focusedDay; // update `_focusedDay` here as well
+          _focusedDay = focusedDay;
+
+          selectedDayInWeek = DateFormat('E', 'ko-KR').format(_selectedDay);
+          print(selectedDayInWeek);
         });
         await _fetchData();
       },
@@ -181,21 +163,23 @@ class _ScheduleMainState extends State<ScheduleMain> {
           shape: BoxShape.circle,
         ),
         selectedTextStyle: TextStyle(
-          fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
+            fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
         todayDecoration: BoxDecoration(
-          color: Colors.transparent,
-          shape: BoxShape.circle,
-          border: Border.all(color: Color(0xffFFC215), width: 1.5)
+            color: Colors.transparent,
+            shape: BoxShape.circle,
+            border: Border.all(color: Color(0xffFFC215), width: 1.5)
         ),
       ),
     );
   }
 
-  Widget ScheduleTimeline() {
+  Widget RoutineTimeline() {
     return Container(
-      height: numberOfSchedules! <= 2
-          ? MediaQuery.of(context).size.height * 0.5
-          : (numberOfSchedules! * MediaQuery.of(context).size.height * 0.25),
+      height: numberOfRoutines != null && numberOfRoutines! <= 1
+          ? MediaQuery.of(context).size.height * 0.6
+          : (numberOfRoutines != null
+          ? numberOfRoutines! * MediaQuery.of(context).size.height * 0.55
+          : 0),
 
       width: MediaQuery.of(context).size.width * 0.9,
       child: TimelineTheme(
@@ -215,9 +199,10 @@ class _ScheduleMainState extends State<ScheduleMain> {
         child: Timeline.tileBuilder(
           builder: TimelineTileBuilder.connectedFromStyle(
             indicatorStyleBuilder: (context, index) {
-              return schedulesBySelectedDay[index].isFinished!
-                  ? IndicatorStyle.dot
-                  : IndicatorStyle.outlined;
+              // return routinesBySelectedDay[index].isFinished!
+              //     ? IndicatorStyle.dot
+              //     : IndicatorStyle.outlined;
+              return IndicatorStyle.dot;
             },
             //connectorStyle: ConnectorStyle.dashedLine,
             connectorStyleBuilder: (context, index) => ConnectorStyle.dashedLine,
@@ -232,42 +217,43 @@ class _ScheduleMainState extends State<ScheduleMain> {
                 onTap: () {
                   // 타일 클릭 시 모달창
                   showDialog(context: context, builder: (_) {
-                    return ScheduleModal(
-                      time: DateFormat('HH시 mm분').format(schedulesBySelectedDay[index].time!.toDate()),
-                      location: schedulesBySelectedDay[index].location!,
-                      name: schedulesBySelectedDay[index].name!,
-                      memo: schedulesBySelectedDay[index].memo,
-                      docRef: schedulesBySelectedDay[index].reference!,
+                    return RoutineModal(
+                      img: routinesBySelectedDay[index].img!,
+                      name: routinesBySelectedDay[index].name!,
+                      days: routinesBySelectedDay[index].repeatDays!,
+                      docRef: routinesBySelectedDay[index].reference!,
+                      time: routinesBySelectedDay[index].time!,
+                      date: _selectedDay,
                     );
                   });
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(schedulesBySelectedDay[index].isFinished! ? '완료됨' : '완료되지 않음',
+                    Text('완료됨',
+                      //routinesBySelectedDay[index].isFinished! ? '완료됨' : '완료되지 않음',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         color: Color(0xff737373),
                         fontSize: 18,
                       ), ),
                     SizedBox(height: 10,),
-                    ScheduleBox(
-                      time: DateFormat('HH시 mm분').format(schedulesBySelectedDay[index].time!.toDate()),
-                      location: schedulesBySelectedDay[index].location,
-                      name: schedulesBySelectedDay[index].name,
+                    RoutineBox(
+                      time: routinesBySelectedDay[index].time!,
+                      img: routinesBySelectedDay[index].img!,
+                      name: routinesBySelectedDay[index].name!,
+                      days: routinesBySelectedDay[index].repeatDays!,
                     ),
                   ],
                 ),
               ),
             ),
-            itemCount: numberOfSchedules ?? 0,
+            itemCount: numberOfRoutines ?? 0,
           ),
           physics: NeverScrollableScrollPhysics(), // 타임라인 빌더 내 스크롤 막기
         ),
       ),
     );
   }
-
-
 
 }

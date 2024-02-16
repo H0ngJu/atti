@@ -1,5 +1,7 @@
 import 'package:atti/screen/HomeCarer.dart';
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
+import 'package:atti/screen/routine/RoutineMain.dart';
+import 'package:atti/screen/routine/register/RoutineRegister1.dart';
 import 'package:atti/screen/schedule/ScheduleMain.dart';
 import 'package:atti/screen/memory/gallery/MainGallery.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: ScheduleMain(),
+      home: RoutineMain(),
     );
   }
 }
