@@ -1,4 +1,6 @@
+import 'package:atti/screen/memory/gallery/MainGallery.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ChatComplete extends StatelessWidget {
   const ChatComplete({Key? key}) : super(key: key);
@@ -28,7 +30,9 @@ class ChatComplete extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.9,
                   height: 60,
                   child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(MainGallery());
+                      },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white),
                       child: Text(

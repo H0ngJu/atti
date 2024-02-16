@@ -49,36 +49,49 @@ class MemoryDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SimpleAppBar(
-        title: '기억 한 조각'
-      ),
-      body: Container(
-        margin: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Expanded(
-              child: Column(children: [
-                MemoryDetailTitle(),
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: Image.network(
-                      'https://newsimg-hams.hankookilbo.com/2022/05/08/f5107e5a-7266-4132-9550-8713162df25a.jpg',
-                      fit: BoxFit.cover,
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: MediaQuery.of(context).size.height * 0.4,
+        appBar: SimpleAppBar(title: '기억 한 조각'),
+        body: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.all(16),
+            child: Column(
+              children: [
+                /*Expanded(
+              child:*/
+                Column(children: [
+                  MemoryDetailTitle(),
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(30),
+                      child: Image.network(
+                        'https://newsimg-hams.hankookilbo.com/2022/05/08/f5107e5a-7266-4132-9550-8713162df25a.jpg',
+                        fit: BoxFit.cover,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        height: MediaQuery.of(context).size.height * 0.4,
+                      ),
                     ),
                   ),
+                  MemoryWords(),
+                ]),
+                //),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.05,
                 ),
-                MemoryWords(),
-              ]),
+                SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: 60,
+                    child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xffFFC215)),
+                        child: Text(
+                          '회상 대화 시작하기',
+                          style: TextStyle(fontSize: 24, color: Colors.white),
+                        )))
+              ],
             ),
-            NextButton(content: '회상 대화 시작하기', isEnabled: true, next: Chat(),)
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
 
@@ -135,13 +148,15 @@ class _MemoryWordsState extends State<MemoryWords> {
           ),
         ),
         if (isExpanded)
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Wrap(
-              spacing: 10, // 각 행의 간격을 조절합니다.
-              children: tagList.map((tag) {
-                return TagContainer(tag);
-              }).toList(),
+          SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Wrap(
+                spacing: 10, // 각 행의 간격을 조절합니다.
+                children: tagList.map((tag) {
+                  return TagContainer(tag);
+                }).toList(),
+              ),
             ),
           ),
       ],
