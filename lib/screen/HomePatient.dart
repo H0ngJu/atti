@@ -455,7 +455,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
               onPressed: () {},
               child: Text(
                 '전체보기',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 20, color: Colors.black),
               ),
               style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xffFFC215),
@@ -592,7 +592,7 @@ class _HomeRoutineState extends State<HomeRoutine> {
               onPressed: () {},
               child: Text(
                 '전체보기',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 20, color: Colors.black),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xffFFC215),

@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: Chat(),
+      home: HomePatient(),
     );
   }
 }
