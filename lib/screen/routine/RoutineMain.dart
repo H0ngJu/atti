@@ -141,7 +141,7 @@ class _RoutineMainState extends State<RoutineMain> {
           _focusedDay = focusedDay;
 
           selectedDayInWeek = DateFormat('E', 'ko-KR').format(_selectedDay);
-          print(selectedDayInWeek);
+          print(_selectedDay);
         });
         await _fetchData();
       },
@@ -199,10 +199,9 @@ class _RoutineMainState extends State<RoutineMain> {
         child: Timeline.tileBuilder(
           builder: TimelineTileBuilder.connectedFromStyle(
             indicatorStyleBuilder: (context, index) {
-              // return routinesBySelectedDay[index].isFinished!
-              //     ? IndicatorStyle.dot
-              //     : IndicatorStyle.outlined;
-              return IndicatorStyle.dot;
+              return routinesBySelectedDay[index].isFinished!.contains(_selectedDay.toString())
+                  ? IndicatorStyle.dot
+                  : IndicatorStyle.outlined;
             },
             //connectorStyle: ConnectorStyle.dashedLine,
             connectorStyleBuilder: (context, index) => ConnectorStyle.dashedLine,
@@ -230,8 +229,9 @@ class _RoutineMainState extends State<RoutineMain> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('완료됨',
-                      //routinesBySelectedDay[index].isFinished! ? '완료됨' : '완료되지 않음',
+                    Text(routinesBySelectedDay[index].isFinished!.contains(_selectedDay.toString())
+                        ? '완료됨'
+                        : '완료되지 않음',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         color: Color(0xff737373),
