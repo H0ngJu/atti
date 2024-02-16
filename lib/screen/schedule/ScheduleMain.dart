@@ -46,11 +46,20 @@ class _ScheduleMainState extends State<ScheduleMain> {
     });
   }
   Future<void> _fetchData() async {
-    schedulesBySelectedDay = await ScheduleService().getSchedulesByDate(_selectedDay);
-    setState(() {
-      numberOfSchedules = schedulesBySelectedDay.length;
-    });
+    List<ScheduleModel>? fetchedSchedules = await ScheduleService().getSchedulesByDate(_selectedDay);
+    if (fetchedSchedules != null) {
+      setState(() {
+        schedulesBySelectedDay = fetchedSchedules;
+        numberOfSchedules = schedulesBySelectedDay.length;
+      });
+    } else {
+      setState(() {
+        schedulesBySelectedDay = [];
+        numberOfSchedules = 0;
+      });
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +110,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
                       style: TextStyle(fontSize: 24),
                     ),
                   ),
-                  numberOfSchedules! >= 1
+                  numberOfSchedules != null && numberOfSchedules! >= 1
                   ? ScheduleTimeline()
                   : Container(
                     height: MediaQuery.of(context).size.height * 0.5,
