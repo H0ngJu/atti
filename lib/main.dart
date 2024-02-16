@@ -1,5 +1,9 @@
 import 'package:atti/screen/HomeCarer.dart';
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
+import 'package:atti/screen/memory/chat/Chat.dart';
+import 'package:atti/screen/memory/gallery/GalleryOption.dart';
+import 'package:atti/screen/memory/register/MemoryRegister1.dart';
+import 'package:atti/screen/memory/register/MemoryRegister2.dart';
 import 'package:atti/screen/LoginSignUp/FinishSignUpScreen.dart';
 import 'package:atti/screen/LoginSignUp/SignUpFamilyTag.dart';
 import 'package:atti/screen/chatbot/Chatbot.dart';
@@ -29,4 +33,25 @@ void main() async {
   await dotenv.load(fileName: '.env');
   runApp(MaterialApp(
       home: ScheduleMain()));
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('ko', 'KR'), // Korean
+      ],
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(),
+      home: HomePatient(),
+    );
+  }
 }

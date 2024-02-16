@@ -226,7 +226,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
             mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
             children: [
               Image(
-                  image: AssetImage('lib/assets/standingAtti.png'), width: 320),
+                  image: AssetImage('lib/assets/Atti/standingAtti.png'), width: MediaQuery.of(context).size.width*0.8),
             ],
           ),
           SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
@@ -479,7 +479,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
               onPressed: () {},
               child: Text(
                 '전체보기',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 20, color: Colors.black),
               ),
               style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xffFFC215),
@@ -616,7 +616,7 @@ class _HomeRoutineState extends State<HomeRoutine> {
               onPressed: () {},
               child: Text(
                 '전체보기',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 20, color: Colors.black),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xffFFC215),
