@@ -1,5 +1,7 @@
 import 'package:atti/screen/HomeCarer.dart';
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
+import 'package:atti/screen/routine/RoutineMain.dart';
+import 'package:atti/screen/routine/register/RoutineRegister1.dart';
 import 'package:atti/screen/memory/chat/Chat.dart';
 import 'package:atti/screen/memory/gallery/GalleryOption.dart';
 import 'package:atti/screen/memory/register/MemoryRegister1.dart';

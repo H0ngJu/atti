@@ -1,46 +1,46 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ScheduleModel {
+class RoutineModel {
   // 자료형
   String? name;
-  String? location;
-  String? memo;
   String? patientId;
+  String? img;
+  List<int>? time;
   Timestamp? createdAt;
-  Timestamp? time;
-  bool? isFinished;
+  List<String>? repeatDays;
+  List<String>? isFinished;
   DocumentReference? reference; // document 식별자
 
   // 생성자
-  ScheduleModel({
+  RoutineModel({
     this.name,
-    this.location,
-    this.memo,
     this.patientId,
-    this.createdAt,
+    this.img,
     this.time,
-    this.isFinished = false,
-    this.reference
-  });
+    this.createdAt,
+    this.repeatDays,
+    this.reference,
+  }) : isFinished = []; // 기본값으로 빈 리스트를 할당
 
   // json -> object (Firestore -> Flutter)
-  ScheduleModel.fromJson(dynamic json, this.reference) {
+  RoutineModel.fromJson(dynamic json, this.reference) {
     name = json['name'];
-    location = json['location'];
-    memo = json['memo'];
     patientId = json['patientId'];
+    img = json['img'];
+    time = List<int>.from(json['time']);
     createdAt = json['createdAt'];
-    time = json['time'];
-    isFinished = json['isFinished'];
-    reference = json['reference'];
+    repeatDays = List<String>.from(json['repeatDays']);
+
+    // isFinished 필드가 Null일 경우 빈 리스트로 초기화
+    isFinished = (json['isFinished'] != null) ? List<String>.from(json['isFinished']) : [];
   }
 
   // Named Constructor with Initializer
-  ScheduleModel.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> snapshot)
+  RoutineModel.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> snapshot)
       : this.fromJson(snapshot.data()!, snapshot.reference);
 
   // Named Constructor with Initializer
-  ScheduleModel.fromQuerySnapshot(
+  RoutineModel.fromQuerySnapshot(
       QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : this.fromJson(snapshot.data()!, snapshot.reference);
 
@@ -48,11 +48,11 @@ class ScheduleModel {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['name'] = name;
-    map['location'] = location;
-    map['memo'] = memo;
     map['patientId'] = patientId;
-    map['createdAt'] = createdAt;
+    map['img'] = img;
     map['time'] = time;
+    map['createdAt'] = createdAt;
+    map['repeatDays'] = repeatDays;
     map['isFinished'] = isFinished;
     map['reference'] = reference;
     return map;
