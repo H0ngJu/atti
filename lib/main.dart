@@ -1,5 +1,6 @@
 import 'package:atti/screen/HomeCarer.dart';
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
+import 'package:atti/screen/report/ReportDetail.dart';
 import 'package:atti/screen/routine/RoutineMain.dart';
 import 'package:atti/screen/routine/register/RoutineRegister1.dart';
 import 'package:atti/screen/memory/chat/Chat.dart';
@@ -33,8 +34,7 @@ void main() async {
     appleProvider: AppleProvider.appAttest,
   );
   await dotenv.load(fileName: '.env');
-  runApp(MaterialApp(
-      home: ScheduleMain()));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: HomePatient(),
+      home: ReportDetail(),
     );
   }
 }
