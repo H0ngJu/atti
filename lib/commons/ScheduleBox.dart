@@ -31,10 +31,10 @@ class _ScheduleBoxState extends State<ScheduleBox> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(widget.time, style: TextStyle(
+          if (widget.time != null) Text(widget.time!, style: TextStyle(
             fontSize: 20
           ),),
-          Text(widget.name, style: TextStyle(
+          if (widget.name != null) Text(widget.name!, style: TextStyle(
             fontSize: 30,
           ),),
           SizedBox(height: 5,),
@@ -42,7 +42,7 @@ class _ScheduleBoxState extends State<ScheduleBox> {
             children: [
               Icon(Icons.location_on_outlined, color: Color(0xffA38130),),
               SizedBox(width: 5),
-              Text(widget.location, style: TextStyle(
+              if (widget.location != null) Text(widget.location!, style: TextStyle(
                 fontSize: 20, color: Color(0xffA38130)
               ),),
             ],

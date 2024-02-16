@@ -19,7 +19,7 @@ class ScheduleRegisterFinish extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.12),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.only(left: 15),
@@ -32,7 +32,7 @@ class ScheduleRegisterFinish extends StatelessWidget {
                 Container(
                   //margin: EdgeInsets.only(left: 50),
                   child: Image.asset('lib/assets/images/schedule_atti.png',
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.7,
                     fit: BoxFit.fitWidth,
                   ),
                 ),

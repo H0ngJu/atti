@@ -116,7 +116,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                                     ),
                                 ),
                             ),
-                            if (!userId.contains('@') || !userId.contains('.'))
+                            if (isPressed == 1 && (!userId.contains('@') || !userId.contains('.')))
                             Container(
                               child: Text(
                                   '올바른 이메일 형식을 입력해 주세요',
@@ -181,7 +181,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                                 ),
                               ),
                             ),
-                            if (userPw.length <6)
+                            if (isPressed == 2 && userPw.length <6)
                               Container(
                                 child: Text(
                                   '6글자 이상을 입력해 주세요',
@@ -252,7 +252,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                                 ),
                               ),
                             ),
-                            if (userPw != userPwCheck || userPwCheck.length < 6)
+                            if (isPressed == 3 && (userPw != userPwCheck || userPwCheck.length < 6))
                               Container(
                                 child: Text(
                                   userPw != userPwCheck ? '비밀번호가 일치하지 않습니다' : '6글자 이상을 입력해 주세요',
