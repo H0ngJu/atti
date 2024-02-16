@@ -62,6 +62,7 @@ dependencies:
   toggle_switch: ^2.1.0
   timeline_tile: ^2.0.0
   http: ^1.2.0
+  fl_chart: ^0.66.2
 
 dev_dependencies:
   flutter_test:
