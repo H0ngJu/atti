@@ -34,8 +34,7 @@ void main() async {
     appleProvider: AppleProvider.appAttest,
   );
   await dotenv.load(fileName: '.env');
-  runApp(MaterialApp(
-      home: ScheduleMain()));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
