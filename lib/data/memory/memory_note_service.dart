@@ -35,7 +35,7 @@ class MemoryNoteService {
 
       // Firestore에 데이터 추가
       memoryNote.img = imageUrl; // img 필드를 업로드된 이미지의 URL로 업데이트
-      memoryNote.createdAt = DateTime.now() as Timestamp?;
+      memoryNote.createdAt = Timestamp.now();
       memoryNote.patientId = authController.patientDocRef;
 
       DocumentReference docRef = await firestore.collection('memoryNote').add(memoryNote.toJson()); // 도큐먼트 추가하고 레퍼런스 받기

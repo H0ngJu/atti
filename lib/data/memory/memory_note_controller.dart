@@ -2,8 +2,6 @@ import 'package:get/get.dart';
 import 'package:atti/data/memory/memory_note_model.dart';
 import 'package:atti/data/memory/memory_note_service.dart';
 import '../auth_controller.dart';
-i
-
 
 class MemoryNoteController extends GetxController {
   final AuthController authController = Get.put(AuthController());

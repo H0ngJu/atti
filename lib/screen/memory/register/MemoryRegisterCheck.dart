@@ -18,7 +18,7 @@ class _MemoryRegisterCheckState extends State<MemoryRegisterCheck> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String>? keywords = memoryNoteController.memoryNote.value.keyword;
+    final List<String> keywords = memoryNoteController.memoryNote.value.keyword ?? [];
 
     return Scaffold(
       body: Column(
@@ -117,7 +117,7 @@ class MemoryKeyword extends StatelessWidget {
       alignment: WrapAlignment.start,
       spacing: 10, // 가로 간격 설정
       runSpacing: 10, // 세로 간격 설정
-      children: List.generate(keywords.length, (index) {
+      children: List.generate(keywords.length ?? 0, (index) {
         return TextButton(
           onPressed: () {
           },
