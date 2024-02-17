@@ -1,5 +1,8 @@
+import 'package:atti/screen/report/ReportHistory.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class ReportDetail extends StatelessWidget {
   const ReportDetail({Key? key}) : super(key: key);
@@ -8,57 +11,60 @@ class ReportDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-      child: Container(
-        margin: EdgeInsets.only(left: 16, right: 16, top: 50),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Container(
+            margin: EdgeInsets.only(left: 16, right: 16, top: 50),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '1월 3주차',
-                      style:
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '1월 3주차',
+                          style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      '이번 주 기록 보고',
-                      style:
+                        ),
+                        Text(
+                          '이번 주 기록 보고',
+                          style:
                           TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                    )
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                        width: 135,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Get.to(ReportHistory());
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xffFFC215)),
+                            child: Text(
+                              '지난 기록',
+                              style: TextStyle(
+                                  fontSize: 20, color: Colors.white),
+                            )))
                   ],
                 ),
                 SizedBox(
-                    width: 135,
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xffFFC215)),
-                        child: Text(
-                          '지난 기록',
-                          style: TextStyle(fontSize: 20, color: Colors.white),
-                        )))
+                  height: 20,
+                ),
+                RoutineInfo(),
+                Divider(),
+                MemoryInfo(),
+                Divider(),
+                EmotionInfo(),
+                Divider(),
+                MostViewMemory()
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            RoutineInfo(),
-            Divider(),
-            MemoryInfo(),
-            Divider(),
-            EmotionInfo(),
-            Divider(),
-            MostViewMemory()
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 }
 
@@ -116,8 +122,8 @@ class MemoryInfo extends StatelessWidget {
                       show: true,
                       leftTitles: AxisTitles(
                           sideTitles: SideTitles(
-                        showTitles: false,
-                      )),
+                            showTitles: false,
+                          )),
                       topTitles: AxisTitles(
                           sideTitles: SideTitles(showTitles: false))),
                   barGroups: [
@@ -267,14 +273,20 @@ class MostViewMemory extends StatelessWidget {
                       Text(
                         '${mostViewMemNum}회 열람',
                         style:
-                            TextStyle(fontSize: 24, color: Color(0xffA38130)),
+                        TextStyle(fontSize: 24, color: Color(0xffA38130)),
                       )
                     ],
                   ),
                   Container(
                       margin: EdgeInsets.only(top: 10),
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      height: MediaQuery.of(context).size.height * 0.3,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.8,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.3,
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(30),
                           child: Image.network(
