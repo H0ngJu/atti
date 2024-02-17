@@ -218,11 +218,11 @@ class _LogInScreenState extends State<LogInScreen> {
                                   // 사용자 정보 저장
                                   final AuthController authController = Get.put(AuthController());
                                   authController.isPatient.value = document['isPatient'];
-                                  authController.userName.value = document['userName'];
                                   print(authController.userName.value);
 
                                   if (isPatient) {
                                     authController.patientDocRef = document.reference;
+                                    authController.userName.value = document['userName'];
                                     authController.familyMember.value = List<String>.from(document['familyMember']);
                                     print(authController.familyMember.value);
                                     Navigator.push(
@@ -241,6 +241,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                         .get();
                                     DocumentSnapshot carerDoc = carerSnapShot.docs[0];
                                     authController.patientDocRef = carerDoc.reference;
+                                    authController.userName.value = carerDoc['userName'];
                                     authController.familyMember.value = List<String>.from(carerDoc['familyMember']);
                                     print(authController.familyMember.value);
                                     Navigator.push(
@@ -336,6 +337,6 @@ class _LogInScreenState extends State<LogInScreen> {
           ],
         ),
       ),
-    );;
+    );
   }
 }

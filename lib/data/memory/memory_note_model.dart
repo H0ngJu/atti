@@ -10,7 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MemoryNoteModel {
   // 자료형
-  String? patientId;
+  DocumentReference? patientId;
   String? img;
   String? imgTitle;
   String? era;

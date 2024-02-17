@@ -2,8 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:atti/data/memory/memory_note_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
+import '../auth_controller.dart';
+import 'package:get/get.dart';
+
 
 class MemoryNoteService {
+  final AuthController authController = Get.put(AuthController());
   final firestore = FirebaseFirestore.instance;
   final storage = FirebaseStorage.instance;
 
@@ -32,6 +36,7 @@ class MemoryNoteService {
       // Firestore에 데이터 추가
       memoryNote.img = imageUrl; // img 필드를 업로드된 이미지의 URL로 업데이트
       memoryNote.createdAt = DateTime.now() as Timestamp?;
+      memoryNote.patientId = authController.patientDocRef;
 
       DocumentReference docRef = await firestore.collection('memoryNote').add(memoryNote.toJson()); // 도큐먼트 추가하고 레퍼런스 받기
       memoryNote.reference = docRef; // 도큐먼트 ID 저장
@@ -40,4 +45,8 @@ class MemoryNoteService {
       print('Error adding memory note: $e');
     }
   }
+
+  // 기억 가져오기
+
+
 }

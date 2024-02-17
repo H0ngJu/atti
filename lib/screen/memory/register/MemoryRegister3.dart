@@ -5,6 +5,7 @@ import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
 import 'package:atti/screen/memory/register/MemoryRegister4.dart';
+import '../../../data/auth_controller.dart';
 
 class MemoryRegister3 extends StatefulWidget {
   const MemoryRegister3({super.key});
@@ -15,6 +16,7 @@ class MemoryRegister3 extends StatefulWidget {
 
 class _MemoryRegister3State extends State<MemoryRegister3> {
   final MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
+  final AuthController authController = Get.put(AuthController());
 
   final _era = ['1900년대', '1910년대', '1920년대', '1930년대', '1940년대', '1950년대',
     '1960년대', '1970년대', '1980년대', '1990년대', '2000년대', '2010년대', '2020년대',];

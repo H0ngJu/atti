@@ -1,4 +1,5 @@
 // 일정 메인 화면
+import 'package:atti/data/auth_controller.dart';
 import 'package:atti/screen/schedule/register/ScheduleRegister1.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,6 +24,8 @@ class ScheduleMain extends StatefulWidget {
 
 class _ScheduleMainState extends State<ScheduleMain> {
   final MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
+  final AuthController authController = Get.put(AuthController());
+
   int _selectedIndex = 4;
   void _onItemTapped(int index) {
     setState(() {
@@ -71,7 +74,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
             Container(
               width: MediaQuery.of(context).size.width * 0.9,
               alignment: Alignment.centerLeft,
-              child: Text('ㅇㅇㅇ님의',
+              child: Text('${authController.userName.value}님의',
                 textAlign: TextAlign.left, style: TextStyle(
                   fontSize: 24,
                 ),),

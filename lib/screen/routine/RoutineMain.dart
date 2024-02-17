@@ -9,6 +9,7 @@ import 'package:timelines/timelines.dart';
 import '../../commons/BottomNextButton.dart';
 import '../../commons/RoutineBox.dart';
 import '../../commons/RoutineModal.dart';
+import '../../data/auth_controller.dart';
 import '../../data/routine/routine_controller.dart';
 import '../../data/routine/routine_model.dart';
 import '../../data/routine/routine_service.dart';
@@ -22,6 +23,7 @@ class RoutineMain extends StatefulWidget {
 
 class _RoutineMainState extends State<RoutineMain> {
   final RoutineController routineController = Get.put(RoutineController());
+  final AuthController authController = Get.put(AuthController());
   int _selectedIndex = 3;
   void _onItemTapped(int index) {
     setState(() {
@@ -69,7 +71,7 @@ class _RoutineMainState extends State<RoutineMain> {
             Container(
               width: MediaQuery.of(context).size.width * 0.9,
               alignment: Alignment.centerLeft,
-              child: Text('ㅇㅇㅇ님의',
+              child: Text('${authController.userName.value}님의',
                 textAlign: TextAlign.left, style: TextStyle(
                   fontSize: 24,
                 ),),
