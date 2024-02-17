@@ -3,6 +3,8 @@ import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
 import 'package:atti/screen/LoginSignUp/FinishSignUpScreen.dart';
 import 'package:atti/screen/LoginSignUp/SignUpFamilyTag.dart';
 import 'package:atti/screen/chatbot/Chatbot.dart';
+import 'package:atti/screen/chatbot/reportTest.dart';
+import 'package:atti/screen/memory/gallery/MemoryDetail.dart';
 import 'package:atti/screen/schedule/ScheduleMain.dart';
 import 'package:atti/screen/memory/gallery/MainGallery.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -27,6 +29,25 @@ void main() async {
     appleProvider: AppleProvider.appAttest,
   );
   await dotenv.load(fileName: '.env');
-  runApp(MaterialApp(
-      home: ScheduleMain()));
+  runApp(MyApp());
+}
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('ko', 'KR'), // Korean
+      ],
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(),
+      home: MemoryDetail(),
+    );
+  }
 }
