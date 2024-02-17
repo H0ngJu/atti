@@ -1,3 +1,4 @@
+import 'package:atti/data/notification/notification_service.dart';
 import 'package:atti/screen/HomeCarer.dart';
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
 import 'package:atti/screen/report/ReportDetail.dart';
@@ -26,7 +27,10 @@ import 'package:atti/screen/schedule/finish/ScheduleFinish1.dart';
 import 'package:atti/screen/schedule/register/ScheduleRegister1.dart';
 
 void main() async {
+  final notificationService = NotificationService();
   WidgetsFlutterBinding.ensureInitialized();
+  await notificationService.init();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

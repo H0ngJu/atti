@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../data/notification/notification_service.dart';
+
 class User {
   final String? name;
   final int? routineCount; // Changed the name to routineCount
@@ -61,6 +63,11 @@ class _HomePatientState extends State<HomePatient> {
   void initState() {
     super.initState();
     getCurrentUser();
+    _requestNotificationPermissions();
+  }
+
+  void _requestNotificationPermissions() async {
+    final status = await NotificationService().requestNotificationPermissions();
   }
 
   void getCurrentUser() {
