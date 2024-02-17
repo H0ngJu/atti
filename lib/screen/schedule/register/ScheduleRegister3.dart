@@ -33,7 +33,7 @@ class _ScheduleRegister3State extends State<ScheduleRegister3> {
                   DetailPageTitle(
                     title: '일정 등록하기',
                     description: '일정 장소를 입력해주세요',
-                    totalStep: 5,
+                    totalStep: 4,
                     currentStep: 3,
                   ),
                   SizedBox(height: 20),

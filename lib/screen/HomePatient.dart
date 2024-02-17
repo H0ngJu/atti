@@ -1,5 +1,7 @@
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -51,6 +53,28 @@ class HomePatient extends StatefulWidget {
 }
 
 class _HomePatientState extends State<HomePatient> {
+  final _authentication = FirebaseAuth.instance;
+  final _db = FirebaseFirestore.instance;
+  User? loggedUser;
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
+
+  void getCurrentUser() {
+    try {
+      final user = _authentication.currentUser;
+      print("loggedUser: ${user!.uid}");
+      if (user != null) {
+        loggedUser = user as User?;
+      };
+    }
+    catch (e) {
+      print(e);
+    }
+  }
   // bottom Navi logic
   int _selectedIndex = 2;
 
@@ -202,7 +226,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
             mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
             children: [
               Image(
-                  image: AssetImage('lib/assets/standingAtti.png'), width: 320),
+                  image: AssetImage('lib/assets/Atti/standingAtti.png'), width: MediaQuery.of(context).size.width*0.8),
             ],
           ),
           SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
@@ -455,7 +479,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
               onPressed: () {},
               child: Text(
                 '전체보기',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 20, color: Colors.black),
               ),
               style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xffFFC215),
@@ -592,7 +616,7 @@ class _HomeRoutineState extends State<HomeRoutine> {
               onPressed: () {},
               child: Text(
                 '전체보기',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 20, color: Colors.black),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xffFFC215),

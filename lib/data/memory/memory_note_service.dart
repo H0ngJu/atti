@@ -9,7 +9,6 @@ class MemoryNoteService {
 
   Future<String> uploadImage(String imagePath) async {
     File file = File(imagePath); // 이미지 파일 객체
-
     try {
       // Firebase Storage에 이미지 업로드
       UploadTask task = storage
