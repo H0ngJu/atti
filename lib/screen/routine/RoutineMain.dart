@@ -9,6 +9,7 @@ import 'package:timelines/timelines.dart';
 import '../../commons/BottomNextButton.dart';
 import '../../commons/RoutineBox.dart';
 import '../../commons/RoutineModal.dart';
+import '../../data/auth_controller.dart';
 import '../../data/routine/routine_controller.dart';
 import '../../data/routine/routine_model.dart';
 import '../../data/routine/routine_service.dart';
@@ -22,6 +23,7 @@ class RoutineMain extends StatefulWidget {
 
 class _RoutineMainState extends State<RoutineMain> {
   final RoutineController routineController = Get.put(RoutineController());
+  final AuthController authController = Get.put(AuthController());
   int _selectedIndex = 3;
   void _onItemTapped(int index) {
     setState(() {
@@ -69,7 +71,7 @@ class _RoutineMainState extends State<RoutineMain> {
             Container(
               width: MediaQuery.of(context).size.width * 0.9,
               alignment: Alignment.centerLeft,
-              child: Text('ㅇㅇㅇ님의',
+              child: Text('${authController.userName.value}님의',
                 textAlign: TextAlign.left, style: TextStyle(
                   fontSize: 24,
                 ),),
@@ -141,7 +143,7 @@ class _RoutineMainState extends State<RoutineMain> {
           _focusedDay = focusedDay;
 
           selectedDayInWeek = DateFormat('E', 'ko-KR').format(_selectedDay);
-          print(selectedDayInWeek);
+          print(_selectedDay);
         });
         await _fetchData();
       },
@@ -199,10 +201,9 @@ class _RoutineMainState extends State<RoutineMain> {
         child: Timeline.tileBuilder(
           builder: TimelineTileBuilder.connectedFromStyle(
             indicatorStyleBuilder: (context, index) {
-              // return routinesBySelectedDay[index].isFinished!
-              //     ? IndicatorStyle.dot
-              //     : IndicatorStyle.outlined;
-              return IndicatorStyle.dot;
+              return routinesBySelectedDay[index].isFinished!.contains(_selectedDay.toString())
+                  ? IndicatorStyle.dot
+                  : IndicatorStyle.outlined;
             },
             //connectorStyle: ConnectorStyle.dashedLine,
             connectorStyleBuilder: (context, index) => ConnectorStyle.dashedLine,
@@ -230,8 +231,9 @@ class _RoutineMainState extends State<RoutineMain> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('완료됨',
-                      //routinesBySelectedDay[index].isFinished! ? '완료됨' : '완료되지 않음',
+                    Text(routinesBySelectedDay[index].isFinished!.contains(_selectedDay.toString())
+                        ? '완료됨'
+                        : '완료되지 않음',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         color: Color(0xff737373),

@@ -5,7 +5,7 @@ class ScheduleModel {
   String? name;
   String? location;
   String? memo;
-  String? patientId;
+  DocumentReference? patientId;
   Timestamp? createdAt;
   Timestamp? time;
   bool? isFinished;

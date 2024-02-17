@@ -1,3 +1,4 @@
+import 'package:atti/data/notification/notification_service.dart';
 import 'package:atti/screen/HomeCarer.dart';
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
 import 'package:atti/screen/report/ReportDetail.dart';
@@ -10,6 +11,8 @@ import 'package:atti/screen/memory/register/MemoryRegister2.dart';
 import 'package:atti/screen/LoginSignUp/FinishSignUpScreen.dart';
 import 'package:atti/screen/LoginSignUp/SignUpFamilyTag.dart';
 import 'package:atti/screen/chatbot/Chatbot.dart';
+import 'package:atti/screen/chatbot/reportTest.dart';
+import 'package:atti/screen/memory/gallery/MemoryDetail.dart';
 import 'package:atti/screen/schedule/ScheduleMain.dart';
 import 'package:atti/screen/memory/gallery/MainGallery.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -24,7 +27,10 @@ import 'package:atti/screen/schedule/finish/ScheduleFinish1.dart';
 import 'package:atti/screen/schedule/register/ScheduleRegister1.dart';
 
 void main() async {
+  final notificationService = NotificationService();
   WidgetsFlutterBinding.ensureInitialized();
+  await notificationService.init();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -34,8 +40,7 @@ void main() async {
     appleProvider: AppleProvider.appAttest,
   );
   await dotenv.load(fileName: '.env');
-  runApp(MaterialApp(
-      home: ScheduleMain()));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -54,7 +59,7 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: ReportDetail(),
+      home: LogInSignUpMainScreen(),
     );
   }
 }
