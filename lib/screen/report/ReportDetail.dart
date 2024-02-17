@@ -245,6 +245,7 @@ class MostViewMemory extends StatelessWidget {
               style: TextStyle(fontSize: 20, color: Color(0xffA38130)),
             ),
             Container(
+              margin: EdgeInsets.only(top: 16),
               decoration: BoxDecoration(
                 color: Color(0xffFFF5DB),
                 borderRadius: BorderRadius.circular(15),
