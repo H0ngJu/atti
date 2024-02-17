@@ -19,7 +19,7 @@ class ScheduleModel {
     this.patientId,
     this.createdAt,
     this.time,
-    this.isFinished,
+    this.isFinished = false,
     this.reference
   });
 
