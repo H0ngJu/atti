@@ -10,6 +10,8 @@ import 'package:atti/screen/memory/register/MemoryRegister2.dart';
 import 'package:atti/screen/LoginSignUp/FinishSignUpScreen.dart';
 import 'package:atti/screen/LoginSignUp/SignUpFamilyTag.dart';
 import 'package:atti/screen/chatbot/Chatbot.dart';
+import 'package:atti/screen/chatbot/reportTest.dart';
+import 'package:atti/screen/memory/gallery/MemoryDetail.dart';
 import 'package:atti/screen/schedule/ScheduleMain.dart';
 import 'package:atti/screen/memory/gallery/MainGallery.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';

@@ -1,7 +1,9 @@
+import 'package:atti/data/report/viewsController.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/commons/SimpleAppBar.dart';
 import 'package:atti/screen/memory/chat/Chat.dart';
 import 'package:atti/screen/memory/gallery/GalleryOption.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -104,6 +106,19 @@ class MemoryWords extends StatefulWidget {
 }
 
 class _MemoryWordsState extends State<MemoryWords> {
+  // ***************추가**********************
+  ViewsController _viewsController = ViewsController(
+    FirebaseFirestore.instance.doc("user/amKtw31nCNJUmOAhAaWU"),
+    FirebaseFirestore.instance.doc("memoryNote/2tjn2WipDfiliDnSASWQ"),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _viewsController.addViews();
+  }
+  // ***************추가**********************
+
   final List<String> tagList = ['돌잔치', '손자', '2010', 'ddddd', 'ddddd'];
   bool isExpanded = false;
 
