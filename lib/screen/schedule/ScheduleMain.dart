@@ -7,7 +7,6 @@ import 'package:atti/data/schedule/schedule_service.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import '../../commons/ScheduleBox.dart';
 import '../../commons/ScheduleModal.dart';
-import '../../data/memory/memory_note_controller.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -23,7 +22,6 @@ class ScheduleMain extends StatefulWidget {
 }
 
 class _ScheduleMainState extends State<ScheduleMain> {
-  final MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
   final AuthController authController = Get.put(AuthController());
 
   int _selectedIndex = 4;

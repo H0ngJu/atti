@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:atti/data/memory/memory_note_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:intl/intl.dart';
 import 'dart:io';
 import '../auth_controller.dart';
 import 'package:get/get.dart';
@@ -47,6 +48,23 @@ class MemoryNoteService {
   }
 
   // 기억 가져오기
+  Future<List<MemoryNoteModel>> getMemoryNote() async {
+    try {
+      QuerySnapshot querySnapshot = await firestore.collection('memoryNote')
+          .where('patientId', isEqualTo: authController.patientDocRef)
+          .orderBy('createdAt', descending: true)
+          .get();
+
+      List<MemoryNoteModel> memoryNotes = [];
+      querySnapshot.docs.forEach((doc) {
+        memoryNotes.add(MemoryNoteModel.fromSnapShot(doc as DocumentSnapshot<Map<String, dynamic>>));
+      });
+      return memoryNotes;
+    } catch (e) {
+      print('Error getting memory note : $e');
+      return [];
+    }
+  }
 
 
 }

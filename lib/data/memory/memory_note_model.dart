@@ -41,7 +41,9 @@ class MemoryNoteModel {
     era = json['era'];
     chat = json['chat'];
     selectedFamilyMember = json['selectedFamilyMember'];
-    keyword = json['keyword'];
+    keyword = json['keyword'] != null
+        ? List<String>.from(json['keyword'])
+        : [];
     createdAt = json['createdAt'];
     reference = json['reference'];
   }
