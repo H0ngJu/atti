@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class RoutineModel {
   // 자료형
   String? name;
-  String? patientId;
+  DocumentReference? patientId;
   String? img;
   List<int>? time;
   Timestamp? createdAt;

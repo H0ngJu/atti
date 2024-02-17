@@ -5,6 +5,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../screen/memory/register/MemoryRegister1.dart';
+import '../screen/routine/RoutineMain.dart';
+import '../screen/schedule/ScheduleMain.dart';
+
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
@@ -79,8 +83,14 @@ class CustomBottomNavigationBar extends StatelessWidget {
   void _onItemTapped(int index) {
     if (index == 0) {
       Get.to(MainGallery());
+    } else if (index == 1) {
+      Get.to(MemoryRegister1());
     } else if (index == 2) {
       Get.to(HomePatient());
+    } else if (index == 3) {
+      Get.to(RoutineMain());
+    } else if (index == 4) {
+      Get.to(ScheduleMain());
     } else {
       onTap(index);
     }

@@ -1,12 +1,17 @@
 import 'package:atti/data/schedule/schedule_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import '../auth_controller.dart';
 
 class ScheduleService {
   final firestore = FirebaseFirestore.instance;
+  final AuthController authController = Get.put(AuthController());
 
   // 일정 등록
   Future<void> addSchedule(ScheduleModel schedule) async {
     try {
+      schedule.patientId = authController.patientDocRef;
       schedule.createdAt = Timestamp.now();
       DocumentReference docRef = await firestore.collection('schedule').add(schedule.toJson());
       schedule.reference = docRef;
@@ -26,6 +31,7 @@ class ScheduleService {
       QuerySnapshot querySnapshot = await firestore.collection('schedule')
           .where('time', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
           .where('time', isLessThanOrEqualTo: Timestamp.fromDate(endDate))
+          .where('patientId', isEqualTo: authController.patientDocRef) // 사용자 연결 추가
           .get();
 
       List<ScheduleModel> schedules = [];

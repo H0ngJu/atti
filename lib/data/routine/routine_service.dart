@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:atti/data/routine/routine_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'dart:io';
+import '../auth_controller.dart';
 
 class RoutineService {
   final firestore = FirebaseFirestore.instance;
   final storage = FirebaseStorage.instance;
+  final AuthController authController = Get.put(AuthController());
 
   // 이미지 업로드
   Future<String> uploadImage(String imagePath) async {
@@ -29,6 +33,7 @@ class RoutineService {
       String imageUrl = await uploadImage(routine.img!);
       routine.img = imageUrl; // 업로드된 이미지 url로 img필드 업데이트
       routine.createdAt = Timestamp.now();
+      routine.patientId = authController.patientDocRef;
 
       DocumentReference docRef =
           await firestore.collection('routine').add(routine.toJson());
@@ -45,6 +50,7 @@ class RoutineService {
       QuerySnapshot querySnapshot = await firestore
           .collection('routine')
           .where('repeatDays', arrayContains: day)
+          .where('patientId', isEqualTo: authController.patientDocRef)
           .get();
 
       List<RoutineModel> routines = querySnapshot.docs

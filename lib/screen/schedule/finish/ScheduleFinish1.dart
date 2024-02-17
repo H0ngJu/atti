@@ -20,7 +20,7 @@ class ScheduleFinish1 extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.only(left: 15),
-                  child: Text(name, style: TextStyle(
+                  child: Text('\'${name}\'\n일정을 완료했어요!', style: TextStyle(
                         fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
                     ),),
                 ),

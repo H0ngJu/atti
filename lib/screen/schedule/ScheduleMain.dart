@@ -1,4 +1,5 @@
 // 일정 메인 화면
+import 'package:atti/data/auth_controller.dart';
 import 'package:atti/screen/schedule/register/ScheduleRegister1.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,7 +7,6 @@ import 'package:atti/data/schedule/schedule_service.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import '../../commons/ScheduleBox.dart';
 import '../../commons/ScheduleModal.dart';
-import '../../data/memory/memory_note_controller.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -22,7 +22,8 @@ class ScheduleMain extends StatefulWidget {
 }
 
 class _ScheduleMainState extends State<ScheduleMain> {
-  final MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
+  final AuthController authController = Get.put(AuthController());
+
   int _selectedIndex = 4;
   void _onItemTapped(int index) {
     setState(() {
@@ -46,11 +47,20 @@ class _ScheduleMainState extends State<ScheduleMain> {
     });
   }
   Future<void> _fetchData() async {
-    schedulesBySelectedDay = await ScheduleService().getSchedulesByDate(_selectedDay);
-    setState(() {
-      numberOfSchedules = schedulesBySelectedDay.length;
-    });
+    List<ScheduleModel>? fetchedSchedules = await ScheduleService().getSchedulesByDate(_selectedDay);
+    if (fetchedSchedules != null) {
+      setState(() {
+        schedulesBySelectedDay = fetchedSchedules;
+        numberOfSchedules = schedulesBySelectedDay.length;
+      });
+    } else {
+      setState(() {
+        schedulesBySelectedDay = [];
+        numberOfSchedules = 0;
+      });
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +72,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
             Container(
               width: MediaQuery.of(context).size.width * 0.9,
               alignment: Alignment.centerLeft,
-              child: Text('ㅇㅇㅇ님의',
+              child: Text('${authController.userName.value}님의',
                 textAlign: TextAlign.left, style: TextStyle(
                   fontSize: 24,
                 ),),
@@ -101,7 +111,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
                       style: TextStyle(fontSize: 24),
                     ),
                   ),
-                  numberOfSchedules! >= 1
+                  numberOfSchedules != null && numberOfSchedules! >= 1
                   ? ScheduleTimeline()
                   : Container(
                     height: MediaQuery.of(context).size.height * 0.5,

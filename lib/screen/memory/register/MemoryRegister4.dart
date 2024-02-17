@@ -73,7 +73,21 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
                 ),),
             ),
             SizedBox(height: 20,),
-            NextButton(next: MemoryRegisterCheck(), content: '다음', isEnabled: true),
+            Container(
+              margin: EdgeInsets.only(bottom: 20),
+              child: TextButton(
+                onPressed: () {
+                  memoryNoteController.memoryNote.value.keyword?.addAll(_values);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MemoryRegisterCheck()),);
+                },
+                child: Text('등록', style: TextStyle(color: Colors.white, fontSize: 20),),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
+                  minimumSize: MaterialStateProperty.all(
+                      Size(MediaQuery.of(context).size.width * 0.9, 50)),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -113,7 +127,6 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
           onTagChanged: (newValue) {
             setState(() {
               _values.add(newValue);
-              memoryNoteController.memoryNote.value.keyword = _values;
             });
           },
           tagBuilder: (context, index) => _Chip(
