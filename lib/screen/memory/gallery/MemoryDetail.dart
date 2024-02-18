@@ -110,8 +110,8 @@ class _MemoryWordsState extends State<MemoryWords> {
   // ***************추가**********************
   final _authentication = FirebaseAuth.instance;
   ViewsController _viewsController = ViewsController(
-    FirebaseFirestore.instance.doc("user/amKtw31nCNJUmOAhAaWU"),
-    FirebaseFirestore.instance.doc("memoryNote/2tjn2WipDfiliDnSASWQ"),
+    FirebaseFirestore.instance.doc("user/erbq9gGSSX66NNrQMi7t"),
+    FirebaseFirestore.instance.doc("memoryNote/fCK0qSBvRzYNjSSqUrjb"),
   );
 
   @override
