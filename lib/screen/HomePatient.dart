@@ -78,6 +78,7 @@ class _HomePatientState extends State<HomePatient> {
     try {
       final user = _authentication.currentUser;
       print("loggedUser: ${user!.uid}");
+      print("check: ${authController.userName.value}");
       if (user != null) {
         loggedUser = user as User?;
       };
@@ -206,6 +207,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
   @override
   Widget build(BuildContext context) {
     String userName = widget.userName; // userName 받음
+    //User user = widget.dummy[0]; // user dummy 전달
     // 시간 가져오기
     DateTime now = DateTime.now();
     String weekday = _getWeekday(now.weekday);
@@ -222,7 +224,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
               style: TextStyle(color: Colors.black, height: 1.2),
               children: [
                 TextSpan(
-                  text: '${userName}\n',
+                  text: '${widget.userName}\n',
                   style: TextStyle(fontSize: 24),
                 ),
                 TextSpan(
