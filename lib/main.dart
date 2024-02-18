@@ -1,4 +1,4 @@
-import 'package:atti/data/notification/notification_service.dart';
+import 'package:atti/data/notification/notification.dart';
 import 'package:atti/screen/HomeCarer.dart';
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
 import 'package:atti/screen/Notice/NoticeMain.dart';

@@ -1,5 +1,6 @@
 // 일정 메인 화면
 import 'package:atti/data/auth_controller.dart';
+import 'package:atti/data/notification/notification.dart';
 import 'package:atti/screen/schedule/register/ScheduleRegister1.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -46,6 +47,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
       await _fetchData();
     });
   }
+
   Future<void> _fetchData() async {
     List<ScheduleModel>? fetchedSchedules = await ScheduleService().getSchedulesByDate(_selectedDay);
     if (fetchedSchedules != null) {
@@ -204,8 +206,8 @@ class _ScheduleMainState extends State<ScheduleMain> {
   Widget ScheduleTimeline() {
     return Container(
       height: numberOfSchedules! <= 2
-          ? MediaQuery.of(context).size.height * 0.5
-          : (numberOfSchedules! * MediaQuery.of(context).size.height * 0.25),
+          ? MediaQuery.of(context).size.height * 0.575
+          : (numberOfSchedules! * MediaQuery.of(context).size.height * 0.28),
 
       width: MediaQuery.of(context).size.width * 0.9,
       child: TimelineTheme(

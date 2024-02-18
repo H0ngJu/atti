@@ -56,5 +56,23 @@ class ScheduleService {
     }
   }
 
+  // 모든 일정 가져오기
+  Future<List<ScheduleModel>> getAllSchedules() async {
+    try {
+      QuerySnapshot querySnapshot = await firestore.collection('schedule')
+          .where('patientId', isEqualTo: authController.patientDocRef) // 사용자 연결 추가
+          .get();
+
+      List<ScheduleModel> schedules = [];
+      querySnapshot.docs.forEach((doc) {
+        schedules.add(ScheduleModel.fromSnapShot(doc as DocumentSnapshot<Map<String, dynamic>>));
+      });
+      return schedules;
+    } catch (e) {
+      print('Error getting all schedules: $e');
+      return [];
+    }
+  }
+
 
 }

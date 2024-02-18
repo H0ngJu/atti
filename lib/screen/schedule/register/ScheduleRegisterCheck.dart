@@ -9,6 +9,8 @@ import 'package:atti/commons/ScheduleBox.dart';
 
 import 'package:atti/screen/schedule/register/ScheduleRegisterFinish.dart';
 
+import '../../../data/notification/notification.dart';
+
 class ScheduleRegisterCheck extends StatefulWidget {
   const ScheduleRegisterCheck({super.key});
 
@@ -18,7 +20,7 @@ class ScheduleRegisterCheck extends StatefulWidget {
 
 class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
   final ScheduleController scheduleController = Get.put(ScheduleController());
-
+  NotificationService notificationService = NotificationService();
   @override
   Widget build(BuildContext context) {
     DateTime? dateTime = scheduleController.schedule.value.time?.toDate();
@@ -110,6 +112,7 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
             onPressed: () {
               scheduleController.tmpScheduleName.value = scheduleController.schedule.value.name!;
               scheduleController.addSchedule();
+              notificationService.scheduleNotifications();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ScheduleRegisterFinish()),
