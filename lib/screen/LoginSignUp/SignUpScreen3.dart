@@ -460,9 +460,10 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                           .value
                                     };
                                   }
-                                  await _db
+                                  var docRef = await _db
                                       .collection("user")
                                       .add(userInfo);
+                                  await docRef.update({ "reference": docRef });
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context) {
