@@ -2,27 +2,29 @@
 // cloudfunction 사용
 // 단위 : 일주일
 // 1. 미완료 루틴
-// 2. 등록 기억 수
-// 3. 감정 키워드
-// 4. 많이 열람한 기억
+// 2. 등록 기억 수 (지금 구현)
+// 3. 감정 키워드 (제일 나중에)
+// 4. 많이 열람한 기억 (지금 구현)
 // 저장 방법: createdAt의 시작 요일은 월요일, -7일 안에 일치하는 문서가 있으면 추가, 없으면 생성 (요일 기준은 일요일, 지난 주 월 ~ 토요일 문서!)
-// memoryViews에 memoryDocId : views 꼴로 저장, 갱신
+// 사용 방법 :
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ReportModel {
-  // 자료형
   final _db = FirebaseFirestore.instance;
+  // 자료형
   DocumentReference? patientId;
   Timestamp? createdAt;
-  DocumentReference? memoryReference; // memoryViews에 저장하기 위해 받는 정보
-  Map<DocumentReference, int>? memoryViews;
+  // List<DocumentReference>? unfinishedRoutine;
+  int? registeredMemoryNumber;
+  // List<String>? emotionKeyword;
+  List<DocumentReference>? MostViewMemories;
+  List<Timestamp>? period;
   DocumentReference? reference; // document 식별자
 
   // 생성자
   ReportModel({
     this.patientId,
-    this.memoryReference,
   });
 
   // object -> json (Flutter -> Firebase)
@@ -30,7 +32,6 @@ class ReportModel {
     final map = <String, dynamic>{};
     map['patientId'] = patientId?.path;
     map['createdAt'] = createdAt;
-    map['memoryViews'] = memoryViews?.map((key, value) => MapEntry(key.path, value));
     map['reference'] = reference?.path;
     return map;
   }
@@ -39,7 +40,6 @@ class ReportModel {
   ReportModel.fromJson(dynamic json, this.reference) {
     patientId = _db.doc(json['patientId']);
     createdAt = json['createdAt'];
-    memoryViews = (json['memoryViews'] as Map)?.map((key, value) => MapEntry(_db.doc(key), value));
     reference = _db.doc(json['reference']);
   }
 
