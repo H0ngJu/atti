@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:atti/commons/SimpleAppBar.dart';
+import 'package:atti/screen/chatbot/Chatbot.dart';
 import 'package:atti/screen/memory/chat/BeforeSave.dart';
 import 'package:atti/screen/memory/chat/ChatBubble.dart';
 import 'package:atti/screen/memory/chat/ChatHistory.dart';
@@ -27,16 +28,16 @@ class _ChatState extends State<Chat> {
     flutterTts.setLanguage("ko-KR");
     flutterTts.setPitch(1);
     _speakMessage(_currentMessage); // Speak initial message
-    _startTimer();
+    //_startTimer();
   }
 
-  void _startTimer() {
+  /*void _startTimer() {
     Timer.periodic(Duration(seconds: 5), (timer) {
       setState(() {
         _currentMessage = 'New Message';
       });
     });
-  }
+  }*/
 
   void _speakMessage(String message) async {
     await flutterTts.speak(message);
@@ -80,7 +81,15 @@ class _ChatState extends State<Chat> {
                   ),
                 ],
               ),
-              VoiceButton(),
+              VoiceButton(
+                updatedMessage: (message) {
+                  setState(() {
+                    _currentMessage = message;
+                  });
+                },
+              ),
+
+
             ],
           ),
         ),
@@ -97,13 +106,16 @@ class _ChatState extends State<Chat> {
 
 // 대화기록, 마이크, 대화 종료 버튼
 class VoiceButton extends StatefulWidget {
-  const VoiceButton({Key? key}) : super(key: key);
+  final Function(String) updatedMessage;
+  const VoiceButton({Key? key, required this.updatedMessage}) : super(key: key);
 
   @override
   State<VoiceButton> createState() => _VoiceButtonState();
 }
 
 class _VoiceButtonState extends State<VoiceButton> {
+  String _currentMessage = '대화를 시작하려면 마이크 버튼을 누르세요';
+  final _chatbot = Chatbot();
   stt.SpeechToText _speech = stt.SpeechToText();
   String _spokenText = '버튼을 누르고 음성을 입력';
   bool _isListening = false;
@@ -129,6 +141,7 @@ class _VoiceButtonState extends State<VoiceButton> {
     }
   }
 
+// 음성을 인식하고 API에 전달하여 응답 받기
   void _startListening() async {
     bool available = await _speech.initialize(
       onStatus: (status) {},
@@ -137,16 +150,42 @@ class _VoiceButtonState extends State<VoiceButton> {
 
     if (available) {
       _speech.listen(
-        onResult: (result) {
+        onResult: (result) async {
           setState(() {
             _spokenText = result.recognizedWords;
-            _resetStaticTimer(); // 음성인식 후 타이머 리셋
           });
+          String message = result.recognizedWords ?? "";
+          print('here : $message');
+          _appendMessage("User", message); // 사용자의 말을 메시지로 추가
+          setState(() {
+            _isListening = false;
+          });
+          _stopListening(); // Listening 중지
+
+          try {
+            String response = await _chatbot.getResponse(message); // Chatbot으로부터 응답 받기
+            _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
+          } catch (e) {
+            print("Error: $e");
+          } finally {
+            setState(() {
+              _isListening = false;
+            });
+          }
         },
       );
     } else {
       print("Speech recognition not available");
     }
+  }
+
+
+  // 메시지 추가
+  void _appendMessage(String role, String message) {
+    setState(() {
+      _currentMessage = message;
+      widget.updatedMessage(_currentMessage);
+    });
   }
 
   void _resetStaticTimer() {
@@ -244,13 +283,13 @@ class _VoiceButtonState extends State<VoiceButton> {
           ]),
 
       // 얘는 임시로 말하는거 보여주려고 ..
-      Container(
+      /*Container(
           width: MediaQuery.of(context).size.width * 0.8,
           padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
               border: Border.all(width: 1, color: Color(0xffF6B818))),
           child: Text('$_spokenText',
-              style: TextStyle(color: Colors.black, fontSize: 25)))
+              style: TextStyle(color: Colors.black, fontSize: 25)))*/
     ]);
   }
 }

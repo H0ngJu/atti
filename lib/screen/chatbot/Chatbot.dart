@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class Chatbot {
   Future<String> getResponse(String prompt) async {
+    print('Received prompt: $prompt');
     await dotenv.load(fileName: '.env');
     final String url = 'https://api.openai.com/v1/chat/completions';
     final String apiKey = dotenv.env['GPT_API_KEY']!;
@@ -17,7 +18,7 @@ class Chatbot {
     var body = jsonEncode({
       'model': 'gpt-3.5-turbo',
       'messages': [
-        {"role": "system", "content": "너는 치매 노인의 기억 회상을 돕는 보이스봇 아띠야. 치매 노인과 사진에 대해 이야기하는게 너의 임무야. 사진에 대해 물어보고 노인의 말에 공감과 긍정적인 답변을 해 줘."},
+        {"role": "system", "content": "사진에 대해 물어보고 노인의 말에 공감과 긍정적인 답변을 해 줘."},
         {"role": "user", "content": prompt}
       ],
       'max_tokens': 60,
@@ -44,7 +45,7 @@ class Chatbot {
   }
 }
 
-class ChatScreen extends StatefulWidget {
+/*class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
 
   @override
@@ -110,7 +111,7 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-}
+}*/
 
 
 // class ChatPage extends StatefulWidget {
