@@ -207,7 +207,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
     return Container(
       height: numberOfSchedules! <= 2
           ? MediaQuery.of(context).size.height * 0.575
-          : (numberOfSchedules! * MediaQuery.of(context).size.height * 0.295),
+          : (numberOfSchedules! * MediaQuery.of(context).size.height * 0.28),
 
       width: MediaQuery.of(context).size.width * 0.9,
       child: TimelineTheme(

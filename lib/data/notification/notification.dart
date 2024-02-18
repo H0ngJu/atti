@@ -150,9 +150,9 @@ class NotificationService {
         DateTime now = DateTime.now();
         DateTime routineTime = DateTime(now.year, now.month, now.day, hour, minute);
 
-        // 만약 루틴 시간이 현재 시간 이전이라면 다음날로 설정
+        // 만약 루틴 시간이 현재 시간 이전이라면 1분 뒤로 설정
         if (routineTime.isBefore(now)) {
-          routineTime = routineTime.add(Duration(minutes: 1));
+          routineTime = now.add(Duration(minutes: 1));
         }
 
         await NotificationService().showDateTimeNotification(

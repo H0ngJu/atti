@@ -57,14 +57,25 @@ class RoutineService {
           .map((doc) => RoutineModel.fromJson(doc.data(), doc.reference))
           .toList();
 
-      //print("쿼리결과 ${routines}");
+      // 시간으로 정렬
+      routines.sort((a, b) {
+        // a와 b의 시간을 가져옴
+        List<int> timeA = a.time!;
+        List<int> timeB = b.time!;
+
+        // 시간을 비교하여 정렬
+        if (timeA[0] != timeB[0]) {
+          return timeA[0].compareTo(timeB[0]); // 시간 비교
+        } else {
+          return timeA[1].compareTo(timeB[1]); // 분 비교
+        }
+      });
       return routines;
     } catch (e) {
       print('Error getting routines by day: $e');
       return [];
     }
   }
-
 
 
   // 루틴 완료
@@ -95,7 +106,6 @@ class RoutineService {
       print('Error completing routine: $e');
     }
   }
-
 
 
 
