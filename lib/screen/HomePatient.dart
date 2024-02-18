@@ -1,3 +1,5 @@
+//import 'dart:js_util';
+
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../data/notification/notification_service.dart';
+import '../data/notification/notification.dart';
 
 class User {
   final String? name;
@@ -59,15 +61,19 @@ class _HomePatientState extends State<HomePatient> {
   final _db = FirebaseFirestore.instance;
   User? loggedUser;
 
+  void _requestNotificationPermissions() async {
+    NotificationService notificationService = NotificationService();
+    final status = await NotificationService().requestNotificationPermissions();
+    bool isGranted = await NotificationService().requestBatteryPermissions();
+    notificationService.scheduleNotifications();
+    notificationService.routineNotifications();
+  }
+
   @override
   void initState() {
     super.initState();
     getCurrentUser();
     _requestNotificationPermissions();
-  }
-
-  void _requestNotificationPermissions() async {
-    final status = await NotificationService().requestNotificationPermissions();
   }
 
   void getCurrentUser() {

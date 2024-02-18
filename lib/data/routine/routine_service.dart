@@ -65,6 +65,8 @@ class RoutineService {
     }
   }
 
+
+
   // 루틴 완료
   Future<void> completeRoutine(DocumentReference docRef, DateTime date) async {
     try {
