@@ -1,6 +1,7 @@
 import 'package:atti/data/notification/notification_service.dart';
 import 'package:atti/screen/HomeCarer.dart';
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
+import 'package:atti/screen/Notice/NoticeMain.dart';
 import 'package:atti/screen/report/ReportDetail.dart';
 import 'package:atti/screen/routine/RoutineMain.dart';
 import 'package:atti/screen/routine/register/RoutineRegister1.dart';
@@ -59,7 +60,7 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: LogInSignUpMainScreen(),
+      home: Chat(),
     );
   }
 }

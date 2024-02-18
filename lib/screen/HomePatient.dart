@@ -194,9 +194,8 @@ class _HomePatientState extends State<HomePatient> {
 
 // 메인 첫 화면
 class HomePatientTop extends StatefulWidget {
-  //final List<User> dummy; // 수정된 부분: dummy 데이터를 받기 위한 변수 선언
-
   final String userName;
+
   const HomePatientTop({Key? key, required this.userName}) : super(key: key);
 
   @override
@@ -204,8 +203,10 @@ class HomePatientTop extends StatefulWidget {
 }
 
 class _HomePatientTopState extends State<HomePatientTop> {
+  final AuthController authController = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
+    String userName = widget.userName; // userName 받음
     //User user = widget.dummy[0]; // user dummy 전달
     // 시간 가져오기
     DateTime now = DateTime.now();

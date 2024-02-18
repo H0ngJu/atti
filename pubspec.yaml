@@ -69,6 +69,8 @@ dependencies:
   firebase_app_check: ^0.2.1+13
   flutter_dotenv: ^5.1.0
   dart_openai: ^5.0.0
+  flutter_tts: ^3.8.5
+
 
 dev_dependencies:
   flutter_test:
