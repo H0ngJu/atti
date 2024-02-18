@@ -10,7 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MemoryNoteModel {
   // 자료형
-  String? patientId;
+  DocumentReference? patientId;
   String? img;
   String? imgTitle;
   String? era;
@@ -41,7 +41,9 @@ class MemoryNoteModel {
     era = json['era'];
     chat = json['chat'];
     selectedFamilyMember = json['selectedFamilyMember'];
-    keyword = json['keyword'];
+    keyword = json['keyword'] != null
+        ? List<String>.from(json['keyword'])
+        : [];
     createdAt = json['createdAt'];
     reference = json['reference'];
   }

@@ -1,4 +1,5 @@
 import 'package:atti/screen/HomePatient.dart';
+import 'package:atti/screen/memory/gallery/MainGallery.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
@@ -49,7 +50,7 @@ class _MemoryRegisterFinishState extends State<MemoryRegisterFinish> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePatient()),
+                  MaterialPageRoute(builder: (context) => MainGallery()),
                 );
               },
               child: Text('내 기억으로 가기', style: TextStyle(color: Colors.black, fontSize: 20),),

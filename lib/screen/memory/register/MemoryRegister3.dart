@@ -5,6 +5,7 @@ import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
 import 'package:atti/screen/memory/register/MemoryRegister4.dart';
+import '../../../data/auth_controller.dart';
 
 class MemoryRegister3 extends StatefulWidget {
   const MemoryRegister3({super.key});
@@ -15,16 +16,19 @@ class MemoryRegister3 extends StatefulWidget {
 
 class _MemoryRegister3State extends State<MemoryRegister3> {
   final MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
+  final AuthController authController = Get.put(AuthController());
 
   final _era = ['1900년대', '1910년대', '1920년대', '1930년대', '1940년대', '1950년대',
     '1960년대', '1970년대', '1980년대', '1990년대', '2000년대', '2010년대', '2020년대',];
   String? _selectedEra;
-  final List<String> familyMembers = ['한돌이', '두돌이', '세돌이', '네돌이', '박수정', '다섯돌이', '수정'];
+  late List<String> familyMembers;
   late List<bool> memberIsSelected = [];
+  late List<String> selectedMembers = [];
 
   @override
   void initState() {
     super.initState();
+    familyMembers = authController.familyMember;
     setState(() {
       _selectedEra = _era[12];
       memoryNoteController.memoryNote.value.era = _selectedEra;
@@ -147,6 +151,13 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
           onPressed: () {
             setState(() {
               memberIsSelected[index] = !memberIsSelected[index];
+              if (memberIsSelected[index]) {
+                selectedMembers.add(familyMembers[index]);
+                memoryNoteController.memoryNote.value.keyword = selectedMembers;
+              } else {
+                selectedMembers.remove(familyMembers[index]);
+                memoryNoteController.memoryNote.value.keyword = selectedMembers;
+              }
             });
           },
           child: Text(familyMembers[index]),

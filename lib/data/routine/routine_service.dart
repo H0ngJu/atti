@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:atti/data/routine/routine_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'dart:io';
+import '../auth_controller.dart';
 
 class RoutineService {
   final firestore = FirebaseFirestore.instance;
   final storage = FirebaseStorage.instance;
+  final AuthController authController = Get.put(AuthController());
 
   // 이미지 업로드
   Future<String> uploadImage(String imagePath) async {
@@ -29,6 +33,7 @@ class RoutineService {
       String imageUrl = await uploadImage(routine.img!);
       routine.img = imageUrl; // 업로드된 이미지 url로 img필드 업데이트
       routine.createdAt = Timestamp.now();
+      routine.patientId = authController.patientDocRef;
 
       DocumentReference docRef =
           await firestore.collection('routine').add(routine.toJson());
@@ -45,19 +50,33 @@ class RoutineService {
       QuerySnapshot querySnapshot = await firestore
           .collection('routine')
           .where('repeatDays', arrayContains: day)
+          .where('patientId', isEqualTo: authController.patientDocRef)
           .get();
 
       List<RoutineModel> routines = querySnapshot.docs
           .map((doc) => RoutineModel.fromJson(doc.data(), doc.reference))
           .toList();
 
-      //print("쿼리결과 ${routines}");
+      // 시간으로 정렬
+      routines.sort((a, b) {
+        // a와 b의 시간을 가져옴
+        List<int> timeA = a.time!;
+        List<int> timeB = b.time!;
+
+        // 시간을 비교하여 정렬
+        if (timeA[0] != timeB[0]) {
+          return timeA[0].compareTo(timeB[0]); // 시간 비교
+        } else {
+          return timeA[1].compareTo(timeB[1]); // 분 비교
+        }
+      });
       return routines;
     } catch (e) {
       print('Error getting routines by day: $e');
       return [];
     }
   }
+
 
   // 루틴 완료
   Future<void> completeRoutine(DocumentReference docRef, DateTime date) async {
@@ -87,7 +106,6 @@ class RoutineService {
       print('Error completing routine: $e');
     }
   }
-
 
 
 

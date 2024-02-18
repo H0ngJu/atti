@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 import 'package:atti/data/schedule/schedule_service.dart';
 import 'package:atti/data/schedule/schedule_model.dart';
+import '../auth_controller.dart';
 
 class ScheduleController extends GetxController {
+  final AuthController authController = Get.put(AuthController());
   final ScheduleService scheduleService = ScheduleService();
   var schedule = ScheduleModel().obs;
   var tmpScheduleName = ''.obs;
@@ -17,7 +19,9 @@ class ScheduleController extends GetxController {
   }
 
   void clear() {
-    schedule.value = ScheduleModel();
+    schedule.value = ScheduleModel(
+      patientId: authController.patientDocRef,
+    );
   }
 
 }

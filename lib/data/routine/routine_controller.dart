@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 import 'package:atti/data/routine/routine_model.dart';
 import 'package:atti/data/routine/routine_service.dart';
+import '../auth_controller.dart';
 
 class RoutineController extends GetxController {
+  final AuthController authController = Get.put(AuthController());
   final RoutineService routineService = RoutineService();
   var routine = RoutineModel().obs;
   var tmpRoutineName = ''.obs;
@@ -16,7 +18,9 @@ class RoutineController extends GetxController {
     }
   }
   void clear() {
-    routine.value = RoutineModel();
+    routine.value = RoutineModel(
+      patientId: authController.patientDocRef,
+    );
   }
 
 

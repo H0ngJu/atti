@@ -1,3 +1,4 @@
+import 'package:atti/data/notification/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +17,7 @@ class RoutineRegisterCheck extends StatefulWidget {
 
 class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
   final RoutineController routineController = Get.put(RoutineController());
+  NotificationService notificationService = NotificationService();
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +50,7 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
               onPressed: () {
                 routineController.tmpRoutineName.value = routineController.routine.value.name!;
                 routineController.addRoutine();
+                notificationService.routineNotifications();
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => RoutineRegisterFinish()),

@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import '../../../data/memory/memory_note_model.dart';
+import '../../../data/memory/memory_note_service.dart';
 
 class User {
   final String? name;
@@ -29,8 +31,30 @@ class MainGallery extends StatefulWidget {
 }
 
 class _MainGalleryState extends State<MainGallery> {
+  MemoryNoteService memoryNoteService = MemoryNoteService();
+  List<MemoryNoteModel> memoryNotes = [];
+  late int numberOfMemory;
   // bottom Navi logic
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    List<MemoryNoteModel> fetchedNotes = await memoryNoteService.getMemoryNote();
+    setState(() {
+      memoryNotes = fetchedNotes;
+      numberOfMemory = memoryNotes.length;
+      // if (memoryNotes.isNotEmpty) {
+      //   print(memoryNotes[0].imgTitle);
+      // } else {
+      //   print('Memory notes is empty');
+      // }
+    });
+  }
 
   void _onItemTapped(int index) {
     setState(() {

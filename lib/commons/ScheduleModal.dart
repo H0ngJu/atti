@@ -87,7 +87,7 @@ class ScheduleModal extends StatelessWidget {
             SizedBox(height: 5,),
             Container(
               width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.7,
+              height: MediaQuery.of(context).size.height * 0.18,
               padding: EdgeInsets.only(top:10, left: 15),
               decoration: BoxDecoration(
                   color: Color(0xffFFF5DB),
@@ -100,7 +100,7 @@ class ScheduleModal extends StatelessWidget {
               ),
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05,),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.04,),
 
             Container(
               margin: EdgeInsets.only(bottom: 20),
@@ -109,7 +109,7 @@ class ScheduleModal extends StatelessWidget {
                   await ScheduleService().completeSchedule(docRef);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ScheduleFinish1(name: '\'${name}\'\n일정을 완료했어요!')),
+                    MaterialPageRoute(builder: (context) => ScheduleFinish1(name: name)),
                   );
                 },
                 child: Text('일정 완료하기', style: TextStyle(color: Colors.white, fontSize: 20),),
