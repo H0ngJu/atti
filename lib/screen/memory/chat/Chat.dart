@@ -8,6 +8,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:flutter_tts/flutter_tts.dart';
 
 class Chat extends StatefulWidget {
   const Chat({Key? key}) : super(key: key);
@@ -17,6 +18,30 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
+  String _currentMessage = '대화를 시작하려면 마이크 버튼을 누르세요';
+  final FlutterTts flutterTts = FlutterTts();
+
+  @override
+  void initState() {
+    super.initState();
+    flutterTts.setLanguage("ko-KR");
+    flutterTts.setPitch(1);
+    _speakMessage(_currentMessage); // Speak initial message
+    _startTimer();
+  }
+
+  void _startTimer() {
+    Timer.periodic(Duration(seconds: 5), (timer) {
+      setState(() {
+        _currentMessage = 'New Message';
+      });
+    });
+  }
+
+  void _speakMessage(String message) async {
+    await flutterTts.speak(message);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +67,10 @@ class _ChatState extends State<Chat> {
                   )
                 ],
               ),
-              ChatBubble(),
+              ChatBubble(
+                message: _currentMessage,
+                //onTextChanged: onBubbleTextChanged,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -173,7 +201,9 @@ class _VoiceButtonState extends State<VoiceButton> {
               height: MediaQuery.of(context).size.width * 0.2,
               margin: EdgeInsets.only(top: 20),
               child: ElevatedButton(
-                  onPressed: () {Get.to(ChatHistory());},
+                  onPressed: () {
+                    Get.to(ChatHistory());
+                  },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xffFFF5DB),
                       shape: CircleBorder()),

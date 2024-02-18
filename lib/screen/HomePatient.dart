@@ -3,8 +3,11 @@ import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../data/auth_controller.dart';
 import '../data/notification/notification_service.dart';
 
 class User {
@@ -58,6 +61,7 @@ class _HomePatientState extends State<HomePatient> {
   final _authentication = FirebaseAuth.instance;
   final _db = FirebaseFirestore.instance;
   User? loggedUser;
+  final AuthController authController = Get.put(AuthController());
 
   @override
   void initState() {
@@ -162,7 +166,7 @@ class _HomePatientState extends State<HomePatient> {
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(30),
                         bottomRight: Radius.circular(30))),
-                child: HomePatientTop(dummy: dummy)),
+                child: HomePatientTop(userName: authController.userName.value)),
             Container(margin: EdgeInsets.all(16), child: HomeTodaySummary()),
             Container(
               margin: EdgeInsets.all(16),
@@ -189,18 +193,19 @@ class _HomePatientState extends State<HomePatient> {
 
 // 메인 첫 화면
 class HomePatientTop extends StatefulWidget {
-  final List<User> dummy; // 수정된 부분: dummy 데이터를 받기 위한 변수 선언
+  final String userName;
 
-  const HomePatientTop({Key? key, required this.dummy}) : super(key: key);
+  const HomePatientTop({Key? key, required this.userName}) : super(key: key);
 
   @override
   State<HomePatientTop> createState() => _HomePatientTopState();
 }
 
 class _HomePatientTopState extends State<HomePatientTop> {
+  final AuthController authController = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
-    User user = widget.dummy[0]; // user dummy 전달
+    String userName = widget.userName; // userName 받음
     // 시간 가져오기
     DateTime now = DateTime.now();
     String weekday = _getWeekday(now.weekday);
@@ -217,7 +222,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
               style: TextStyle(color: Colors.black, height: 1.2),
               children: [
                 TextSpan(
-                  text: '${user.name}\n',
+                  text: '${userName}\n',
                   style: TextStyle(fontSize: 24),
                 ),
                 TextSpan(
