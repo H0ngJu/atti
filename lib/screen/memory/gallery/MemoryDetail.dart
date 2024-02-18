@@ -4,6 +4,7 @@ import 'package:atti/commons/SimpleAppBar.dart';
 import 'package:atti/screen/memory/chat/Chat.dart';
 import 'package:atti/screen/memory/gallery/GalleryOption.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -107,6 +108,7 @@ class MemoryWords extends StatefulWidget {
 
 class _MemoryWordsState extends State<MemoryWords> {
   // ***************추가**********************
+  final _authentication = FirebaseAuth.instance;
   ViewsController _viewsController = ViewsController(
     FirebaseFirestore.instance.doc("user/amKtw31nCNJUmOAhAaWU"),
     FirebaseFirestore.instance.doc("memoryNote/2tjn2WipDfiliDnSASWQ"),
@@ -115,7 +117,7 @@ class _MemoryWordsState extends State<MemoryWords> {
   @override
   void initState() {
     super.initState();
-    _viewsController.addViews();
+    _viewsController.addViews(_authentication.currentUser as User);
   }
   // ***************추가**********************
 

@@ -115,9 +115,9 @@ class ViewsController extends GetxController {
     views = ViewsModel(patientId: patientId, memoryReference: memoryReference).obs;
   }
 
-  void addViews() async {
+  void addViews(User currentUser) async {
     try {
-      await viewsService.addViews(views.value);
+      await viewsService.addViews(views.value, currentUser);
       clear();
     } catch (e) {
       print('Error adding views: $e');
