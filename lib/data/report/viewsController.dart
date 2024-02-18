@@ -4,6 +4,7 @@
 // memoryViews에 memoryDocId : views 꼴로 저장, 갱신
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ViewsModel {
   // 자료형
@@ -51,38 +52,52 @@ class ViewsModel {
 
 class ViewsService {
   final _db = FirebaseFirestore.instance;
-  Future<void> addViews(ViewsModel views) async {
+  Future<void> addViews(ViewsModel views, User currentUser) async {
     try {
       // 오늘 날짜의 views Doc이 이미 존재하는지 확인
         DateTime now = DateTime.now();
         DateTime today = DateTime(now.year, now.month, now.day); // 시간, 분, 초, 밀리초는 모두 0으로 설정
         DateTime nextDay = DateTime(today.year, today.month, today.day + 1); // 설정한 날짜의 다음 날을 계산
-        QuerySnapshot snapshot = await _db
-            .collection('views')
-            .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(today)) // 설정한 날짜 이후의 문서를 찾습니다.
-            .where('createdAt', isLessThan: Timestamp.fromDate(nextDay)) // 다음 날 이전의 문서를 찾습니다.
+
+        // 메모리를 조회한 유저 정보 받아오기 (환자일 경우에만)
+        QuerySnapshot userSnapshot = await _db
+            .collection('user')
+            .where('userId', isEqualTo: currentUser.uid)
+            .where('isPatient', isEqualTo: true)
             .get();
-        // Doc이 이미 존재한다면 : Doc 갱신
-        if (snapshot.docs.length > 0) {
-          DocumentSnapshot document = snapshot.docs[0];
-          ViewsModel existingViews = ViewsModel.fromSnapShot(document as DocumentSnapshot<Map<String, dynamic>>);
-          if (existingViews.memoryViews == null) {
-            existingViews.memoryViews = {};
+        // 환자인 경우에만 이후 과정 진행
+        if (userSnapshot != null) {
+          final patientId = userSnapshot.docs[0].reference;
+          // 유저 정보, 기간을 기준으로 문서 검색
+          QuerySnapshot snapshot = await _db
+              .collection('views')
+              .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(today)) // 설정한 날짜 이후의 문서를 찾습니다.
+              .where('createdAt', isLessThan: Timestamp.fromDate(nextDay)) // 다음 날 이전의 문서를 찾습니다.
+              .where('reference', isEqualTo: patientId)
+              .get();
+          // Doc이 이미 존재한다면 : Doc 갱신
+          if (snapshot.docs.length > 0) {
+            DocumentSnapshot document = snapshot.docs[0];
+            ViewsModel existingViews = ViewsModel.fromSnapShot(document as DocumentSnapshot<Map<String, dynamic>>);
+            if (existingViews.memoryViews == null) {
+              existingViews.memoryViews = {};
+            }
+            existingViews.memoryViews![views.memoryReference!] =
+                (existingViews.memoryViews![views.memoryReference!] ?? 0) + 1; // memoryViews를 1 증가시킵니다.
+            await document.reference.update(existingViews.toJson()); // 변경된 정보를 업데이트합니다.
           }
-          existingViews.memoryViews![views.memoryReference!] =
-              (existingViews.memoryViews![views.memoryReference!] ?? 0) + 1; // memoryViews를 1 증가시킵니다.
-          await document.reference.update(existingViews.toJson()); // 변경된 정보를 업데이트합니다.
+          // Doc이 존재하지 않는다면 : Doc 추가
+          else {
+            views.createdAt = Timestamp.now();
+            views.memoryViews = {
+              views.memoryReference!: 1 // memoryViews를 초기화합니다.
+            };
+            DocumentReference docRef = await _db.collection('views').add(views.toJson());
+            views.reference = docRef;
+            await docRef.update(views.toJson());
+          }
         }
-        // Doc이 존재하지 않는다면 : Doc 추가
-        else {
-          views.createdAt = Timestamp.now();
-          views.memoryViews = {
-            views.memoryReference!: 1 // memoryViews를 초기화합니다.
-          };
-          DocumentReference docRef = await _db.collection('views').add(views.toJson());
-          views.reference = docRef;
-          await docRef.update(views.toJson());
-        }
+
     } catch (e) {
       print('Error adding views: $e');
     }
@@ -100,9 +115,9 @@ class ViewsController extends GetxController {
     views = ViewsModel(patientId: patientId, memoryReference: memoryReference).obs;
   }
 
-  void addViews() async {
+  void addViews(User currentUser) async {
     try {
-      await viewsService.addViews(views.value);
+      await viewsService.addViews(views.value, currentUser);
       clear();
     } catch (e) {
       print('Error adding views: $e');

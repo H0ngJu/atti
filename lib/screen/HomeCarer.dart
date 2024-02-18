@@ -3,6 +3,8 @@ import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../data/notification/notification.dart';
+
 class User {
   final String? name;
   final int? incompleteRoutineCount;
@@ -47,6 +49,20 @@ class _HomeCarerState extends State<HomeCarer> {
       incompleteRoutineCount: 3,
     ),
   ];
+
+  void _requestNotificationPermissions() async {
+    NotificationService notificationService = NotificationService();
+    final status = await NotificationService().requestNotificationPermissions();
+    bool isGranted = await NotificationService().requestBatteryPermissions();
+    notificationService.scheduleNotifications();
+    notificationService.routineNotifications();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _requestNotificationPermissions();
+  }
 
   @override
   Widget build(BuildContext context) {
