@@ -104,3 +104,4 @@ exports.weeklyReport = onSchedule({
         logger.log("Weekly report generated");
     }
 }));
+// issue 추가!!!

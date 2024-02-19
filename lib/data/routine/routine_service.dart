@@ -36,9 +36,9 @@ class RoutineService {
       routine.createdAt = Timestamp.now();
       routine.patientId = authController.patientDocRef;
 
-      // 추가 *************************
-      routine.isFinished = createTimeMap(routine.repeatDays);
-      // 추가 *************************
+      // // 추가 *************************
+      // routine.isFinished = createTimeMap(routine.repeatDays);
+      // // 추가 *************************
 
       DocumentReference docRef =
           await firestore.collection('routine').add(routine.toJson());
@@ -48,6 +48,7 @@ class RoutineService {
       print('Error adding notification : $e!!!!!!!!!!!!!!!!!!');
     }
   }
+
 
   // 추가 ************************* isFinished Map 만들기
   Map<String, bool> createTimeMap(List<String>? days) {
@@ -88,6 +89,7 @@ class RoutineService {
     }
   }
   // 추가 ************************* isFinished Map 만들기
+
 
   // 특정 요일의 루틴 가져오기
   Future<List<RoutineModel>> getRoutinesByDay(String day) async {
@@ -151,7 +153,4 @@ class RoutineService {
       print('Error completing routine: $e');
     }
   }
-
-
-
 }
