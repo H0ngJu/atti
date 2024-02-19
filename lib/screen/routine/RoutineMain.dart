@@ -39,6 +39,10 @@ class _RoutineMainState extends State<RoutineMain> {
   int? numberOfRoutines;
   String selectedDayInWeek = DateFormat('E', 'ko-KR').format(DateTime.now());
 
+  String removeZ(String dateTimeString) {
+    return dateTimeString.replaceAll('Z', '');
+  }
+
   @override
   void initState() {
     super.initState();
@@ -200,11 +204,14 @@ class _RoutineMainState extends State<RoutineMain> {
         ),
         child: Timeline.tileBuilder(
           builder: TimelineTileBuilder.connectedFromStyle(
-            // indicatorStyleBuilder: (context, index) {
-              // return routinesBySelectedDay[index].isFinished!.contains(_selectedDay.toString())
-              //     ? IndicatorStyle.dot
-              //     : IndicatorStyle.outlined;
-            // },
+            indicatorStyleBuilder: (context, index) {
+              return (routinesBySelectedDay[index].isFinished != null &&
+                  routinesBySelectedDay[index].isFinished!.containsKey(removeZ(_selectedDay.toString())) &&
+                  routinesBySelectedDay[index].isFinished![removeZ(_selectedDay.toString())]! ?? false)
+                  ? IndicatorStyle.dot
+                  : IndicatorStyle.outlined;
+
+            },
             //connectorStyle: ConnectorStyle.dashedLine,
             connectorStyleBuilder: (context, index) => ConnectorStyle.dashedLine,
             lastConnectorStyle: ConnectorStyle.dashedLine,
@@ -231,14 +238,16 @@ class _RoutineMainState extends State<RoutineMain> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Text(routinesBySelectedDay[index].isFinished!.contains(_selectedDay.toString())
-                    //     ? '완료됨'
-                    //     : '완료되지 않음',
-                    //   textAlign: TextAlign.start,
-                    //   style: TextStyle(
-                    //     color: Color(0xff737373),
-                    //     fontSize: 18,
-                    //   ), ),
+                    Text((routinesBySelectedDay[index].isFinished != null &&
+                        routinesBySelectedDay[index].isFinished!.containsKey(removeZ(_selectedDay.toString())) &&
+                        routinesBySelectedDay[index].isFinished![removeZ(_selectedDay.toString())]! ?? false)
+                         ? '완료됨'
+                         : '완료되지 않음',
+                       textAlign: TextAlign.start,
+                       style: TextStyle(
+                         color: Color(0xff737373),
+                         fontSize: 18,
+                       ), ),
                     SizedBox(height: 10,),
                     RoutineBox(
                       time: routinesBySelectedDay[index].time!,

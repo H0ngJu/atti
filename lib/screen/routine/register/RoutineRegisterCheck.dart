@@ -50,6 +50,7 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
             child: TextButton(
               onPressed: () {
                 routineController.tmpRoutineName.value = routineController.routine.value.name!;
+                print(routineController.routine.value.repeatDays);
                 routineController.addRoutine();
 
                 if (authController.isPatient) {

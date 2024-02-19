@@ -8,7 +8,7 @@ class RoutineModel {
   List<int>? time;
   Timestamp? createdAt;
   List<String>? repeatDays;
-  Map<DateTime, bool>? isFinished;
+  Map<String, bool>? isFinished;
   DocumentReference? reference; // document 식별자
 
   // 생성자
@@ -30,16 +30,15 @@ class RoutineModel {
     time = List<int>.from(json['time']);
     createdAt = json['createdAt'];
     repeatDays = List<String>.from(json['repeatDays']);
+    isFinished = Map<String, bool>.from(json['isFinished']);
 
     // // isFinished 필드가 Null일 경우 빈 리스트로 초기화
     // isFinished = (json['isFinished'] != null) ? Map<DateTime, bool>.from(json['isFinished']) : [];
   }
 
-  // Named Constructor with Initializer
   RoutineModel.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> snapshot)
       : this.fromJson(snapshot.data()!, snapshot.reference);
 
-  // Named Constructor with Initializer
   RoutineModel.fromQuerySnapshot(
       QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : this.fromJson(snapshot.data()!, snapshot.reference);
@@ -56,7 +55,9 @@ class RoutineModel {
 
     // 추가 *************************
     if (isFinished != null) {
-      map['isFinished'] = isFinished!.map((key, value) => MapEntry(key.millisecondsSinceEpoch, value));
+      map['isFinished'] = isFinished!.map<String, bool>(
+            (key, value) => MapEntry(key.toString(), value)
+      );
     }
     // 추가 *************************
 
