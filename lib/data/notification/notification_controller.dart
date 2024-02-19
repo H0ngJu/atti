@@ -61,48 +61,56 @@ class NotificationModel {
 }
 // 알림 데이터 저장하기
 Future<void> addNotification(String title, String body, DateTime dateTime, bool isPatient) async {
+  QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('notification')
+      .where('message', isEqualTo: body)
+      .get();
 
-  NotificationModel notification = NotificationModel(
-    uid: authController.loggedUser,
-    title: title,
-    message: body,
-    time: Timestamp.fromDate(dateTime),
-    isPatient: isPatient,
-  );
+  if (querySnapshot.docs.isEmpty) {
+    NotificationModel notification = NotificationModel(
+      uid: authController.loggedUser,
+      title: title,
+      message: body,
+      time: Timestamp.fromDate(dateTime),
+      isPatient: isPatient,
+    );
 
-  try {
-    DocumentReference docRef = await FirebaseFirestore.instance.collection('notification').add(notification.toJson());
-    print('Notification saved to Firestore successfully!');
+    try {
+      DocumentReference docRef = await FirebaseFirestore.instance.collection(
+          'notification').add(notification.toJson());
+      print('Notification saved to Firestore successfully!');
 
-    notification.reference = docRef;
-    await docRef.update({'reference': docRef});
-  } catch (e) {
-    print('Error saving notification to Firestore: $e');
+      notification.reference = docRef;
+      await docRef.update({'reference': docRef});
+    } catch (e) {
+      print('Error saving notification to Firestore: $e');
+    }
   }
-}
 
 
 // 알림 데이터 불러오기
-Future<List<NotificationModel>> getNotification() async {
-  List<NotificationModel> notifications = [];
+  Future<List<NotificationModel>> getNotification() async {
+    List<NotificationModel> notifications = [];
 
-  try {
-    DateTime now = DateTime.now();
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('notification')
-        .where('uid', isEqualTo: authController.loggedUser)
-        .where('isPatient', isEqualTo: authController.isPatient)
-        .get();
+    try {
+      DateTime now = DateTime.now();
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('notification')
+          .where('uid', isEqualTo: authController.loggedUser)
+          .where('isPatient', isEqualTo: authController.isPatient)
+          .get();
 
-    querySnapshot.docs.forEach((doc) { // 현재 시간 이전의 알림만 선택
-      NotificationModel notification = NotificationModel.fromSnapshot(doc as DocumentSnapshot<Map<String, dynamic>>);
-      if (notification.time!.toDate().isBefore(now)) {
-        notifications.add(notification);
-      }
-    });
-    return notifications;
-  } catch (e) {
-    print('Error loading notifications from Firestore: $e');
-    return [];
+      querySnapshot.docs.forEach((doc) { // 현재 시간 이전의 알림만 선택
+        NotificationModel notification = NotificationModel.fromSnapshot(
+            doc as DocumentSnapshot<Map<String, dynamic>>);
+        if (notification.time!.toDate().isBefore(now)) {
+          notifications.add(notification);
+        }
+      });
+      return notifications;
+    } catch (e) {
+      print('Error loading notifications from Firestore: $e');
+      return [];
+    }
   }
 }
