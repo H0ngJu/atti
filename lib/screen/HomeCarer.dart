@@ -126,25 +126,6 @@ class _HomeCarerState extends State<HomeCarer> {
     ),
   ];
 
-  void _requestNotificationPermissions() async {
-    NotificationService notificationService = NotificationService();
-    final status = await NotificationService().requestNotificationPermissions();
-    bool isGranted = await NotificationService().requestBatteryPermissions();
-    notificationService.showDailyNotification();
-
-    if (authController.isPatient) {
-      notificationService.scheduleNotifications();
-      notificationService.routineNotifications();
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _requestNotificationPermissions();
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
