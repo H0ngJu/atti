@@ -6,6 +6,7 @@ import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/data/routine/routine_controller.dart';
 import '../../../commons/RoutineBox.dart';
+import '../../../data/notification/notification_controller.dart';
 import 'RoutineRegisterFinish.dart';
 
 class RoutineRegisterCheck extends StatefulWidget {
@@ -50,7 +51,10 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
               onPressed: () {
                 routineController.tmpRoutineName.value = routineController.routine.value.name!;
                 routineController.addRoutine();
-                notificationService.routineNotifications();
+
+                if (authController.isPatient) {
+                  notificationService.routineNotifications();
+                }
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => RoutineRegisterFinish()),

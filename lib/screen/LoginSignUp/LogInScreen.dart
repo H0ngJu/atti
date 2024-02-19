@@ -217,7 +217,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
                                   // 사용자 정보 저장
                                   final AuthController authController = Get.put(AuthController());
-                                  authController.isPatient.value = document['isPatient'];
+                                  authController.isPatient = document['isPatient'];
                                   print(authController.userName.value);
 
                                   if (isPatient) {
