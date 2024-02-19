@@ -75,6 +75,5 @@ class BeforeSave extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

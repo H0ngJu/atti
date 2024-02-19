@@ -1,27 +1,15 @@
 import 'package:atti/commons/AttiBottomNavi.dart';
+import 'package:atti/data/memory/memory_note_controller.dart';
 import 'package:atti/screen/memory/gallery/GalleryOption.dart';
 import 'package:atti/screen/memory/gallery/MemoryDetail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import '../../../data/auth_controller.dart';
 import '../../../data/memory/memory_note_model.dart';
 import '../../../data/memory/memory_note_service.dart';
-
-class User {
-  final String? name;
-  final String? tagName; // Changed the name to routineCount
-  final List<MemoryInfo>? memory;
-
-  User({this.name, this.tagName, this.memory});
-}
-
-class MemoryInfo {
-  final String? name;
-  final String? url;
-
-  MemoryInfo({this.name, this.url});
-}
+import 'TagController.dart';
 
 class MainGallery extends StatefulWidget {
   const MainGallery({Key? key}) : super(key: key);
@@ -31,6 +19,9 @@ class MainGallery extends StatefulWidget {
 }
 
 class _MainGalleryState extends State<MainGallery> {
+  AuthController authController = Get.put(AuthController());
+  MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
+  TagController tagController = Get.put(TagController());
   MemoryNoteService memoryNoteService = MemoryNoteService();
   List<MemoryNoteModel> memoryNotes = [];
   late int numberOfMemory;
@@ -45,8 +36,17 @@ class _MainGalleryState extends State<MainGallery> {
 
   Future<void> fetchData() async {
     List<MemoryNoteModel> fetchedNotes = await memoryNoteService.getMemoryNote();
+
+    memoryNotes = fetchedNotes.where((memory) => memory.keyword?.contains(tagController.selectedTag.value) ?? false).toList();
+    memoryNotes.sort((a, b) {
+      // Timestamp를 DateTime으로 변환하여 비교합니다.
+      DateTime dateTimeA = a.createdAt!.toDate();
+      DateTime dateTimeB = b.createdAt!.toDate();
+      return dateTimeA.compareTo(dateTimeB);
+    });
+
     setState(() {
-      memoryNotes = fetchedNotes;
+      //memoryNotes = fetchedNotes;
       numberOfMemory = memoryNotes.length;
       // if (memoryNotes.isNotEmpty) {
       //   print(memoryNotes[0].imgTitle);
@@ -63,30 +63,6 @@ class _MainGalleryState extends State<MainGallery> {
     });
   }
 
-  final List<User> dummy = [
-    User(
-      name: '최한별',
-      tagName: '옛날',
-      memory: [
-        MemoryInfo(
-          name: '중학교 졸업',
-          url:
-              'https://dimg.donga.com/wps/NEWS/IMAGE/2022/02/18/111894898.1.jpg',
-        ),
-        MemoryInfo(
-          name: '내 고향',
-          url:
-              'https://cdn.lecturernews.com/news/photo/202308/133402_377232_2037.png',
-        ),
-        MemoryInfo(
-          name: '아버지 유품',
-          url:
-              'https://mblogthumb-phinf.pstatic.net/20160425_60/upup23_1461558270098iGYoi_JPEG/%BF%BE%B3%AF%BB%E7%C1%F8%2C%BB%E7%C1%F8%BA%B9%BF%F8_%281%29.jpg?type=w800',
-        ),
-      ],
-    )
-  ];
-
   Widget GalleryContent(info) {
     return GestureDetector(
       onTap: () {Get.to(MemoryDetail());},
@@ -97,7 +73,7 @@ class _MainGalleryState extends State<MainGallery> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(30),
                 child: Image.network(
-                  '${info.url}',
+                  '${info.img}',
                   fit: BoxFit.cover,
                   width: 150,
                   height: 150,
@@ -107,7 +83,7 @@ class _MainGalleryState extends State<MainGallery> {
             Container(
               alignment: Alignment.center,
               child: Text(
-                '${info.name}',
+                '${info.imgTitle}',
                 style: TextStyle(fontSize: 24),
               ),
             ),
@@ -119,8 +95,6 @@ class _MainGalleryState extends State<MainGallery> {
 
   @override
   Widget build(BuildContext context) {
-    User user = dummy[0];
-    List<MemoryInfo>? memories = user.memory;
     return Scaffold(
       backgroundColor: Color(0xffFFF5DB),
       body: SingleChildScrollView(
@@ -140,9 +114,9 @@ class _MainGalleryState extends State<MainGallery> {
                         height: 1.5,
                       ),
                       children: [
-                        TextSpan(text: '${user.name}님의\n'),
+                        TextSpan(text: '${authController.userName.value}님의\n'),
                         TextSpan(
-                          text: '\'${user.tagName}\'기억을 모아봤어요',
+                          text: '\'${tagController.selectedTag.value}\'기억을 모아봤어요',
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
@@ -180,7 +154,7 @@ class _MainGalleryState extends State<MainGallery> {
               // GridView가 SingleChildScrollView와 함께 사용될 때 필요합니다.
               physics: NeverScrollableScrollPhysics(),
               // GridView가 스크롤되지 않도록 합니다.
-              children: memories!.map((memory) {
+              children: memoryNotes!.map((memory) {
                 return GalleryContent(memory);
               }).toList(),
             ),
