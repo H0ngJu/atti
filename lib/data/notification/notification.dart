@@ -1,9 +1,11 @@
+import 'dart:ui';
+
+import 'package:atti/data/notification/notification_controller.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-
 import '../routine/routine_model.dart';
 import '../routine/routine_service.dart';
 import '../schedule/schedule_model.dart';
@@ -24,7 +26,7 @@ class NotificationService {
 
     // 알림에 사용할 로고
     const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+    AndroidInitializationSettings('@mipmap/launcher_icon');
 
     const InitializationSettings initializationSettings = // 안드로이드 초기화 설정
     InitializationSettings(android: initializationSettingsAndroid);
@@ -43,26 +45,26 @@ class NotificationService {
   }
 
   // 테스트용 기본 알림 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-  Future<void> showNotification() async {
-    // 알림 채널 설정값 구성
-    final AndroidNotificationDetails androidNotificationDetails =
-    AndroidNotificationDetails(
-      'counter_channel', // 알림 채널 ID
-      'Counter Channel', // 알림 종류 설명
-      channelDescription: 'This channel is used for counter-related notifications', // 알림 채널 설명
-      importance: Importance.high, // 알림 중요도
-    );
-
-    // 알림 상세 정보 설정
-    final NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
-    
-    await flutterLocalNotificationsPlugin.show( // 알림에 보이는 정보들
-      0, // 알림 ID
-      '테스트', // 알림 제목
-      '알림 메시지', // 알림 메시지
-      notificationDetails, // 알림 상세 정보
-    );
-  }
+  // Future<void> showNotification() async {
+  //   // 알림 채널 설정값 구성
+  //   final AndroidNotificationDetails androidNotificationDetails =
+  //   AndroidNotificationDetails(
+  //     'counter_channel', // 알림 채널 ID
+  //     'Counter Channel', // 알림 종류 설명
+  //     channelDescription: 'This channel is used for counter-related notifications', // 알림 채널 설명
+  //     importance: Importance.high, // 알림 중요도
+  //   );
+  //
+  //   // 알림 상세 정보 설정
+  //   final NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
+  //
+  //   await flutterLocalNotificationsPlugin.show( // 알림에 보이는 정보들
+  //     0, // 알림 ID
+  //     '테스트', // 알림 제목
+  //     '알림 메시지', // 알림 메시지
+  //     notificationDetails, // 알림 상세 정보
+  //   );
+  // }
 
   // 매일 같은 시간에 알림 보내기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
   Future<void> showDailyNotification() async {
@@ -74,6 +76,7 @@ class NotificationService {
       'Daily Notification Channel',
       channelDescription: 'This channel is used for daily notifications',
       importance: Importance.high,
+      color: Color(0xffFFE9B3),
     );
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
@@ -100,6 +103,7 @@ class NotificationService {
       channelDescription: 'This channel is used for scheduled notifications',
       importance: Importance.max,
       priority: Priority.high,
+      color: Color(0xffFFE9B3),
     );
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
@@ -112,6 +116,8 @@ class NotificationService {
       uiLocalNotificationDateInterpretation:
       UILocalNotificationDateInterpretation.absoluteTime,
     );
+
+    await addNotification(title, body, dateTime); // 알림 보낸 후 파이어베이스에 저장
   }
 
   // 일정 30분 전 알림 예약
@@ -164,10 +170,6 @@ class NotificationService {
     });
   }
 
-
-
-
-
   makeDate(hour, min, sec){  // tz로 날짜, 시간 변환
     var now = tz.TZDateTime.now(tz.local);
     var when = tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, min, sec);
@@ -177,5 +179,4 @@ class NotificationService {
       return when;
     }
   }
-
 }

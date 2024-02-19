@@ -18,7 +18,7 @@ class ScheduleModal extends StatelessWidget {
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.zero,
       content: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.7,
+        height: MediaQuery.of(context).size.height * 0.73,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -30,6 +30,8 @@ class ScheduleModal extends StatelessWidget {
                   Navigator.pop(context);
                 }, icon: Icon(Icons.close, color: Color(0xffB8B8B8),),
                   padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(),
+                  visualDensity: VisualDensity.compact,
                 )
               ],
             ),

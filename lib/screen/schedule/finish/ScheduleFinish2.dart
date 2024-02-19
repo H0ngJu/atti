@@ -16,26 +16,24 @@ class ScheduleFinish2 extends StatelessWidget {
           Expanded(child: Column(
             children: [
               SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-              Row(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    margin: EdgeInsets.only(left: 15),
-                    //alignment: Alignment.centerLeft,
-                    child: Text('\'${name}\' 일정을\n내 기억에 남길까요?',
-                      style: TextStyle(
-                        fontSize: 30, fontWeight: FontWeight.w500
-                    ),),
-                  ),
-                  //SizedBox(width: 10,),
-                  Container(
-                    //margin: EdgeInsets.only(left: 50),
-                    child: Image.asset('lib/assets/images/mini_atti.png',
-                      width: MediaQuery.of(context).size.width * 0.2,
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                ],
+              Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                margin: EdgeInsets.only(left: 15),
+                //alignment: Alignment.centerLeft,
+                child: Text('\'${name}\' 일정을\n내 기억에 남길까요?',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontSize: 30, fontWeight: FontWeight.w500
+                ),),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.1,),
+              Container(
+                //margin: EdgeInsets.only(left: 50),
+                alignment: Alignment.center,
+                child: Image.asset('lib/assets/Atti/standingAtti.png',
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  fit: BoxFit.fitWidth,
+                ),
               ),
 
             ],

@@ -56,6 +56,7 @@ class _HomeCarerState extends State<HomeCarer> {
     bool isGranted = await NotificationService().requestBatteryPermissions();
     notificationService.scheduleNotifications();
     notificationService.routineNotifications();
+    notificationService.showDailyNotification();
   }
 
   @override

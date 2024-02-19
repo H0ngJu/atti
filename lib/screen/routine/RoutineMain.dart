@@ -141,9 +141,9 @@ class _RoutineMainState extends State<RoutineMain> {
         setState(() {
           _selectedDay = selectedDay;
           _focusedDay = focusedDay;
-
+          print(_selectedDay.toString());
           selectedDayInWeek = DateFormat('E', 'ko-KR').format(_selectedDay);
-          print(_selectedDay);
+          //print(_selectedDay);
         });
         await _fetchData();
       },

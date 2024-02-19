@@ -18,16 +18,19 @@ class _RoutineBoxState extends State<RoutineBox> {
   final RoutineController routineController = Get.put(RoutineController());
 
   String generateRepeatText(List<String> days) {
-    String repeatText = '';
-
-    for (int i = 0; i < days.length; i++) {
-      if (i == days.length - 1) {
-        repeatText += days[i];
-      } else {
-        repeatText += days[i] + ', ';
+    if (days.length == 7) {
+      return '매일 반복';
+    } else {
+      String repeatText = '';
+      for (int i = 0; i < days.length; i++) {
+        if (i == days.length - 1) {
+          repeatText += days[i];
+        } else {
+          repeatText += days[i] + ', ';
+        }
       }
+      return '$repeatText 반복';
     }
-    return '$repeatText 반복';
   }
 
   @override
@@ -73,13 +76,15 @@ class _RoutineBoxState extends State<RoutineBox> {
                   fit: BoxFit.cover,
                   alignment: Alignment.center,
                 )
-                    : Image.file(
-                  File(routineController.routine.value.img!),
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                  alignment: Alignment.center,
-                ),
+                    : (widget.img != null && File(widget.img!).existsSync())
+                      ? Image.file(
+                        File(routineController.routine.value.img!),
+                        width: double.infinity,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.center,
+                      )
+                      : Container(),
               ),
             ),
 
