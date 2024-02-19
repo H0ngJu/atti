@@ -14,7 +14,7 @@ class MemoryNoteModel {
   String? img;
   String? imgTitle;
   int? era;
-  Map<String, dynamic>? chat;
+  String? chat;
   Map<String, dynamic>? selectedFamilyMember;
   List<String>? keyword;
   Timestamp? createdAt;

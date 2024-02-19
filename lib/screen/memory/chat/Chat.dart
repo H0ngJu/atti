@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:atti/commons/SimpleAppBar.dart';
 import 'package:atti/data/memory/memory_note_model.dart';
 import 'package:atti/screen/chatbot/Chatbot.dart';
@@ -22,6 +23,21 @@ class ChatMessage {
     required this.text,
     required this.date,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'sender': sender,
+      'text': text,
+      'date': date.toIso8601String(),
+    };
+  }
+  static List<Map<String, dynamic>> messagesToJson(List<ChatMessage> messages) {
+    return messages.map((message) => message.toJson()).toList();
+  }
+  // 실제 사용할 List<Message> => Json 코드
+  static String messagesToJsonString(List<ChatMessage> messages) {
+    return jsonEncode(messagesToJson(messages));
+  }
 }
 
 class Chat extends StatefulWidget {
@@ -66,11 +82,11 @@ class _ChatState extends State<Chat> {
                 children: [
                   Text(
                     '${widget.memory.era}년대',
-                    style: TextStyle(fontSize: 24),
+                    style: TextStyle(fontSize: 10),
                   ),
                   Text(
                     '\'${widget.memory.imgTitle}\' 기억',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   )
                 ],
               ),
@@ -83,7 +99,7 @@ class _ChatState extends State<Chat> {
                 children: [
                   Image(
                     image: AssetImage('lib/assets/Atti/Normal.png'),
-                    width: MediaQuery.of(context).size.width * 0.65,
+                    height: MediaQuery.of(context).size.height * 0.3,
                   ),
                 ],
               ),
@@ -296,7 +312,7 @@ class _VoiceButtonState extends State<VoiceButton> {
               margin: EdgeInsets.only(top: 20),
               child: ElevatedButton(
                   onPressed: () {
-                    Get.to(ChatHistory());
+                    Get.to(ChatHistory(memory: widget.memory,));
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xffFFF5DB),
@@ -304,6 +320,7 @@ class _VoiceButtonState extends State<VoiceButton> {
                   child: Text('대화\n기록',
                       style: TextStyle(color: Color(0xffA38130)))),
             ),
+            // 대화 기록 조회 버튼
             Container(
               height: MediaQuery.of(context).size.width * 0.2,
               margin: EdgeInsets.only(top: 20),
@@ -320,12 +337,14 @@ class _VoiceButtonState extends State<VoiceButton> {
                 ),
               ),
             ),
+            // 대화 버튼
             Container(
               height: MediaQuery.of(context).size.width * 0.2,
               margin: EdgeInsets.only(top: 20),
               child: ElevatedButton(
                   onPressed: () {
-                    Get.to(BeforeSave(memory : widget.memory));
+                    var chat = ChatMessage.messagesToJsonString(chatMessages);
+                    Get.to(BeforeSave(memory : widget.memory, chat: chat));
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xffFFF5DB),
@@ -335,6 +354,7 @@ class _VoiceButtonState extends State<VoiceButton> {
                     style: TextStyle(color: Color(0xffA38130)),
                   )),
             ),
+            // 대화 종료 버튼
           ]),
 
       // 얘는 임시로 말하는거 보여주려고 ..
