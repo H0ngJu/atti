@@ -1,17 +1,12 @@
+import 'package:atti/screen/memory/gallery/MainGallery.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: GalleryOption(),
-    );
-  }
-}
+import '../../../data/memory/memory_note_controller.dart';
+import '../../../data/memory/memory_note_model.dart';
+import '../../../data/memory/memory_note_service.dart';
+import 'TagController.dart';
 
 class GalleryOption extends StatefulWidget {
   const GalleryOption({Key? key}) : super(key: key);
@@ -21,27 +16,52 @@ class GalleryOption extends StatefulWidget {
 }
 
 class _GalleryOptionState extends State<GalleryOption> {
-  final List<String> tagList = [
-    '최근',
-    '최한별',
-    '박수정',
-    '박시목',
-    '밥',
-    '김명자',
-    '복순이',
-    '회상하지 않은 사진',
-    '기타',
-    '기타1',
-    '기타2'
-  ];
+  MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
+  TagController tagController = Get.put(TagController());
+  MemoryNoteService memoryNoteService = MemoryNoteService();
+  List<MemoryNoteModel> memoryNotes = [];
+  List<String> keywords = [];
+  late int numberOfMemory;
+  final List<String> tagList = ['옛날'];
   late String selectedTag = '';
   late bool showAllTags;
 
   @override
   void initState() {
     super.initState();
-    selectedTag = tagList.first;
+    fetchData();
+    if (tagList.isNotEmpty) {
+      selectedTag = tagList.first;
+    }
     showAllTags = tagList.length <= 6;
+  }
+
+  Future<void> fetchData() async {
+    List<MemoryNoteModel> fetchedNotes = await memoryNoteService.getMemoryNote();
+    List<String> allKeywords = [];
+
+    // 모든 메모에서 키워드를 추출하여 리스트에 추가
+    fetchedNotes.forEach((memoryNote) {
+      if (memoryNote.keyword != null) {
+        allKeywords.addAll(memoryNote.keyword!);
+      }
+    });
+
+    // 중복 제거를 위해 Set으로 변환 후 다시 리스트로 변환
+    List<String> uniqueKeywords = allKeywords.toSet().toList();
+
+    // tagList에 선택된 태그가 포함되어 있지 않으면 추가
+    uniqueKeywords.forEach((keyword) {
+      if (!tagList.contains(keyword)) {
+        tagList.add(keyword);
+      }
+    });
+
+    setState(() {
+      memoryNotes = fetchedNotes;
+      keywords = allKeywords;
+      numberOfMemory = memoryNotes.length;
+    });
   }
 
   Widget CurrentTag() {
@@ -61,7 +81,7 @@ class _GalleryOptionState extends State<GalleryOption> {
               color: Color(0xffD9D9D9), borderRadius: BorderRadius.circular(25)),
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
           child: Text(
-            '옛날',
+            '${tagController.selectedTag.value}',
             style: TextStyle(fontSize: 24, color: Color(0xff616161)),
           ),
         )
@@ -143,7 +163,9 @@ class _GalleryOptionState extends State<GalleryOption> {
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
                 child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(MainGallery());
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xffFFC215),
                       minimumSize: Size(MediaQuery.of(context).size.width * 0.9, 48),
@@ -175,6 +197,7 @@ class _GalleryOptionState extends State<GalleryOption> {
               onPressed: () {
                 setState(() {
                   selectedTag = displayTags[index];
+                  tagController.selectedTag.value = selectedTag; // 선택된 태그를 업데이트합니다.
                 });
               },
               child: Text(displayTags[index]),

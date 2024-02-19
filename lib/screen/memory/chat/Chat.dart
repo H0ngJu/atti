@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:atti/commons/SimpleAppBar.dart';
+import 'package:atti/data/memory/memory_note_model.dart';
 import 'package:atti/screen/chatbot/Chatbot.dart';
 import 'package:atti/screen/memory/chat/BeforeSave.dart';
 import 'package:atti/screen/memory/chat/ChatBubble.dart';
@@ -11,15 +12,28 @@ import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
 
+class ChatMessage {
+  final String sender; // I or ATTI
+  final String text; // 대화 내용
+  final DateTime date; // 시간
+
+  ChatMessage({
+    required this.sender,
+    required this.text,
+    required this.date,
+  });
+}
+
 class Chat extends StatefulWidget {
-  const Chat({Key? key}) : super(key: key);
+  final MemoryNoteModel memory;
+  const Chat({Key? key, required this.memory}) : super(key: key);
 
   @override
   State<Chat> createState() => _ChatState();
 }
 
 class _ChatState extends State<Chat> {
-  String _currentMessage = '대화를 시작하려면 마이크 버튼을 누르세요';
+  String _currentMessage = '대화를 시작하려면 마이크 버튼을 누르세요'; // 내가 한 대화
   final FlutterTts flutterTts = FlutterTts();
 
   @override
@@ -27,17 +41,9 @@ class _ChatState extends State<Chat> {
     super.initState();
     flutterTts.setLanguage("ko-KR");
     flutterTts.setPitch(1);
-    _speakMessage(_currentMessage); // Speak initial message
+    _speakMessage(_currentMessage);
     //_startTimer();
   }
-
-  /*void _startTimer() {
-    Timer.periodic(Duration(seconds: 5), (timer) {
-      setState(() {
-        _currentMessage = 'New Message';
-      });
-    });
-  }*/
 
   void _speakMessage(String message) async {
     await flutterTts.speak(message);
@@ -59,11 +65,11 @@ class _ChatState extends State<Chat> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    '2010년대',
+                    '${widget.memory.era}년대',
                     style: TextStyle(fontSize: 24),
                   ),
                   Text(
-                    '\'돌잔치\' 기억',
+                    '\'${widget.memory.imgTitle}\' 기억',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   )
                 ],
@@ -87,6 +93,8 @@ class _ChatState extends State<Chat> {
                     _currentMessage = message;
                   });
                 },
+                memory: widget.memory,
+                //updatedMessage: _onUserMessage, // 사용자가 말할 때 호출되는 콜백 함수 전달
               ),
 
 
@@ -97,7 +105,7 @@ class _ChatState extends State<Chat> {
           bottom: 0,
           left: MediaQuery.of(context).size.width * 0.05,
           right: MediaQuery.of(context).size.width * 0.05,
-          child: SlideUpPanel(),
+          child: SlideUpPanel(memory: widget.memory,),
         ),
       ]),
     );
@@ -106,8 +114,9 @@ class _ChatState extends State<Chat> {
 
 // 대화기록, 마이크, 대화 종료 버튼
 class VoiceButton extends StatefulWidget {
+  final MemoryNoteModel memory;
   final Function(String) updatedMessage;
-  const VoiceButton({Key? key, required this.updatedMessage}) : super(key: key);
+  const VoiceButton({Key? key, required this.updatedMessage, required this.memory}) : super(key: key);
 
   @override
   State<VoiceButton> createState() => _VoiceButtonState();
@@ -121,11 +130,17 @@ class _VoiceButtonState extends State<VoiceButton> {
   bool _isListening = false;
   int _staticTimeout = 2; // 정적 상태 타임아웃 (2초)
   int _elapsedTime = 0;
+  late List<ChatMessage> chatMessages = []; // 대화 리스트
 
   @override
   void initState() {
     super.initState();
     _requestMicrophonePermission(); // 페이지가 처음 로딩될 때 권한 요청
+    chatMessages.add(ChatMessage(
+      sender: 'ATTI',
+      text: '대화시작', //대화시작
+      date: DateTime.now(),
+    ));
   }
 
   void _requestMicrophonePermission() async {
@@ -155,16 +170,18 @@ class _VoiceButtonState extends State<VoiceButton> {
             _spokenText = result.recognizedWords;
           });
           String message = result.recognizedWords ?? "";
-          print('here : $message');
+          //print('here : $message');
           _appendMessage("User", message); // 사용자의 말을 메시지로 추가
           setState(() {
             _isListening = false;
           });
           _stopListening(); // Listening 중지
+          _onUserMessage(message);
 
           try {
             String response = await _chatbot.getResponse(message); // Chatbot으로부터 응답 받기
             _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
+            _onApiResponse(response);
           } catch (e) {
             print("Error: $e");
           } finally {
@@ -178,7 +195,6 @@ class _VoiceButtonState extends State<VoiceButton> {
       print("Speech recognition not available");
     }
   }
-
 
   // 메시지 추가
   void _appendMessage(String role, String message) {
@@ -229,6 +245,45 @@ class _VoiceButtonState extends State<VoiceButton> {
     });
   }
 
+  // 사용자가 말할 때 호출되는 함수
+  void _onUserMessage(String message) {
+    // 메시지가 이미 chatMessages 목록에 존재하는지 확인합니다.
+    if (!chatMessages.any((msg) => msg.text == message)) {
+      setState(() {
+        // 메시지를 chatMessages 목록에 추가합니다.
+        chatMessages.add(ChatMessage(
+          sender: 'I',
+          text: message,
+          date: DateTime.now(),
+        ));
+        printChatMessages();
+      });
+    }
+  }
+
+  void printChatMessages() {
+    print('Printing Chat Messages:');
+    for (var message in chatMessages) {
+      print('Sender: ${message.sender}');
+      print('Text: ${message.text}');
+      print('Date: ${message.date}');
+      print('-------------');
+    }
+  }
+
+  // API가 응답할 때 호출되는 함수
+  void _onApiResponse(String response) {
+    setState(() {
+      // 대화 리스트에 API 응답 메시지 추가
+      chatMessages.add(ChatMessage(
+        sender: 'ATTI',
+        text: response,
+        date: DateTime.now(),
+      ));
+      printChatMessages();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -270,7 +325,7 @@ class _VoiceButtonState extends State<VoiceButton> {
               margin: EdgeInsets.only(top: 20),
               child: ElevatedButton(
                   onPressed: () {
-                    Get.to(BeforeSave());
+                    Get.to(BeforeSave(memory : widget.memory));
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xffFFF5DB),
@@ -296,7 +351,8 @@ class _VoiceButtonState extends State<VoiceButton> {
 
 // 슬라이드 업
 class SlideUpPanel extends StatefulWidget {
-  const SlideUpPanel({Key? key}) : super(key: key);
+  final MemoryNoteModel memory;
+  const SlideUpPanel({Key? key, required this.memory}) : super(key: key);
 
   @override
   State<SlideUpPanel> createState() => _SlideUpPanelState();
@@ -306,7 +362,12 @@ class _SlideUpPanelState extends State<SlideUpPanel> {
   bool _isPanelOpen = false;
   double _panelHeightClosed = 50;
   double _panelHeightOpen = 50;
-  final List<String> tagList = ['아들', '손자', '돌잔치', '아들', '손자', '돌잔치'];
+  final List<String> tagList = [];
+
+  @override void initState() {
+    super.initState();
+    tagList.addAll(widget.memory.keyword ?? []);
+  }
 
   Widget TagContainer(tagName) {
     return Container(
@@ -356,7 +417,7 @@ class _SlideUpPanelState extends State<SlideUpPanel> {
                         height: MediaQuery.of(context).size.height * 0.01,
                       ),
                       Image.network(
-                        'https://newsimg-hams.hankookilbo.com/2022/05/08/f5107e5a-7266-4132-9550-8713162df25a.jpg',
+                        '${widget.memory.img}',
                         fit: BoxFit.cover,
                         width: MediaQuery.of(context).size.width * 0.7,
                         height: MediaQuery.of(context).size.height * 0.2,

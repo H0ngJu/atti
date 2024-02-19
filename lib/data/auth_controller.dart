@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthController extends GetxController {
-  RxBool isPatient = true.obs;
+  String loggedUser = FirebaseAuth.instance.currentUser!.uid;
+  bool isPatient = true;
   var userName = ''.obs;
   RxList<String> familyMember = <String>[].obs;
   late DocumentReference patientDocRef;

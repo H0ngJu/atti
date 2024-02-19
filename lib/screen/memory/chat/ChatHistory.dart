@@ -121,7 +121,7 @@ class ChatMessage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: Text(
-                message.text,
+                message.text, // 메시지 출력
                 style: TextStyle(fontSize: 16.0),
               ),
             ),
