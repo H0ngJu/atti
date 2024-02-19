@@ -60,14 +60,14 @@ class NotificationModel {
   }
 }
 // 알림 데이터 저장하기
-Future<void> addNotification(String title, String body, DateTime dateTime) async {
+Future<void> addNotification(String title, String body, DateTime dateTime, bool isPatient) async {
 
   NotificationModel notification = NotificationModel(
     uid: authController.loggedUser,
     title: title,
     message: body,
     time: Timestamp.fromDate(dateTime),
-    isPatient: authController.isPatient,
+    isPatient: isPatient,
   );
 
   try {

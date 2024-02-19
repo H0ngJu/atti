@@ -117,7 +117,7 @@ class NotificationService {
       UILocalNotificationDateInterpretation.absoluteTime,
     );
 
-    await addNotification(title, body, dateTime); // 알림 보낸 후 파이어베이스에 저장
+    await addNotification(title, body, dateTime, authController.isPatient); // 알림 보낸 후 파이어베이스에 저장
   }
 
   // 일정 30분 전 알림 예약
@@ -163,7 +163,7 @@ class NotificationService {
         }
 
         await NotificationService().showDateTimeNotification(
-          '루틴 알림',
+          '하루 일과 알림',
           '\'${routine.name}\' 일과를 완료하셨나요?',
           routineTime,
         );
