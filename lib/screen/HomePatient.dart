@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:atti/screen/memory/register/MemoryRegister1.dart';
+import 'package:atti/screen/routine/RoutineMain.dart';
 import 'package:atti/screen/schedule/ScheduleMain.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -200,7 +201,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
               style: TextStyle(color: Colors.black, height: 1.2),
               children: [
                 TextSpan(
-                  text: '${widget.userName}\n',
+                  text: '${widget.userName}님\n',
                   style: TextStyle(fontSize: 24),
                 ),
                 TextSpan(
@@ -630,7 +631,9 @@ class _HomeRoutineState extends State<HomeRoutine> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.to(RoutineMain());
+              },
               child: Text(
                 '전체보기',
                 style: TextStyle(fontSize: 20, color: Colors.black),
@@ -650,27 +653,30 @@ class _HomeRoutineState extends State<HomeRoutine> {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              // children: routines?.map((routines) {
-              //       final List<int>? time = routines.time;
-              //       String formattedTime = '';
-              //       if (time != null && time.length == 2) {
-              //         final int hour = time[0];
-              //         final int minute = time[1];
-              //         final bool isPM = hour >= 12; // 오후 여부 확인
-              //         int hour12 = hour > 12 ? hour - 12 : hour;
-              //         hour12 = hour12 == 0 ? 12 : hour12;
-              //         formattedTime =
-              //             '${isPM ? '오후' : '오전'} ${hour12.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
-              //       }
-              //       return RoutineWidget(
-              //         time: formattedTime,
-              //         name: routines.name,
-              //         url: routines.img,
-              //         done: routines.isFinished!
-              //             .contains(_selectedDay.toString()),
-              //       );
-              //     }).toList() ??
-              //     [],
+              children: routines?.map((routines) {
+                    final List<int>? time = routines.time;
+                    String formattedTime = '';
+                    if (time != null && time.length == 2) {
+                      final int hour = time[0];
+                      final int minute = time[1];
+                      final bool isPM = hour >= 12; // 오후 여부 확인
+                      int hour12 = hour > 12 ? hour - 12 : hour;
+                      hour12 = hour12 == 0 ? 12 : hour12;
+                      formattedTime =
+                          '${isPM ? '오후' : '오전'} ${hour12.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+                    }
+                    return RoutineWidget(
+                      time: formattedTime,
+                      name: routines.name,
+                      url: routines.img,
+                      done: (routines.isFinished != null &&
+                          routines.isFinished!.containsKey(_selectedDay.toString().replaceAll('Z', '')) &&
+                          routines.isFinished![_selectedDay.toString().replaceAll('Z', '')]! ?? false)
+                      // done: routines.isFinished![_selectedDay.toString().replaceAll('Z', '')]! ?? false,
+                    );
+                  }).toList() ??
+                  [],
+
             ),
           ),
         ),
