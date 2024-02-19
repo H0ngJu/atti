@@ -18,7 +18,7 @@ admin.initializeApp();
 //const MAX_CONCURRENT = 3;
 
 exports.weeklyReport = onSchedule({
-    schedule: 'every sunday 02:30',
+    schedule: 'every sunday 17:40',
     region: "asia-northeast3",
     timeZone: 'Asia/Seoul'}, (async (event) => {
     // 모든 userId를 가져옵니다

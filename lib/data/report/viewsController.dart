@@ -66,14 +66,15 @@ class ViewsService {
             .where('isPatient', isEqualTo: true)
             .get();
         // 환자인 경우에만 이후 과정 진행
-        if (userSnapshot != null) {
-          final patientId = userSnapshot.docs[0].reference;
+        if (userSnapshot.docs.length > 0) {
+          var username=userSnapshot.docs[0]['userName'];
+          final patientId = userSnapshot.docs[0].reference.id;
           // 유저 정보, 기간을 기준으로 문서 검색
           QuerySnapshot snapshot = await _db
               .collection('views')
               .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(today)) // 설정한 날짜 이후의 문서를 찾습니다.
               .where('createdAt', isLessThan: Timestamp.fromDate(nextDay)) // 다음 날 이전의 문서를 찾습니다.
-              .where('reference', isEqualTo: patientId)
+              // .where('patientId', isEqualTo: patientId)
               .get();
           // Doc이 이미 존재한다면 : Doc 갱신
           if (snapshot.docs.length > 0) {
