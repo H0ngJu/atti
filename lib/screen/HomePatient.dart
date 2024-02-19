@@ -666,8 +666,9 @@ class _HomeRoutineState extends State<HomeRoutine> {
                       time: formattedTime,
                       name: routines.name,
                       url: routines.img,
-                      done: routines.isFinished!
-                          .contains(_selectedDay.toString()),
+                      // done: routines.isFinished!
+                      //     .contains(_selectedDay.toString()),
+                      done: true
                     );
                   }).toList() ??
                   [],
