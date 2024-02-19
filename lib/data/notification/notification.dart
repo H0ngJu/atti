@@ -147,13 +147,14 @@ class NotificationService {
     String today = DateFormat('E', 'ko-KR').format(DateTime.now());
     List<RoutineModel> routines = await routineService.getRoutinesByDay(today);
 
+    DateTime now = DateTime.now();
     // 각 루틴에 대해 알림 예약
     routines.forEach((routine) async {
+      // if (routine.time != null && !routine.isFinished.contains(now.toString())) {
       if (routine.time != null) {
         final int hour = routine.time![0];
         final int minute = routine.time![1];
 
-        DateTime now = DateTime.now();
         DateTime routineTime = DateTime(now.year, now.month, now.day, hour, minute);
 
         // 만약 루틴 시간이 현재 시간 이전이라면 1분 뒤로 설정

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../data/notification/notification.dart';
+import '../data/notification/notification_controller.dart';
 
 class User {
   final String? name;
@@ -54,9 +55,12 @@ class _HomeCarerState extends State<HomeCarer> {
     NotificationService notificationService = NotificationService();
     final status = await NotificationService().requestNotificationPermissions();
     bool isGranted = await NotificationService().requestBatteryPermissions();
-    notificationService.scheduleNotifications();
-    notificationService.routineNotifications();
     notificationService.showDailyNotification();
+
+    if (authController.isPatient) {
+      notificationService.scheduleNotifications();
+      notificationService.routineNotifications();
+    }
   }
 
   @override

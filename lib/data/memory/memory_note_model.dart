@@ -13,7 +13,7 @@ class MemoryNoteModel {
   DocumentReference? patientId;
   String? img;
   String? imgTitle;
-  String? era;
+  int? era;
   Map<String, dynamic>? chat;
   Map<String, dynamic>? selectedFamilyMember;
   List<String>? keyword;

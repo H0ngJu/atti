@@ -10,6 +10,7 @@ class NotificationModel {
   String? message;
   Timestamp? time;
   DocumentReference? reference;
+  bool? isPatient;
 
   NotificationModel({
     this.uid,
@@ -17,6 +18,7 @@ class NotificationModel {
     this.message,
     this.time,
     this.reference,
+    this.isPatient
   });
 
   NotificationModel.fromJson(Map<String, dynamic> json)
@@ -24,7 +26,8 @@ class NotificationModel {
         title = json['title'],
         message = json['message'],
         reference = json['reference'],
-        time = json['time'];
+        time = json['time'],
+        isPatient = json['isPatient'];
 
   // Named constructor to create NotificationModel from DocumentSnapshot
   NotificationModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -32,7 +35,8 @@ class NotificationModel {
         title = snapshot.data()?['title'],
         message = snapshot.data()?['message'],
         reference = snapshot.reference,
-        time = snapshot.data()?['time'];
+        time = snapshot.data()?['time'],
+        isPatient = snapshot.data()?['isPatient'];
 
   // Named constructor to create NotificationModel from QueryDocumentSnapshot
   NotificationModel.fromQuerySnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -40,7 +44,8 @@ class NotificationModel {
         title = snapshot.data()['title'],
         message = snapshot.data()['message'],
         reference = snapshot.reference,
-        time = snapshot.data()['time'];
+        time = snapshot.data()['time'],
+        isPatient = snapshot.data()['isPatient'];
 
   // Convert NotificationModel to JSON format
   Map<String, dynamic> toJson() {
@@ -50,6 +55,7 @@ class NotificationModel {
     map['message'] = message;
     map['reference'] = reference;
     map['time'] = time;
+    map['isPatient'] = isPatient;
     return map;
   }
 }
@@ -61,6 +67,7 @@ Future<void> addNotification(String title, String body, DateTime dateTime) async
     title: title,
     message: body,
     time: Timestamp.fromDate(dateTime),
+    isPatient: authController.isPatient,
   );
 
   try {

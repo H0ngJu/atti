@@ -1,14 +1,12 @@
 // 피그마 '일정 등록하기 5 - 입력한 일정 확인' 화면
+import 'package:atti/data/notification/notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
 import 'package:atti/data/schedule/schedule_controller.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/ScheduleBox.dart';
-
 import 'package:atti/screen/schedule/register/ScheduleRegisterFinish.dart';
-
 import '../../../data/notification/notification.dart';
 
 class ScheduleRegisterCheck extends StatefulWidget {
@@ -21,6 +19,7 @@ class ScheduleRegisterCheck extends StatefulWidget {
 class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
   final ScheduleController scheduleController = Get.put(ScheduleController());
   NotificationService notificationService = NotificationService();
+
   @override
   Widget build(BuildContext context) {
     DateTime? dateTime = scheduleController.schedule.value.time?.toDate();
@@ -112,7 +111,15 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
             onPressed: () {
               scheduleController.tmpScheduleName.value = scheduleController.schedule.value.name!;
               scheduleController.addSchedule();
-              notificationService.scheduleNotifications();
+
+              if (authController.isPatient) { // 환자일때만 일정 알림 등록
+                notificationService.showDateTimeNotification(
+                    '일정 알림',
+                    '곧 \'${scheduleController.schedule.value.name}\'을(를) 하실 시간이에요!',
+                    scheduleController.schedule.value.time!.toDate().subtract(Duration(minutes: 30))
+                );
+              }
+
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ScheduleRegisterFinish()),

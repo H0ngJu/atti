@@ -67,9 +67,12 @@ class _HomePatientState extends State<HomePatient> {
     NotificationService notificationService = NotificationService();
     final status = await NotificationService().requestNotificationPermissions();
     bool isGranted = await NotificationService().requestBatteryPermissions();
-    notificationService.scheduleNotifications();
-    notificationService.routineNotifications();
     notificationService.showDailyNotification();
+
+    if (authController.isPatient) {
+      notificationService.scheduleNotifications();
+      notificationService.routineNotifications();
+    }
   }
 
   @override

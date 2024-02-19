@@ -25,13 +25,17 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
   late List<bool> memberIsSelected = [];
   late List<String> selectedMembers = [];
 
+  int eraStringToInt(String era) {
+    return int.parse(era.replaceAll('년대', ''));
+  }
+
   @override
   void initState() {
     super.initState();
     familyMembers = authController.familyMember;
     setState(() {
       _selectedEra = _era[12];
-      memoryNoteController.memoryNote.value.era = _selectedEra;
+      memoryNoteController.memoryNote.value.era = eraStringToInt(_selectedEra!);
       memberIsSelected = List.generate(familyMembers.length, (index) => false);
     });
   }
@@ -111,7 +115,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
         onChanged: (value) {
           setState(() {
             _selectedEra = value!;
-            memoryNoteController.memoryNote.value.era = _selectedEra;
+            memoryNoteController.memoryNote.value.era = eraStringToInt(_selectedEra!);
           });
         },
         decoration: InputDecoration(
