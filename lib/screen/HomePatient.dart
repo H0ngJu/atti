@@ -1,55 +1,24 @@
 //import 'dart:js_util';
 
+import 'dart:ffi';
+
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
+import 'package:atti/screen/memory/register/MemoryRegister1.dart';
+import 'package:atti/screen/schedule/ScheduleMain.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../data/auth_controller.dart';
 import '../data/notification/notification.dart';
-
-class User {
-  final String? name;
-  final int? routineCount; // Changed the name to routineCount
-  final List<Schedule>? schedule;
-  final List<Routine>? routines; // Changed the name to routines
-
-  User({
-    this.name,
-    this.routineCount,
-    this.schedule,
-    this.routines,
-  });
-}
-
-class Schedule {
-  final String? name;
-  final String? time;
-  final bool? done;
-
-  Schedule({
-    this.name,
-    this.time,
-    this.done,
-  });
-}
-
-class Routine {
-  final String? name;
-  final String? time;
-  final String? url;
-  final bool? done;
-
-  Routine({
-    this.name,
-    this.time,
-    this.url,
-    this.done,
-  });
-}
+import '../data/routine/routine_model.dart';
+import '../data/routine/routine_service.dart';
+import '../data/schedule/schedule_model.dart';
+import '../data/schedule/schedule_service.dart';
 
 class HomePatient extends StatefulWidget {
   const HomePatient({Key? key}) : super(key: key);
@@ -64,6 +33,45 @@ class _HomePatientState extends State<HomePatient> {
   User? loggedUser;
   final AuthController authController = Get.put(AuthController());
 
+  DateTime _selectedDay = DateTime.now();
+  List<ScheduleModel> schedulesBySelectedDay = []; // 선택된 날짜의 일정들이 반환되는 리스트
+  int? numberOfSchedules; // 선택된 날짜의 일정 개수
+
+  List<RoutineModel> routinesBySelectedDay = []; // 선택된 요일의 루틴 반환
+  int? numberOfRoutines; // 선택된 요일의 루틴 개수
+  String selectedDayInWeek = DateFormat('E', 'ko-KR').format(DateTime.now());
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      await _fetchData();
+    });
+    getCurrentUser();
+    _requestNotificationPermissions();
+  }
+
+  Future<void> _fetchData() async {
+    List<ScheduleModel>? fetchedSchedules =
+        await ScheduleService().getSchedulesByDate(_selectedDay);
+    List<RoutineModel> fetchedRoutines =
+        await RoutineService().getRoutinesByDay(selectedDayInWeek);
+    if (fetchedSchedules != null) {
+      setState(() {
+        schedulesBySelectedDay = fetchedSchedules;
+        routinesBySelectedDay = fetchedRoutines;
+        numberOfSchedules = schedulesBySelectedDay.length;
+        numberOfRoutines = routinesBySelectedDay.length;
+      });
+    } else {
+      setState(() {
+        schedulesBySelectedDay = [];
+        numberOfSchedules = 0;
+        numberOfRoutines = 0;
+      });
+    }
+  }
+
   void _requestNotificationPermissions() async {
     NotificationService notificationService = NotificationService();
     final status = await NotificationService().requestNotificationPermissions();
@@ -72,12 +80,12 @@ class _HomePatientState extends State<HomePatient> {
     notificationService.routineNotifications();
   }
 
-  @override
+  /*@override
   void initState() {
     super.initState();
     getCurrentUser();
     _requestNotificationPermissions();
-  }
+  }*/
 
   void getCurrentUser() {
     try {
@@ -86,12 +94,13 @@ class _HomePatientState extends State<HomePatient> {
       print("check: ${authController.userName.value}");
       if (user != null) {
         loggedUser = user as User?;
-      };
-    }
-    catch (e) {
+      }
+      ;
+    } catch (e) {
       print(e);
     }
   }
+
   // bottom Navi logic
   int _selectedIndex = 2;
 
@@ -101,55 +110,6 @@ class _HomePatientState extends State<HomePatient> {
       // 해당 인덱스로 페이지 변경
     });
   }
-
-  // 사용자 dummy
-  final List<User> dummy = [
-    User(
-      name: '최한별',
-      routines: [
-        Routine(
-          name: '아침 식사 후 약 복용',
-          time: '오전 7시',
-          url:
-              'https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfNTMg/MDAxNTI4MDMzMDg3Mjk3.uawygqJVJ63TIzibG82yUkZxIUNpRKbpuM-0O1kl6oAg.iTqCtuOrXnj7OjOdz5K-wyVAwhO5dOBn2JKXSU-9S4og.JPEG.hanulmom84/image_5521562981528032119580.jpg?type=w800',
-          done: true,
-        ),
-        Routine(
-          name: '아침 식사 후 약 복용',
-          time: '오전 7시',
-          url:
-              'https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfNTMg/MDAxNTI4MDMzMDg3Mjk3.uawygqJVJ63TIzibG82yUkZxIUNpRKbpuM-0O1kl6oAg.iTqCtuOrXnj7OjOdz5K-wyVAwhO5dOBn2JKXSU-9S4og.JPEG.hanulmom84/image_5521562981528032119580.jpg?type=w800',
-          done: false,
-        ),
-        Routine(
-          name: '아침 식사 후 약 복용',
-          time: '오전 7시',
-          url:
-              'https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfNTMg/MDAxNTI4MDMzMDg3Mjk3.uawygqJVJ63TIzibG82yUkZxIUNpRKbpuM-0O1kl6oAg.iTqCtuOrXnj7OjOdz5K-wyVAwhO5dOBn2JKXSU-9S4og.JPEG.hanulmom84/image_5521562981528032119580.jpg?type=w800',
-          done: false,
-        ),
-        Routine(
-          name: '아침 식사 후 약 복용',
-          time: '오전 7시',
-          url:
-              'https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfNTMg/MDAxNTI4MDMzMDg3Mjk3.uawygqJVJ63TIzibG82yUkZxIUNpRKbpuM-0O1kl6oAg.iTqCtuOrXnj7OjOdz5K-wyVAwhO5dOBn2JKXSU-9S4og.JPEG.hanulmom84/image_5521562981528032119580.jpg?type=w800',
-          done: false,
-        ),
-      ],
-      schedule: [
-        Schedule(
-          name: '마을회관',
-          time: '오후 1시',
-          done: true,
-        ),
-        Schedule(
-          name: '가족모임',
-          time: '오후 5시',
-          done: false,
-        ),
-      ],
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +121,7 @@ class _HomePatientState extends State<HomePatient> {
           width: 150,
         ),
         showNotificationsIcon: true,
-        showPersonIcon: true,
+        showPersonIcon: false,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -173,14 +133,23 @@ class _HomePatientState extends State<HomePatient> {
                         bottomLeft: Radius.circular(30),
                         bottomRight: Radius.circular(30))),
                 child: HomePatientTop(userName: authController.userName.value)),
-            Container(margin: EdgeInsets.all(16), child: HomeTodaySummary()),
+            Container(
+                margin: EdgeInsets.all(16),
+                child: HomeTodaySummary(
+                  scheduleCnt: numberOfSchedules,
+                  routineCnt: numberOfRoutines,
+                )),
             Container(
               margin: EdgeInsets.all(16),
-              child: HomeSchedule(dummy: dummy),
+              child: HomeSchedule(
+                schedulesBySelectedDay: schedulesBySelectedDay,
+              ),
             ),
             Container(
               margin: EdgeInsets.all(16),
-              child: HomeRoutine(dummy: dummy),
+              child: HomeRoutine(
+                routinesBySelectedDay: routinesBySelectedDay,
+              ),
             ),
             Container(
               margin: EdgeInsets.all(16),
@@ -209,6 +178,7 @@ class HomePatientTop extends StatefulWidget {
 
 class _HomePatientTopState extends State<HomePatientTop> {
   final AuthController authController = Get.put(AuthController());
+
   @override
   Widget build(BuildContext context) {
     String userName = widget.userName; // userName 받음
@@ -245,7 +215,8 @@ class _HomePatientTopState extends State<HomePatientTop> {
             mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
             children: [
               Image(
-                  image: AssetImage('lib/assets/Atti/standingAtti.png'), width: MediaQuery.of(context).size.width*0.8),
+                  image: AssetImage('lib/assets/Atti/standingAtti.png'),
+                  width: MediaQuery.of(context).size.width * 0.8),
             ],
           ),
           SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
@@ -293,7 +264,12 @@ class _HomePatientTopState extends State<HomePatientTop> {
 
 // 오늘의 일정, 일과
 class HomeTodaySummary extends StatefulWidget {
-  const HomeTodaySummary({Key? key}) : super(key: key);
+  final int? scheduleCnt;
+  final int? routineCnt;
+
+  const HomeTodaySummary(
+      {Key? key, required this.scheduleCnt, required this.routineCnt})
+      : super(key: key);
 
   @override
   State<HomeTodaySummary> createState() => _HomeTodaySummaryState();
@@ -330,7 +306,7 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
                 children: [
                   TextSpan(text: '예정된 일정\n'),
                   TextSpan(
-                      text: '2개',
+                      text: '${widget.scheduleCnt}',
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
@@ -366,7 +342,7 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
                 children: [
                   TextSpan(text: '오늘의 일과\n'),
                   TextSpan(
-                      text: '4개',
+                      text: '${widget.routineCnt}',
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
@@ -469,9 +445,10 @@ class CompleteScheduleWidget extends StatelessWidget {
 }
 
 class HomeSchedule extends StatefulWidget {
-  final List<User> dummy; // 수정된 부분: dummy 데이터를 받기 위한 변수 선언
+  final List<ScheduleModel> schedulesBySelectedDay;
 
-  const HomeSchedule({Key? key, required this.dummy}) : super(key: key);
+  const HomeSchedule({Key? key, required this.schedulesBySelectedDay})
+      : super(key: key);
 
   @override
   State<HomeSchedule> createState() => _HomeScheduleState();
@@ -480,8 +457,7 @@ class HomeSchedule extends StatefulWidget {
 class _HomeScheduleState extends State<HomeSchedule> {
   @override
   Widget build(BuildContext context) {
-    User user = widget.dummy[0]; // user dummy 전달
-    List<Schedule>? schedules = user.schedule; // 사용자의 일정 목록
+    List<ScheduleModel> schedules = widget.schedulesBySelectedDay;
 
     return Column(
       children: [
@@ -491,55 +467,72 @@ class _HomeScheduleState extends State<HomeSchedule> {
               child: Text(
                 '일정이 있어요',
                 style: TextStyle(fontSize: 30),
-                textAlign: TextAlign.left, // 왼쪽 정렬
+                textAlign: TextAlign.left,
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.to(ScheduleMain());
+              },
               child: Text(
                 '전체보기',
                 style: TextStyle(fontSize: 20, color: Colors.black),
               ),
               style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xffFFC215),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)) // 버튼의 가로 여백 조정
-                  ),
+                backgroundColor: Color(0xffFFC215),
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
             ),
           ],
         ),
         SizedBox(height: 11),
-        Container(
-          padding: EdgeInsets.only(top: 17, right: 17, left: 17),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(15))),
-          child: Column(
-            children: [
-              // ListView.builder를 사용하여 사용자의 일정을 동적으로 표시
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: schedules?.length ?? 0,
-                itemBuilder: (BuildContext context, int index) {
-                  Schedule? schedule = schedules?[index];
-                  if (schedule?.done == true) {
-                    return CompleteScheduleWidget(
-                      time: schedule?.time,
-                      name: schedule?.name,
-                    );
-                  } else {
-                    return IncompleteScheduleWidget(
-                      time: schedule?.time,
-                      name: schedule?.name,
-                    );
-                  }
-                },
+        schedules.isEmpty // 일정이 없을 때
+            ? Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                padding: EdgeInsets.all(20),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+                child: Text(
+                  '등록된 일정이 없어요',
+                  style: TextStyle(fontSize: 24),
+                ),
+              )
+            : Container(
+                padding: EdgeInsets.only(top: 17, right: 17, left: 17),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+                child: Column(
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: schedules.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        ScheduleModel schedule = schedules[index];
+                        return schedule.isFinished ?? false
+                            ? CompleteScheduleWidget(
+                                time: DateFormat('HH시 mm분')
+                                    .format(schedule.time!.toDate()),
+                                name: schedule.name,
+                              )
+                            : IncompleteScheduleWidget(
+                                time: DateFormat('HH시 mm분')
+                                    .format(schedule.time!.toDate()),
+                                name: schedule.name,
+                              );
+                      },
+                    )
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
       ],
     );
   }
@@ -576,6 +569,7 @@ class RoutineWidget extends StatelessWidget {
             child: Image.network(
               url ?? '',
               width: 292,
+              height: 200,
               fit: BoxFit.cover,
             ),
           ),
@@ -606,9 +600,10 @@ class RoutineWidget extends StatelessWidget {
 }
 
 class HomeRoutine extends StatefulWidget {
-  final List<User> dummy;
+  final List<RoutineModel> routinesBySelectedDay;
 
-  const HomeRoutine({Key? key, required this.dummy}) : super(key: key);
+  const HomeRoutine({Key? key, required this.routinesBySelectedDay})
+      : super(key: key);
 
   @override
   State<HomeRoutine> createState() => _HomeRoutineState();
@@ -617,8 +612,10 @@ class HomeRoutine extends StatefulWidget {
 class _HomeRoutineState extends State<HomeRoutine> {
   @override
   Widget build(BuildContext context) {
-    User user = widget.dummy[0];
-    List<Routine>? routines = user.routines;
+    //User user = widget.dummy[0];
+    //List<Routine>? routines = user.routines;
+    DateTime _selectedDay = DateTime.now();
+    List<RoutineModel> routines = widget.routinesBySelectedDay;
 
     return Column(
       children: [
@@ -652,12 +649,24 @@ class _HomeRoutineState extends State<HomeRoutine> {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: routines?.map((routine) {
+              children: routines?.map((routines) {
+                    final List<int>? time = routines.time;
+                    String formattedTime = '';
+                    if (time != null && time.length == 2) {
+                      final int hour = time[0];
+                      final int minute = time[1];
+                      final bool isPM = hour >= 12; // 오후 여부 확인
+                      int hour12 = hour > 12 ? hour - 12 : hour;
+                      hour12 = hour12 == 0 ? 12 : hour12;
+                      formattedTime =
+                          '${isPM ? '오후' : '오전'} ${hour12.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+                    }
                     return RoutineWidget(
-                      time: routine.time,
-                      name: routine.name,
-                      url: routine.url,
-                      done: routine.done,
+                      time: formattedTime,
+                      name: routines.name,
+                      url: routines.img,
+                      done: routines.isFinished!
+                          .contains(_selectedDay.toString()),
                     );
                   }).toList() ??
                   [],
@@ -689,45 +698,53 @@ class HomeMemory extends StatelessWidget {
           children: [
             Row(
               children: [
-                Expanded(child: Container(
-                  width: (MediaQuery.of(context).size.width - 66) / 2,
-                  height: 260,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage('https://img.freepik.com/premium-photo/happy-woman-sitting-in-the-car-and-traveling-summer-season-on-the-sea-resting-and-special-day-to-vacation_36577-127.jpg'),
-                        fit: BoxFit.cover, // 이미지가 Container에 맞게 잘리지 않도록 적절하게 조정
-                        opacity: 0.4
+                Expanded(
+                  child: Container(
+                    width: (MediaQuery.of(context).size.width - 66) / 2,
+                    height: 260,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                'https://img.freepik.com/premium-photo/happy-woman-sitting-in-the-car-and-traveling-summer-season-on-the-sea-resting-and-special-day-to-vacation_36577-127.jpg'),
+                            fit: BoxFit.cover,
+                            // 이미지가 Container에 맞게 잘리지 않도록 적절하게 조정
+                            opacity: 0.4),
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Center(
+                      child: Text(
+                        '15일 전\n제주도 여행',
+                        style:
+                            TextStyle(fontSize: 20, color: Color(0xff737373)),
+                        textAlign: TextAlign.center,
                       ),
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Center(
-                    child: Text(
-                      '15일 전\n제주도 여행',
-                      style: TextStyle(fontSize: 20, color: Color(0xff737373)),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),),
-                SizedBox(
-                  width: 16,),
-               Expanded(child: Container(
-                  width: (MediaQuery.of(context).size.width - 66) / 2,
-                  height: 260,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage('https://img.freepik.com/premium-photo/happy-woman-sitting-in-the-car-and-traveling-summer-season-on-the-sea-resting-and-special-day-to-vacation_36577-127.jpg'),
-                          fit: BoxFit.cover, // 이미지가 Container에 맞게 잘리지 않도록 적절하게 조정
-                          opacity: 0.4
-                      ),
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Center(
-                    child: Text(
-                      '15일 전\n제주도 여행',
-                      style: TextStyle(fontSize: 20, color: Color(0xff737373)),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-               )
+                SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                  child: Container(
+                    width: (MediaQuery.of(context).size.width - 66) / 2,
+                    height: 260,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                'https://img.freepik.com/premium-photo/happy-woman-sitting-in-the-car-and-traveling-summer-season-on-the-sea-resting-and-special-day-to-vacation_36577-127.jpg'),
+                            fit: BoxFit.cover,
+                            // 이미지가 Container에 맞게 잘리지 않도록 적절하게 조정
+                            opacity: 0.4),
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Center(
+                      child: Text(
+                        '15일 전\n제주도 여행',
+                        style:
+                            TextStyle(fontSize: 20, color: Color(0xff737373)),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
             SizedBox(
@@ -743,12 +760,14 @@ class HomeMemory extends StatelessWidget {
             SizedBox(
               width: 380,
               height: 60,
-              child: FilledButton(
+              child: ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Color(0xffFFC215)),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(MemoryRegister1());
+                },
                 child: Text(
                   '내 기억에 담기',
                   style: TextStyle(fontSize: 24, color: Colors.black),
