@@ -83,10 +83,10 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                   SizedBox(height: 10,),
 
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    alignment: Alignment.centerLeft,
-                    margin: EdgeInsets.only(left: 15),
-                    child: SelectFamilyMemberButtons()),
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.only(left: 15),
+                      child: SelectFamilyMemberButtons()),
                   SizedBox(height: 30,),
                 ],
               ),

@@ -38,7 +38,7 @@ class MemoryNoteModel {
     patientId = json['patientId'];
     img = json['img'];
     imgTitle = json['imgTitle'];
-    era = json['era'];
+    era = json['era'] is int ? json['era'] : int.tryParse(json['era'] ?? ''); // 수정된 부분
     chat = json['chat'];
     selectedFamilyMember = json['selectedFamilyMember'];
     keyword = json['keyword'] != null

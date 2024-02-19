@@ -16,12 +16,12 @@ class Chatbot {
     };
 
     var body = jsonEncode({
-      'model': 'gpt-3.5-turbo',
+      'model': 'ft:gpt-3.5-turbo-1106:personal::8telQ4wq',
       'messages': [
-        {"role": "system", "content": "사진에 대해 물어보고 노인의 말에 공감과 긍정적인 답변을 해 줘."},
+        {"role": "system", "content": "너는 치매 어르신과 대화를 나누는 보이스봇 아띠야. 어르신이 화면 속의 사진에 담긴 추억을 회상하는 것을 돕는 것이 목적이야. 너의 역할은 질문에 대한 정보를 제공하는 것이 아니야. 어르신께 사진에 대해 물어봐줘. 공감하고 긍정적인 정서를 이끌어내도록 어르신께 대화를 유도해줘."},
         {"role": "user", "content": prompt}
       ],
-      'max_tokens': 60,
+      'max_tokens': 100,
     });
 
     var response = await http.post(
@@ -45,7 +45,7 @@ class Chatbot {
   }
 }
 
-/*class ChatScreen extends StatefulWidget {
+class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
 
   @override
@@ -111,7 +111,7 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-}*/
+}
 
 
 // class ChatPage extends StatefulWidget {
