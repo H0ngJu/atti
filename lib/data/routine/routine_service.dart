@@ -37,9 +37,9 @@ class RoutineService {
       routine.createdAt = Timestamp.now();
       routine.patientId = authController.patientDocRef;
 
-      // 추가 *************************
-      routine.isFinished = createTimeMap(routine.repeatDays);
-      // 추가 *************************
+      // // 추가 *************************
+      // routine.isFinished = createTimeMap(routine.repeatDays);
+      // // 추가 *************************
 
       DocumentReference docRef =
           await firestore.collection('routine').add(routine.toJson());
@@ -50,45 +50,45 @@ class RoutineService {
     }
   }
 
-  // 추가 ************************* isFinished Map 만들기
-  Map<DateTime, bool> createTimeMap(List<String>? days) {
-    Map<DateTime, bool> timeMap = {};
-    DateTime now = DateTime.now();
-    DateTime oneYearFromNow = DateTime(now.year + 1, now.month, now.day);
-    if (days != null) {
-      for (var i = 0; i < 365; i++) {
-        DateTime date = DateTime(now.year, now.month, now.day + i);
-        String dayOfWeek = getDayOfWeek(date.weekday);
-
-        if (days.contains(dayOfWeek) && date.isBefore(oneYearFromNow)) {
-          timeMap[DateTime(date.year, date.month, date.day)] = false;
-        }
-      }
-    }
-    return timeMap;
-  }
-
-  String getDayOfWeek(int weekday) {
-    switch (weekday) {
-      case 1:
-        return '월';
-      case 2:
-        return '화';
-      case 3:
-        return '수';
-      case 4:
-        return '목';
-      case 5:
-        return '금';
-      case 6:
-        return '토';
-      case 7:
-        return '일';
-      default:
-        return '';
-    }
-  }
-  // 추가 ************************* isFinished Map 만들기
+  // // 추가 ************************* isFinished Map 만들기
+  // Map<DateTime, bool> createTimeMap(List<String>? days) {
+  //   Map<DateTime, bool> timeMap = {};
+  //   DateTime now = DateTime.now();
+  //   DateTime oneYearFromNow = DateTime(now.year + 1, now.month, now.day);
+  //   if (days != null) {
+  //     for (var i = 0; i < 365; i++) {
+  //       DateTime date = DateTime(now.year, now.month, now.day + i);
+  //       String dayOfWeek = getDayOfWeek(date.weekday);
+  //
+  //       if (days.contains(dayOfWeek) && date.isBefore(oneYearFromNow)) {
+  //         timeMap[DateTime(date.year, date.month, date.day)] = false;
+  //       }
+  //     }
+  //   }
+  //   return timeMap;
+  // }
+  //
+  // String getDayOfWeek(int weekday) {
+  //   switch (weekday) {
+  //     case 1:
+  //       return '월';
+  //     case 2:
+  //       return '화';
+  //     case 3:
+  //       return '수';
+  //     case 4:
+  //       return '목';
+  //     case 5:
+  //       return '금';
+  //     case 6:
+  //       return '토';
+  //     case 7:
+  //       return '일';
+  //     default:
+  //       return '';
+  //   }
+  // }
+  // // 추가 ************************* isFinished Map 만들기
 
   // 특정 요일의 루틴 가져오기
   Future<List<RoutineModel>> getRoutinesByDay(String day) async {
@@ -152,7 +152,4 @@ class RoutineService {
       print('Error completing routine: $e');
     }
   }
-
-
-
 }
