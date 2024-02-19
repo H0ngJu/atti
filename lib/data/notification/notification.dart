@@ -67,6 +67,8 @@ class NotificationService {
   // }
 
   // 매일 같은 시간에 알림 보내기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+  // 매일 아침 7시에 알림 보내기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
   Future<void> showDailyNotification() async {
     tz.initializeTimeZones();
 
@@ -89,6 +91,38 @@ class NotificationService {
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time
     );
+  }
+
+  // 매주 월요일 아침에 알림 보내기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+  Future<void> showWeeklyCarerNotification() async {
+    tz.initializeTimeZones();
+
+    final AndroidNotificationDetails androidNotificationDetails =
+    AndroidNotificationDetails(
+      'weekly_channel',
+      'Weekly Notification Channel',
+      channelDescription: 'This channel is used for weekly notifications',
+      importance: Importance.max,
+      priority: Priority.high,
+      color: Color(0xffFFE9B3),
+    );
+
+    // 다음 주 월요일 아침 7시에 알림 예약ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+    final now = tz.TZDateTime.now(tz.local);
+    final nextMonday = tz.TZDateTime(now.location, now.year, now.month, now.day + 7 - now.weekday, 7);
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      0,
+      '아띠',
+      '새로운 일주일이 시작되었습니다! 오늘의 일정을 확인해보세요!',
+      nextMonday,
+      NotificationDetails(android: androidNotificationDetails),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+      payload: 'weekly_notification',
+    );
+
   }
 
   // 정해진 날짜, 시간에 예약 알림 보내기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
