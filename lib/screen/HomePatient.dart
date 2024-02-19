@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../data/auth_controller.dart';
-import '../data/notification/notification_service.dart';
+import '../data/notification/notification.dart';
 
 class User {
   final String? name;

@@ -1,4 +1,5 @@
 import 'package:atti/commons/DetailPageTitle.dart';
+import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/data/SignUpController.dart';
 import 'package:atti/screen/LoginSignUp/LogInSignUpMainScreen.dart';
 import 'package:atti/screen/LogInSignUp/SignUpScreen2.dart';
@@ -14,6 +15,8 @@ class SignUpScreen1 extends StatefulWidget {
 }
 
 class _SignUpScreen1State extends State<SignUpScreen1> {
+  ColorPallet _colorPallet = ColorPallet();
+  bool _isButtonDisabled = true;
   final SignUpController signUpController = Get.put(SignUpController());
   Color borderColor = const Color(0xffFFF5DB);
   Color pressedBorderColor = const Color(0xffFFC215);
@@ -21,11 +24,13 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
   void topBtnPressed() {
     setState(() {
       isPressed == 1 ? isPressed = 0 : isPressed = 1;
+      _isButtonDisabled = false;
     });
   }
   void botBtnPressed() {
     setState(() {
       isPressed == 2 ? isPressed = 0 : isPressed = 2;
+      _isButtonDisabled = false;
     });
   }
   @override
@@ -179,9 +184,8 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                         SizedBox(
                           height: 10,),
                         Visibility(
-                            visible: isPressed != 0,
                             child: ElevatedButton(
-                                onPressed: () async {
+                                onPressed: _isButtonDisabled ? null : () async {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context) {
@@ -191,7 +195,7 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xffFFF5DB),
+                                  backgroundColor: _isButtonDisabled ? _colorPallet.lightYellow : _colorPallet.yellow,
                                 ),
                                 child: Container(
                                   width: 300,
@@ -201,7 +205,7 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 24,
-                                      color: Color(0xffA38130),
+                                      color: _isButtonDisabled ? _colorPallet.textColor : Colors.white,
                                     ),
                                   ),
                                 )
