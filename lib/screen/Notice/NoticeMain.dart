@@ -273,22 +273,23 @@ class PastNotice extends StatefulWidget {
 
 class _PastNoticeState extends State<PastNotice> {
   String selectedCategory = '전체'; // 선택된 카테고리
-  late List<NotificationModel> filteredData;
-  late List<NotificationModel> originData;
+  late List<NotificationModel> filteredData = _filterDataByCategory(selectedCategory);
+  //late List<NotificationModel> originData;
   List<String> allCategories = ['전체', '하루일과', '일정'];
 
   @override
   void initState() {
     super.initState();
-    filteredData = widget.notifications;
-    originData = widget.notifications;
+    filteredData = _filterDataByCategory(selectedCategory);
+    print('${widget.notifications}');
+    //originData = widget.notifications;
   }
 
   List<NotificationModel> _filterDataByCategory(String category) {
     if (category == '전체') {
-      return originData;
+      return widget.notifications;
     } else {
-      return originData.where((notification) {
+      return widget.notifications.where((notification) {
         if (category == '하루일과') {
           return notification.title == '하루 일과 알림';
         } else if (category == '일정') {
@@ -299,10 +300,11 @@ class _PastNoticeState extends State<PastNotice> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    List<NotificationModel> filteredData = _filterDataByCategory(selectedCategory);
-    print('Filtered Data: $filteredData'); // filteredData 값을 출력
+    //List<NotificationModel> filteredData = _filterDataByCategory(selectedCategory);
+    //print('Filtered Data: $_filterDataByCategory(category)'); // filteredData 값을 출력
     //print('total : ${originData.first.message}');
     return Column(
       children: [
@@ -330,6 +332,7 @@ class _PastNoticeState extends State<PastNotice> {
                   setState(() {
                     if (selected) {
                       selectedCategory = category;
+                      filteredData = _filterDataByCategory(category);
                     }
                   });
                 },
