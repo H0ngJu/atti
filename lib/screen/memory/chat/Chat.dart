@@ -33,7 +33,7 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
-  String _currentMessage = '대화를 시작하려면 마이크 버튼을 누르세요';
+  String _currentMessage = '대화를 시작하려면 마이크 버튼을 누르세요'; // 내가 한 대화
   final FlutterTts flutterTts = FlutterTts();
 
   @override

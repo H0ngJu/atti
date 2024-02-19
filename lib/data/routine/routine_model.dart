@@ -8,7 +8,7 @@ class RoutineModel {
   List<int>? time;
   Timestamp? createdAt;
   List<String>? repeatDays;
-  List<String>? isFinished;
+  Map<DateTime, bool>? isFinished;
   DocumentReference? reference; // document 식별자
 
   // 생성자
@@ -20,7 +20,7 @@ class RoutineModel {
     this.createdAt,
     this.repeatDays,
     this.reference,
-  }) : isFinished = []; // 기본값으로 빈 리스트를 할당
+  }) : isFinished = {}; // 기본값으로 빈 map 할당
 
   // json -> object (Firestore -> Flutter)
   RoutineModel.fromJson(dynamic json, this.reference) {
@@ -31,8 +31,8 @@ class RoutineModel {
     createdAt = json['createdAt'];
     repeatDays = List<String>.from(json['repeatDays']);
 
-    // isFinished 필드가 Null일 경우 빈 리스트로 초기화
-    isFinished = (json['isFinished'] != null) ? List<String>.from(json['isFinished']) : [];
+    // // isFinished 필드가 Null일 경우 빈 리스트로 초기화
+    // isFinished = (json['isFinished'] != null) ? Map<DateTime, bool>.from(json['isFinished']) : [];
   }
 
   // Named Constructor with Initializer
@@ -53,7 +53,13 @@ class RoutineModel {
     map['time'] = time;
     map['createdAt'] = createdAt;
     map['repeatDays'] = repeatDays;
-    map['isFinished'] = isFinished;
+
+    // 추가 *************************
+    if (isFinished != null) {
+      map['isFinished'] = isFinished!.map((key, value) => MapEntry(key.millisecondsSinceEpoch, value));
+    }
+    // 추가 *************************
+
     map['reference'] = reference;
     return map;
   }

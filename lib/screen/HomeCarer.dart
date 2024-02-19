@@ -10,6 +10,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../data/auth_controller.dart';
 import '../data/notification/notification.dart';
+import '../data/notification/notification_controller.dart';
 import '../data/routine/routine_model.dart';
 import '../data/routine/routine_service.dart';
 import '../data/schedule/schedule_model.dart';
@@ -124,6 +125,24 @@ class _HomeCarerState extends State<HomeCarer> {
       incompleteRoutineCount: 3,
     ),
   ];
+
+  void _requestNotificationPermissions() async {
+    NotificationService notificationService = NotificationService();
+    final status = await NotificationService().requestNotificationPermissions();
+    bool isGranted = await NotificationService().requestBatteryPermissions();
+    notificationService.showDailyNotification();
+
+    if (authController.isPatient) {
+      notificationService.scheduleNotifications();
+      notificationService.routineNotifications();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _requestNotificationPermissions();
+  }
 
 
   @override

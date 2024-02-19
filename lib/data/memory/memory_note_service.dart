@@ -66,5 +66,7 @@ class MemoryNoteService {
     }
   }
 
+  // 대화 기록 저장하기
+
 
 }
