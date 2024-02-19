@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:atti/commons/SimpleAppBar.dart';
+import 'package:atti/data/memory/memory_note_model.dart';
 import 'package:atti/screen/chatbot/Chatbot.dart';
 import 'package:atti/screen/memory/chat/BeforeSave.dart';
 import 'package:atti/screen/memory/chat/ChatBubble.dart';
@@ -12,7 +13,8 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
 
 class Chat extends StatefulWidget {
-  const Chat({Key? key}) : super(key: key);
+  final MemoryNoteModel memory;
+  const Chat({Key? key, required this.memory}) : super(key: key);
 
   @override
   State<Chat> createState() => _ChatState();
@@ -59,11 +61,11 @@ class _ChatState extends State<Chat> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    '2010년대',
+                    '${widget.memory.era}년대',
                     style: TextStyle(fontSize: 24),
                   ),
                   Text(
-                    '\'돌잔치\' 기억',
+                    '\'${widget.memory.imgTitle}\' 기억',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   )
                 ],
@@ -87,6 +89,7 @@ class _ChatState extends State<Chat> {
                     _currentMessage = message;
                   });
                 },
+                memory: widget.memory,
               ),
 
 
@@ -97,7 +100,7 @@ class _ChatState extends State<Chat> {
           bottom: 0,
           left: MediaQuery.of(context).size.width * 0.05,
           right: MediaQuery.of(context).size.width * 0.05,
-          child: SlideUpPanel(),
+          child: SlideUpPanel(memory: widget.memory,),
         ),
       ]),
     );
@@ -106,8 +109,9 @@ class _ChatState extends State<Chat> {
 
 // 대화기록, 마이크, 대화 종료 버튼
 class VoiceButton extends StatefulWidget {
+  final MemoryNoteModel memory;
   final Function(String) updatedMessage;
-  const VoiceButton({Key? key, required this.updatedMessage}) : super(key: key);
+  const VoiceButton({Key? key, required this.updatedMessage, required this.memory}) : super(key: key);
 
   @override
   State<VoiceButton> createState() => _VoiceButtonState();
@@ -270,7 +274,7 @@ class _VoiceButtonState extends State<VoiceButton> {
               margin: EdgeInsets.only(top: 20),
               child: ElevatedButton(
                   onPressed: () {
-                    Get.to(BeforeSave());
+                    Get.to(BeforeSave(memory : widget.memory));
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xffFFF5DB),
@@ -296,7 +300,8 @@ class _VoiceButtonState extends State<VoiceButton> {
 
 // 슬라이드 업
 class SlideUpPanel extends StatefulWidget {
-  const SlideUpPanel({Key? key}) : super(key: key);
+  final MemoryNoteModel memory;
+  const SlideUpPanel({Key? key, required this.memory}) : super(key: key);
 
   @override
   State<SlideUpPanel> createState() => _SlideUpPanelState();
@@ -306,7 +311,12 @@ class _SlideUpPanelState extends State<SlideUpPanel> {
   bool _isPanelOpen = false;
   double _panelHeightClosed = 50;
   double _panelHeightOpen = 50;
-  final List<String> tagList = ['아들', '손자', '돌잔치', '아들', '손자', '돌잔치'];
+  final List<String> tagList = [];
+
+  @override void initState() {
+    super.initState();
+    tagList.addAll(widget.memory.keyword ?? []);
+  }
 
   Widget TagContainer(tagName) {
     return Container(
@@ -356,7 +366,7 @@ class _SlideUpPanelState extends State<SlideUpPanel> {
                         height: MediaQuery.of(context).size.height * 0.01,
                       ),
                       Image.network(
-                        'https://newsimg-hams.hankookilbo.com/2022/05/08/f5107e5a-7266-4132-9550-8713162df25a.jpg',
+                        '${widget.memory.img}',
                         fit: BoxFit.cover,
                         width: MediaQuery.of(context).size.width * 0.7,
                         height: MediaQuery.of(context).size.height * 0.2,

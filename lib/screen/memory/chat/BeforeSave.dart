@@ -6,8 +6,11 @@ import 'package:atti/screen/memory/gallery/MainGallery.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../data/memory/memory_note_model.dart';
+
 class BeforeSave extends StatelessWidget {
-  const BeforeSave({Key? key}) : super(key: key);
+  final MemoryNoteModel memory;
+  const BeforeSave({Key? key, required this.memory}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +28,11 @@ class BeforeSave extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    '2010년대',
+                    '${memory.era}년대',
                     style: TextStyle(fontSize: 24),
                   ),
                   Text(
-                    '\'돌잔치\' 기억',
+                    '\'${memory.imgTitle}\' 기억',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                   Row(

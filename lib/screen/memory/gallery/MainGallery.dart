@@ -25,6 +25,7 @@ class _MainGalleryState extends State<MainGallery> {
   MemoryNoteService memoryNoteService = MemoryNoteService();
   List<MemoryNoteModel> memoryNotes = [];
   late int numberOfMemory;
+
   // bottom Navi logic
   int _selectedIndex = 0;
 
@@ -35,15 +36,29 @@ class _MainGalleryState extends State<MainGallery> {
   }
 
   Future<void> fetchData() async {
-    List<MemoryNoteModel> fetchedNotes = await memoryNoteService.getMemoryNote();
+    List<MemoryNoteModel> fetchedNotes =
+        await memoryNoteService.getMemoryNote();
 
-    memoryNotes = fetchedNotes.where((memory) => memory.keyword?.contains(tagController.selectedTag.value) ?? false).toList();
-    memoryNotes.sort((a, b) {
-      // Timestamp를 DateTime으로 변환하여 비교합니다.
-      DateTime dateTimeA = a.createdAt!.toDate();
-      DateTime dateTimeB = b.createdAt!.toDate();
-      return dateTimeA.compareTo(dateTimeB);
-    });
+    if (tagController.selectedTag.value == '옛날') {
+      memoryNotes = fetchedNotes;
+
+      memoryNotes.sort((a, b) {
+        int eraA = a.era ?? 0;
+        int eraB = b.era ?? 0;
+        return eraA.compareTo(eraB);
+      });
+    } else {
+      memoryNotes = fetchedNotes
+          .where((memory) =>
+              memory.keyword?.contains(tagController.selectedTag.value) ??
+              false)
+          .toList();
+      memoryNotes.sort((a, b) {
+        int eraA = a.era ?? 0;
+        int eraB = b.era ?? 0;
+        return eraA.compareTo(eraB);
+      });
+    }
 
     setState(() {
       //memoryNotes = fetchedNotes;
@@ -63,9 +78,11 @@ class _MainGalleryState extends State<MainGallery> {
     });
   }
 
-  Widget GalleryContent(info) {
+  Widget GalleryContent(memory) {
     return GestureDetector(
-      onTap: () {Get.to(MemoryDetail());},
+      onTap: () {
+        Get.to(MemoryDetail(memory: memory));
+      },
       child: Container(
         child: Column(
           children: [
@@ -73,7 +90,7 @@ class _MainGalleryState extends State<MainGallery> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(30),
                 child: Image.network(
-                  '${info.img}',
+                  '${memory.img}',
                   fit: BoxFit.cover,
                   width: 150,
                   height: 150,
@@ -83,7 +100,7 @@ class _MainGalleryState extends State<MainGallery> {
             Container(
               alignment: Alignment.center,
               child: Text(
-                '${info.imgTitle}',
+                '${memory.imgTitle}',
                 style: TextStyle(fontSize: 24),
               ),
             ),
@@ -106,23 +123,28 @@ class _MainGalleryState extends State<MainGallery> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 24,
-                        height: 1.5,
-                      ),
-                      children: [
-                        TextSpan(text: '${authController.userName.value}님의\n'),
-                        TextSpan(
-                          text: '\'${tagController.selectedTag.value}\'기억을 모아봤어요',
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.75,
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 24,
+                          height: 1.5,
                         ),
-                      ],
+                        children: [
+                          TextSpan(
+                              text: '${authController.userName.value}님의\n'),
+                          TextSpan(
+                            text:
+                                '\'${tagController.selectedTag.value}\'기억을 모아봤어요',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   ElevatedButton(
