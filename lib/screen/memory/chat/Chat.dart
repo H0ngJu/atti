@@ -12,6 +12,18 @@ import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
 
+class ChatMessage {
+  final String sender; // I or ATTI
+  final String text; // 대화 내용
+  final DateTime date; // 시간
+
+  ChatMessage({
+    required this.sender,
+    required this.text,
+    required this.date,
+  });
+}
+
 class Chat extends StatefulWidget {
   final MemoryNoteModel memory;
   const Chat({Key? key, required this.memory}) : super(key: key);
@@ -29,17 +41,9 @@ class _ChatState extends State<Chat> {
     super.initState();
     flutterTts.setLanguage("ko-KR");
     flutterTts.setPitch(1);
-    _speakMessage(_currentMessage); // Speak initial message
+    _speakMessage(_currentMessage);
     //_startTimer();
   }
-
-  /*void _startTimer() {
-    Timer.periodic(Duration(seconds: 5), (timer) {
-      setState(() {
-        _currentMessage = 'New Message';
-      });
-    });
-  }*/
 
   void _speakMessage(String message) async {
     await flutterTts.speak(message);
@@ -90,6 +94,7 @@ class _ChatState extends State<Chat> {
                   });
                 },
                 memory: widget.memory,
+                //updatedMessage: _onUserMessage, // 사용자가 말할 때 호출되는 콜백 함수 전달
               ),
 
 
@@ -125,11 +130,17 @@ class _VoiceButtonState extends State<VoiceButton> {
   bool _isListening = false;
   int _staticTimeout = 2; // 정적 상태 타임아웃 (2초)
   int _elapsedTime = 0;
+  late List<ChatMessage> chatMessages = []; // 대화 리스트
 
   @override
   void initState() {
     super.initState();
     _requestMicrophonePermission(); // 페이지가 처음 로딩될 때 권한 요청
+    chatMessages.add(ChatMessage(
+      sender: 'ATTI',
+      text: '대화시작', //대화시작
+      date: DateTime.now(),
+    ));
   }
 
   void _requestMicrophonePermission() async {
@@ -159,16 +170,18 @@ class _VoiceButtonState extends State<VoiceButton> {
             _spokenText = result.recognizedWords;
           });
           String message = result.recognizedWords ?? "";
-          print('here : $message');
+          //print('here : $message');
           _appendMessage("User", message); // 사용자의 말을 메시지로 추가
           setState(() {
             _isListening = false;
           });
           _stopListening(); // Listening 중지
+          _onUserMessage(message);
 
           try {
             String response = await _chatbot.getResponse(message); // Chatbot으로부터 응답 받기
             _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
+            _onApiResponse(response);
           } catch (e) {
             print("Error: $e");
           } finally {
@@ -182,7 +195,6 @@ class _VoiceButtonState extends State<VoiceButton> {
       print("Speech recognition not available");
     }
   }
-
 
   // 메시지 추가
   void _appendMessage(String role, String message) {
@@ -230,6 +242,45 @@ class _VoiceButtonState extends State<VoiceButton> {
     }
     setState(() {
       _isListening = !_isListening; // 버튼 상태 변경
+    });
+  }
+
+  // 사용자가 말할 때 호출되는 함수
+  void _onUserMessage(String message) {
+    // 메시지가 이미 chatMessages 목록에 존재하는지 확인합니다.
+    if (!chatMessages.any((msg) => msg.text == message)) {
+      setState(() {
+        // 메시지를 chatMessages 목록에 추가합니다.
+        chatMessages.add(ChatMessage(
+          sender: 'I',
+          text: message,
+          date: DateTime.now(),
+        ));
+        printChatMessages();
+      });
+    }
+  }
+
+  void printChatMessages() {
+    print('Printing Chat Messages:');
+    for (var message in chatMessages) {
+      print('Sender: ${message.sender}');
+      print('Text: ${message.text}');
+      print('Date: ${message.date}');
+      print('-------------');
+    }
+  }
+
+  // API가 응답할 때 호출되는 함수
+  void _onApiResponse(String response) {
+    setState(() {
+      // 대화 리스트에 API 응답 메시지 추가
+      chatMessages.add(ChatMessage(
+        sender: 'ATTI',
+        text: response,
+        date: DateTime.now(),
+      ));
+      printChatMessages();
     });
   }
 
