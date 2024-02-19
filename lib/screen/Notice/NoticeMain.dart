@@ -1,5 +1,10 @@
 import 'package:atti/commons/SimpleAppBar.dart';
+import 'package:atti/data/auth_controller.dart';
+import 'package:atti/data/notification/notification_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class NoticeMain extends StatefulWidget {
   const NoticeMain({Key? key}) : super(key: key);
@@ -9,6 +14,58 @@ class NoticeMain extends StatefulWidget {
 }
 
 class _NoticeMainState extends State<NoticeMain> {
+  final AuthController authController = Get.put(AuthController());
+  List<NotificationModel> todayNotifications = [];
+  List<NotificationModel> pastNotifications = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchNotifications();
+  }
+
+  // 알림 데이터 불러오기
+  void fetchNotifications() async {
+    try {
+      // 현재 사용자의 UID 가져오기
+      String? userUid = authController.loggedUser;
+
+      if (userUid != null) {
+        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+            .collection('notification')
+            .where('uid', isEqualTo: userUid) // 현재 사용자의 UID로 필터링
+            .get();
+
+        DateTime now = DateTime.now();
+        print('here');
+        List<NotificationModel> allNotifications = querySnapshot.docs
+            .map((doc) => NotificationModel.fromMap(doc.data() as Map<String, dynamic>))
+            .toList();
+
+        todayNotifications = allNotifications
+            .where((notification) => isSameDay(notification.time!.toDate(), now))
+            .toList();
+
+        pastNotifications = allNotifications
+            .where((notification) => notification.time!.toDate().isBefore(now))
+            .toList();
+        print('there : ${pastNotifications.isNotEmpty ? pastNotifications.first.time : 'No notifications found'}');
+      } else {
+        print('User is not logged in.'); // 현재 사용자가 로그인되어 있지 않은 경우
+      }
+
+      setState(() {}); // 상태를 업데이트하여 화면을 다시 그립니다.
+    } catch (e) {
+      print('Failed to fetch notifications: $e');
+    }
+  }
+
+
+  bool isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year && date1.month == date2.month && date1.day == date2.day;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,9 +77,9 @@ class _NoticeMainState extends State<NoticeMain> {
         margin: EdgeInsets.all(16),
         child: Column(
           children: [
-            TodayNotice(),
+            TodayNotice(notifications: todayNotifications),
             SizedBox(height: 30,),
-            PastNotice(),
+            PastNotice(notifications : pastNotifications),
           ],
         ),
       )),
@@ -45,12 +102,13 @@ class Noti {
 }
 
 class TodayNoticeContainer extends StatelessWidget {
-  final Noti noti;
+  final NotificationModel notifications;
 
-  const TodayNoticeContainer({Key? key, required this.noti}) : super(key: key);
+  const TodayNoticeContainer({Key? key, required this.notifications}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String formattedTime = notifications.time != null ? _formatTimestamp(notifications.time!) : '';
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       padding: EdgeInsets.all(10),
@@ -59,7 +117,7 @@ class TodayNoticeContainer extends StatelessWidget {
       child: Row(
         //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
+          /*Container(
             width: 30,
             height: 30,
             decoration: BoxDecoration(
@@ -67,7 +125,7 @@ class TodayNoticeContainer extends StatelessWidget {
               color: noti.done ? Color(0xffFFC215) : Color(0xffFFE9B3),
               shape: BoxShape.circle,
             ),
-          ),
+          ),*/
           SizedBox(
             width: 10,
           ),
@@ -78,11 +136,11 @@ class TodayNoticeContainer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    '${noti.category}   ${noti.time}',
+                    '${notifications.title}   ${formattedTime}',
                     style: TextStyle(fontSize: 16, color: Color(0xffA38130)),
                   ),
                   Text(
-                    '잠시후 \'${noti.time}\'에\n\'${noti.title}\'(이)가 있어요!',
+                    '${notifications.message}',
                     style: TextStyle(fontSize: 20),
                   )
                 ],
@@ -91,10 +149,21 @@ class TodayNoticeContainer extends StatelessWidget {
       ),
     );
   }
+  String _formatTimestamp(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
+    String formattedDate = '${dateTime.year}년 ${dateTime.month}월 ${dateTime.day}일'; // 연도, 월, 일을 문자열로 변환
+    String period = dateTime.hour < 12 ? '오전' : '오후';
+    int hour = dateTime.hour % 12;
+    if (hour == 0) hour = 12;
+
+    String formattedTime = '$period ${hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+    return '$formattedDate $formattedTime';
+  }
 }
 
 class TodayNotice extends StatefulWidget {
-  const TodayNotice({Key? key}) : super(key: key);
+  final List<NotificationModel> notifications;
+  const TodayNotice({Key? key, required this.notifications}) : super(key: key);
 
   @override
   State<TodayNotice> createState() => _TodayNoticeState();
@@ -103,22 +172,6 @@ class TodayNotice extends StatefulWidget {
 class _TodayNoticeState extends State<TodayNotice> {
   @override
   Widget build(BuildContext context) {
-    List<Noti> dummyData = [
-      Noti(title: '새로운 알림', time: '09:00', category: '기억회상', done: false),
-      Noti(title: '미팅 일정', time: '10:30', category: '하루일과', done: false),
-      Noti(
-        title: '과제 마감',
-        time: '18:00',
-        category: '일정',
-        done: true,
-      ),
-      Noti(
-        title: '추가',
-        time: '18:00',
-        category: '일정',
-        done: true,
-      ),
-    ];
     return Column(
       children: [
         Row(
@@ -128,7 +181,7 @@ class _TodayNoticeState extends State<TodayNotice> {
               style: TextStyle(fontSize: 24),
             ),
             Text(
-              '${dummyData.length}',
+              '${widget.notifications.length}',
               style: TextStyle(fontSize: 24, color: Color(0xffFFC215)),
             )
           ],
@@ -139,9 +192,9 @@ class _TodayNoticeState extends State<TodayNotice> {
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: dummyData.length,
+          itemCount: widget.notifications.length,
           itemBuilder: (context, index) {
-            return TodayNoticeContainer(noti: dummyData[index]);
+            return TodayNoticeContainer(notifications: widget.notifications[index]); // Pass individual notification item
           },
         ),
       ],
@@ -150,12 +203,13 @@ class _TodayNoticeState extends State<TodayNotice> {
 }
 
 class PastNoticeContainer extends StatelessWidget {
-  final Noti noti;
+  final NotificationModel notifications;
 
-  const PastNoticeContainer({Key? key, required this.noti}) : super(key: key);
+  const PastNoticeContainer({Key? key, required this.notifications}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String formattedTime = notifications.time != null ? _formatTimestamp(notifications.time!) : '';
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       padding: EdgeInsets.all(10),
@@ -164,7 +218,7 @@ class PastNoticeContainer extends StatelessWidget {
       child: Row(
         //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
+          /*Container(
             width: 30,
             height: 30,
             decoration: BoxDecoration(
@@ -172,7 +226,7 @@ class PastNoticeContainer extends StatelessWidget {
               color: noti.done ? Colors.grey : Colors.grey[200],
               shape: BoxShape.circle,
             ),
-          ),
+          ),*/
           SizedBox(
             width: 10,
           ),
@@ -183,11 +237,11 @@ class PastNoticeContainer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    '${noti.category}   ${noti.time}',
+                    '${notifications.title}   ${formattedTime}',
                     style: TextStyle(fontSize: 16, color: Colors.grey[500]),
                   ),
                   Text(
-                    '잠시후 \'${noti.time}\'에\n\'${noti.title}\'(이)가 있어요!',
+                    '${notifications.message}',
                     style: TextStyle(fontSize: 20, color: Colors.grey),
                   )
                 ],
@@ -196,10 +250,22 @@ class PastNoticeContainer extends StatelessWidget {
       ),
     );
   }
+
+  String _formatTimestamp(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
+    String formattedDate = '${dateTime.year}년 ${dateTime.month}월 ${dateTime.day}일'; // 연도, 월, 일을 문자열로 변환
+    String period = dateTime.hour < 12 ? '오전' : '오후';
+    int hour = dateTime.hour % 12;
+    if (hour == 0) hour = 12;
+
+    String formattedTime = '$period ${hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+    return '$formattedDate $formattedTime';
+  }
 }
 
 class PastNotice extends StatefulWidget {
-  const PastNotice({Key? key}) : super(key: key);
+  final List<NotificationModel> notifications;
+  const PastNotice({Key? key, required this.notifications}) : super(key: key);
 
   @override
   State<PastNotice> createState() => _PastNoticeState();
@@ -207,31 +273,37 @@ class PastNotice extends StatefulWidget {
 
 class _PastNoticeState extends State<PastNotice> {
   String selectedCategory = '전체'; // 선택된 카테고리
-  List<Noti> filteredData = [];
+  late List<NotificationModel> filteredData;
+  late List<NotificationModel> originData;
   List<String> allCategories = ['전체', '하루일과', '일정'];
-  List<Noti> dummyData = [
-    Noti(title: '새로운 알림', time: '09:00', category: '기억회상', done: false),
-    Noti(title: '미팅 일정', time: '10:30', category: '하루일과', done: false),
-    Noti(title: '과제 마감', time: '18:00', category: '일정', done: true),
-    Noti(title: '추가', time: '18:00', category: '일정', done: true),
-  ];
 
   @override
   void initState() {
     super.initState();
-    filteredData = _filterDataByCategory(selectedCategory);
+    filteredData = widget.notifications;
+    originData = widget.notifications;
   }
 
-  List<Noti> _filterDataByCategory(String category) {
+  List<NotificationModel> _filterDataByCategory(String category) {
     if (category == '전체') {
-      return dummyData;
+      return originData;
     } else {
-      return dummyData.where((noti) => noti.category == category).toList();
+      return originData.where((notification) {
+        if (category == '하루일과') {
+          return notification.title == '하루 일과 알림';
+        } else if (category == '일정') {
+          return notification.title == '일정 알림';
+        }
+        return false;
+      }).toList();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    List<NotificationModel> filteredData = _filterDataByCategory(selectedCategory);
+    print('Filtered Data: $filteredData'); // filteredData 값을 출력
+    //print('total : ${originData.first.message}');
     return Column(
       children: [
         Row(
@@ -241,7 +313,7 @@ class _PastNoticeState extends State<PastNotice> {
               style: TextStyle(fontSize: 24),
             ),
             Text(
-              '${filteredData.length}',
+              '${widget.notifications.length}',
               style: TextStyle(fontSize: 24, color: Color(0xffFFC215)),
             )
           ],
@@ -258,7 +330,6 @@ class _PastNoticeState extends State<PastNotice> {
                   setState(() {
                     if (selected) {
                       selectedCategory = category;
-                      filteredData = _filterDataByCategory(selectedCategory);
                     }
                   });
                 },
@@ -274,13 +345,14 @@ class _PastNoticeState extends State<PastNotice> {
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: filteredData.length,
+          itemCount: filteredData!.length,
           itemBuilder: (context, index) {
-            return PastNoticeContainer(noti: filteredData[index]);
+            return PastNoticeContainer(notifications: filteredData[index]);
           },
         ),
       ],
     );
   }
 }
+
 
