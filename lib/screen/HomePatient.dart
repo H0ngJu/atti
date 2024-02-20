@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:atti/screen/memory/register/MemoryRegister1.dart';
+import 'package:atti/screen/routine/RoutineMain.dart';
 import 'package:atti/screen/schedule/ScheduleMain.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -200,7 +201,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
               style: TextStyle(color: Colors.black, height: 1.2),
               children: [
                 TextSpan(
-                  text: '${widget.userName}\n',
+                  text: '${widget.userName}님\n',
                   style: TextStyle(fontSize: 24),
                 ),
                 TextSpan(
@@ -632,7 +633,9 @@ class _HomeRoutineState extends State<HomeRoutine> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.to(RoutineMain());
+              },
               child: Text(
                 '전체보기',
                 style: TextStyle(fontSize: 20, color: Colors.black),
@@ -668,10 +671,14 @@ class _HomeRoutineState extends State<HomeRoutine> {
                       time: formattedTime,
                       name: routines.name,
                       url: routines.img,
-                      done: routines.isFinished!.containsKey(_selectedDay),
+                      done: (routines.isFinished != null &&
+                          routines.isFinished!.containsKey(_selectedDay.toString().replaceAll('Z', '')) &&
+                          routines.isFinished![_selectedDay.toString().replaceAll('Z', '')]! ?? false)
+                      // done: routines.isFinished![_selectedDay.toString().replaceAll('Z', '')]! ?? false,
                     );
                   }).toList() ??
                   [],
+
             ),
           ),
         ),

@@ -100,6 +100,7 @@ Future<List<NotificationModel>> getNotification() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('notification')
         .where('uid', isEqualTo: authController.loggedUser)
+        .where('isPatient', isEqualTo: authController.isPatient)
         .get();
 
     querySnapshot.docs.forEach((doc) { // 현재 시간 이전의 알림만 선택

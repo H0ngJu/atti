@@ -90,8 +90,7 @@ class _HomeCarerState extends State<HomeCarer> {
     NotificationService notificationService = NotificationService();
     final status = await NotificationService().requestNotificationPermissions();
     bool isGranted = await NotificationService().requestBatteryPermissions();
-    notificationService.scheduleNotifications();
-    notificationService.routineNotifications();
+    notificationService.showDailyNotification();
   }
 
   void getCurrentUser() {
