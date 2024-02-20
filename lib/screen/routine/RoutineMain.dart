@@ -53,12 +53,13 @@ class _RoutineMainState extends State<RoutineMain> {
   Future<void> _fetchData() async {
     List<RoutineModel> fetchedRoutines = await RoutineService().getRoutinesByDay(selectedDayInWeek);
     if (fetchedRoutines != null) {
-      routinesBySelectedDay = fetchedRoutines;
       setState(() {
+        routinesBySelectedDay = fetchedRoutines;
         numberOfRoutines = routinesBySelectedDay.length;
       });
     } else {
       setState(() {
+        routinesBySelectedDay = [];
         numberOfRoutines = 0;
       });
     }
@@ -145,7 +146,7 @@ class _RoutineMainState extends State<RoutineMain> {
         setState(() {
           _selectedDay = selectedDay;
           _focusedDay = focusedDay;
-          print(_selectedDay.toString());
+          //print(_selectedDay.toString());
           selectedDayInWeek = DateFormat('E', 'ko-KR').format(_selectedDay);
           //print(_selectedDay);
         });
@@ -232,6 +233,7 @@ class _RoutineMainState extends State<RoutineMain> {
                       docRef: routinesBySelectedDay[index].reference!,
                       time: routinesBySelectedDay[index].time!,
                       date: _selectedDay,
+                      onCompleted: _fetchData,
                     );
                   });
                 },

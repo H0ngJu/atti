@@ -5,15 +5,17 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:atti/data/notification/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:atti/main.dart';
 
 void main() {
+  final notificationService = NotificationService();
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(MyApp(notificationService: notificationService));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
