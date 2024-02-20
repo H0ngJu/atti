@@ -115,18 +115,16 @@ class MemoryWords extends StatefulWidget {
 class _MemoryWordsState extends State<MemoryWords> {
   final _authentication = FirebaseAuth.instance;
   late ViewsController _viewsController;
-  late String? memoryReferencePath;
-
+  late DocumentReference memoryReferencePath;
 
   @override
   void initState() {
     super.initState();
-    memoryReferencePath = widget.memory.reference?.path;
+    memoryReferencePath = widget.memory.reference!;
     _viewsController = ViewsController(
-      FirebaseFirestore.instance.doc("user/"+authController.loggedUser),
-      FirebaseFirestore.instance.doc(memoryReferencePath!),
+      memoryReferencePath,
     );
-    _viewsController.addViews(_authentication.currentUser as User);
+    _viewsController.addViews();
     tagList.addAll(widget.memory.keyword ?? []);
   }
 
