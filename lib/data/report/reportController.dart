@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import '../auth_controller.dart';
+import 'dart:core';
 
 class ReportModel {
   // 자료형
@@ -8,7 +10,7 @@ class ReportModel {
   DocumentReference? patientId;
   Map<DocumentReference, int>? mostViews;
   List<Map<String, dynamic>>? unfinishedRoutine;
-  int? registeredMemoryCount;
+  List<Map<String, int>>? registeredMemoryCount;
   DocumentReference? reference; // document 식별자
 
   // 생성자
@@ -55,23 +57,31 @@ class ReportModel {
   }
 }
 
-
-
 class ReportController {
   final AuthController authController = Get.put(AuthController());
   final _db = FirebaseFirestore.instance;
-
+  final _authentication = FirebaseAuth.instance;
   // 레포트 가져오기
   Future<List<ReportModel>> getReport() async {
     try {
-      QuerySnapshot querySnapshot = await _db.collection('reports')
-          .where('patientId', isEqualTo: authController.patientDocRef)
-          .get();
-
+      User? user = _authentication.currentUser;
       List<ReportModel> reports = [];
-      querySnapshot.docs.forEach((doc) {
-        reports.add(ReportModel.fromSnapShot(doc as DocumentSnapshot<Map<String, dynamic>>));
-      });
+      print(user!.uid);
+      QuerySnapshot userSnapshot = await _db.collection('user')
+          .where('userId', isEqualTo: user.uid)
+          .get();
+      if (userSnapshot.docs.length > 0) {
+        DocumentReference patientRef = _db.doc("/user/"+userSnapshot.docs[0]["patientDocId"]);
+        QuerySnapshot reportsSnapshot = await _db.collection('report')
+            .where('patientId', isEqualTo: patientRef)
+            .get();
+
+        reportsSnapshot.docs.forEach((doc) {
+          print("레포트 존재");
+          reports.add(ReportModel.fromSnapShot(doc as DocumentSnapshot<Map<String, dynamic>>));
+        });
+      }
+      print(reports);
       return reports;
     } catch (e) {
       print('Error getting reports : $e');

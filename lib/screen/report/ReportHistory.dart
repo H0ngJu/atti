@@ -1,3 +1,4 @@
+import 'package:atti/data/report/reportController.dart';
 import 'package:atti/screen/report/ReportDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,72 +13,96 @@ class ReportHistory extends StatefulWidget {
 
 class _ReportHistoryState extends State<ReportHistory> {
   int _addItemCnt = 0;
+  ReportController reportController = ReportController();
+  late Future<List<ReportModel>> reports;
 
+  @override
+  void initState() {
+    super.initState();
+    reports = reportController.getReport(); // getReport 호출을 initState에서 수행
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
         body: SingleChildScrollView(
-          child: Container(
-              margin: EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        child: Text(
-                          '이번 달',
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      ReportHistoryContainer()
-                    ],
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
+          child: FutureBuilder<List<ReportModel>>(
+          future: reports,
+          builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator(); // 로딩 중일 때는 로딩 인디케이터 표시
+          } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}'); // 에러 발생 시 에러 메시지 표시
+          } else {
+            var reports = snapshot.data!;
+            // 실제 데이터가 준비되었을 때 렌더링하려는 위젯
+            return Container(
+                margin: EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
                           margin: EdgeInsets.only(bottom: 10),
-                          child: Text('이전 받은 기록 보고',
-                              style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold))),
-                      ListView(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        children: List.generate(5 + _addItemCnt,
-                            (index) => ReportHistoryContainer()),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            _addItemCnt += 2; // 버튼을 누를 때마다 추가 아이템 개수 업데이트
-                          });
-                        },
-                        child: Text(
-                          '이전 기록 보고 더보기',
-                          style: TextStyle(fontSize: 24, color: Colors.white),
+                          child: Text(
+                            '이번 달',
+                            style: TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xffFFC215),
-                            padding: EdgeInsets.symmetric(vertical: 10)),
-                      ))
-                ],
-              )),
+                        ReportHistoryContainer()
+                      ],
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            child: Text('이전 받은 기록 보고',
+                                style: TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold))),
+                        Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            child: Text('${reports.toString()}',
+                                style: TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold))),
+                        ListView(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          children: List.generate(5 + _addItemCnt,
+                                  (index) => ReportHistoryContainer()),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _addItemCnt += 2; // 버튼을 누를 때마다 추가 아이템 개수 업데이트
+                            });
+                          },
+                          child: Text(
+                            '이전 기록 보고 더보기',
+                            style: TextStyle(fontSize: 24, color: Colors.white),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xffFFC215),
+                              padding: EdgeInsets.symmetric(vertical: 10)),
+                        ))
+                  ],
+                )
+            );
+          }}),
         ));
   }
 }
@@ -121,6 +146,7 @@ class _ReportHistoryContainerState extends State<ReportHistoryContainer> {
               )
             ],
           ),
-        ));
+        )
+    );
   }
 }
