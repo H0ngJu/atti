@@ -43,7 +43,14 @@ class _NoticeMainState extends State<NoticeMain> {
             .toList();
 
         todayNotifications = allNotifications
-            .where((notification) => isSameDay(notification.time!.toDate(), now))
+            .where((notification) {
+          DateTime notificationTime = notification.time!.toDate();
+          // 오늘 데이터중, 시가만 이전걸로
+          return notificationTime.year == now.year &&
+              notificationTime.month == now.month &&
+              notificationTime.day == now.day &&
+              notificationTime.isBefore(now);
+        })
             .toList();
 
         pastNotifications = allNotifications
@@ -84,20 +91,6 @@ class _NoticeMainState extends State<NoticeMain> {
       )),
     );
   }
-}
-
-class Noti {
-  String title;
-  String time;
-  String category;
-  bool done;
-
-  Noti({
-    required this.title,
-    required this.time,
-    required this.category,
-    this.done = false,
-  });
 }
 
 class TodayNoticeContainer extends StatelessWidget {
@@ -273,7 +266,6 @@ class PastNotice extends StatefulWidget {
 class _PastNoticeState extends State<PastNotice> {
   late String selectedCategory; // 선택된 카테고리
   late List<NotificationModel>? filteredData;
-  //late List<NotificationModel> originData;
   List<String> allCategories = ['전체', '하루일과', '일정'];
 
   @override
@@ -281,9 +273,6 @@ class _PastNoticeState extends State<PastNotice> {
     super.initState();
     selectedCategory = '전체';
     filteredData = _filterDataByCategory(selectedCategory);
-    print('initState() is called');
-    //print('${widget.notifications}');
-    //originData = widget.notifications;
   }
 
   List<NotificationModel> _filterDataByCategory(String category) {
@@ -301,13 +290,9 @@ class _PastNoticeState extends State<PastNotice> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    //List<NotificationModel> filteredData = _filterDataByCategory(selectedCategory);
-    //print('Filtered Data: $_filterDataByCategory(category)'); // filteredData 값을 출력
-    //print('total : ${originData.first.message}');
+    List<NotificationModel> filteredData = _filterDataByCategory(selectedCategory);
     return Column(
       children: [
         Row(
