@@ -301,10 +301,11 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                                 );
                               }
                             },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: !userId.contains('@') || !userId.contains('.') ||
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                              !userId.contains('@') || !userId.contains('.') ||
                                   userPw.length <6 || userPw != userPwCheck ||
-                                  userPwCheck.length < 6 ? _colorPallet.lightYellow : _colorPallet.yellow,
+                                  userPwCheck.length < 6 ? _colorPallet.lightYellow : _colorPallet.goldYellow,)
                             ),
                             child: Container(
                                 width: 350,
