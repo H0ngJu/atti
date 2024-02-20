@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:atti/data/notification/notification_controller.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
@@ -69,8 +69,18 @@ class NotificationService {
   // 매일 같은 시간에 알림 보내기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
   // 매일 아침 7시에 알림 보내기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+  // (환자, 보호자 공통) 매일 아침 7시에 알림 보내기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
   Future<void> showDailyNotification() async {
     tz.initializeTimeZones();
+    DateTime now = DateTime.now();
+    DateTime dailyTime = DateTime(now.year, now.month, now.day, 7, 0);
+
+    DocumentSnapshot userDocSnapshot = await FirebaseFirestore.instance
+        .collection('user')
+        .doc(authController.patientDocRef as String?)
+        .get();
+    String userName = userDocSnapshot['userName'];
 
     final AndroidNotificationDetails androidNotificationDetails =
     AndroidNotificationDetails(
@@ -91,11 +101,19 @@ class NotificationService {
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time
     );
+
+    await addNotification('매일 알림', '오늘 ${userName}님의 일과와 일정을 확인해보세요!', dailyTime, authController.isPatient);
   }
 
-  // 매주 월요일 아침에 알림 보내기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+  // (보호자) 매주 월요일 아침에 알림 보내기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
   Future<void> showWeeklyCarerNotification() async {
     tz.initializeTimeZones();
+
+    DocumentSnapshot userDocSnapshot = await FirebaseFirestore.instance
+        .collection('user')
+        .doc(authController.patientDocRef as String?)
+        .get();
+    String userName = userDocSnapshot['userName'];
 
     final AndroidNotificationDetails androidNotificationDetails =
     AndroidNotificationDetails(
@@ -107,14 +125,13 @@ class NotificationService {
       color: Color(0xffFFE9B3),
     );
 
-    // 다음 주 월요일 아침 7시에 알림 예약ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     final now = tz.TZDateTime.now(tz.local);
-    final nextMonday = tz.TZDateTime(now.location, now.year, now.month, now.day + 7 - now.weekday, 7);
+    final nextMonday = tz.TZDateTime(now.location, now.year, now.month, now.day + (8 - now.weekday) % 7, 7);
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
       '아띠',
-      '새로운 일주일이 시작되었습니다! 오늘의 일정을 확인해보세요!',
+      '저번 주 ${userName}님의 보고서가 도착했어요!',
       nextMonday,
       NotificationDetails(android: androidNotificationDetails),
       androidAllowWhileIdle: true,
@@ -123,7 +140,9 @@ class NotificationService {
       payload: 'weekly_notification',
     );
 
+    await addNotification('주간 알림', '저번 주 ${userName}님의 보고서가 도착했어요!', nextMonday, false);
   }
+
 
   // 정해진 날짜, 시간에 예약 알림 보내기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
   Future<void> showDateTimeNotification(String title, String body, DateTime dateTime) async {
