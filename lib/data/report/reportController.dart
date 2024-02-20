@@ -64,6 +64,7 @@ class ReportController {
   // 레포트 가져오기
   Future<List<ReportModel>> getReport() async {
     try {
+      print("레포트 존재");
       User? user = _authentication.currentUser;
       List<ReportModel> reports = [];
       print(user!.uid);
