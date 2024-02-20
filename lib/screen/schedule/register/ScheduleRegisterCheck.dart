@@ -116,7 +116,8 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
                 notificationService.showDateTimeNotification(
                     '일정 알림',
                     '곧 \'${scheduleController.schedule.value.name}\'을(를) 하실 시간이에요!',
-                    scheduleController.schedule.value.time!.toDate().subtract(Duration(minutes: 30))
+                    scheduleController.schedule.value.time!.toDate().subtract(Duration(minutes: 30)),
+                    'schedule'
                 );
               }
 

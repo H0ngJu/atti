@@ -53,7 +53,7 @@ class _SignUpFamilyTagState extends State<SignUpFamilyTag> {
               isDense: true,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(color: Color(0xffFFF5DB), width: 3),
+                borderSide: BorderSide(color: Color(0xffFFE9B3), width: 3),
               ),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -61,7 +61,7 @@ class _SignUpFamilyTagState extends State<SignUpFamilyTag> {
               ),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Color(0xffFFF5DB), width: 3)
+                  borderSide: BorderSide(color: Color(0xffFFE9B3), width: 3)
               ),
               contentPadding: EdgeInsets.only(top: 15, bottom: 10, left: 15),
               filled: true,
