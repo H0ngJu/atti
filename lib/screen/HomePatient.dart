@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:math';
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:atti/screen/memory/register/MemoryRegister1.dart';
@@ -14,6 +15,9 @@ import 'package:table_calendar/table_calendar.dart';
 import '../commons/RoutineModal.dart';
 import '../commons/ScheduleModal.dart';
 import '../data/auth_controller.dart';
+import '../data/memory/memory_note_controller.dart';
+import '../data/memory/memory_note_model.dart';
+import '../data/memory/memory_note_service.dart';
 import '../data/notification/notification.dart';
 import '../data/routine/routine_model.dart';
 import '../data/routine/routine_service.dart';
@@ -286,10 +290,10 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
       children: [
         Expanded(
           child: Container(
-            height: 132,
+            //height: 132,
             // 정적으로 고정할 것인가?
             margin: EdgeInsets.only(right: 8),
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.symmetric(vertical: 25),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -322,10 +326,10 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
         ),
         Expanded(
           child: Container(
-            height: 132,
+            //height: 132,
             // 정적으로 고정할 것인가?
             margin: EdgeInsets.only(left: 8),
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.symmetric(vertical: 25),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -396,38 +400,33 @@ class IncompleteScheduleWidget extends StatelessWidget {
             width: 2,
           ),
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Container(
-            color: Color(0xffFFF5DB),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(17),
-                    alignment: Alignment.center,
-                    child: Text(
-                      time ?? '',
-                      style: TextStyle(fontSize: 24),
-                    ),
+      ),
+      child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration : BoxDecoration( color: Color(0xffFFF5DB),borderRadius: BorderRadius.circular(15),),
+                  padding: EdgeInsets.all(17),
+                  alignment: Alignment.center,
+                  child: Text(
+                    time ?? '',
+                    style: TextStyle(fontSize: 24),
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(17),
-                    alignment: Alignment.center,
-                    color: Colors.white,
-                    child: Text(
-                      name ?? '',
-                      style: TextStyle(fontSize: 24),
-                    ),
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(17),
+                  alignment: Alignment.center,
+                  decoration : BoxDecoration( color: Colors.white,borderRadius: BorderRadius.circular(15),),
+                  child: Text(
+                    name ?? '',
+                    style: TextStyle(fontSize: 24),
                   ),
                 ),
               ],
             ),
           ),
-        ),
-      ),
     );
   }
 }
@@ -673,6 +672,7 @@ class HomeRoutine extends StatefulWidget {
 }
 
 class _HomeRoutineState extends State<HomeRoutine> {
+
   @override
   Widget build(BuildContext context) {
     //User user = widget.dummy[0];
@@ -750,11 +750,44 @@ class _HomeRoutineState extends State<HomeRoutine> {
   }
 }
 
-class HomeMemory extends StatelessWidget {
+class HomeMemory extends StatefulWidget {
   const HomeMemory({Key? key}) : super(key: key);
 
   @override
+  _HomeMemoryState createState() => _HomeMemoryState();
+}
+
+class _HomeMemoryState extends State<HomeMemory> {
+  MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
+  MemoryNoteService memoryNoteService = MemoryNoteService();
+  List<MemoryNoteModel> memoryNotes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    List<MemoryNoteModel> fetchedNotes =
+    await memoryNoteService.getMemoryNote();
+
+    setState(() {
+      memoryNotes = fetchedNotes;
+    });
+  }
+
+  MemoryNoteModel getRandomMemoryNote() {
+    if (memoryNotes.isEmpty) return MemoryNoteModel(); // Return empty model if list is empty
+    final Random random = Random();
+    final int randomIndex = random.nextInt(memoryNotes.length);
+    return memoryNotes[randomIndex];
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final MemoryNoteModel randomMemoryNote = getRandomMemoryNote();
+
     return Column(children: [
       Text(
         '오늘을 내 기억에 남겨보세요!',
@@ -776,47 +809,21 @@ class HomeMemory extends StatelessWidget {
                     height: 260,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: NetworkImage(
-                                'https://img.freepik.com/premium-photo/happy-woman-sitting-in-the-car-and-traveling-summer-season-on-the-sea-resting-and-special-day-to-vacation_36577-127.jpg'),
+                            image: NetworkImage('${randomMemoryNote.img}'), // Use random image URL
                             fit: BoxFit.cover,
                             // 이미지가 Container에 맞게 잘리지 않도록 적절하게 조정
                             opacity: 0.4),
                         borderRadius: BorderRadius.circular(15)),
                     child: Center(
                       child: Text(
-                        '15일 전\n제주도 여행',
+                        '${randomMemoryNote.imgTitle}', // You might want to replace this text with actual data from the model
                         style:
-                            TextStyle(fontSize: 20, color: Color(0xff737373)),
+                        TextStyle(fontSize: 20, color: Color(0xff737373)),
                         textAlign: TextAlign.center,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                  child: Container(
-                    width: (MediaQuery.of(context).size.width - 66) / 2,
-                    height: 260,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                'https://img.freepik.com/premium-photo/happy-woman-sitting-in-the-car-and-traveling-summer-season-on-the-sea-resting-and-special-day-to-vacation_36577-127.jpg'),
-                            fit: BoxFit.cover,
-                            // 이미지가 Container에 맞게 잘리지 않도록 적절하게 조정
-                            opacity: 0.4),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Center(
-                      child: Text(
-                        '15일 전\n제주도 여행',
-                        style:
-                            TextStyle(fontSize: 20, color: Color(0xff737373)),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                )
               ],
             ),
             SizedBox(
@@ -835,7 +842,7 @@ class HomeMemory extends StatelessWidget {
               child: ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateProperty.all<Color>(Color(0xffFFC215)),
+                  MaterialStateProperty.all<Color>(Color(0xffFFC215)),
                 ),
                 onPressed: () {
                   Get.to(MemoryRegister1());

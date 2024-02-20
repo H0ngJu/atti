@@ -34,16 +34,23 @@ class _NoticeMainState extends State<NoticeMain> {
         QuerySnapshot querySnapshot = await FirebaseFirestore.instance
             .collection('notification')
             .where('uid', isEqualTo: userUid) // 현재 사용자의 UID로 필터링
+            .where('isPatient', isEqualTo: authController.isPatient)
             .get();
 
         DateTime now = DateTime.now();
-        print('here');
         List<NotificationModel> allNotifications = querySnapshot.docs
             .map((doc) => NotificationModel.fromMap(doc.data() as Map<String, dynamic>))
             .toList();
 
         todayNotifications = allNotifications
-            .where((notification) => isSameDay(notification.time!.toDate(), now))
+            .where((notification) {
+          DateTime notificationTime = notification.time!.toDate();
+          // 오늘 데이터중, 시가만 이전걸로
+          return notificationTime.year == now.year &&
+              notificationTime.month == now.month &&
+              notificationTime.day == now.day &&
+              notificationTime.isBefore(now);
+        })
             .toList();
 
         pastNotifications = allNotifications
@@ -59,7 +66,6 @@ class _NoticeMainState extends State<NoticeMain> {
       print('Failed to fetch notifications: $e');
     }
   }
-
 
   bool isSameDay(DateTime date1, DateTime date2) {
     return date1.year == date2.year && date1.month == date2.month && date1.day == date2.day;
@@ -85,20 +91,6 @@ class _NoticeMainState extends State<NoticeMain> {
       )),
     );
   }
-}
-
-class Noti {
-  String title;
-  String time;
-  String category;
-  bool done;
-
-  Noti({
-    required this.title,
-    required this.time,
-    required this.category,
-    this.done = false,
-  });
 }
 
 class TodayNoticeContainer extends StatelessWidget {
@@ -170,6 +162,7 @@ class TodayNotice extends StatefulWidget {
 }
 
 class _TodayNoticeState extends State<TodayNotice> {
+  int _visibleItemCount = 5;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -196,6 +189,22 @@ class _TodayNoticeState extends State<TodayNotice> {
           itemBuilder: (context, index) {
             return TodayNoticeContainer(notifications: widget.notifications[index]); // Pass individual notification item
           },
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              // 한 번에 보여줄 아이템 개수를 업데이트
+              if (_visibleItemCount + 5 <= widget.notifications.length) {
+                _visibleItemCount += 5;
+              } else {
+                _visibleItemCount = widget.notifications.length;
+              }
+            });
+          },
+          child: Text('더 보기'),
         ),
       ],
     );
@@ -274,7 +283,6 @@ class PastNotice extends StatefulWidget {
 class _PastNoticeState extends State<PastNotice> {
   late String selectedCategory; // 선택된 카테고리
   late List<NotificationModel>? filteredData;
-  //late List<NotificationModel> originData;
   List<String> allCategories = ['전체', '하루일과', '일정'];
 
   @override
@@ -282,9 +290,6 @@ class _PastNoticeState extends State<PastNotice> {
     super.initState();
     selectedCategory = '전체';
     filteredData = _filterDataByCategory(selectedCategory);
-    print('initState() is called');
-    //print('${widget.notifications}');
-    //originData = widget.notifications;
   }
 
   List<NotificationModel> _filterDataByCategory(String category) {
@@ -302,13 +307,10 @@ class _PastNoticeState extends State<PastNotice> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    //List<NotificationModel> filteredData = _filterDataByCategory(selectedCategory);
-    //print('Filtered Data: $_filterDataByCategory(category)'); // filteredData 값을 출력
-    //print('total : ${originData.first.message}');
+    int _visibleItemCount = 3;
+    List<NotificationModel> filteredData = _filterDataByCategory(selectedCategory);
     return Column(
       children: [
         Row(
@@ -336,6 +338,7 @@ class _PastNoticeState extends State<PastNotice> {
                     if (selected) {
                       selectedCategory = category;
                       filteredData = _filterDataByCategory(category);
+                      _visibleItemCount = 3;
                     }
                   });
                 },
@@ -351,10 +354,26 @@ class _PastNoticeState extends State<PastNotice> {
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: filteredData!.length,
+          itemCount: _visibleItemCount,
           itemBuilder: (context, index) {
             return PastNoticeContainer(notifications: filteredData![index]);
           },
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              // 한 번에 보여줄 아이템 개수를 업데이트
+              if (_visibleItemCount + 3 <= filteredData.length) {
+                _visibleItemCount += 3;
+              } else {
+                _visibleItemCount = filteredData.length;
+              }
+            });
+          },
+          child: Text('더 보기'),
         ),
       ],
     );
