@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
-class RoutineModel {
+class RoutineModel with ChangeNotifier {
   // 자료형
   String? name;
   DocumentReference? patientId;
@@ -63,5 +64,12 @@ class RoutineModel {
 
     map['reference'] = reference;
     return map;
+  }
+
+  void updateIsFinished(String dateString, Map<String, bool> isFinished) {
+    if (isFinished != null && isFinished.containsKey(dateString)) {
+      isFinished[dateString] = true;
+      notifyListeners(); // 완료 여부가 변경될 때 리스너들에게 알림
+    }
   }
 }

@@ -11,6 +11,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import '../commons/RoutineModal.dart';
+import '../commons/ScheduleModal.dart';
 import '../data/auth_controller.dart';
 import '../data/notification/notification.dart';
 import '../data/routine/routine_model.dart';
@@ -362,51 +364,67 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
 // 일정이 있어요
 // 미완료 스케줄 위젯
 class IncompleteScheduleWidget extends StatelessWidget {
-  final String? time;
-  final String? name;
+  final String time;
+  final String name;
+  final String location;
+  final String memo;
+  final DocumentReference docRef;
 
-  const IncompleteScheduleWidget({Key? key, this.time, this.name})
+  const IncompleteScheduleWidget({Key? key, required this.time, required this.name, required this.location, required this.memo, required this.docRef})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 17),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(
-          color: Color(0xffFFC215),
-          width: 2,
+    return GestureDetector(
+      onTap: (){
+        showDialog(context: context, builder: (_) {
+          return ScheduleModal(
+            time: time,
+            location: location,
+            name: name,
+            memo: memo,
+            docRef: docRef,
+          );
+        });
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 17),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+            color: Color(0xffFFC215),
+            width: 2,
+          ),
         ),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Container(
-          color: Color(0xffFFF5DB),
-          child: Row(
-            children: [
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(17),
-                  alignment: Alignment.center,
-                  child: Text(
-                    time ?? '',
-                    style: TextStyle(fontSize: 24),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Container(
+            color: Color(0xffFFF5DB),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(17),
+                    alignment: Alignment.center,
+                    child: Text(
+                      time ?? '',
+                      style: TextStyle(fontSize: 24),
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(17),
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: Text(
-                    name ?? '',
-                    style: TextStyle(fontSize: 24),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(17),
+                    alignment: Alignment.center,
+                    color: Colors.white,
+                    child: Text(
+                      name ?? '',
+                      style: TextStyle(fontSize: 24),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -416,30 +434,46 @@ class IncompleteScheduleWidget extends StatelessWidget {
 
 //완료 스케줄 위젯
 class CompleteScheduleWidget extends StatelessWidget {
-  final String? time;
-  final String? name;
+  final String time;
+  final String name;
+  final String location;
+  final String memo;
+  final DocumentReference docRef;
 
-  const CompleteScheduleWidget({Key? key, this.time, this.name})
+  const CompleteScheduleWidget({Key? key, required this.time, required this.name, required this.location, required this.docRef, required this.memo})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 17),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(
-          color: Color(0xffFFC215),
-          width: 2,
+    return GestureDetector(
+      onTap: (){
+        showDialog(context: context, builder: (_) {
+          return ScheduleModal(
+            time: time,
+            location: location,
+            name: name,
+            memo: memo,
+            docRef: docRef,
+          );
+        });
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 17),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+            color: Color(0xffFFC215),
+            width: 2,
+          ),
         ),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.all(17),
-          color: Color(0xffFFF5DB),
-          child: Text('\'$name\' 일정 완료', style: TextStyle(fontSize: 24)),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(17),
+            color: Color(0xffFFF5DB),
+            child: Text('\'$name\' 일정 완료', style: TextStyle(fontSize: 24)),
+          ),
         ),
       ),
     );
@@ -523,12 +557,18 @@ class _HomeScheduleState extends State<HomeSchedule> {
                             ? CompleteScheduleWidget(
                                 time: DateFormat('HH시 mm분')
                                     .format(schedule.time!.toDate()),
-                                name: schedule.name,
+                                name: schedule.name!,
+                                location: schedule.location!,
+                                memo: schedule.memo ?? '',
+                                docRef: schedule.reference!,
                               )
                             : IncompleteScheduleWidget(
                                 time: DateFormat('HH시 mm분')
                                     .format(schedule.time!.toDate()),
-                                name: schedule.name,
+                                name: schedule.name!,
+                                location: schedule.location!,
+                                memo: schedule.memo ?? '',
+                                docRef: schedule.reference!,
                               );
                       },
                     )
@@ -549,55 +589,74 @@ class RoutineWidget extends StatelessWidget {
   final String? name;
   final String? url;
   final bool? done;
+  final List<String>? days;
+  final date;
+  final DocumentReference? docRef;
+  final List<int>? originalTime;
 
-  const RoutineWidget({Key? key, this.time, this.name, this.url, this.done})
+  const RoutineWidget({Key? key, this.time, this.name, this.url, this.done, this.days, this.docRef, this.date, this.originalTime})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Color iconColor =
         done == true ? Colors.green : Colors.grey; // done이 true이면 초록색, 아니면 회색
-    return Container(
-      margin: EdgeInsets.all(15),
-      padding: EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.network(
-              url ?? '',
-              width: 292,
-              height: 200,
-              fit: BoxFit.cover,
-            ),
-          ),
-          SizedBox(height: 20),
-          Row(
-            children: [
-              Text(
-                time ?? '',
-                style: TextStyle(fontSize: 24),
+    return GestureDetector(
+      onTap: (){
+        showDialog(context: context, builder: (_) {
+          return RoutineModal(
+            img: url!,
+            name: name!,
+            days: days!,
+            docRef: docRef!,
+            date: date,
+            time: originalTime!,
+            onCompleted: (){},
+          );
+        });
+      },
+      child: Container(
+        margin: EdgeInsets.all(15),
+        padding: EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(
+                url ?? '',
+                width: 292,
+                height: 200,
+                fit: BoxFit.cover,
               ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.check_circle,
-                  color: iconColor,
+            ),
+            SizedBox(height: 20),
+            Row(
+              children: [
+                Text(
+                  time ?? '',
+                  style: TextStyle(fontSize: 24),
                 ),
-              )
-            ],
-          ),
-          Text(
-            name ?? '',
-            style: TextStyle(fontSize: 24),
-          ),
-        ],
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.check_circle,
+                    color: iconColor,
+                  ),
+                )
+              ],
+            ),
+            Text(
+              name ?? '',
+              style: TextStyle(fontSize: 24),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -673,8 +732,12 @@ class _HomeRoutineState extends State<HomeRoutine> {
                       url: routines.img,
                       done: (routines.isFinished != null &&
                           routines.isFinished!.containsKey(_selectedDay.toString().replaceAll('Z', '')) &&
-                          routines.isFinished![_selectedDay.toString().replaceAll('Z', '')]! ?? false)
+                          routines.isFinished![_selectedDay.toString().replaceAll('Z', '')]! ?? false),
                       // done: routines.isFinished![_selectedDay.toString().replaceAll('Z', '')]! ?? false,
+                      days: routines.repeatDays,
+                      date: DateTime.now().toString(),
+                      docRef: routines.reference,
+                      originalTime: routines.time
                     );
                   }).toList() ??
                   [],

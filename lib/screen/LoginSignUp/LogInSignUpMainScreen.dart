@@ -76,17 +76,22 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                           ),
                         ),
                         child: SingleChildScrollView(
+                          physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
                           child: Container(
-                            padding: EdgeInsets.only(top: 20),
+                            padding: EdgeInsets.only(top: height * 0.045),
                             decoration: BoxDecoration(
-                              color: Color(0xffFFE9B3)
+                              color: Color(0xffFFE9B3),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(30.0),
+                              ),
                             ),
                             child: Column(
                               children: [
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('반가워요! 저는 아띠에요!',
+                                    Text('반가워요!  저는 아띠에요!',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 30,
@@ -110,7 +115,7 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: height*0.025,),
+                                SizedBox(height: height*0.035,),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -135,7 +140,7 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                           style: TextStyle(
                                             color: Colors.white,
                                               fontSize: 24,
-                                              fontWeight: FontWeight.bold
+                                              fontWeight: FontWeight.w600
                                           ),),
                                     )),
                                     SizedBox(width: width*0.025,),
@@ -150,7 +155,8 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
-                                            backgroundColor: Color(0xffFFF5DB),
+                                            //backgroundColor: Color(0xffFFF5DB),
+                                            backgroundColor: Colors.white
                                         ),
                                         child: Container(
                                           alignment: Alignment.center,
@@ -160,12 +166,12 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                           style: TextStyle(
                                             color: Color(0xffA38130),
                                             fontSize: 24,
-                                            fontWeight: FontWeight.bold
+                                            fontWeight: FontWeight.w600
                                           ),),
                                         ))
                                   ],
                                 ),
-                                SizedBox(height: height*0.5,)
+                                SizedBox(height: height*0.2,)
                               ],
                             ),
                           ),

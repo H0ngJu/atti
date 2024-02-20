@@ -182,7 +182,7 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                               ),
                             )),
                         SizedBox(
-                          height: 10,),
+                          height: 25,),
                         Visibility(
                             child: ElevatedButton(
                                 onPressed: _isButtonDisabled ? null : () async {
@@ -194,8 +194,10 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                                       )
                                   );
                                 },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: _isButtonDisabled ? _colorPallet.lightYellow : _colorPallet.yellow,
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                    _isButtonDisabled ? _colorPallet.lightYellow : _colorPallet.goldYellow,
+                                  ),
                                 ),
                                 child: Container(
                                   width: 300,
@@ -203,9 +205,11 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                                   alignment: Alignment.center,
                                   child: Text('다음',
                                     style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w600,
                                       fontSize: 24,
-                                      color: _isButtonDisabled ? _colorPallet.textColor : Colors.white,
+                                      color: _isButtonDisabled
+                                          ?_colorPallet.textColor
+                                          : Colors.white,
                                     ),
                                   ),
                                 )

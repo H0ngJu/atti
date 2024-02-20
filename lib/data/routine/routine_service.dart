@@ -23,7 +23,7 @@ class RoutineService {
       TaskSnapshot snapshot = await task;
       return await snapshot.ref.getDownloadURL(); // 이미지 URL 반환
     } catch (e) {
-      print('Error uploading image: $e!!!!!!!!!!!1');
+      print('Error uploading image: $e');
       return '';
     }
   }
@@ -45,7 +45,7 @@ class RoutineService {
       routine.reference = docRef;
       await docRef.update(routine.toJson());
     } catch (e) {
-      print('Error adding schedule : $e!!!!!!!!!!!!!!!!!!');
+      print('Error adding notification : $e!!!!!!!!!!!!!!!!!!');
     }
   }
 

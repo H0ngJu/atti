@@ -206,6 +206,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                   password: userPassword,
                                 );
                                 if (credential.user != null) {
+
                                   print(credential.user!.uid);
 
                                   QuerySnapshot snapshot = await _db
@@ -287,16 +288,20 @@ class _LogInScreenState extends State<LogInScreen> {
                                 }
                               }
                             },
+
+
                             style: ElevatedButton.styleFrom(
                               backgroundColor: colorPallet.lightYellow,
                             ),
+
+
                             child: Container(
                                 width: 300,
                                 height: height*0.07,
                                 alignment: Alignment.center,
                                 child: Text('로그인',
                                     style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w600,
                                       fontSize: 24,
                                       color: colorPallet.textColor,
                                     )
