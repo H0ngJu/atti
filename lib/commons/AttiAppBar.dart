@@ -1,5 +1,8 @@
+import 'package:atti/screen/Notice/NoticeMain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class AttiAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? title;
@@ -47,7 +50,9 @@ class AttiAppBar extends StatelessWidget implements PreferredSizeWidget {
             ? Container(
           margin: EdgeInsets.only(left: 16),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(NoticeMain());
+                  },
                   icon: Icon(
                     Icons.notifications,
                     color: Colors.grey,
