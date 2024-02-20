@@ -30,7 +30,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
   String userName = "";
   String userPhoneNumber = "";
   String userPatientEmail = "";
-  late String? patientDocId;
+  late String patientDocId;
   DateTime userBirthDate = DateTime.now();
   String formattedDate = "연도 / 월 / 일을 선택해 주세요";
   int isPressed = 0;
