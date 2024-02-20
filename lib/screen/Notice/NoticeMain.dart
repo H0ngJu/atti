@@ -272,16 +272,18 @@ class PastNotice extends StatefulWidget {
 }
 
 class _PastNoticeState extends State<PastNotice> {
-  String selectedCategory = '전체'; // 선택된 카테고리
-  late List<NotificationModel> filteredData = _filterDataByCategory(selectedCategory);
+  late String selectedCategory; // 선택된 카테고리
+  late List<NotificationModel>? filteredData;
   //late List<NotificationModel> originData;
   List<String> allCategories = ['전체', '하루일과', '일정'];
 
   @override
   void initState() {
     super.initState();
+    selectedCategory = '전체';
     filteredData = _filterDataByCategory(selectedCategory);
-    print('${widget.notifications}');
+    print('initState() is called');
+    //print('${widget.notifications}');
     //originData = widget.notifications;
   }
 
@@ -299,6 +301,7 @@ class _PastNoticeState extends State<PastNotice> {
       }).toList();
     }
   }
+
 
 
   @override
@@ -350,7 +353,7 @@ class _PastNoticeState extends State<PastNotice> {
           physics: NeverScrollableScrollPhysics(),
           itemCount: filteredData!.length,
           itemBuilder: (context, index) {
-            return PastNoticeContainer(notifications: filteredData[index]);
+            return PastNoticeContainer(notifications: filteredData![index]);
           },
         ),
       ],
