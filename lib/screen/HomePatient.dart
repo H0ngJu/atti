@@ -383,14 +383,11 @@ class IncompleteScheduleWidget extends StatelessWidget {
           width: 2,
         ),
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Container(
-          color: Color(0xffFFF5DB),
-          child: Row(
+      child: Row(
             children: [
               Expanded(
                 child: Container(
+                  decoration : BoxDecoration( color: Color(0xffFFF5DB),borderRadius: BorderRadius.circular(15),),
                   padding: EdgeInsets.all(17),
                   alignment: Alignment.center,
                   child: Text(
@@ -403,7 +400,7 @@ class IncompleteScheduleWidget extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.all(17),
                   alignment: Alignment.center,
-                  color: Colors.white,
+                  decoration : BoxDecoration( color: Colors.white,borderRadius: BorderRadius.circular(15),),
                   child: Text(
                     name ?? '',
                     style: TextStyle(fontSize: 24),
@@ -412,8 +409,6 @@ class IncompleteScheduleWidget extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
     );
   }
 }
