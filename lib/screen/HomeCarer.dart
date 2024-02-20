@@ -1,7 +1,20 @@
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../data/auth_controller.dart';
+import '../data/notification/notification.dart';
+import '../data/notification/notification_controller.dart';
+import '../data/routine/routine_model.dart';
+import '../data/routine/routine_service.dart';
+import '../data/schedule/schedule_model.dart';
+import '../data/schedule/schedule_service.dart';
 
 class User {
   final String? name;
@@ -29,6 +42,70 @@ class HomeCarer extends StatefulWidget {
 class _HomeCarerState extends State<HomeCarer> {
   // bottom Navi logic
   int _selectedIndex = 2;
+  final _authentication = FirebaseAuth.instance;
+  final _db = FirebaseFirestore.instance;
+  User? loggedUser;
+  final AuthController authController = Get.put(AuthController());
+
+  DateTime _selectedDay = DateTime.now();
+  List<ScheduleModel> schedulesBySelectedDay = []; // 선택된 날짜의 일정들이 반환되는 리스트
+  int? numberOfSchedules; // 선택된 날짜의 일정 개수
+
+  List<RoutineModel> routinesBySelectedDay = []; // 선택된 요일의 루틴 반환
+  int? numberOfRoutines; // 선택된 요일의 루틴 개수
+  String selectedDayInWeek = DateFormat('E', 'ko-KR').format(DateTime.now());
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      await _fetchData();
+    });
+    getCurrentUser();
+    _requestNotificationPermissions();
+  }
+
+  Future<void> _fetchData() async {
+    List<ScheduleModel>? fetchedSchedules =
+    await ScheduleService().getSchedulesByDate(_selectedDay);
+    List<RoutineModel> fetchedRoutines =
+    await RoutineService().getRoutinesByDay(selectedDayInWeek);
+    if (fetchedSchedules != null) {
+      setState(() {
+        schedulesBySelectedDay = fetchedSchedules;
+        routinesBySelectedDay = fetchedRoutines;
+        numberOfSchedules = schedulesBySelectedDay.length;
+        numberOfRoutines = routinesBySelectedDay.length;
+      });
+    } else {
+      setState(() {
+        schedulesBySelectedDay = [];
+        numberOfSchedules = 0;
+        numberOfRoutines = 0;
+      });
+    }
+  }
+
+  void _requestNotificationPermissions() async {
+    NotificationService notificationService = NotificationService();
+    final status = await NotificationService().requestNotificationPermissions();
+    bool isGranted = await NotificationService().requestBatteryPermissions();
+    notificationService.showDailyNotification();
+  }
+
+  void getCurrentUser() {
+    try {
+      final user = _authentication.currentUser;
+      print("loggedUser: ${user!.uid}");
+      print("check: ${authController.userName.value}");
+      if (user != null) {
+        loggedUser = user as User?;
+      }
+      ;
+    } catch (e) {
+      print(e);
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -58,7 +135,7 @@ class _HomeCarerState extends State<HomeCarer> {
           width: 150,
         ),
         showNotificationsIcon: true,
-        showPersonIcon: true,
+        showPersonIcon: false,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -69,8 +146,9 @@ class _HomeCarerState extends State<HomeCarer> {
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(30),
                         bottomRight: Radius.circular(30))),
-                child: HomePatientTop(dummy: dummy)),
-            Container(margin: EdgeInsets.all(16), child: HomeTodaySummary()),
+                child: HomePatientTop(userName: authController.userName.value)),
+            Container(margin: EdgeInsets.all(16), child: HomeTodaySummary(scheduleCnt: numberOfSchedules,
+              routineCnt: numberOfRoutines,)),
             Container(
               margin: EdgeInsets.all(16),
               child: HomeReport(dummy: dummy, context: context),
@@ -88,18 +166,20 @@ class _HomeCarerState extends State<HomeCarer> {
 
 // 메인 첫 화면
 class HomePatientTop extends StatefulWidget {
-  final List<User> dummy; // 수정된 부분: dummy 데이터를 받기 위한 변수 선언
+  final String userName;
 
-  const HomePatientTop({Key? key, required this.dummy}) : super(key: key);
+  const HomePatientTop({Key? key, required this.userName}) : super(key: key);
 
   @override
   State<HomePatientTop> createState() => _HomePatientTopState();
 }
 
 class _HomePatientTopState extends State<HomePatientTop> {
+  AuthController authController = Get.put(AuthController());
+
   @override
   Widget build(BuildContext context) {
-    User user = widget.dummy[0]; // user dummy 전달
+    String userName = widget.userName; // userName 받음
     // 시간 가져오기
     DateTime now = DateTime.now();
     String weekday = _getWeekday(now.weekday);
@@ -116,7 +196,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
               style: TextStyle(color: Colors.black, height: 1.2),
               children: [
                 TextSpan(
-                  text: '${user.name} 보호자님\n',
+                  text: '${widget.userName} 보호자님\n',
                   style: TextStyle(fontSize: 24),
                 ),
                 TextSpan(
@@ -132,7 +212,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
             mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
             children: [
               Image(
-                  image: AssetImage('lib/assets/standingAtti.png'), width: 320),
+                  image: AssetImage('lib/assets/Atti/standingAtti.png'), width: MediaQuery.of(context).size.width*0.8),
             ],
           ),
           SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
@@ -180,7 +260,9 @@ class _HomePatientTopState extends State<HomePatientTop> {
 
 // 오늘의 일정, 일과
 class HomeTodaySummary extends StatefulWidget {
-  const HomeTodaySummary({Key? key}) : super(key: key);
+  final int? scheduleCnt;
+  final int? routineCnt;
+  const HomeTodaySummary({Key? key, required this.scheduleCnt, required this.routineCnt}) : super(key: key);
 
   @override
   State<HomeTodaySummary> createState() => _HomeTodaySummaryState();
@@ -217,7 +299,7 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
                 children: [
                   TextSpan(text: '예정된 일정\n'),
                   TextSpan(
-                      text: '2개',
+                      text: '${widget.scheduleCnt}',
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
@@ -253,7 +335,7 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
                 children: [
                   TextSpan(text: '오늘의 일과\n'),
                   TextSpan(
-                      text: '4개',
+                      text: '${widget.routineCnt}',
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
@@ -343,7 +425,7 @@ class HomeReport extends StatelessWidget {
                 onPressed: () {},
                 child: Text(
                   '전체보기',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 20, color: Colors.black),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xffFFC215),

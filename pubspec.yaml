@@ -58,8 +58,23 @@ dependencies:
     sdk: flutter
   bottom_picker:
   flutter_svg: ^2.0.9
+  material_tag_editor: ^0.1.2
+  toggle_switch: ^2.1.0
+  timeline_tile: ^2.0.0
+  http: ^1.2.0
+  fl_chart: ^0.66.2
+  speech_to_text: ^6.6.0
+  permission_handler: ^11.3.0
+  flutter_sliding_up_panel: ^2.1.1
+  firebase_app_check: ^0.2.1+13
+  flutter_dotenv: ^5.1.0
+  dart_openai: ^5.0.0
+  flutter_tts: ^3.8.5
+
+
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
   flutter_test:
     sdk: flutter
 
@@ -70,6 +85,11 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "lib/assets/icons/icon.png"
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -79,6 +99,8 @@ flutter:
     - lib/assets/images/
     - lib/assets/icons/
     - lib/assets/
+    - lib/assets/Atti/
+    - .env
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
