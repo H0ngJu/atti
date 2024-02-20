@@ -34,10 +34,10 @@ class _NoticeMainState extends State<NoticeMain> {
         QuerySnapshot querySnapshot = await FirebaseFirestore.instance
             .collection('notification')
             .where('uid', isEqualTo: userUid) // 현재 사용자의 UID로 필터링
+            .where('isPatient', isEqualTo: authController.isPatient)
             .get();
 
         DateTime now = DateTime.now();
-        print('here');
         List<NotificationModel> allNotifications = querySnapshot.docs
             .map((doc) => NotificationModel.fromMap(doc.data() as Map<String, dynamic>))
             .toList();
@@ -59,7 +59,6 @@ class _NoticeMainState extends State<NoticeMain> {
       print('Failed to fetch notifications: $e');
     }
   }
-
 
   bool isSameDay(DateTime date1, DateTime date2) {
     return date1.year == date2.year && date1.month == date2.month && date1.day == date2.day;
