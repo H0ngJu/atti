@@ -162,6 +162,7 @@ class TodayNotice extends StatefulWidget {
 }
 
 class _TodayNoticeState extends State<TodayNotice> {
+  int _visibleItemCount = 5;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -188,6 +189,22 @@ class _TodayNoticeState extends State<TodayNotice> {
           itemBuilder: (context, index) {
             return TodayNoticeContainer(notifications: widget.notifications[index]); // Pass individual notification item
           },
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              // 한 번에 보여줄 아이템 개수를 업데이트
+              if (_visibleItemCount + 5 <= widget.notifications.length) {
+                _visibleItemCount += 5;
+              } else {
+                _visibleItemCount = widget.notifications.length;
+              }
+            });
+          },
+          child: Text('더 보기'),
         ),
       ],
     );
@@ -292,6 +309,7 @@ class _PastNoticeState extends State<PastNotice> {
 
   @override
   Widget build(BuildContext context) {
+    int _visibleItemCount = 3;
     List<NotificationModel> filteredData = _filterDataByCategory(selectedCategory);
     return Column(
       children: [
@@ -320,6 +338,7 @@ class _PastNoticeState extends State<PastNotice> {
                     if (selected) {
                       selectedCategory = category;
                       filteredData = _filterDataByCategory(category);
+                      _visibleItemCount = 3;
                     }
                   });
                 },
@@ -335,10 +354,26 @@ class _PastNoticeState extends State<PastNotice> {
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: filteredData!.length,
+          itemCount: _visibleItemCount,
           itemBuilder: (context, index) {
             return PastNoticeContainer(notifications: filteredData![index]);
           },
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              // 한 번에 보여줄 아이템 개수를 업데이트
+              if (_visibleItemCount + 3 <= filteredData.length) {
+                _visibleItemCount += 3;
+              } else {
+                _visibleItemCount = filteredData.length;
+              }
+            });
+          },
+          child: Text('더 보기'),
         ),
       ],
     );
