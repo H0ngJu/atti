@@ -58,6 +58,15 @@ class NotificationModel {
     map['isPatient'] = isPatient;
     return map;
   }
+
+  factory NotificationModel.fromMap(Map<String, dynamic> map) {
+    return NotificationModel(
+      title: map['title'],
+      message: map['message'],
+      time: map['time'], // Assuming 'time' is of type Timestamp
+    );
+  }
+
 }
 // 알림 데이터 저장하기
 Future<void> addNotification(String title, String body, DateTime dateTime, bool isPatient) async {
