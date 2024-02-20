@@ -1,3 +1,4 @@
+import 'package:atti/screen/HomeCarer.dart';
 import 'package:atti/screen/HomePatient.dart';
 import 'package:atti/screen/memory/gallery/MainGallery.dart';
 import 'package:flutter/material.dart';
@@ -5,11 +6,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../data/auth_controller.dart';
 import '../screen/memory/register/MemoryRegister1.dart';
 import '../screen/routine/RoutineMain.dart';
 import '../screen/schedule/ScheduleMain.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
+  final AuthController authController = Get.put(AuthController());
   final int currentIndex;
   final Function(int) onTap;
 
@@ -85,9 +88,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
       Get.to(MainGallery());
     } else if (index == 1) {
       Get.to(MemoryRegister1());
-    } else if (index == 2) {
+    } else if (index == 2 && authController.isPatient ) {
       Get.to(HomePatient());
-    } else if (index == 3) {
+    } else if(index == 2 && !authController.isPatient){
+      Get.to(HomeCarer());
+    }else if (index == 3) {
       Get.to(RoutineMain());
     } else if (index == 4) {
       Get.to(ScheduleMain());

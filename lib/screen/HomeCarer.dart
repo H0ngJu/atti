@@ -91,6 +91,7 @@ class _HomeCarerState extends State<HomeCarer> {
     final status = await NotificationService().requestNotificationPermissions();
     bool isGranted = await NotificationService().requestBatteryPermissions();
     notificationService.showDailyNotification();
+    notificationService.showWeeklyCarerNotification();
   }
 
   void getCurrentUser() {
@@ -124,7 +125,6 @@ class _HomeCarerState extends State<HomeCarer> {
       incompleteRoutineCount: 3,
     ),
   ];
-
 
   @override
   Widget build(BuildContext context) {

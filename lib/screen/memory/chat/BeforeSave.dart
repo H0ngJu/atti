@@ -38,10 +38,10 @@ class BeforeSave extends StatelessWidget {
                     '\'${memory.imgTitle}\' 기억',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
-                  Text(
+                  /*Text(
                     "${chat}\n${chat.runtimeType}\n${memory.reference?.id}",
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
+                  ),*/
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

@@ -7,6 +7,8 @@ import '../screen/routine/RoutineFinish.dart';
 import '../screen/schedule/finish/ScheduleFinish1.dart';
 
 class RoutineModal extends StatelessWidget {
+  final Function onCompleted; // 콜백 함수 추가
+
   const RoutineModal({
     super.key,
     required this.days,
@@ -14,7 +16,8 @@ class RoutineModal extends StatelessWidget {
     required this.img,
     required this.name,
     required this.docRef,
-    required this.date
+    required this.date,
+    required this.onCompleted,
   });
 
   final List<String> days;
@@ -111,6 +114,8 @@ class RoutineModal extends StatelessWidget {
                         '${authController.userName}님이 \'${name}\' 일과를 완료하셨어요!',
                         DateTime.now(),
                         false);
+
+                    onCompleted(); // 콜백함수 추가
 
                     Navigator.push(
                       context,

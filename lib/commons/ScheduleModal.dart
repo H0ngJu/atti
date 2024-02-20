@@ -19,7 +19,7 @@ class ScheduleModal extends StatelessWidget {
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.zero,
       content: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.73,
+        height: MediaQuery.of(context).size.height * 0.74,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -90,7 +90,7 @@ class ScheduleModal extends StatelessWidget {
             SizedBox(height: 5,),
             Container(
               width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.18,
+              height: MediaQuery.of(context).size.height * 0.14,
               padding: EdgeInsets.only(top:10, left: 15),
               decoration: BoxDecoration(
                   color: Color(0xffFFF5DB),
