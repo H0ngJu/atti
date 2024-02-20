@@ -400,8 +400,7 @@ class IncompleteScheduleWidget extends StatelessWidget {
             width: 2,
           ),
         ),
-      ),
-      child: Row(
+      child : Row(
             children: [
               Expanded(
                 child: Container(
@@ -424,9 +423,10 @@ class IncompleteScheduleWidget extends StatelessWidget {
                     style: TextStyle(fontSize: 24),
                   ),
                 ),
+              ),
               ],
             ),
-          ),
+      ),
     );
   }
 }
