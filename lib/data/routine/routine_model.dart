@@ -68,7 +68,7 @@ class RoutineModel with ChangeNotifier {
 
   void updateIsFinished(String dateString, Map<String, bool> isFinished) {
     if (isFinished != null && isFinished.containsKey(dateString)) {
-      isFinished[dateString] = isFinished as bool;
+      isFinished[dateString] = true;
       notifyListeners(); // 완료 여부가 변경될 때 리스너들에게 알림
     }
   }

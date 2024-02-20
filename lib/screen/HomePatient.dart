@@ -609,6 +609,7 @@ class RoutineWidget extends StatelessWidget {
             docRef: docRef!,
             date: date,
             time: originalTime!,
+            onCompleted: (){},
           );
         });
       },

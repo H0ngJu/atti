@@ -233,6 +233,7 @@ class _RoutineMainState extends State<RoutineMain> {
                       docRef: routinesBySelectedDay[index].reference!,
                       time: routinesBySelectedDay[index].time!,
                       date: _selectedDay,
+                      onCompleted: _fetchData,
                     );
                   });
                 },
