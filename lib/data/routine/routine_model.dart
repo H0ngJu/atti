@@ -54,13 +54,11 @@ class RoutineModel with ChangeNotifier {
     map['createdAt'] = createdAt;
     map['repeatDays'] = repeatDays;
 
-    // 추가 *************************
     if (isFinished != null) {
       map['isFinished'] = isFinished!.map<String, bool>(
             (key, value) => MapEntry(key.toString(), value)
       );
     }
-    // 추가 *************************
 
     map['reference'] = reference;
     return map;

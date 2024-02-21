@@ -10,7 +10,7 @@ class ReportModel {
   String? patientId;
   Map<String, dynamic>? mostViews; // ++
   List<Map<String, dynamic>>? unfinishedRoutine;
-  List<Map<String, int>>? registeredMemoryCount;
+  Map<String, dynamic>? registeredMemoryCount;
   DocumentReference? reference; // document 식별자
   final _db = FirebaseFirestore.instance; // ++
   // json -> object (Firestore -> Flutter)
@@ -19,8 +19,10 @@ class ReportModel {
     patientId = json['patientId'];
     // patientId = _db.doc(json['patientId']); // ++
     mostViews = json['mostViews'] as Map<String, dynamic>;
-    unfinishedRoutine = json['unfinishedRoutine'];
-    registeredMemoryCount = json['registeredMemoryCount'];
+    unfinishedRoutine = List<Map<String, String>>.from(json['unfinishedRoutine'].map((item) => Map<String, String>.from(item)));
+    registeredMemoryCount = json['registeredMemoryCount'] as Map<String, dynamic>; // 수정된 부분
+    // unfinishedRoutine = json['unfinishedRoutine'];
+    // registeredMemoryCount = json['registeredMemoryCount'];
     reference = json['reference'];
   }
 
@@ -72,11 +74,9 @@ class ReportController {
             .get();
         reportsSnapshot.docs.forEach((doc) {
           // add함수에서 문제가 발생하는듯
-          print("이까진오니");
           reports.add(ReportModel.fromSnapShot(doc));
         });
       }
-      print(reports);
       return reports;
     } catch (e) {
       print('Error getting reports : $e');
