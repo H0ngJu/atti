@@ -186,10 +186,18 @@ class _TodayNoticeState extends State<TodayNotice> {
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: widget.notifications.length,
+          itemCount: widget.notifications.length > 0 ? _visibleItemCount : 1,
           itemBuilder: (context, index) {
-            return TodayNoticeContainer(notifications: widget.notifications[index]); // Pass individual notification item
-          },
+            if (widget.notifications.length > 0) {
+              return PastNoticeContainer(
+                  notifications: widget.notifications[index]);
+            } else {
+              return Center(
+                child: Text("데이터가 없습니다."), // 데이터가 없는 경우 메시지를 출력합니다.
+              );
+            }
+          }
+
         ),
         SizedBox(
           height: 10,
