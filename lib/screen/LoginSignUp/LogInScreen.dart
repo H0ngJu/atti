@@ -221,6 +221,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                   authController.isPatient = document['isPatient'];
                                   print(authController.userName.value);
 
+                                  // 환자
                                   if (isPatient) {
                                     authController.patientDocRef = document.reference;
                                     authController.userName.value = document['userName'];
@@ -234,11 +235,12 @@ class _LogInScreenState extends State<LogInScreen> {
                                         )
                                     );
                                   }
+                                  // 보호자
                                   else {
-                                    var patientUid = document['patientDocId'];
+                                    var carerRef = _db.doc("user/" + document['patientDocId']);
                                     QuerySnapshot carerSnapShot = await _db
                                         .collection('user')
-                                        .where('userId', isEqualTo: patientUid)
+                                        .where('reference', isEqualTo: carerRef)
                                         .get();
                                     DocumentSnapshot carerDoc = carerSnapShot.docs[0];
                                     authController.patientDocRef = carerDoc.reference;
@@ -288,13 +290,9 @@ class _LogInScreenState extends State<LogInScreen> {
                                 }
                               }
                             },
-
-
                             style: ElevatedButton.styleFrom(
                               backgroundColor: colorPallet.lightYellow,
                             ),
-
-
                             child: Container(
                                 width: 300,
                                 height: height*0.07,
@@ -307,6 +305,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                     )
                                 )
                             )
+                            // 로그인 버튼
                         ),
                       ),
                       SizedBox(height: height*0.01,),
@@ -334,6 +333,7 @@ class _LogInScreenState extends State<LogInScreen> {
                           ),
                         ],
                       )
+                      // 아이디 비밀번호 찾기
                     ],
                   ),
                 ),

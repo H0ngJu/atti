@@ -1,5 +1,6 @@
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
+import 'package:atti/screen/report/ReportHistory.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -423,7 +424,15 @@ class HomeReport extends StatelessWidget {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return ReportHistory();
+                        }
+                      )
+                  );
+                },
                 child: Text(
                   '전체보기',
                   style: TextStyle(fontSize: 20, color: Colors.black),

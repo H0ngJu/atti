@@ -1,3 +1,4 @@
+import 'package:atti/data/notification/notification_controller.dart';
 import 'package:atti/data/report/viewsController.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/commons/SimpleAppBar.dart';
@@ -112,20 +113,20 @@ class MemoryWords extends StatefulWidget {
 }
 
 class _MemoryWordsState extends State<MemoryWords> {
-  // ***************추가**********************
   final _authentication = FirebaseAuth.instance;
-  ViewsController _viewsController = ViewsController(
-    FirebaseFirestore.instance.doc("user/erbq9gGSSX66NNrQMi7t"),
-    FirebaseFirestore.instance.doc("memoryNote/fCK0qSBvRzYNjSSqUrjb"),
-  );
+  late ViewsController _viewsController;
+  late DocumentReference memoryReferencePath;
 
   @override
   void initState() {
     super.initState();
-    _viewsController.addViews(_authentication.currentUser as User);
+    memoryReferencePath = widget.memory.reference!;
+    _viewsController = ViewsController(
+      memoryReferencePath,
+    );
+    _viewsController.addViews();
     tagList.addAll(widget.memory.keyword ?? []);
   }
-  // ***************추가**********************
 
   final List<String> tagList = [];
   bool isExpanded = false;
