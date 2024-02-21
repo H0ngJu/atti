@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:timelines/timelines.dart';
+
+import '../../commons/RoutineBox.dart';
+import '../../commons/RoutineModal.dart';
 
 class ReportDetail extends StatelessWidget {
   const ReportDetail({Key? key}) : super(key: key);
@@ -82,9 +86,72 @@ class RoutineInfo extends StatelessWidget {
           style: TextStyle(fontSize: 24),
         ),
         Text(
-          'n개의 일과를 완료하지 못했어요.',
+          '2개의 일과를 완료하지 못했어요.',
           style: TextStyle(fontSize: 20, color: Color(0xffA38130)),
         ),
+
+        Container(
+          height:  MediaQuery.of(context).size.height * 0.58 * 2,
+          width: MediaQuery.of(context).size.width * 0.9,
+          child: TimelineTheme(
+            data: TimelineThemeData(
+                nodePosition: 0,
+                indicatorPosition: 0,
+                color: Color(0xffFFC215),
+                connectorTheme: ConnectorThemeData(
+                    color: Color(0xff9C9C9C), indent: 5, thickness: 1.5),
+                indicatorTheme: IndicatorThemeData(
+                  size: 17,
+                )),
+            child: Timeline.tileBuilder(
+              builder: TimelineTileBuilder.connectedFromStyle(
+                indicatorStyleBuilder: (context, index) {
+                  return IndicatorStyle.outlined;
+                },
+                //connectorStyle: ConnectorStyle.dashedLine,
+                connectorStyleBuilder: (context, index) =>
+                    ConnectorStyle.dashedLine,
+                lastConnectorStyle: ConnectorStyle.dashedLine,
+                contentsAlign: ContentsAlign.basic,
+                //indicatorStyle: IndicatorStyle.dot,
+                contentsBuilder: (context, index) => Padding(
+                  padding:
+                      const EdgeInsets.only(left: 15, right: 15, bottom: 20),
+
+                  // 각 타임라인 타일
+                  child: GestureDetector(
+                    onTap: () {
+                      // 타일 클릭 시 모달창
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('1월 19일 금요일',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: Color(0xff737373),
+                            fontSize: 18,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        RoutineBox(
+                          time: [8, 20],
+                          img: 'https://thumbnews.nateimg.co.kr/view610///news.nateimg.co.kr/orgImg/hr/2022/01/21/20220121000202_0.jpg',
+                          name: '미완료 루틴 이름',
+                          days: ['월', '수'],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                itemCount: 2,
+              ),
+              physics: NeverScrollableScrollPhysics(), // 타임라인 빌더 내 스크롤 막기
+            ),
+          ),
+        )
       ],
     );
   }

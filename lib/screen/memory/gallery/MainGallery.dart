@@ -124,7 +124,7 @@ class _MainGalleryState extends State<MainGallery> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.75,
+                    width: MediaQuery.of(context).size.width * 0.72,
                     child: RichText(
                       text: TextSpan(
                         style: TextStyle(
@@ -137,7 +137,7 @@ class _MainGalleryState extends State<MainGallery> {
                               text: '${authController.userName.value}님의\n'),
                           TextSpan(
                             text:
-                                '\'${tagController.selectedTag.value}\'기억을 모아봤어요',
+                                '\'${tagController.selectedTag.value}\' 기억을 모아봤어요',
                             style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.bold,

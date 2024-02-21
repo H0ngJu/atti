@@ -8,6 +8,8 @@ import 'package:atti/screen/schedule/ScheduleMain.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
@@ -23,6 +25,7 @@ import '../data/routine/routine_model.dart';
 import '../data/routine/routine_service.dart';
 import '../data/schedule/schedule_model.dart';
 import '../data/schedule/schedule_service.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class HomePatient extends StatefulWidget {
   const HomePatient({Key? key}) : super(key: key);
@@ -36,6 +39,8 @@ class _HomePatientState extends State<HomePatient> {
   final _db = FirebaseFirestore.instance;
   User? loggedUser;
   final AuthController authController = Get.put(AuthController());
+  String _weatherDescription = '';
+  FlutterTts flutterTts = FlutterTts();
 
   DateTime _selectedDay = DateTime.now();
   List<ScheduleModel> schedulesBySelectedDay = []; // 선택된 날짜의 일정들이 반환되는 리스트
@@ -53,6 +58,9 @@ class _HomePatientState extends State<HomePatient> {
     });
     getCurrentUser();
     _requestNotificationPermissions();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchAndSpeakWeather();
+    });
   }
 
   Future<void> _fetchData() async {
@@ -87,6 +95,158 @@ class _HomePatientState extends State<HomePatient> {
       notificationService.routineNotifications();
     }
   }
+
+  Future<void> _fetchAndSpeakWeather() async {
+
+    // 요일을 반환하는 함수
+    String _getWeekday(int weekday) {
+      switch (weekday) {
+        case 1:
+          return '월요일';
+        case 2:
+          return '화요일';
+        case 3:
+          return '수요일';
+        case 4:
+          return '목요일';
+        case 5:
+          return '금요일';
+        case 6:
+          return '토요일';
+        case 7:
+          return '일요일';
+        default:
+          return '';
+      }
+    }
+    String weekday = _getWeekday(_selectedDay.weekday);
+    final List<String> greetings = [
+      '안녕하세요',
+      '오늘의 ${_selectedDay.year}년 ${_selectedDay.month}월 ${_selectedDay.day}일 ${weekday}이에요',
+      '오늘의 기분은 어떠신가요?',
+      '내 기억에서 과거 기억을 열람해볼까요?',
+      '오늘의 일정을 확인해보세요',
+      '오늘의 일과를 확인해보세요',
+    ];
+
+    final Map<String, String> weatherTranslations = {
+      'thunderstorm with light rain': '가벼운 비를 동반한 천둥구름',
+      'thunderstorm with rain': '비를 동반한 천둥구름',
+      'thunderstorm with heavy rain': '폭우를 동반한 천둥구름',
+      'light thunderstorm': '약한 천둥구름',
+      'thunderstorm': '천둥구름',
+      'heavy thunderstorm': '강한 천둥구름',
+      'ragged thunderstorm': '불규칙적 천둥구름',
+      'thunderstorm with light drizzle': '약한 연무를 동반한 천둥구름',
+      'thunderstorm with drizzle': '연무를 동반한 천둥구름',
+      'thunderstorm with heavy drizzle': '강한 안개비를 동반한 천둥구름',
+      'light intensity drizzle': '가벼운 안개비',
+      'drizzle': '안개비',
+      'heavy intensity drizzle': '강한 안개비',
+      'light intensity drizzle rain': '가벼운 적은비',
+      'drizzle rain': '적은비',
+      'heavy intensity drizzle rain': '강한 적은비',
+      'shower rain and drizzle': '소나기와 안개비',
+      'heavy shower rain and drizzle': '강한 소나기와 안개비',
+      'shower drizzle': '소나기',
+      'light rain': '약한 비',
+      'moderate rain': '중간 비',
+      'heavy intensity rain': '강한 비',
+      'very heavy rain': '매우 강한 비',
+      'extreme rain': '극심한 비',
+      'freezing rain': '우박',
+      'light intensity shower rain': '약한 소나기 비',
+      'shower rain': '소나기 비',
+      'heavy intensity shower rain': '강한 소나기 비',
+      'ragged shower rain': '불규칙적 소나기 비',
+      'light snow': '가벼운 눈',
+      'snow': '눈',
+      'heavy snow': '강한 눈',
+      'sleet': '진눈깨비',
+      'shower sleet': '소나기 진눈깨비',
+      'light rain and snow': '약한 비와 눈',
+      'rain and snow': '비와 눈',
+      'light shower snow': '약한 소나기 눈',
+      'shower snow': '소나기 눈',
+      'heavy shower snow': '강한 소나기 눈',
+      'mist': '박무',
+      'smoke': '연기',
+      'haze': '연무',
+      'sand, dust whirls': '모래 먼지',
+      'fog': '안개',
+      'sand': '모래',
+      'dust': '먼지',
+      'volcanic ash': '화산재',
+      'squalls': '돌풍',
+      'tornado': '토네이도',
+      'clear sky': '구름 한 점 없는 맑은 하늘',
+      'few clouds': '약간의 구름이 낀 하늘',
+      'scattered clouds': '드문드문 구름이 낀 하늘',
+      'broken clouds': '구름이 거의 없는 하늘',
+      'overcast clouds': '구름으로 뒤덮인 흐린 하늘',
+      'tropical storm': '태풍',
+      'hurricane': '허리케인',
+      'cold': '한랭',
+      'hot': '고온',
+      'windy': '바람부는',
+      'hail': '우박',
+      'calm': '바람이 거의 없는',
+      'light breeze': '약한 바람',
+      'gentle breeze': '부드러운 바람',
+      'moderate breeze': '중간 세기 바람',
+      'fresh breeze': '신선한 바람',
+      'strong breeze': '센 바람',
+      'high win': '돌풍에 가까운 센 바람',
+      'gale': '돌풍',
+      'severe gale': '심각한 돌풍',
+      'storm': '폭풍',
+      'violent storm': '강한 폭풍',
+      'tornado': '토네이도',
+    };
+
+    final apiKey = 'ed74afe6187d312df4971ce15ecfa56c';
+    final city = 'Seoul';
+    final url = Uri.parse(
+        'http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&units=metric');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final description = data['weather'][0]['description'];
+      final temperature = data['main']['temp'];
+      final humidity = data['main']['humidity'];
+      final weatherStatus = data['weather'][0]['description'];
+      final weatherTranslation = weatherTranslations[weatherStatus.toLowerCase()];
+      setState(() {
+        if (weatherTranslation != null) {
+          _weatherDescription =
+          '현재 날씨는 $weatherTranslation이며, 온도는 $temperature도, 습도는 $humidity% 입니다.';
+        } else {
+          // 만약 매핑된 한글이 없는 경우에는 영어로
+          _weatherDescription =
+          '현재 날씨는 $description이며, 온도는 $temperature도, 습도는 $humidity% 입니다.';
+        }
+      });
+    } else {
+      throw Exception('Failed to load weather');
+    }
+
+    greetings.add(_weatherDescription);
+
+    final Random random = Random();
+    final index = random.nextInt(greetings.length);
+
+    String message = greetings[index];
+
+    await flutterTts.setLanguage('ko-KR');
+    await flutterTts.setPitch(1);
+    await flutterTts.speak(message);
+  }
+  /*Future<void> _speakWeather() async {
+    await flutterTts.setLanguage('ko-KR');
+    await flutterTts.setPitch(1);
+    await flutterTts.speak(_weatherDescription);
+  }*/
 
   /*@override
   void initState() {

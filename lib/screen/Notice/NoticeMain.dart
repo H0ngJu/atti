@@ -53,8 +53,9 @@ class _NoticeMainState extends State<NoticeMain> {
         })
             .toList();
 
+        DateTime todayStart = DateTime(now.year, now.month, now.day);
         pastNotifications = allNotifications
-            .where((notification) => notification.time!.toDate().isBefore(now))
+            .where((notification) => notification.time!.toDate().isBefore(todayStart))
             .toList();
         print('there : ${pastNotifications.isNotEmpty ? pastNotifications.first.time : 'No notifications found'}');
       } else {
@@ -162,7 +163,7 @@ class TodayNotice extends StatefulWidget {
 }
 
 class _TodayNoticeState extends State<TodayNotice> {
-  int _visibleItemCount = 5;
+  int _visibleItemCount = 3;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -197,8 +198,8 @@ class _TodayNoticeState extends State<TodayNotice> {
           onPressed: () {
             setState(() {
               // 한 번에 보여줄 아이템 개수를 업데이트
-              if (_visibleItemCount + 5 <= widget.notifications.length) {
-                _visibleItemCount += 5;
+              if (_visibleItemCount + 3 <= widget.notifications.length) {
+                _visibleItemCount += 3;
               } else {
                 _visibleItemCount = widget.notifications.length;
               }
@@ -354,9 +355,15 @@ class _PastNoticeState extends State<PastNotice> {
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: _visibleItemCount,
+          itemCount: filteredData.length > 0 ? _visibleItemCount : 1,
           itemBuilder: (context, index) {
-            return PastNoticeContainer(notifications: filteredData![index]);
+            if (filteredData.length > 0) {
+              return PastNoticeContainer(notifications: filteredData[index]);
+            } else {
+              return Center(
+                child: Text("데이터가 없습니다."), // 데이터가 없는 경우 메시지를 출력합니다.
+              );
+            }
           },
         ),
         SizedBox(
