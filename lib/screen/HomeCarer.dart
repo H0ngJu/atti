@@ -120,10 +120,10 @@ class _HomeCarerState extends State<HomeCarer> {
   final List<User> dummy = [
     User(
       name: '최한별',
-      emotion: '즐거움',
+      //emotion: '즐거움',
       momoryRegistCount: 5,
       mostMemory: '제주도 여행',
-      incompleteRoutineCount: 3,
+      incompleteRoutineCount: 2,
     ),
   ];
 
@@ -385,17 +385,18 @@ class HomeReport extends StatelessWidget {
               maxLines: 2,
             ),
           ),
+          SizedBox(height: 5,),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 '${title1}',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 18),
               ),
               Text(
                 '${title2}',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 18),
               )
             ],
           ),
@@ -465,9 +466,11 @@ class HomeReport extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ContentCircle(user.incompleteRoutineCount, '미완료', '완료'),
+                ContentCircle(user.incompleteRoutineCount, '미완료', '일과'),
+                SizedBox(width: 18,),
                 ContentCircle(user.momoryRegistCount, '기억', '등록'),
-                ContentCircle(user.emotion, '회상', '감정'),
+                SizedBox(width: 18,),
+                //ContentCircle(user.emotion, '회상', '감정'),
                 ContentCircle(user.mostMemory, '최다', '열람기억')
               ],
             ),
