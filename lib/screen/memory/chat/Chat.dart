@@ -160,8 +160,8 @@ class _VoiceButtonState extends State<VoiceButton> {
   stt.SpeechToText _speech = stt.SpeechToText();
   String _spokenText = '버튼을 누르고 음성을 입력';
   bool _isListening = false;
-  int _staticTimeout = 2; // 정적 상태 타임아웃 (2초)
-  int _elapsedTime = 2;
+  int _staticTimeout = 5; // 정적 상태 타임아웃 (2초)
+  int _elapsedTime = 0;
   late List<ChatMessage> chatMessages = []; // 대화 리스트
 
   @override
