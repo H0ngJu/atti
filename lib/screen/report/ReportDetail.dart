@@ -77,6 +77,22 @@ class RoutineInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> unfinishedRoutineDummy = [
+      {
+        "date": '2월 12일 월요일',
+        "time": [8, 20],
+        "img" : 'https://thumbnews.nateimg.co.kr/view610///news.nateimg.co.kr/orgImg/hr/2022/01/21/20220121000202_0.jpg',
+        "name" : "산책하기",
+        "days" : ["월","수","금"]
+      },
+      {
+        "date": '2월 15일 목요일',
+        "time": [10, 00],
+        "img" : 'https://thumbnews.nateimg.co.kr/view610///news.nateimg.co.kr/orgImg/hr/2022/01/21/20220121000202_0.jpg',
+        "name" : "치매안심센터 방문",
+        "days" : ["화","목"]
+      }
+    ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -117,7 +133,6 @@ class RoutineInfo extends StatelessWidget {
                 contentsBuilder: (context, index) => Padding(
                   padding:
                       const EdgeInsets.only(left: 15, right: 15, bottom: 20),
-
                   // 각 타임라인 타일
                   child: GestureDetector(
                     onTap: () {
@@ -126,7 +141,7 @@ class RoutineInfo extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('1월 19일 금요일',
+                        Text(unfinishedRoutineDummy[index]["date"],
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             color: Color(0xff737373),
@@ -137,10 +152,10 @@ class RoutineInfo extends StatelessWidget {
                           height: 10,
                         ),
                         RoutineBox(
-                          time: [8, 20],
-                          img: 'https://thumbnews.nateimg.co.kr/view610///news.nateimg.co.kr/orgImg/hr/2022/01/21/20220121000202_0.jpg',
-                          name: '미완료 루틴 이름',
-                          days: ['월', '수'],
+                          time: unfinishedRoutineDummy[index]["time"],
+                          img: unfinishedRoutineDummy[index]["img"],
+                          name: unfinishedRoutineDummy[index]["name"],
+                          days: unfinishedRoutineDummy[index]["days"],
                         ),
                       ],
                     ),
