@@ -955,77 +955,93 @@ class _HomeMemoryState extends State<HomeMemory> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     final MemoryNoteModel randomMemoryNote = getRandomMemoryNote();
 
-    return Column(children: [
-      Text(
-        '오늘을 내 기억에 남겨보세요!',
-        style: TextStyle(fontSize: 28),
-        textAlign: TextAlign.left,
-      ),
-      SizedBox(height: 11),
-      Container(
-        padding: EdgeInsets.all(17),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15), color: Colors.white),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    width: (MediaQuery.of(context).size.width - 66) / 2,
-                    height: 260,
-                    decoration: BoxDecoration(
+    return Column(
+      children: [
+        Text(
+          '오늘을 내 기억에 남겨보세요!',
+          style: TextStyle(fontSize: 28),
+          textAlign: TextAlign.left,
+        ),
+        SizedBox(height: 11),
+        Container(
+          padding: EdgeInsets.all(17),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: Colors.white,
+          ),
+          child: Column(
+            children: [
+              randomMemoryNote.img != null
+                  ? Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      width: (MediaQuery.of(context).size.width - 66) / 2,
+                      height: 260,
+                      decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: NetworkImage('${randomMemoryNote.img}'), // Use random image URL
-                            fit: BoxFit.cover,
-                            // 이미지가 Container에 맞게 잘리지 않도록 적절하게 조정
-                            opacity: 0.4),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Center(
-                      child: Text(
-                        '${randomMemoryNote.imgTitle}', // You might want to replace this text with actual data from the model
-                        style:
-                        TextStyle(fontSize: 20, color: Color(0xff737373)),
-                        textAlign: TextAlign.center,
+                          image: NetworkImage('${randomMemoryNote.img}'),
+                          fit: BoxFit.cover,
+                          opacity: 0.4,
+                        ),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${randomMemoryNote.imgTitle}',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Color(0xff737373),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 17,
-            ),
-            Text(
-              '오늘 하루를 보내며서 기억하고 싶은 특별한 순간이 있나요?',
-              style: TextStyle(fontSize: 24),
-            ),
-            SizedBox(
-              height: 17,
-            ),
-            SizedBox(
-              width: 380,
-              height: 60,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor:
-                  MaterialStateProperty.all<Color>(Color(0xffFFC215)),
-                ),
-                onPressed: () {
-                  Get.to(MemoryRegister1());
-                },
-                child: Text(
-                  '내 기억에 담기',
-                  style: TextStyle(fontSize: 24, color: Colors.black),
+                ],
+              )
+                  : Text(
+                '저장된 기억이 없어요',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color(0xff737373),
+                  ),
+              ),
+              SizedBox(
+                height: 17,
+              ),
+              Text(
+                '오늘 하루를 보내며서 기억하고 싶은 특별한 순간이 있나요?',
+                style: TextStyle(fontSize: 24),
+              ),
+              SizedBox(
+                height: 17,
+              ),
+              SizedBox(
+                width: 380,
+                height: 60,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                    MaterialStateProperty.all<Color>(Color(0xffFFC215)),
+                  ),
+                  onPressed: () {
+                    Get.to(MemoryRegister1());
+                  },
+                  child: Text(
+                    '내 기억에 담기',
+                    style: TextStyle(fontSize: 24, color: Colors.black),
+                  ),
                 ),
               ),
-            )
-          ],
+            ],
+          ),
         ),
-      )
-    ]);
+      ],
+    );
   }
 }

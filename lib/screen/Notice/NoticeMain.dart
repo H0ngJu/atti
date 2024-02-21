@@ -186,7 +186,9 @@ class _TodayNoticeState extends State<TodayNotice> {
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: widget.notifications.length > 0 ? _visibleItemCount : 1,
+          itemCount: widget.notifications.isNotEmpty ?
+          (widget.notifications.length <= 2 ? widget.notifications.length : _visibleItemCount) :
+          1,
           itemBuilder: (context, index) {
             if (widget.notifications.length > 0) {
               return TodayNoticeContainer(
@@ -363,16 +365,18 @@ class _PastNoticeState extends State<PastNotice> {
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: filteredData.length > 0 ? _visibleItemCount : 1,
+          itemCount: filteredData.isNotEmpty ?
+          (filteredData.length <= 2 ? filteredData.length : _visibleItemCount) :
+          1,
           itemBuilder: (context, index) {
-            if (filteredData.length > 0) {
+            if (filteredData.isNotEmpty) {
               return PastNoticeContainer(notifications: filteredData[index]);
             } else {
               return Center(
                 child: Text("데이터가 없습니다."), // 데이터가 없는 경우 메시지를 출력합니다.
               );
             }
-          },
+          }
         ),
         SizedBox(
           height: 10,
