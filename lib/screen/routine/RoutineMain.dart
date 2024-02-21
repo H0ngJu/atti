@@ -25,6 +25,7 @@ class _RoutineMainState extends State<RoutineMain> {
   final RoutineController routineController = Get.put(RoutineController());
   final AuthController authController = Get.put(AuthController());
   int _selectedIndex = 3;
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -50,8 +51,10 @@ class _RoutineMainState extends State<RoutineMain> {
       await _fetchData();
     });
   }
+
   Future<void> _fetchData() async {
-    List<RoutineModel> fetchedRoutines = await RoutineService().getRoutinesByDay(selectedDayInWeek);
+    List<RoutineModel> fetchedRoutines =
+        await RoutineService().getRoutinesByDay(selectedDayInWeek);
     if (fetchedRoutines != null) {
       setState(() {
         routinesBySelectedDay = fetchedRoutines;
@@ -65,34 +68,38 @@ class _RoutineMainState extends State<RoutineMain> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: MediaQuery.of(context).size.height * 0.06,),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.9,
-              alignment: Alignment.centerLeft,
-              child: Text('${authController.userName.value}님의',
-                textAlign: TextAlign.left, style: TextStyle(
-                  fontSize: 24,
-                ),),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.06,
             ),
             Container(
               width: MediaQuery.of(context).size.width * 0.9,
               alignment: Alignment.centerLeft,
-              child: Text('하루 일과',
-                textAlign: TextAlign.left, style: TextStyle(
-                  fontSize: 30, fontWeight: FontWeight.w600
-                ),),
+              child: Text(
+                '${authController.userName.value}님의',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '하루 일과',
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+              ),
             ),
             SizedBox(height: 30),
             RoutineCalendar(),
             SizedBox(height: 10),
-
             Container(
               width: MediaQuery.of(context).size.width,
               color: Color(0xffFFFAEF),
@@ -107,22 +114,27 @@ class _RoutineMainState extends State<RoutineMain> {
                     ),
                   ),
                   numberOfRoutines != null && numberOfRoutines! >= 1
-                  ? RoutineTimeline()
-                  : Container(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    alignment: Alignment.center,
-                    child: Text('오늘은 일과가 없네요!', style: TextStyle(
-                        fontSize: 30, fontWeight: FontWeight.w600
-                    ),),
+                      ? RoutineTimeline()
+                      : Container(
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          alignment: Alignment.center,
+                          child: Text(
+                            '오늘은 일과가 없네요!',
+                            style: TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                  SizedBox(
+                    height: 10,
                   ),
-
-                  SizedBox(height: 10,),
-                  NextButton(next: RoutineRegister1(), content: '하루 일과 등록하기', isEnabled: true,)
-
+                  NextButton(
+                    next: RoutineRegister1(),
+                    content: '하루 일과 등록하기',
+                    isEnabled: true,
+                  )
                 ],
               ),
             )
-
           ],
         ),
       ),
@@ -174,8 +186,7 @@ class _RoutineMainState extends State<RoutineMain> {
         todayDecoration: BoxDecoration(
             color: Colors.transparent,
             shape: BoxShape.circle,
-            border: Border.all(color: Color(0xffFFC215), width: 1.5)
-        ),
+            border: Border.all(color: Color(0xffFFC215), width: 1.5)),
       ),
     );
   }
@@ -185,9 +196,8 @@ class _RoutineMainState extends State<RoutineMain> {
       height: numberOfRoutines != null && numberOfRoutines! <= 1
           ? MediaQuery.of(context).size.height * 0.6
           : (numberOfRoutines != null
-          ? numberOfRoutines! * MediaQuery.of(context).size.height * 0.55
-          : 0),
-
+              ? numberOfRoutines! * MediaQuery.of(context).size.height * 0.55
+              : 0),
       width: MediaQuery.of(context).size.width * 0.9,
       child: TimelineTheme(
         data: TimelineThemeData(
@@ -195,26 +205,30 @@ class _RoutineMainState extends State<RoutineMain> {
             indicatorPosition: 0,
             color: Color(0xffFFC215),
             connectorTheme: ConnectorThemeData(
-                color: Color(0xff9C9C9C),
-                indent: 5,
-                thickness: 1.5
-            ),
+                color: Color(0xff9C9C9C), indent: 5, thickness: 1.5),
             indicatorTheme: IndicatorThemeData(
               size: 17,
-            )
-        ),
+            )),
         child: Timeline.tileBuilder(
           builder: TimelineTileBuilder.connectedFromStyle(
             indicatorStyleBuilder: (context, index) {
-              return (routinesBySelectedDay[index].isFinished != null &&
-                  routinesBySelectedDay[index].isFinished!.containsKey(removeZ(_selectedDay.toString())) &&
-                  routinesBySelectedDay[index].isFinished![removeZ(_selectedDay.toString())]! ?? false)
+              print(
+                  '${routinesBySelectedDay[index].name} : ${routinesBySelectedDay[index].isFinished![removeZ(_selectedDay.toString())]}');
+              bool isFinished =
+                  routinesBySelectedDay[index].isFinished != null &&
+                      routinesBySelectedDay[index]
+                          .isFinished!
+                          .containsKey(removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')) &&
+                      routinesBySelectedDay[index]
+                          .isFinished![removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')]!;
+              print('here : ${isFinished}');
+              return (isFinished
                   ? IndicatorStyle.dot
-                  : IndicatorStyle.outlined;
-
+                  : IndicatorStyle.outlined);
             },
             //connectorStyle: ConnectorStyle.dashedLine,
-            connectorStyleBuilder: (context, index) => ConnectorStyle.dashedLine,
+            connectorStyleBuilder: (context, index) =>
+                ConnectorStyle.dashedLine,
             lastConnectorStyle: ConnectorStyle.dashedLine,
             contentsAlign: ContentsAlign.basic,
             //indicatorStyle: IndicatorStyle.dot,
@@ -225,32 +239,42 @@ class _RoutineMainState extends State<RoutineMain> {
               child: GestureDetector(
                 onTap: () {
                   // 타일 클릭 시 모달창
-                  showDialog(context: context, builder: (_) {
-                    return RoutineModal(
-                      img: routinesBySelectedDay[index].img!,
-                      name: routinesBySelectedDay[index].name!,
-                      days: routinesBySelectedDay[index].repeatDays!,
-                      docRef: routinesBySelectedDay[index].reference!,
-                      time: routinesBySelectedDay[index].time!,
-                      date: _selectedDay,
-                      onCompleted: _fetchData,
-                    );
-                  });
+                  showDialog(
+                      context: context,
+                      builder: (_) {
+                        return RoutineModal(
+                          img: routinesBySelectedDay[index].img!,
+                          name: routinesBySelectedDay[index].name!,
+                          days: routinesBySelectedDay[index].repeatDays!,
+                          docRef: routinesBySelectedDay[index].reference!,
+                          time: routinesBySelectedDay[index].time!,
+                          date: _selectedDay,
+                          onCompleted: _fetchData,
+                        );
+                      });
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text((routinesBySelectedDay[index].isFinished != null &&
-                        routinesBySelectedDay[index].isFinished!.containsKey(removeZ(_selectedDay.toString())) &&
-                        routinesBySelectedDay[index].isFinished![removeZ(_selectedDay.toString())]! ?? false)
-                         ? '완료됨'
-                         : '완료되지 않음',
-                       textAlign: TextAlign.start,
-                       style: TextStyle(
-                         color: Color(0xff737373),
-                         fontSize: 18,
-                       ), ),
-                    SizedBox(height: 10,),
+                    Text(
+                      (
+                routinesBySelectedDay[index].isFinished != null &&
+                routinesBySelectedDay[index]
+                        .isFinished!
+                        .containsKey(removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')) &&
+                routinesBySelectedDay[index]
+                    .isFinished![removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')]!)
+                          ? '완료됨'
+                          : '완료되지 않음',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Color(0xff737373),
+                        fontSize: 18,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     RoutineBox(
                       time: routinesBySelectedDay[index].time!,
                       img: routinesBySelectedDay[index].img!,
@@ -268,5 +292,4 @@ class _RoutineMainState extends State<RoutineMain> {
       ),
     );
   }
-
 }

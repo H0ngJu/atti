@@ -186,7 +186,7 @@ class _TodayNoticeState extends State<TodayNotice> {
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: widget.notifications.length,
+          itemCount: _visibleItemCount,
           itemBuilder: (context, index) {
             return TodayNoticeContainer(notifications: widget.notifications[index]); // Pass individual notification item
           },

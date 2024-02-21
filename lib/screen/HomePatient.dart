@@ -802,7 +802,7 @@ class RoutineWidget extends StatelessWidget {
                   style: TextStyle(fontSize: 24),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {print('done: $done');},
                   icon: Icon(
                     Icons.check_circle,
                     color: iconColor,
@@ -832,12 +832,11 @@ class HomeRoutine extends StatefulWidget {
 }
 
 class _HomeRoutineState extends State<HomeRoutine> {
-
+  DateTime _selectedDay = DateTime.now();
   @override
   Widget build(BuildContext context) {
     //User user = widget.dummy[0];
     //List<Routine>? routines = user.routines;
-    DateTime _selectedDay = DateTime.now();
     List<RoutineModel> routines = widget.routinesBySelectedDay;
 
     return Column(
@@ -886,13 +885,17 @@ class _HomeRoutineState extends State<HomeRoutine> {
                       formattedTime =
                           '${isPM ? '오후' : '오전'} ${hour12.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
                     }
+                    // isFinished가 true인지 확인하여 해당하는 값으로 설정
+
+                    bool isFinished = routines.isFinished != null &&
+                        routines.isFinished!.containsKey(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000') &&
+                        routines.isFinished![_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000']!;
+                    //print('${routines.isFinished}');
                     return RoutineWidget(
                       time: formattedTime,
                       name: routines.name,
                       url: routines.img,
-                      done: (routines.isFinished != null &&
-                          routines.isFinished!.containsKey(_selectedDay.toString().replaceAll('Z', '')) &&
-                          routines.isFinished![_selectedDay.toString().replaceAll('Z', '')]! ?? false),
+                      done: isFinished,
                       // done: routines.isFinished![_selectedDay.toString().replaceAll('Z', '')]! ?? false,
                       days: routines.repeatDays,
                       date: DateTime.now().toString(),
@@ -901,7 +904,6 @@ class _HomeRoutineState extends State<HomeRoutine> {
                     );
                   }).toList() ??
                   [],
-
             ),
           ),
         ),
