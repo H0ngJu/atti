@@ -68,7 +68,7 @@ class _RoutineBoxState extends State<RoutineBox> {
             child: Container(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: widget.img != null && widget.img.contains('firebasestorage')
+                child: widget.img != null && widget.img.contains('http')
                     ? Image.network(
                   widget.img,
                   width: double.infinity,
