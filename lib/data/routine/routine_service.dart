@@ -50,7 +50,6 @@ class RoutineService {
   }
 
 
-  // 추가 ************************* isFinished Map 만들기
   Map<String, bool> createTimeMap(List<String>? days) {
     Map<String, bool> timeMap = {};
     DateTime now = DateTime.now();
@@ -88,7 +87,6 @@ class RoutineService {
         return '';
     }
   }
-  // 추가 ************************* isFinished Map 만들기
 
 
   // 특정 요일의 루틴 가져오기
@@ -139,6 +137,7 @@ class RoutineService {
 
           String dateString = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} 00:00:00.000';
           //String dateString = DateTime(date.year, date.month, date.day).toString();
+
           finishedMap[dateString] = true;
           await docRef.update({'isFinished': finishedMap});
 
