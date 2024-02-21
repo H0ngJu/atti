@@ -206,12 +206,12 @@ class _RoutineMainState extends State<RoutineMain> {
         child: Timeline.tileBuilder(
           builder: TimelineTileBuilder.connectedFromStyle(
             indicatorStyleBuilder: (context, index) {
+              print('${routinesBySelectedDay[index].name} : ${routinesBySelectedDay[index].isFinished![removeZ(_selectedDay.toString())]}');
               return (routinesBySelectedDay[index].isFinished != null &&
                   routinesBySelectedDay[index].isFinished!.containsKey(removeZ(_selectedDay.toString())) &&
                   routinesBySelectedDay[index].isFinished![removeZ(_selectedDay.toString())]! ?? false)
                   ? IndicatorStyle.dot
                   : IndicatorStyle.outlined;
-
             },
             //connectorStyle: ConnectorStyle.dashedLine,
             connectorStyleBuilder: (context, index) => ConnectorStyle.dashedLine,
