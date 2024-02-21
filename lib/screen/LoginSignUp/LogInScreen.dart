@@ -226,7 +226,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                     authController.patientDocRef = document.reference;
                                     authController.userName.value = document['userName'];
                                     authController.familyMember.value = List<String>.from(document['familyMember']);
-                                    print(authController.familyMember.value);
+                                    print(authController.isPatient);
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(builder: (context) {
@@ -235,9 +235,12 @@ class _LogInScreenState extends State<LogInScreen> {
                                         )
                                     );
                                   }
-                                  // 보호자
-                                  else {
+                                  
+                                  else { // 보호자인 경우
+                                    print(authController.isPatient);
+                                    var patientUid = document['patientDocId'];
                                     var carerRef = _db.doc("user/" + document['patientDocId']);
+
                                     QuerySnapshot carerSnapShot = await _db
                                         .collection('user')
                                         .where('reference', isEqualTo: carerRef)

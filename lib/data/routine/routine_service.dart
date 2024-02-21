@@ -36,7 +36,9 @@ class RoutineService {
       routine.createdAt = Timestamp.now();
       routine.patientId = authController.patientDocRef;
 
+      // // 추가 *************************
       routine.isFinished = createTimeMap(routine.repeatDays);
+      // // 추가 *************************
 
       DocumentReference docRef =
           await firestore.collection('routine').add(routine.toJson());
@@ -134,7 +136,8 @@ class RoutineService {
           Map<String, dynamic> finishedMap = Map<String, dynamic>.from(data['isFinished']!);
 
           String dateString = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} 00:00:00.000';
-          // String dateString = DateTime(date.year, date.month, date.day).toString();
+          //String dateString = DateTime(date.year, date.month, date.day).toString();
+
           finishedMap[dateString] = true;
           await docRef.update({'isFinished': finishedMap});
 
