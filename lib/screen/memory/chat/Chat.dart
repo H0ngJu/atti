@@ -145,7 +145,7 @@ class _VoiceButtonState extends State<VoiceButton> {
   String _spokenText = '버튼을 누르고 음성을 입력';
   bool _isListening = false;
   int _staticTimeout = 2; // 정적 상태 타임아웃 (2초)
-  int _elapsedTime = 0;
+  int _elapsedTime = 2;
   late List<ChatMessage> chatMessages = []; // 대화 리스트
 
   @override
@@ -186,27 +186,54 @@ class _VoiceButtonState extends State<VoiceButton> {
             _spokenText = result.recognizedWords;
           });
           String message = result.recognizedWords ?? "";
-          //print('here : $message');
           _appendMessage("User", message); // 사용자의 말을 메시지로 추가
-          setState(() {
-            _isListening = false;
-          });
-          _stopListening(); // Listening 중지
           _onUserMessage(message);
 
-          try {
-            String response = await _chatbot.getResponse(message); // Chatbot으로부터 응답 받기
-            _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
-            _onApiResponse(response);
-          } catch (e) {
-            print("Error: $e");
-          } finally {
-            setState(() {
-              _isListening = false;
-            });
-          }
+          // 일정 시간 동안 아무런 결과가 없으면 음성 인식 종료로 판단하고 API 호출
+          Future.delayed(Duration(seconds: 2), () async {
+            if (_spokenText == message) { // 1초 동안 결과가 변하지 않았다면
+              try {
+                String response = await _chatbot.getResponse(message); // Chatbot으로부터 응답 받기
+                _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
+                _onApiResponse(response);
+              } catch (e) {
+                print("Error: $e");
+              } finally {
+                setState(() {
+                  _isListening = false;
+                });
+              }
+            }
+          });
         },
       );
+      // _speech.listen(
+      //   onResult: (result) async {
+      //     setState(() {
+      //       _spokenText = result.recognizedWords;
+      //     });
+      //     String message = result.recognizedWords ?? "";
+      //     //print('here : $message');
+      //     _appendMessage("User", message); // 사용자의 말을 메시지로 추가
+      //     setState(() {
+      //       _isListening = false;
+      //     });
+      //     _stopListening(); // Listening 중지
+      //     _onUserMessage(message);
+      //
+      //     try {
+      //       String response = await _chatbot.getResponse(message); // Chatbot으로부터 응답 받기
+      //       _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
+      //       _onApiResponse(response);
+      //     } catch (e) {
+      //       print("Error: $e");
+      //     } finally {
+      //       setState(() {
+      //         _isListening = false;
+      //       });
+      //     }
+      //   },
+      // );
     } else {
       print("Speech recognition not available");
     }
