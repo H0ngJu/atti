@@ -25,7 +25,7 @@ class ReportDetail extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '1월 3주차',
+                          '2월 3주차',
                           style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                         ),
@@ -58,8 +58,8 @@ class ReportDetail extends StatelessWidget {
                 Divider(),
                 MemoryInfo(),
                 Divider(),
-                EmotionInfo(),
-                Divider(),
+                // EmotionInfo(),
+                // Divider(),
                 MostViewMemory()
               ],
             ),
@@ -237,13 +237,21 @@ class MostViewMemory extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              '기억 회상 감정기록',
+              '기억 회상 조회수',
               style: TextStyle(fontSize: 24),
             ),
             Text(
-              '최근 7일간 아띠와의 회상 대화에서 이러한 감정을 느끼고 있어요.',
+              '최근 7일간 가장 자주 조회한 기억 회상은 다음과 같아요.',
               style: TextStyle(fontSize: 20, color: Color(0xffA38130)),
             ),
+            // Text(
+            //   '기억 회상 감정기록',
+            //   style: TextStyle(fontSize: 24),
+            // ),
+            // Text(
+            //   '최근 7일간 아띠와의 회상 대화에서 이러한 감정을 느끼고 있어요.',
+            //   style: TextStyle(fontSize: 20, color: Color(0xffA38130)),
+            // ),
             Container(
               margin: EdgeInsets.only(top: 16),
               decoration: BoxDecoration(
