@@ -122,7 +122,7 @@ class _HomeCarerState extends State<HomeCarer> {
       name: '최한별',
       //emotion: '즐거움',
       momoryRegistCount: 5,
-      mostMemory: '제주도 여행',
+      mostMemory: '놀이공원\n갔을때',
       incompleteRoutineCount: 2,
     ),
   ];
