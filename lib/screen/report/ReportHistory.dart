@@ -67,11 +67,11 @@ class _ReportHistoryState extends State<ReportHistory> {
                             child: Text('이전 받은 기록 보고',
                                 style: TextStyle(
                                     fontSize: 24, fontWeight: FontWeight.bold))),
-                        Container(
-                            margin: EdgeInsets.only(bottom: 10),
-                            child: Text('${reports.toString()}',
-                                style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.bold))),
+                        // Container(
+                        //     margin: EdgeInsets.only(bottom: 10),
+                        //     child: Text('${reports}',
+                        //         style: TextStyle(
+                        //             fontSize: 24, fontWeight: FontWeight.bold))),
                         ListView(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
