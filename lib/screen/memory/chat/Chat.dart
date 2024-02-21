@@ -17,7 +17,6 @@ class ChatMessage {
   final String sender; // I or ATTI
   final String text; // 대화 내용
   final DateTime date; // 시간
-
   ChatMessage({
     required this.sender,
     required this.text,
@@ -31,6 +30,7 @@ class ChatMessage {
       'date': date.toIso8601String(),
     };
   }
+
   static List<Map<String, dynamic>> messagesToJson(List<ChatMessage> messages) {
     return messages.map((message) => message.toJson()).toList();
   }
@@ -39,6 +39,14 @@ class ChatMessage {
     return jsonEncode(messagesToJson(messages));
   }
 }
+
+List<String> AngryMsg = ['화나', '짜증', '분노', ];  // 'lib/assets/Atti/Angry.png'
+List<String> CalmMsg = ['편안', '그리운', '그립', '추억'];  // 'lib/assets/Atti/Calm.png'
+List<String> FunnyMsg = ['안녕하세요', '안녕', '신나', '재미', '재밌,' '즐거', '행복', '소중', '기쁘', '앗싸', '아싸', ];  // 'lib/assets/Atti/Funny.png'
+List<String> HmmMsg = ['고민', '곰곰', '힘든', '힘들', ];  // 'lib/assets/Atti/Hmm.png'
+//List<String> NormalMsg = ['그렇군요', '군요', ]; // 'lib/assets/Atti/Normal.png'
+List<String> ShyMsg = ['걱정', '불안', '슬퍼', '슬프', '슬펐', '위로', '아프', '아파', '아팠', '우울'];  // 'lib/assets/Atti/Shy.png'
+List<String> SurprisedMsg = ['놀라', '놀랐', '깜짝', '신기', '대단', '멋지', '멋진', ];  // 'lib/assets/Atti/Surprised.png'
 
 class Chat extends StatefulWidget {
   final MemoryNoteModel memory;
@@ -51,6 +59,7 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   String _currentMessage = '대화를 시작하려면 마이크 버튼을 누르세요'; // 내가 한 대화
   final FlutterTts flutterTts = FlutterTts();
+  String _currentImage = 'lib/assets/Atti/Normal.png'; // 기본 이미지 설정
 
   @override
   void initState() {
@@ -97,8 +106,9 @@ class _ChatState extends State<Chat> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // 메세지에 따른 이미지 변화 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
                   Image(
-                    image: AssetImage('lib/assets/Atti/Normal.png'),
+                    image: AssetImage(_currentImage),
                     height: MediaQuery.of(context).size.height * 0.3,
                   ),
                 ],
@@ -109,10 +119,14 @@ class _ChatState extends State<Chat> {
                     _currentMessage = message;
                   });
                 },
+                updatedImage: (image) { // 이미지 업데이트 콜백
+                  setState(() {
+                    _currentImage = image;
+                  });
+                },
                 memory: widget.memory,
                 //updatedMessage: _onUserMessage, // 사용자가 말할 때 호출되는 콜백 함수 전달
               ),
-
 
             ],
           ),
@@ -132,7 +146,9 @@ class _ChatState extends State<Chat> {
 class VoiceButton extends StatefulWidget {
   final MemoryNoteModel memory;
   final Function(String) updatedMessage;
-  const VoiceButton({Key? key, required this.updatedMessage, required this.memory}) : super(key: key);
+  final Function(String) updatedImage; // 이미지 업데이트 콜백 추가
+  const VoiceButton({Key? key, required this.updatedMessage, required this.memory, required this.updatedImage})
+      : super(key: key);
 
   @override
   State<VoiceButton> createState() => _VoiceButtonState();
@@ -287,9 +303,25 @@ class _VoiceButtonState extends State<VoiceButton> {
     }
   }
 
-  // API가 응답할 때 호출되는 함수
+  // API가 응답할 때 호출되는 함수 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
   void _onApiResponse(String response) {
     setState(() {
+      List<List<String>> emotionLists = [AngryMsg, CalmMsg, FunnyMsg, HmmMsg, ShyMsg, SurprisedMsg];
+      // 응답 메시지에 따른 이미지 변화 확인
+      for (int i = 0; i < emotionLists.length; i++) {
+        for (String emotion in emotionLists[i]) {
+          print(emotion);
+          if (response.contains(emotion)) {
+            // 해당 감정에 해당하는 이미지 표시
+            print("챗봇 응답이 ${emotion}을 포함함!!!!!!!!!");
+            _showEmotionImage(i);
+            return;
+          }
+        }
+      }
+      // 모든 감정 리스트에 해당하지 않으면 기본 이미지 표시
+      _showEmotionImage(-1);
+
       // 대화 리스트에 API 응답 메시지 추가
       chatMessages.add(ChatMessage(
         sender: 'ATTI',
@@ -297,6 +329,35 @@ class _VoiceButtonState extends State<VoiceButton> {
         date: DateTime.now(),
       ));
       printChatMessages();
+
+    });
+  }
+
+  void _showEmotionImage(int index) {
+    setState(() {
+      switch(index) {
+        case 0: // AngryMsg
+          widget.updatedImage('lib/assets/Atti/Angry.png');
+          break;
+        case 1: // CalmMsg
+          widget.updatedImage('lib/assets/Atti/Calm.png');
+          break;
+        case 2: // FunnyMsg
+          widget.updatedImage('lib/assets/Atti/Funny.png');
+          break;
+        case 3: // HmmMsg
+          widget.updatedImage('lib/assets/Atti/Hmm.png');
+          break;
+        case 4: // ShyMsg
+          widget.updatedImage('lib/assets/Atti/Shy.png');
+          break;
+        case 5: // SurprisedMsg
+          widget.updatedImage('lib/assets/Atti/Surprised.png');
+          break;
+        default:
+          widget.updatedImage('lib/assets/Atti/Normal.png'); // 기본 이미지
+          break;
+      }
     });
   }
 
