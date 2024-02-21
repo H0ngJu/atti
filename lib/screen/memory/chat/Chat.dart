@@ -221,6 +221,7 @@ class _VoiceButtonState extends State<VoiceButton> {
               _isListening = false;
             });
           }
+
         },
       );
     } else {
@@ -310,10 +311,9 @@ class _VoiceButtonState extends State<VoiceButton> {
       // 응답 메시지에 따른 이미지 변화 확인
       for (int i = 0; i < emotionLists.length; i++) {
         for (String emotion in emotionLists[i]) {
-          print(emotion);
           if (response.contains(emotion)) {
             // 해당 감정에 해당하는 이미지 표시
-            print("챗봇 응답이 ${emotion}을 포함함!!!!!!!!!");
+            //print("챗봇 응답이 ${emotion}을 포함함!!!!!!!!!");
             _showEmotionImage(i);
             return;
           }
