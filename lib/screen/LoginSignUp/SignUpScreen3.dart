@@ -440,8 +440,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                       .where('isPatient', isEqualTo: true)
                                       .get();
                                   if (snapshot.docs.length > 0) {
-                                    DocumentSnapshot document = snapshot.docs[0];
-                                    patientDocId = await (document.data() as Map<String, dynamic>)["userId"];
+                                    patientDocId = snapshot.docs[0].reference.id;
                                   } else {
                                     print('일치하는 피보호자가 없습니다');
                                     throw ("일치하는 피보호자가 없습니다");

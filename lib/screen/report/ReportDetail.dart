@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:timelines/timelines.dart';
+
+import '../../commons/RoutineBox.dart';
+import '../../commons/RoutineModal.dart';
 
 class ReportDetail extends StatelessWidget {
   const ReportDetail({Key? key}) : super(key: key);
@@ -25,7 +29,7 @@ class ReportDetail extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '1월 3주차',
+                          '2월 3주차',
                           style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                         ),
@@ -58,8 +62,8 @@ class ReportDetail extends StatelessWidget {
                 Divider(),
                 MemoryInfo(),
                 Divider(),
-                EmotionInfo(),
-                Divider(),
+                // EmotionInfo(),
+                // Divider(),
                 MostViewMemory()
               ],
             ),
@@ -73,6 +77,22 @@ class RoutineInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> unfinishedRoutineDummy = [
+      {
+        "date": '2월 12일 월요일',
+        "time": [8, 20],
+        "img" : 'https://thumbnews.nateimg.co.kr/view610///news.nateimg.co.kr/orgImg/hr/2022/01/21/20220121000202_0.jpg',
+        "name" : "산책하기",
+        "days" : ["월","수","금"]
+      },
+      {
+        "date": '2월 15일 목요일',
+        "time": [10, 00],
+        "img" : 'https://thumbnews.nateimg.co.kr/view610///news.nateimg.co.kr/orgImg/hr/2022/01/21/20220121000202_0.jpg',
+        "name" : "치매안심센터 방문",
+        "days" : ["화","목"]
+      }
+    ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -82,9 +102,71 @@ class RoutineInfo extends StatelessWidget {
           style: TextStyle(fontSize: 24),
         ),
         Text(
-          'n개의 일과를 완료하지 못했어요.',
+          '2개의 일과를 완료하지 못했어요.',
           style: TextStyle(fontSize: 20, color: Color(0xffA38130)),
         ),
+
+        Container(
+          height:  MediaQuery.of(context).size.height * 0.58 * 2,
+          width: MediaQuery.of(context).size.width * 0.9,
+          child: TimelineTheme(
+            data: TimelineThemeData(
+                nodePosition: 0,
+                indicatorPosition: 0,
+                color: Color(0xffFFC215),
+                connectorTheme: ConnectorThemeData(
+                    color: Color(0xff9C9C9C), indent: 5, thickness: 1.5),
+                indicatorTheme: IndicatorThemeData(
+                  size: 17,
+                )),
+            child: Timeline.tileBuilder(
+              builder: TimelineTileBuilder.connectedFromStyle(
+                indicatorStyleBuilder: (context, index) {
+                  return IndicatorStyle.outlined;
+                },
+                //connectorStyle: ConnectorStyle.dashedLine,
+                connectorStyleBuilder: (context, index) =>
+                    ConnectorStyle.dashedLine,
+                lastConnectorStyle: ConnectorStyle.dashedLine,
+                contentsAlign: ContentsAlign.basic,
+                //indicatorStyle: IndicatorStyle.dot,
+                contentsBuilder: (context, index) => Padding(
+                  padding:
+                      const EdgeInsets.only(left: 15, right: 15, bottom: 20),
+                  // 각 타임라인 타일
+                  child: GestureDetector(
+                    onTap: () {
+                      // 타일 클릭 시 모달창
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(unfinishedRoutineDummy[index]["date"],
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: Color(0xff737373),
+                            fontSize: 18,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        RoutineBox(
+                          time: unfinishedRoutineDummy[index]["time"],
+                          img: unfinishedRoutineDummy[index]["img"],
+                          name: unfinishedRoutineDummy[index]["name"],
+                          days: unfinishedRoutineDummy[index]["days"],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                itemCount: 2,
+              ),
+              physics: NeverScrollableScrollPhysics(), // 타임라인 빌더 내 스크롤 막기
+            ),
+          ),
+        )
       ],
     );
   }
@@ -237,13 +319,21 @@ class MostViewMemory extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              '기억 회상 감정기록',
+              '기억 회상 조회수',
               style: TextStyle(fontSize: 24),
             ),
             Text(
-              '최근 7일간 아띠와의 회상 대화에서 이러한 감정을 느끼고 있어요.',
+              '최근 7일간 가장 자주 조회한 기억 회상은 다음과 같아요.',
               style: TextStyle(fontSize: 20, color: Color(0xffA38130)),
             ),
+            // Text(
+            //   '기억 회상 감정기록',
+            //   style: TextStyle(fontSize: 24),
+            // ),
+            // Text(
+            //   '최근 7일간 아띠와의 회상 대화에서 이러한 감정을 느끼고 있어요.',
+            //   style: TextStyle(fontSize: 20, color: Color(0xffA38130)),
+            // ),
             Container(
               margin: EdgeInsets.only(top: 16),
               decoration: BoxDecoration(
