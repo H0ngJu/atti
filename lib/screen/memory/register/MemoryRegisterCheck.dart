@@ -56,7 +56,9 @@ class _MemoryRegisterCheckState extends State<MemoryRegisterCheck> {
                   alignment: Alignment.centerLeft,
                   constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.35),
                   width: MediaQuery.of(context).size.width * 0.9,
-                  child: Image.file(File(memoryNoteController.memoryNote.value.img!)), // 컨트롤러에 저장해둔 이미지 띄우기
+                  child: memoryNoteController.memoryNote.value.img != null
+                      ? Image.file(File(memoryNoteController.memoryNote.value.img!))
+                      : SizedBox(), // 널일 경우 대체할 위젯 설정
                 ),
                 SizedBox(height: 30,),
                 Container(

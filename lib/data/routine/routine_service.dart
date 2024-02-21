@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'dart:io';
 import '../auth_controller.dart';
+import 'dart:core';
 
 class RoutineService {
   final firestore = FirebaseFirestore.instance;
@@ -35,14 +36,58 @@ class RoutineService {
       routine.createdAt = Timestamp.now();
       routine.patientId = authController.patientDocRef;
 
+      // // 추가 *************************
+      routine.isFinished = createTimeMap(routine.repeatDays);
+      // // 추가 *************************
+
       DocumentReference docRef =
           await firestore.collection('routine').add(routine.toJson());
       routine.reference = docRef;
       await docRef.update(routine.toJson());
     } catch (e) {
-      print('Error adding schedule : $e');
+      print('Error adding notification : $e!!!!!!!!!!!!!!!!!!');
     }
   }
+
+
+  Map<String, bool> createTimeMap(List<String>? days) {
+    Map<String, bool> timeMap = {};
+    DateTime now = DateTime.now();
+    DateTime oneYearFromNow = DateTime(now.year + 1, now.month, now.day);
+    if (days != null) {
+      for (var i = 0; i < 30; i++) {
+        DateTime date = DateTime(now.year, now.month, now.day + i);
+        String dayOfWeek = getDayOfWeek(date.weekday);
+
+        if (days.contains(dayOfWeek) && date.isBefore(oneYearFromNow)) {
+          timeMap[DateTime(date.year, date.month, date.day).toString()] = false;
+        }
+      }
+    }
+    return timeMap;
+  }
+
+  String getDayOfWeek(int weekday) {
+    switch (weekday) {
+      case 1:
+        return '월';
+      case 2:
+        return '화';
+      case 3:
+        return '수';
+      case 4:
+        return '목';
+      case 5:
+        return '금';
+      case 6:
+        return '토';
+      case 7:
+        return '일';
+      default:
+        return '';
+    }
+  }
+
 
   // 특정 요일의 루틴 가져오기
   Future<List<RoutineModel>> getRoutinesByDay(String day) async {
@@ -82,22 +127,23 @@ class RoutineService {
   Future<void> completeRoutine(DocumentReference docRef, DateTime date) async {
     try {
       // 도큐먼트 가져오기
-      DocumentSnapshot snapshot = await docRef.get();
+      DocumentSnapshot<Object?> snapshot = await docRef.get();
 
       Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
 
       if (data != null && data.containsKey('isFinished')) {
-        if (data['isFinished'] is List<dynamic>) { // List<String> 대신 List<dynamic>을 확인합니다.
-          List<dynamic> finishedDates = List<dynamic>.from(data['isFinished']!);
+        if (data['isFinished'] is Map<String, dynamic>) { // 맵 형태인지 확인합니다.
+          Map<String, dynamic> finishedMap = Map<String, dynamic>.from(data['isFinished']!);
 
-          finishedDates.add(date.toString());
+          String dateString = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} 00:00:00.000';
+          //String dateString = DateTime(date.year, date.month, date.day).toString();
 
-          Map<String, dynamic> updateData = {'isFinished': finishedDates};
-          await docRef.update(updateData);
+          finishedMap[dateString] = true;
+          await docRef.update({'isFinished': finishedMap});
 
           print('Routine completed successfully!');
         } else {
-          print('Error completing routine: isFinished field is not of type List<dynamic>.');
+          print('Error completing routine: isFinished field is not of type Map<String, dynamic>.');
         }
       } else {
         print('Error completing routine: isFinished field does not exist or is null.');
@@ -106,7 +152,4 @@ class RoutineService {
       print('Error completing routine: $e');
     }
   }
-
-
-
 }

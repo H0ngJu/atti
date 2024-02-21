@@ -1,3 +1,4 @@
+import 'package:atti/data/notification/notification_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +7,8 @@ import '../screen/routine/RoutineFinish.dart';
 import '../screen/schedule/finish/ScheduleFinish1.dart';
 
 class RoutineModal extends StatelessWidget {
+  final Function onCompleted; // 콜백 함수 추가
+
   const RoutineModal({
     super.key,
     required this.days,
@@ -13,7 +16,8 @@ class RoutineModal extends StatelessWidget {
     required this.img,
     required this.name,
     required this.docRef,
-    required this.date
+    required this.date,
+    required this.onCompleted,
   });
 
   final List<String> days;
@@ -98,24 +102,35 @@ class RoutineModal extends StatelessWidget {
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
-            Container(
-              margin: EdgeInsets.only(bottom: 20),
-              child: TextButton(
-                onPressed: () async {
-                  await RoutineService().completeRoutine(docRef, date);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RoutineFinish(name: '\'${name}\'\n일과를 완료했어요!')),
-                  );
-                },
-                child: Text('하루 일과 완료하기', style: TextStyle(color: Colors.white, fontSize: 20),),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
-                  minimumSize: MaterialStateProperty.all(
-                      Size(MediaQuery.of(context).size.width * 0.8, 50)),
+
+            if (authController.isPatient)
+              Container(
+                margin: EdgeInsets.only(bottom: 20),
+                child: TextButton(
+                  onPressed: () async {
+                    await RoutineService().completeRoutine(docRef, date);
+                    await addNotification(
+                        '하루 일과 알림',
+                        '${authController.userName}님이 \'${name}\' 일과를 완료하셨어요!',
+                        DateTime.now(),
+                        false);
+
+                    onCompleted(); // 콜백함수 추가
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RoutineFinish(name: '\'${name}\'\n일과를 완료했어요!')),
+                    );
+                  },
+                  child: Text('하루 일과 완료하기', style: TextStyle(color: Colors.white, fontSize: 20),),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
+                    minimumSize: MaterialStateProperty.all(
+                        Size(MediaQuery.of(context).size.width * 0.8, 50)),
+                  ),
                 ),
               ),
-            ),
+
           ],
         ),
       ),

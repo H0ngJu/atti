@@ -1,6 +1,10 @@
 import 'package:atti/commons/SimpleAppBar.dart';
+import 'package:atti/data/memory/chatController.dart';
+import 'package:atti/data/memory/memory_note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:convert';
+
 
 class Message {
   final String sender;
@@ -8,64 +12,79 @@ class Message {
   final DateTime? date;
 
   Message({required this.sender, required this.text, required this.date});
+
+  // Map을 Message로 변환
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      sender: json['sender'],
+      text: json['text'],
+      date: DateTime.parse(json['date']),
+    );
+  }
+  static Future<List<Message>> getMessage(String path) async {
+    String chatString = await ChatController.getChat(path);
+    chatString = "[" + chatString + "]";
+    List<dynamic> chatList = jsonDecode(chatString);
+    List<Message> chat = chatList.map((json) => Message.fromJson(json)).toList();
+    return chat;
+  }
 }
 
 class ChatHistory extends StatelessWidget {
-  final List<Message> messages = [
-    Message(sender: 'I', text: '어떤 기억인가요?', date: DateTime.now().subtract(Duration(days: 3))),
-    Message(sender: 'Atti', text: '손자, 돌잔치, 최새돌이 기억 키워드로 저장되었어요', date: DateTime.now()),
-    Message(sender: 'I', text: '우리 손자 최세돌이 태어난지 1년이 되어 돌잔치를 했어',date: DateTime.now().subtract(Duration(days: 1))),
-    Message(sender: 'Atti', text: '그렇군요! 기쁘셨겠어요!\n어떤 감정이셨나요?',date: DateTime.now()),
-    Message(sender: 'I', text: '신비로운 느낌',date: DateTime.now()),
-    Message(sender: 'I', text: '우리 손자 너무 귀엽지',date: DateTime.now()),
-    Message(sender: 'I', text: '우리 손자 너무 귀엽지',date: DateTime.now()),
-    Message(sender: 'I', text: '우리 손자 너무 귀엽지',date: DateTime.now()),
-    Message(sender: 'I', text: '우리 손자 너무 귀엽지',date: DateTime.now()),
-    Message(sender: 'I', text: '우리 손자 너무 귀엽지',date: DateTime.now()),
-    Message(sender: 'I', text: '우리 손자 너무 귀엽지',date: DateTime.now()),
-  ];
+  final MemoryNoteModel memory;
 
-  //const ChatHistory({Key? key}) : super(key: key);
+  const ChatHistory({Key? key, required this.memory}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: SimpleAppBar(
-          title: '아띠와 회상 대화 기록',
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
+    return FutureBuilder<List<Message>>(
+      future: Message.getMessage(memory.reference!.path),
+      builder: (BuildContext context, AsyncSnapshot<List<Message>> snapshot) {
+        if (snapshot.hasData) {
+          List<Message> messages = snapshot.data!;
+          return Scaffold(
+            appBar: SimpleAppBar(
+              title: '아띠와 회상 대화 기록',
+            ),
+            body: SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      '2010년대',
-                      style: TextStyle(fontSize: 24),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${memory.era}년대',
+                          style: TextStyle(fontSize: 24),
+                        ),
+                        Text(
+                          '\'${memory.imgTitle}\' 기억',
+                          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                    Text(
-                      '\'돌잔치\' 기억',
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                    )
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: messages.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ChatMessage(message: messages[index], messages: messages);
+                      },
+                    ),
                   ],
                 ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: messages.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ChatMessage(message: messages[index], messages: messages);
-                  },
-                ),
-              ],
+              ),
             ),
-          ),
-        ));
+          );
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error}");
+        }
+        return CircularProgressIndicator();
+      },
+    );
   }
 }
 
@@ -121,7 +140,7 @@ class ChatMessage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: Text(
-                message.text,
+                message.text, // 메시지 출력
                 style: TextStyle(fontSize: 16.0),
               ),
             ),

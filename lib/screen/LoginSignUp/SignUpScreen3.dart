@@ -34,6 +34,14 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
   DateTime userBirthDate = DateTime.now();
   String formattedDate = "연도 / 월 / 일을 선택해 주세요";
   int isPressed = 0;
+  bool _isButtonDisabled = true;
+
+  void updateButtonStatus() {
+    setState(() {
+      _isButtonDisabled = ((signUpController.isPatient == true) && (userName.length < 2 || formattedDate == "연도 / 월 / 일을 선택해 주세요" || userPhoneNumber.length < 10)) ||
+          ((signUpController.isPatient == false) && (userName.length < 2 || userPhoneNumber.length < 10 || !userPatientEmail.contains('@') || !userPatientEmail.contains('.')));
+    });
+  }
 
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
@@ -61,12 +69,17 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
 
   void _openDatePicker(BuildContext context) {
     BottomPicker.date(
+      minDateTime: DateTime(1900),
       title: '생년월일을 입력해 주세요',
+      titleStyle: TextStyle(
+        fontSize: 24, fontWeight: FontWeight.normal,
+      ),
       dateOrder: DatePickerDateOrder.ymd,
       pickerTextStyle: const TextStyle(
         color: Colors.black,
         fontSize: 24,
       ),
+      displayCloseIcon: false,
       onSubmit: (value) {
         if (value != null) {
           signUpController.userBirthDate = value; // check
@@ -76,12 +89,26 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
           });
         }
       },
+      buttonContent: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 10,
+        ),
+        child: Text('선택', style: TextStyle(
+            color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),
+        textAlign: TextAlign.center,),
+      ),
       bottomPickerTheme: BottomPickerTheme.plumPlate,
+      buttonStyle: BoxDecoration(
+        color: Color(0xffFFC215),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      buttonWidth: MediaQuery.of(context).size.width * 0.5,
     ).show(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    updateButtonStatus();
     double height = MediaQuery
         .of(context)
         .size
@@ -124,7 +151,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                               ),),
                             Container(
                               margin: EdgeInsets.only(top: height*0.01),
-                              padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 5.0),
+                              padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 15.0),
                               decoration: BoxDecoration(
                                 color: colorPallet.yellow,
                                 borderRadius: BorderRadius.circular(15.0),
@@ -158,7 +185,8 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                     hintText: "이름을 입력해주세요",
                                     hintStyle: TextStyle(
                                         fontSize: 24,
-                                        color: colorPallet.textColor
+                                        color: colorPallet.textColor,
+                                      fontWeight: FontWeight.normal
                                     ),
                                   )
                               ),
@@ -215,6 +243,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                   style: TextStyle(
                                     fontSize: 24,
                                     color: formattedDate == "연도 / 월 / 일을 선택해 주세요" ? colorPallet.textColor : Colors.black,
+                                    fontWeight: FontWeight.normal
                                   ),
                                 ),
                               ),
@@ -234,7 +263,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                               ),),
                             Container(
                               margin: EdgeInsets.only(top: height*0.01),
-                              padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 5.0),
+                              padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 15.0),
                               decoration: BoxDecoration(
                                 color: colorPallet.yellow,
                                 borderRadius: BorderRadius.circular(15.0),
@@ -266,6 +295,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                   hintStyle: TextStyle(
                                       fontSize: 24,
                                       color: colorPallet.textColor,
+                                    fontWeight: FontWeight.normal
                                   ),
                                 ),
                                 onSaved: (value) {
@@ -400,7 +430,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                       SizedBox(height: height * 0.1,),
                       Container(
                         child: ElevatedButton(
-                            onPressed: () async {
+                            onPressed: _isButtonDisabled ? null : () async {
                               _tryValidation();
                               try {
                                 if (!signUpController.isPatient.value) {
@@ -410,8 +440,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                       .where('isPatient', isEqualTo: true)
                                       .get();
                                   if (snapshot.docs.length > 0) {
-                                    DocumentSnapshot document = snapshot.docs[0];
-                                    patientDocId = await (document.data() as Map<String, dynamic>)["userId"];
+                                    patientDocId = snapshot.docs[0].reference.id;
                                   } else {
                                     print('일치하는 피보호자가 없습니다');
                                     throw ("일치하는 피보호자가 없습니다");
@@ -506,8 +535,9 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                 );
                               }
                             },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: colorPallet.lightYellow,
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                _isButtonDisabled ? colorPallet.lightYellow : colorPallet.goldYellow,)
                             ),
                             child: Container(
                                 width: 350,
@@ -516,7 +546,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                 child: Text('가입하기',
                                     style: TextStyle(
                                       fontSize: 24,
-                                      color: colorPallet.textColor,
+                                      color: _isButtonDisabled ? colorPallet.textColor : Colors.white,
                                       fontWeight: FontWeight.bold,
                                     )
                                 )

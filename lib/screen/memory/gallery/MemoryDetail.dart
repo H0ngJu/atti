@@ -1,3 +1,4 @@
+import 'package:atti/data/notification/notification_controller.dart';
 import 'package:atti/data/report/viewsController.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/commons/SimpleAppBar.dart';
@@ -10,8 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../../data/memory/memory_note_model.dart';
+
 class MemoryDetail extends StatelessWidget {
-  const MemoryDetail({Key? key}) : super(key: key);
+  final MemoryNoteModel memory;
+  const MemoryDetail({Key? key, required this.memory}) : super(key: key);
 
   Widget MemoryDetailTitle() {
     return Row(
@@ -22,11 +26,11 @@ class MemoryDetail extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                '2010년대',
+                '${memory.era}년대',
                 style: TextStyle(fontSize: 24),
               ),
               Text(
-                '\'돌잔치\' 기억',
+                '\'${memory.imgTitle}\' 기억',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               )
             ]),
@@ -67,14 +71,14 @@ class MemoryDetail extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(30),
                       child: Image.network(
-                        'https://newsimg-hams.hankookilbo.com/2022/05/08/f5107e5a-7266-4132-9550-8713162df25a.jpg',
+                        '${memory.img}',
                         fit: BoxFit.cover,
                         width: MediaQuery.of(context).size.width * 0.9,
                         height: MediaQuery.of(context).size.height * 0.4,
                       ),
                     ),
                   ),
-                  MemoryWords(),
+                  MemoryWords(memory: memory),
                 ]),
                 //),
                 SizedBox(
@@ -84,7 +88,7 @@ class MemoryDetail extends StatelessWidget {
                     width: MediaQuery.of(context).size.width * 0.9,
                     height: 60,
                     child: ElevatedButton(
-                        onPressed: () {Get.to(Chat());},
+                        onPressed: () {Get.to(Chat(memory: memory));},
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xffFFC215)),
                         child: Text(
@@ -100,28 +104,31 @@ class MemoryDetail extends StatelessWidget {
 
 //기억 단어 보기 widget (stful)
 class MemoryWords extends StatefulWidget {
-  const MemoryWords({Key? key}) : super(key: key);
+  final MemoryNoteModel memory;
+
+  const MemoryWords({Key? key, required this.memory}) : super(key: key);
 
   @override
   State<MemoryWords> createState() => _MemoryWordsState();
 }
 
 class _MemoryWordsState extends State<MemoryWords> {
-  // ***************추가**********************
   final _authentication = FirebaseAuth.instance;
-  ViewsController _viewsController = ViewsController(
-    FirebaseFirestore.instance.doc("user/amKtw31nCNJUmOAhAaWU"),
-    FirebaseFirestore.instance.doc("memoryNote/2tjn2WipDfiliDnSASWQ"),
-  );
+  late ViewsController _viewsController;
+  late DocumentReference memoryReferencePath;
 
   @override
   void initState() {
     super.initState();
-    _viewsController.addViews(_authentication.currentUser as User);
+    memoryReferencePath = widget.memory.reference!;
+    _viewsController = ViewsController(
+      memoryReferencePath,
+    );
+    _viewsController.addViews();
+    tagList.addAll(widget.memory.keyword ?? []);
   }
-  // ***************추가**********************
 
-  final List<String> tagList = ['돌잔치', '손자', '2010', 'ddddd', 'ddddd'];
+  final List<String> tagList = [];
   bool isExpanded = false;
 
   void toggleExpand() {

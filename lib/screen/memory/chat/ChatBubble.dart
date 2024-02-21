@@ -25,7 +25,7 @@ class _ChatBubbleState extends State<ChatBubble> {
     super.initState();
     flutterTts.setLanguage("ko-KR");
     flutterTts.setPitch(1);
-    _speakMessage(widget.message); // Speak initial message
+    //_speakMessage(widget.message); // Speak initial message
   }
 
   // message tts 읽기

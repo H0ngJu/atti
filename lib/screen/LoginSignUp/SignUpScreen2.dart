@@ -1,4 +1,5 @@
 import 'package:atti/commons/DetailPageTitle.dart';
+import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/data/SignUpController.dart';
 import 'package:atti/screen/LogInSignUp/SignUpScreen3.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class SignUpScreen2 extends StatefulWidget {
 }
 
 class _SignUpScreen2State extends State<SignUpScreen2> {
+  ColorPallet _colorPallet = ColorPallet();
   final SignUpController signUpController = Get.put(SignUpController());
   final _formKey = GlobalKey<FormState>();
   String userId = "";
@@ -268,7 +270,10 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                       SizedBox(height: height*0.05),
                       Container(
                         child: ElevatedButton(
-                            onPressed: () async {
+                            onPressed: !userId.contains('@') || !userId.contains('.') ||
+                                userPw.length <6 || userPw != userPwCheck ||
+                                userPwCheck.length < 6
+                                ? null : () async {
                               _tryValidation();
                               try {
                                 Navigator.push(
@@ -296,8 +301,11 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                                 );
                               }
                             },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xffFFF5DB),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                              !userId.contains('@') || !userId.contains('.') ||
+                                  userPw.length <6 || userPw != userPwCheck ||
+                                  userPwCheck.length < 6 ? _colorPallet.lightYellow : _colorPallet.goldYellow,)
                             ),
                             child: Container(
                                 width: 350,
@@ -306,7 +314,9 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                                 child: Text('다음',
                                     style: TextStyle(
                                       fontSize: 24,
-                                      color: boxFocusedColor,
+                                      color: !userId.contains('@') || !userId.contains('.') ||
+                                          userPw.length <6 || userPw != userPwCheck ||
+                                          userPwCheck.length < 6 ? _colorPallet.textColor : Colors.white,
                                       fontWeight: FontWeight.bold,
                                     )
                                 )

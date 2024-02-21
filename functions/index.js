@@ -18,13 +18,12 @@ admin.initializeApp();
 //const MAX_CONCURRENT = 3;
 
 exports.weeklyReport = onSchedule({
-    schedule: 'every sunday 02:30',
+    schedule: 'every sunday 17:40',
     region: "asia-northeast3",
     timeZone: 'Asia/Seoul'}, (async (event) => {
     // 모든 userId를 가져옵니다
     const userSnapshot = await admin.firestore().collection('user').where('isPatient', '==', true).get();
-    const userIds = userSnapshot.docs.map(doc => doc.reference);
-
+    const userIds = userSnapshot.docs.map(doc => doc.reference.path);
     // 각 userId에 대해 처리를 수행합니다
     for (const userId of userIds) {
         // 지난 월요일과 다음 일요일의 날짜를 가져옵니다

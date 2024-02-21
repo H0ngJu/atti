@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../data/notification/notification_controller.dart';
 import '../data/schedule/schedule_service.dart';
 import '../screen/schedule/finish/ScheduleFinish1.dart';
 
@@ -18,7 +19,7 @@ class ScheduleModal extends StatelessWidget {
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.zero,
       content: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.7,
+        height: MediaQuery.of(context).size.height * 0.74,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -30,6 +31,8 @@ class ScheduleModal extends StatelessWidget {
                   Navigator.pop(context);
                 }, icon: Icon(Icons.close, color: Color(0xffB8B8B8),),
                   padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(),
+                  visualDensity: VisualDensity.compact,
                 )
               ],
             ),
@@ -87,7 +90,7 @@ class ScheduleModal extends StatelessWidget {
             SizedBox(height: 5,),
             Container(
               width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.18,
+              height: MediaQuery.of(context).size.height * 0.14,
               padding: EdgeInsets.only(top:10, left: 15),
               decoration: BoxDecoration(
                   color: Color(0xffFFF5DB),
@@ -102,24 +105,30 @@ class ScheduleModal extends StatelessWidget {
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.04,),
 
-            Container(
-              margin: EdgeInsets.only(bottom: 20),
-              child: TextButton(
-                onPressed: () async {
-                  await ScheduleService().completeSchedule(docRef);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ScheduleFinish1(name: name)),
-                  );
-                },
-                child: Text('일정 완료하기', style: TextStyle(color: Colors.white, fontSize: 20),),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
-                  minimumSize: MaterialStateProperty.all(
-                      Size(MediaQuery.of(context).size.width * 0.8, 50)),
+            if (authController.isPatient)
+              Container(
+                margin: EdgeInsets.only(bottom: 20),
+                child: TextButton(
+                  onPressed: () async {
+                    await ScheduleService().completeSchedule(docRef);
+                    await addNotification(
+                        '일정 알림',
+                        '${authController.userName}님이 \'${name}\' 일정을 완료하셨어요!',
+                        DateTime.now(),
+                        false);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ScheduleFinish1(name: name)),
+                    );
+                  },
+                  child: Text('일정 완료하기', style: TextStyle(color: Colors.white, fontSize: 20),),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
+                    minimumSize: MaterialStateProperty.all(
+                        Size(MediaQuery.of(context).size.width * 0.8, 50)),
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),
