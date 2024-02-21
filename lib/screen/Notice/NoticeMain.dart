@@ -189,7 +189,7 @@ class _TodayNoticeState extends State<TodayNotice> {
           itemCount: widget.notifications.length > 0 ? _visibleItemCount : 1,
           itemBuilder: (context, index) {
             if (widget.notifications.length > 0) {
-              return PastNoticeContainer(
+              return TodayNoticeContainer(
                   notifications: widget.notifications[index]);
             } else {
               return Center(
