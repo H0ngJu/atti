@@ -890,7 +890,7 @@ class _HomeRoutineState extends State<HomeRoutine> {
                     bool isFinished = routines.isFinished != null &&
                         routines.isFinished!.containsKey(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000') &&
                         routines.isFinished![_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000']!;
-                    print('${routines.isFinished}');
+                    //print('${routines.isFinished}');
                     return RoutineWidget(
                       time: formattedTime,
                       name: routines.name,
