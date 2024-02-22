@@ -13,10 +13,6 @@
 
 [[ATTI] - GDSC Solution Challenge 2024](https://www.youtube.com/watch?v=eCIppc-osqE)
 
-# 목차
-
----
-
 ---
 
 # How To Run
