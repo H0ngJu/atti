@@ -1,4 +1,5 @@
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/2114ca51-dc57-42c1-97ea-a9e0d486e641/Untitled.png)
+<img width="202" alt="Untitled" src="https://github.com/H0ngJu/atti/assets/106425326/19cf611b-308a-457a-b10b-380f2b6e4bdb">
+
 
 # ATTI
 
@@ -41,13 +42,15 @@ Here are the steps to download the Flutter app from https://github.com/H0ngJu/a
 
 ### **South Korea's super-aging population**
 
-![출처 : BBC NEWS 코리아](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/d58b98fd-a4db-43ba-9851-8e96c0db408c/Untitled.png)
+<img width="466" alt="Untitled1" src="https://github.com/H0ngJu/atti/assets/106425326/04a7d8a6-9610-4eea-88e1-858a8cb17585">
+
 
 출처 : BBC NEWS 코리아
 
 South Korea is currently in the midst of a rapid aging process. By 2024, South Korea will be an aging society with more than 14% of the population aged 65 and older, and by 2025, the proportion of seniors will soon exceed 20.8%.
 
-![출처 : KOSIS 국가통계포털 = 통계청](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/74b166ee-de4b-4242-8dd9-0137a6f59bed/Untitled.png)
+![출처 : KOSIS 국가통계포털 = 통계청]<img width="527" alt="Untitled2" src="https://github.com/H0ngJu/atti/assets/106425326/ae83e671-d286-4d18-b613-faf1417de992">
+
 
 출처 : KOSIS 국가통계포털 = 통계청
 
@@ -57,7 +60,8 @@ As South Korea's population ages, the incidence of dementia is rising rapidly. A
 
 South Korea is not alone in facing a growing number of dementia patients. According to the World Health Organization (WHO) in 2021, 55 million people are currently living with dementia due to brain-related diseases such as Alzheimer's or stroke. The WHO also projected that the number of people with dementia will continue to rise, reaching about 139 million by 2050.
 
-![출처 : WHO](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/6e39b506-27c9-4288-bdb1-61074c7ff1f6/Untitled.png)
+![출처 : WHO]<img width="927" alt="Untitled3" src="https://github.com/H0ngJu/atti/assets/106425326/9725c132-2a77-466b-917e-b42c2eb11b20">
+
 
 출처 : WHO
 
@@ -67,9 +71,11 @@ South Korea is not alone in facing a growing number of dementia patients. Accord
 
 ## User research
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/c8081e97-0a22-4c39-a1db-89fb6c89fc27/Untitled.png)
+<img width="201" alt="Untitled4" src="https://github.com/H0ngJu/atti/assets/106425326/e27bce6d-5fca-4b26-88b0-8c233fecec37">
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/7accdd1d-ec04-477b-b494-b8ab5826095b/Untitled.png)
+
+<img width="170" alt="Untitled5" src="https://github.com/H0ngJu/atti/assets/106425326/d496a89a-bdf9-423a-ae43-25fce76e867b">
+
 
 
 
