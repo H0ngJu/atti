@@ -5,11 +5,7 @@
 
 ---
 
-경증 치매 환자가 기억력 저하로 겪는 어려움인 ‘과거의 중요한 기억을 잊음’와 ‘일상 생활에서의 기억 소실’에 도움을 주는 솔루션을 제시한 프로젝트다. 치매 환자는 앱에서 만날 수 있는 챗봇 ‘아띠’를 통해 과거의 의미있는 기억을 회상하고 현재와 미래의 규칙적인 생활을 구축할 수 있다.
-
-- 영어
-    
-    The project proposes a solution to help people with mild dementia with memory decline, which is characterized by "forgetting important memories from the past" and "forgetting to remember things in everyday life". Through Ati, a chatbot that can be found in the app, dementia patients can **recall meaningful memories from the past and build a regular life in the present and future**.
+The project proposes a solution to help people with mild dementia with memory decline, which is characterized by "forgetting important memories from the past" and "forgetting to remember things in everyday life". Through Ati, a chatbot that can be found in the app, dementia patients can **recall meaningful memories from the past and build a regular life in the present and future**.
     
 
 [[ATTI] - GDSC Solution Challenge 2024](https://www.youtube.com/watch?v=eCIppc-osqE)
