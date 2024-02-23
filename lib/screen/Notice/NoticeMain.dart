@@ -28,12 +28,12 @@ class _NoticeMainState extends State<NoticeMain> {
   void fetchNotifications() async {
     try {
       // 현재 사용자의 UID 가져오기
-      String? userUid = authController.loggedUser;
+      DocumentReference? patientDocRef = authController.patientDocRef;
 
-      if (userUid != null) {
+      if (patientDocRef != null) {
         QuerySnapshot querySnapshot = await FirebaseFirestore.instance
             .collection('notification')
-            .where('uid', isEqualTo: userUid) // 현재 사용자의 UID로 필터링
+            .where('patientDocRef', isEqualTo: patientDocRef) // 현재 사용자의 UID로 필터링
             .where('isPatient', isEqualTo: authController.isPatient)
             .get();
 

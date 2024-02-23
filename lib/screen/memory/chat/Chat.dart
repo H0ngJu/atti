@@ -91,11 +91,11 @@ class _ChatState extends State<Chat> {
                 children: [
                   Text(
                     '${widget.memory.era}년대',
-                    style: TextStyle(fontSize: 10),
+                    style: TextStyle(fontSize: 20),
                   ),
                   Text(
                     '\'${widget.memory.imgTitle}\' 기억',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   )
                 ],
               ),
