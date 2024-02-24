@@ -1,18 +1,18 @@
-<img width="202" alt="Untitled" src="https://github.com/H0ngJu/atti/assets/106425326/19cf611b-308a-457a-b10b-380f2b6e4bdb">
-
+<!--![Frame 8](https://github.com/H0ngJu/atti/assets/106425326/bf80130e-cc07-4d29-aed6-41065fd09180)-->
+<!--![Frame 10](https://github.com/H0ngJu/atti/assets/106425326/f199cb2e-57e0-4a84-b824-f33313eb2e35)-->
+![Frame 8](https://github.com/H0ngJu/atti/assets/106425326/574cbb35-5e7f-4e26-b7d0-ef19bc3cdd39)
 
 # ATTI
-
 ---
-
 The project proposes a solution to help people with mild dementia with memory decline, which is characterized by "forgetting important memories from the past" and "forgetting to remember things in everyday life". Through Ati, a chatbot that can be found in the app, dementia patients can **recall meaningful memories from the past and build a regular life in the present and future**.
     
 
-[[ATTI] - GDSC Solution Challenge 2024](https://www.youtube.com/watch?v=eCIppc-osqE)
+Youtube : [[ATTI] - GDSC Solution Challenge 2024](https://www.youtube.com/watch?v=eCIppc-osqE)
 
----
+
 
 # How To Run
+---
 
 Here are the steps to download the Flutter app from https://github.com/H0ngJu/atti and run it on Android Studio:
 
@@ -32,6 +32,18 @@ Here are the steps to download the Flutter app from https://github.com/H0ngJu/a
 6. Once Android Studio loads the project, select Run -> Run from the top menu.
 7. Select an emulator or connect a mobile device to run the app.
 
+---
+
+# Contents
+
+1. [Overview](#Overview)
+2. [Necessity](#Necessity)
+4. [UN SDGs](#UN_SDGs)
+5. [Skill](#Skill)
+6. [Screens](#Screens)
+7. [Expected Effect]
+8. [Closing](#Closing)
+   
 ---
 
 # Overview
@@ -72,25 +84,19 @@ South Korea is not alone in facing a growing number of dementia patients. Accord
 
 <img width="170" alt="Untitled5" src="https://github.com/H0ngJu/atti/assets/106425326/d496a89a-bdf9-423a-ae43-25fce76e867b">
 
+---
+
 # UN SDGs 3
 
-![Untitled]([https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/eb28e88b-c675-48cd-b264-7f945f0b0f68/Untitled.png](https://cdn.imweb.me/upload/S202108243f92708905182/af6401c8a0536.jpg))
+![Untitled](https://cdn.imweb.me/upload/S202108243f92708905182/af6401c8a0536.jpg)
 
 ---
 
 # Skill
 
-Firebase
-
-![Untitled]([https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/22b553a5-89b7-4912-8951-90323c8dea96/Untitled.png](https://upload.wikimedia.org/wikipedia/commons/b/bd/Firebase_Logo.png))
-
-Flutter
-
-![Untitled](https://modulabs.co.kr/wp-content/uploads/2023/06/flutter-logo-sharing.png)
-
-Gpt3.5 turbo API
-
-![Untitled](https://appmaster.io/api/_files/URQWqPJkzqvi98To3QGKnG/download/)
+|   Firebase   |    Flutter    |  Gpt3.5 turbo API  |
+|:------------:|:-------------:|:-------------:|
+|  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Firebase_Logo.svg/1280px-Firebase_Logo.svg.png" alt="Firebase Logo" width="200"> | <img src="https://modulabs.co.kr/wp-content/uploads/2023/06/flutter-logo-sharing.png" alt="Flutter Logo" width="200"> | <img src="https://appmaster.io/api/_files/URQWqPJkzqvi98To3QGKnG/download/" alt="GPT3.5 turbo API" width="200"> |
 
 ---
 
@@ -98,69 +104,58 @@ Gpt3.5 turbo API
 
 ### Home
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/4544272a-995e-4c9f-bebb-bdbe64b7dbf6/Untitled.png)
-
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/5975c200-4f9b-4f9a-9771-b998b998ca01/Untitled.png)
-
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/7d45618d-dd54-4fff-a4e2-90b22a2a10cb/Untitled.png)
-
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/07ce932b-f464-4c84-84e4-1bc04394ff0c/Untitled.png)
+| 1 | 2 | 3 | 4 |
+|---------|---------|---------|---------|
+| ![image](https://github.com/H0ngJu/atti/assets/106425326/468c3264-637b-4034-97e1-61bf3e03acab) | ![image](https://github.com/H0ngJu/atti/assets/106425326/1e5a83f8-9b55-4a83-8c57-20310823dc40) | ![image](https://github.com/H0ngJu/atti/assets/106425326/de71baff-87f1-48ed-8b99-bb5a9be1c2bc) | ![image](https://github.com/H0ngJu/atti/assets/106425326/0e2fc91c-ff90-47d7-bcbf-2622790082ab) |
 
 ### Memory Note
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/b935ff4d-a568-4ee7-aea2-69456eb9de41/Untitled.png)
+| 1 | 2 | 3 | 4 | 5 | 6 |
+|---------|---------|---------|---------|---------|---------|
+| ![image](https://github.com/H0ngJu/atti/assets/106425326/52c4b089-03a7-4782-9b6d-19e38e447ef8) | ![image](https://github.com/H0ngJu/atti/assets/106425326/cfee8a67-56e3-494a-911f-cfe3aded0127) | ![image](https://github.com/H0ngJu/atti/assets/106425326/f7a87ba5-1992-4c5d-959a-b1ffbcd251ec) | ![image](https://github.com/H0ngJu/atti/assets/106425326/7e1f8997-3a14-4d4f-94c8-521a6c570933) | ![image](https://github.com/H0ngJu/atti/assets/106425326/afbe55bd-a1be-44db-beb3-cc1a9f24b3f3) | ![image](https://github.com/H0ngJu/atti/assets/106425326/cab17a41-8ae3-4f9e-b2f3-db4e48c60bea) |
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/5aee6ce4-bcaf-4e3a-95af-fe38eb685bac/Untitled.png)
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/0df90114-6ffc-45e8-8dc3-1a46efb40333/Untitled.png)
-
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/23d50fab-2f9a-4769-a6c3-64a8e200ea77/Untitled.png)
-
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/c4210a02-05d1-473d-90ff-f1116cce9fbb/Untitled.png)
 
 ### Routine
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/92bbbfc3-1247-432b-9a8c-2f3d4cc38738/Untitled.png)
+| 1 | 2 |
+|---------|---------|
+| <img src="https://github.com/H0ngJu/atti/assets/106425326/cae55e78-065f-4fd4-b69f-b697e71de8fd" width="200"> | <img src="https://github.com/H0ngJu/atti/assets/106425326/c0e7e97d-66fc-40ad-a94f-7b1d9098c9e4" width="200"> |
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/49d91bc7-d5ea-4926-bdeb-93167c956381/Untitled.png)
 
 ### Schedule
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/7efb5d7e-ccb6-412d-a8ea-73b4b0804149/Untitled.png)
+| 1 | 2 |
+|---------|---------|
+| <img src="https://github.com/H0ngJu/atti/assets/106425326/10bee284-c706-4c71-bc9d-3c91c95d0bc8" width="200"> | <img src="https://github.com/H0ngJu/atti/assets/106425326/5e8bc055-d244-40c9-bf29-85b09487e88a" width="200"> |
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/cf24b4d9-9e5e-4977-816b-06f0f522010a/Untitled.png)
 
 ### Report
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/afb70ee0-2eed-41be-af46-0443ed8c9491/Untitled.png)
-
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/44e490b0-7eac-4c88-b4e8-ed1bcef3afe0/Untitled.png)
-
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/d24d5887-a47b-4479-9d42-4b066e0a8a94/Untitled.png)
+| 1 | 2 | 3 |
+|---------|---------|----------|
+| <img src="https://github.com/H0ngJu/atti/assets/106425326/e0c2444a-03dc-4ec9-8def-56bc164fad8c" width="200"> | <img src="https://github.com/H0ngJu/atti/assets/106425326/71a664dd-60cf-4dbb-9e79-60b87c341e95" width="200"> | <img src="https://github.com/H0ngJu/atti/assets/106425326/58cfc924-5135-4f7a-8574-02d09ce6265b" width="200"> |
 
 ### Alert
 
 ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/89f6249b-0bce-4203-b994-eb9ff18992ca/Untitled.png)
 
 
+---
 
+# Closing
 
+'The memories of the past are viewed.'
 
+'Today's memories are recorded for the future.'
 
+This app brings together the past, present, and future of people with dementia.
 
-# atti
+"Many people think that if you have dementia you have to live in a hopeless state, with no hope and no pleasure, but that's not the case." -Alzheimer's Society, UK
 
-A new Flutter project.
+While dementia has been identified as one of the negative aspects of living longer, it is possible to live well as the disease progresses with the right support from those around you.
 
-## Getting Started
+The 'ATTI' app connects people with dementia to their past, present, and future through positive memory recall, improving their psychological well-being and quality of life. 
 
-This project is a starting point for a Flutter application.
+We want to realize a future where dementia, which can strike anyone at any time, is not something to be feared, but something to be prepared for.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
