@@ -4,7 +4,7 @@
 
 # ATTI
 
-The project proposes a solution to help people with mild dementia with memory decline, which is characterized by "forgetting important memories from the past" and "forgetting to remember things in everyday life". Through Ati, a chatbot that can be found in the app, dementia patients can **recall meaningful memories from the past and build a regular life in the present and future**.
+The project proposes a solution to help people with mild dementia with memory decline, which is characterized by "forgetting important memories from the past" and "forgetting to remember things in everyday life". Through Atti, a voicebot that can be found in the app, dementia patients can **<u>recall meaningful memories from the past and build a regular life in the present and future</u>**.
     
 
 Youtube : [[ATTI] - GDSC Solution Challenge 2024](https://www.youtube.com/watch?v=eCIppc-osqE)
@@ -24,8 +24,8 @@ Here are the steps to download the Flutter app from https://github.com/H0ngJu/a
 5. Create an .env file under your project file and write it like this
     
     ```
-    GPT_API_KEY="{Your_API_KEY}"
-    OPEN_WEATHER_MAP_API_KEY="{Your_API_KEY}"
+    GPT_API_KEY="Your_OPENAI_API_KEY"
+    OPEN_WEATHER_MAP_API_KEY="Your_OpenWheatherMap_API_KEY"
     ```
     
 6. Once Android Studio loads the project, select Run -> Run from the top menu.
@@ -80,19 +80,21 @@ We spent about two weeks volunteering and conducting user research to understand
     <img height="300" alt="image" src="https://github.com/H0ngJu/atti/assets/106425326/56e9c722-3c85-4a94-ab69-3da96b2fd15f">
 </div>
 
-- First round of interviews
+- First Interview
     
-    After the desk research, during the process of proposing a solution, the question kept coming up again and again: would seniors with mild dementia be able to actively use ATTI? Therefore, the first round of interviews focused on understanding the communication skills, smartphone utilization, and functional needs of seniors with dementia.
+    After the desk research, during the process of proposing a solution, the question kept coming up again and again: would seniors with mild dementia be able to actively use ATTI? Therefore, the first interview focused on understanding their communication skills, smartphone utilization, and functional needs of seniors with dementia.
     
     1. Communication of seniors with mild dementia
         
         We found that the communication skills of the elderly with mild dementia were good: they were able to understand normal speech at a normal pace, even when the voice was not loud enough.
         
     2. Only one of the interviewees did not own a smartphone, confirming the value of ATTI as an application solution. In addition, Korean 60-somethings will be more proficient with smartphones in the future than today, so it will be more useful.
-    3. The interviewees were animated when they talked about pleasant memories of the past. They said that they often feel lonely because they have no one to talk to, and through the first interview, ATTI, a voice bot that reminisces about the past and evokes pleasant emotions, was born. 
+    3. The interviewees were animated when they talked about pleasant memories of the past. They said that they often feel lonely because they have no one to talk to, and through the first interview, ATTI, a voice bot that reminisces about the past and evokes pleasant emotions, was born.
+
+ 
 - Second Interview
     
-    The second round of interviews was conducted to help us refine the features of ATTI, the representative character and memory reminiscence voice bot, focusing on the question of how it could further strengthen the connection between patients and their caregivers.
+    The second interview was conducted to help us refine the features of ATTI, the representative character and memory reminiscence voice bot, focusing on the question of how it could further strengthen the connection between patients and their caregivers.
     
     1. We interviewed staff at dementia care centers and found that they were positive about the idea of a solution that relies on voice rather than text. However, we also received feedback from patient caregivers, many of whom are in their 60s and older, that the UX flow should be simplified rather than complicated.
     2. Elderly people with dementia responded positively to the memory recall and verbalization services. However, they tended to have some difficulty with the fact that they were using a smartphone app. Therefore, we tried to implement a user-friendly, large, easy-to-identify UI in warm colors and a simplified UX.
@@ -170,7 +172,7 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 - Improve emotional stability and quality of life
     - Memory notes can help patients maintain emotional stability by recalling and recording the past, and improve their quality of life through scheduling.
     - Patients' positive emotions can help alleviate the depression caused by dementia and bring a sense of psychological well-being.
-- Care of caregivers
+- Better care for patient
     - As Korea has become a nuclear family, many elderly households live apart from their children. Even if the caregivers are far away, they can manage the patient's schedule and keep track of the patient's condition.
     - This reduces stress and worry for the caregiver, and provides the patient with an environment where they can maintain their routine and control their life.
 - Increased communication and peace of mind
