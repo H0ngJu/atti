@@ -3,16 +3,15 @@
 ![Frame 8](https://github.com/H0ngJu/atti/assets/106425326/574cbb35-5e7f-4e26-b7d0-ef19bc3cdd39)
 
 # ATTI
----
+
 The project proposes a solution to help people with mild dementia with memory decline, which is characterized by "forgetting important memories from the past" and "forgetting to remember things in everyday life". Through Ati, a chatbot that can be found in the app, dementia patients can **recall meaningful memories from the past and build a regular life in the present and future**.
     
 
 Youtube : [[ATTI] - GDSC Solution Challenge 2024](https://www.youtube.com/watch?v=eCIppc-osqE)
 
-
+---
 
 # How To Run
----
 
 Here are the steps to download the Flutter app from https://github.com/H0ngJu/atti and run it on Android Studio:
 
@@ -41,58 +40,80 @@ Here are the steps to download the Flutter app from https://github.com/H0ngJu/a
 4. [UN SDGs](#UN_SDGs)
 5. [Skill](#Skill)
 6. [Screens](#Screens)
-7. [Expected Effect]
+7. [Expected Effect](#Expected_Effect)
 8. [Closing](#Closing)
    
 ---
 
 # Overview
 
-### **South Korea's super-aging population**
+## **South Korea's super-aging population**
 
 <img width="466" alt="Untitled1" src="https://github.com/H0ngJu/atti/assets/106425326/04a7d8a6-9610-4eea-88e1-858a8cb17585">
 
-
-출처 : BBC NEWS 코리아
+source : BBC NEWS Korea
 
 South Korea is currently in the midst of a rapid aging process. By 2024, South Korea will be an aging society with more than 14% of the population aged 65 and older, and by 2025, the proportion of seniors will soon exceed 20.8%.
 
-![출처 : KOSIS 국가통계포털 = 통계청]<img width="527" alt="Untitled2" src="https://github.com/H0ngJu/atti/assets/106425326/ae83e671-d286-4d18-b613-faf1417de992">
+<div style="text-align:center;"><img width="527" alt="Untitled2" src="https://github.com/H0ngJu/atti/assets/106425326/ae83e671-d286-4d18-b613-faf1417de992"></div>
 
-
-출처 : KOSIS 국가통계포털 = 통계청
+source : KOSIS 국가통계포털
 
 As South Korea's population ages, the incidence of dementia is rising rapidly. As of 2022, the number of dementia patients in Korea is estimated to be around 930,000, according to the Korea Dementia Center.
 
-### Increasing number of people with dementia Worldwide
+## Increasing number of people with dementia Worldwide
 
 South Korea is not alone in facing a growing number of dementia patients. According to the World Health Organization (WHO) in 2021, 55 million people are currently living with dementia due to brain-related diseases such as Alzheimer's or stroke. The WHO also projected that the number of people with dementia will continue to rise, reaching about 139 million by 2050.
 
-![출처 : WHO]<img width="927" alt="Untitled3" src="https://github.com/H0ngJu/atti/assets/106425326/9725c132-2a77-466b-917e-b42c2eb11b20">
+<img width="927" alt="Untitled3" src="https://github.com/H0ngJu/atti/assets/106425326/9725c132-2a77-466b-917e-b42c2eb11b20">
 
-
-출처 : WHO
+source : WHO
 
 ---
 
 # Necessity
 
 ## User research
+We spent about two weeks volunteering and conducting user research to understand the challenges of people with dementia, interviewing at the local dementia center twice during this period.
+<div style="display: flex; justify-content: center;">
+    <img height="300" alt="Untitled4" src="https://github.com/H0ngJu/atti/assets/106425326/e27bce6d-5fca-4b26-88b0-8c233fecec37">
+    <img height="300" alt="image" src="https://github.com/H0ngJu/atti/assets/106425326/56e9c722-3c85-4a94-ab69-3da96b2fd15f">
+</div>
 
-<img width="201" alt="Untitled4" src="https://github.com/H0ngJu/atti/assets/106425326/e27bce6d-5fca-4b26-88b0-8c233fecec37">
+- First round of interviews
+    
+    After the desk research, during the process of proposing a solution, the question kept coming up again and again: would seniors with mild dementia be able to actively use ATTI? Therefore, the first round of interviews focused on understanding the communication skills, smartphone utilization, and functional needs of seniors with dementia.
+    
+    1. Communication of seniors with mild dementia
+        
+        We found that the communication skills of the elderly with mild dementia were good: they were able to understand normal speech at a normal pace, even when the voice was not loud enough.
+        
+    2. Only one of the interviewees did not own a smartphone, confirming the value of ATTI as an application solution. In addition, Korean 60-somethings will be more proficient with smartphones in the future than today, so it will be more useful.
+    3. The interviewees were animated when they talked about pleasant memories of the past. They said that they often feel lonely because they have no one to talk to, and through the first interview, ATTI, a voice bot that reminisces about the past and evokes pleasant emotions, was born. 
+- Second Interview
+    
+    The second round of interviews was conducted to help us refine the features of ATTI, the representative character and memory reminiscence voice bot, focusing on the question of how it could further strengthen the connection between patients and their caregivers.
+    
+    1. We interviewed staff at dementia care centers and found that they were positive about the idea of a solution that relies on voice rather than text. However, we also received feedback from patient caregivers, many of whom are in their 60s and older, that the UX flow should be simplified rather than complicated.
+    2. Elderly people with dementia responded positively to the memory recall and verbalization services. However, they tended to have some difficulty with the fact that they were using a smartphone app. Therefore, we tried to implement a user-friendly, large, easy-to-identify UI in warm colors and a simplified UX.
 
+## Solution proposal
+To address the challenges faced by people with dementia, ATTI proposes an app to maintain quality of life and promote well-being for people with dementia. 
 
-<img width="170" alt="Untitled5" src="https://github.com/H0ngJu/atti/assets/106425326/d496a89a-bdf9-423a-ae43-25fce76e867b">
+ATTI is inspired by the "Memory Note", a dementia prevention information provided by the Seoul Dementia Center. The positive effects of a photo reminiscence program for older adults with dementia are shown in the following study.
+
+- According to 'The Effect of Digital Group Reminiscence Program for the Elderly with Mild Dementia' (2023), a digital reminiscence program for the elderly with mild dementia at a dementia day care center showed that the experimental group showed an increase in CIST (Cognitive Impairment Screening Test) results of 5 points out of 30 compared to the control group. In addition, according to the KGDS (Korean Form of Geriatric Depression Scale), both the experimental and control groups showed depressive symptoms with a pre-score of 8 or more, but the experimental group dropped to 6 points afterwards.
 
 ---
 
 # UN SDGs 3
 
-![Untitled](https://cdn.imweb.me/upload/S202108243f92708905182/af6401c8a0536.jpg)
+<img height="300" alt="image" src="https://cdn.imweb.me/upload/S202108243f92708905182/af6401c8a0536.jpg">
 
 ---
 
 # Skill
+
 
 |   Firebase   |    Flutter    |  Gpt3.5 turbo API  |
 |:------------:|:-------------:|:-------------:|
@@ -138,8 +159,23 @@ South Korea is not alone in facing a growing number of dementia patients. Accord
 
 ### Alert
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/1b31276c-d22e-4d55-b95d-ee063d938df3/89f6249b-0bce-4203-b994-eb9ff18992ca/Untitled.png)
+| 1 | 2 |
+|---------|---------|
+| <img src="https://github.com/H0ngJu/atti/assets/106425326/97cceef3-9073-4128-bd1d-53251f965d87" width="200"> | <img src="https://github.com/H0ngJu/atti/assets/106425326/f4948cb1-26af-484e-b9ff-dab81cc10a28" width="200"> |
 
+---
+
+# Expected Effect
+
+- Improve emotional stability and quality of life
+    - Memory notes can help patients maintain emotional stability by recalling and recording the past, and improve their quality of life through scheduling.
+    - Patients' positive emotions can help alleviate the depression caused by dementia and bring a sense of psychological well-being.
+- Care of caregivers
+    - As Korea has become a nuclear family, many elderly households live apart from their children. Even if the caregivers are far away, they can manage the patient's schedule and keep track of the patient's condition.
+    - This reduces stress and worry for the caregiver, and provides the patient with an environment where they can maintain their routine and control their life.
+- Increased communication and peace of mind
+    - Past reminiscences with A.I. allow patients to share a variety of stories, providing them with a new outlet for communication and preventing social isolation.
+    - By sharing and communicating their stories, they can maintain their sense of self and strengthen their social relationships.
 
 ---
 
