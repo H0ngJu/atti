@@ -46,7 +46,7 @@ List<String> FunnyMsg = ['안녕', '신나', '재미', '재밌,' '즐거', '행�
 List<String> HmmMsg = ['고민', '곰곰', '힘든', '힘들', ];  // 'lib/assets/Atti/Hmm.png'
 //List<String> NormalMsg = ['그렇군요', '군요', ]; // 'lib/assets/Atti/Normal.png'
 List<String> ShyMsg = ['걱정', '불안', '슬퍼', '슬프', '슬펐', '위로', '아프', '아파', '아팠', '우울'];  // 'lib/assets/Atti/Shy.png'
-List<String> SurprisedMsg = ['놀라', '놀랐', '깜짝', '신기', '대단', '멋지', '멋진', ];  // 'lib/assets/Atti/Surprised.png'
+List<String> SurprisedMsg = ['놀라', '놀랐', '깜짝', '신기', '대단', '멋지', '멋진', '특별',];  // 'lib/assets/Atti/Surprised.png'
 
 class Chat extends StatefulWidget {
   final MemoryNoteModel memory;
@@ -57,8 +57,8 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
-  String _currentMessage = '대화를 시작하려면 마이크 버튼을 누르세요'; // 내가 한 대화 (ChatBubble에 텍스트로 보이는 메시지)
-  //String _msgToVoice = '음성처리부분'; // TTS되는 메시지
+  String _currentMessage = '대화를 시작하려면 마이크 버튼을 누르세요'; // 내가 한 대화
+  //String _msgToVoice = '대화를 시작하려면 마이크 버튼을 누르세요'; // TTS되는 메시지
 
   final FlutterTts flutterTts = FlutterTts();
   String _currentImage = 'lib/assets/Atti/Normal.png'; // 기본 이미지 설정
@@ -68,7 +68,8 @@ class _ChatState extends State<Chat> {
     super.initState();
     flutterTts.setLanguage("ko-KR");
     flutterTts.setPitch(1);
-    _speakMessage('대화를 시작하려면 마이크 버튼을 누르세요');
+    _speakMessage(_currentMessage);
+    //_speakMessage(_msgToVoice);
     //_startTimer();
   }
 
@@ -117,8 +118,13 @@ class _ChatState extends State<Chat> {
               ),
               VoiceButton(
                 updatedMessage: (message) {
+                // updatedMessage: (message, role) {
                   setState(() {
                     _currentMessage = message;
+
+                    // if (role == "Assistant") {   <- 콜백에 role도 받아와서 아띠일때만 state업뎃할라햇음
+                    //   _msgToVoice = message;
+                    // }
                   });
                 },
                 updatedImage: (image) { // 이미지 업데이트 콜백
@@ -148,6 +154,7 @@ class _ChatState extends State<Chat> {
 class VoiceButton extends StatefulWidget {
   final MemoryNoteModel memory;
   final Function(String) updatedMessage;
+  //final Function(String, String) updatedMessage;
   final Function(String) updatedImage; // 이미지 업데이트 콜백 추가
   const VoiceButton({Key? key, required this.updatedMessage, required this.memory, required this.updatedImage})
       : super(key: key);
@@ -268,12 +275,23 @@ class _VoiceButtonState extends State<VoiceButton> {
   // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 수정한 부분
   // 메시지 추가
   void _appendMessage(String role, String message) {
-    if (role == "Assistant") {  // <- 아띠 메시지만 _currentMessage로 업데이트되게 함
+    if (role == "Assistant") {  // <- 아띠 메시지만 _currentMessage로 업데이트되게 함 (if문빼면 사용자 메시지도 출력)
       setState(() {
         _currentMessage = message;
         widget.updatedMessage(_currentMessage);
       });
     }
+
+    // 이건 하려다 잘 안된 부분이라죠 ㅋㅋ
+    // if (role == "Assistant") { // 아띠 메시지 -> 화면에 텍스트로도 띄우고 + TTS도 함
+    //   setState(() {
+    //     _currentMessage = message;
+    //     widget.updatedMessage(_currentMessage, "Assistant");
+    //   });
+    // } else { // 내 메시지 -> 화면에만 띄움
+    //   _currentMessage = message;
+    //   widget.updatedMessage(_currentMessage, "I");
+    // }
   }
 
   void _resetStaticTimer() {
