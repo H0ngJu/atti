@@ -63,7 +63,7 @@ class Chatbot {
         model: 'gemini-1.0-pro',
         apiKey: apiKey,
         generationConfig: GenerationConfig(
-            maxOutputTokens: 100,
+            maxOutputTokens: 70,
             temperature: 0.7,
         ),
 
