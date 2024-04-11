@@ -195,21 +195,28 @@ class _VoiceButtonState extends State<VoiceButton> {
       onError: (error) {},
     );
 
+    List<String> wordsList = []; // 사용자의 단어를 저장할 리스트
+
     if (available) {
+      List<String> wordsList = []; // 음성 인식이 시작될 때마다 wordsList 초기화
+
       _speech.listen(
         onResult: (result) async {
           setState(() {
             _spokenText = result.recognizedWords;
           });
           String message = result.recognizedWords ?? "";
-          _appendMessage("User", message); // 사용자의 말을 메시지로 추가
-          _onUserMessage(message);
 
+          // _appendMessage("User", message); // 사용자의 말을 메시지로 추가
+          // _onUserMessage(message);
 
           // 일정 시간 동안 아무런 결과가 없으면 음성 인식 종료로 판단하고 API 호출
           Future.delayed(Duration(seconds: 2), () async {
             if (_spokenText == message) { // 1초 동안 결과가 변하지 않았다면
               try {
+                _appendMessage("User", message); // 사용자의 말을 메시지로 추가
+                _onUserMessage(message);
+
                 String response = await _chatbot.getResponse(message); // Chatbot으로부터 응답 받기
                 _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
                 _onApiResponse(response);
