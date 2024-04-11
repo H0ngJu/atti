@@ -70,6 +70,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   dart_openai: ^5.0.0
   flutter_tts: ^3.8.5
+  google_generative_ai: ^0.2.3
 
 
 
