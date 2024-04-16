@@ -71,6 +71,7 @@ dependencies:
   dart_openai: ^5.0.0
   flutter_tts: ^3.8.5
   google_generative_ai: ^0.2.3
+  firebase_messaging: ^14.7.19
 
 
 
