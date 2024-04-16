@@ -18,15 +18,6 @@ class _ReportHistoryState extends State<ReportHistory> {
   late Future<List<ReportModel>> reports;
   var thisMonth = '${DateTime.now().year}-${DateTime.now().month}';
 
-  // List<List<String>> datedummy = [
-  //   ['2024.02.11', '2024.02.17'],
-  //   ['2024.02.04', '2024.02.10'],
-  //   ['2024.01.28', '2024.02.03'],
-  //   ['2024.01.21', '2024.01.27'],
-  //   ['2024.01.14', '2024.01.20'],
-  //   ['2024.01.07', '2024.01.13'],
-  // ];
-
   @override
   void initState() {
     super.initState();
@@ -68,7 +59,7 @@ class _ReportHistoryState extends State<ReportHistory> {
                               Container(
                                 margin: EdgeInsets.only(bottom: 10),
                                 child: Text(
-                                  '${reports[0].registeredMemoryCount}',
+                                  '${reports[0].patientId}',
                                   style: TextStyle(
                                       fontSize: 24, fontWeight: FontWeight.bold),
                                 ),
