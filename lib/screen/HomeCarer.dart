@@ -46,7 +46,7 @@ class _HomeCarerState extends State<HomeCarer> {
   final _authentication = FirebaseAuth.instance;
   final _db = FirebaseFirestore.instance;
   User? loggedUser;
-  final AuthController authController = Get.put(AuthController());
+  final AuthController authController = Get.find<AuthController>();
 
   DateTime _selectedDay = DateTime.now();
   List<ScheduleModel> schedulesBySelectedDay = []; // 선택된 날짜의 일정들이 반환되는 리스트
@@ -59,9 +59,10 @@ class _HomeCarerState extends State<HomeCarer> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      await _fetchData();
-    });
+    // Future.delayed(Duration.zero, () async {
+    //   await _fetchData();
+    _fetchData();
+    // });
     getCurrentUser();
     _requestNotificationPermissions();
   }
