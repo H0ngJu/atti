@@ -27,7 +27,7 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                   children: [
                       Container(
                         width: width,
-                        height: height*0.4,
+                        height: height*0.45,
                         margin: EdgeInsets.only(top: height * 0.15),
                         child: Align(
                           alignment: Alignment.center,
@@ -44,19 +44,37 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                         color: Color(0xffE1E1E1),
                       ),
                     ),
-                    Text("반가워요! 저는 아띠에요!",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
+                    // 안내멘트 : 고민 ! 안내멘트 그냥 png로 따서 집어넣을가요? 사이즈도 안맞고 열받는데... =======================================
+                    SizedBox(
+                      height: height * 0.015,
+                    ),
+                    SizedBox(
+                      width: width*0.9,
+                      child: Text("반가워요! 저는 아띠에요!",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          letterSpacing: 0.05,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    Text("서비스 이용을 위해 로그인 해주세요.\n만약 앱 사용이 처음이시라면 회원가입을\n진행해주세요.",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
+                    SizedBox(
+                      height: height * 0.015,
+                    ),
+                    SizedBox(
+                      width: width*0.9,
+                      child: Text("서비스 이용을 위해 로그인 해주세요. 만약 앱 사용이 처음이시라면 회원가입을 진행해주세요.",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 24,
+                          letterSpacing: 0.05,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
+                    ),
+                    SizedBox(
+                      height: height * 0.03,
                     ),
                     // 회원가입, 로그인 버튼
                     Row(
