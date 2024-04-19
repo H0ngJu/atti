@@ -146,17 +146,16 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                           children: [
                             Text('이름',
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
                                   fontSize: 24
                               ),),
                             Container(
                               margin: EdgeInsets.only(top: height*0.01),
                               padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 15.0),
                               decoration: BoxDecoration(
-                                color: colorPallet.yellow,
+                                color: colorPallet.lightYellow,
                                 borderRadius: BorderRadius.circular(15.0),
                                 border: Border.all(
-                                  color: isPressed == 1? colorPallet.textColor : colorPallet.yellow,
+                                  color: isPressed == 1? colorPallet.textColor : colorPallet.lightYellow,
                                 ),
                               ),
                               child: TextFormField(
@@ -211,7 +210,6 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                           alignment: Alignment.topLeft,
                           child: Text('생년월일',
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
                               fontSize: 24
                             ),
                           ),
@@ -223,10 +221,10 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                           margin: EdgeInsets.only(top: height*0.01),
                           padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 5.0),
                           decoration: BoxDecoration(
-                            color: colorPallet.yellow,
+                            color: colorPallet.lightYellow,
                             borderRadius: BorderRadius.circular(15.0),
                             border: Border.all(
-                              color: isPressed == 2? colorPallet.textColor : colorPallet.yellow,
+                              color: isPressed == 2? colorPallet.textColor : colorPallet.lightYellow,
                             ),
                           ),
                           child: Column(
@@ -258,17 +256,16 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                           children: [
                             Text('전화번호',
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
                                   fontSize: 24
                               ),),
                             Container(
                               margin: EdgeInsets.only(top: height*0.01),
                               padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 15.0),
                               decoration: BoxDecoration(
-                                color: colorPallet.yellow,
+                                color: colorPallet.lightYellow,
                                 borderRadius: BorderRadius.circular(15.0),
                                 border: Border.all(
-                                  color: isPressed == 3? colorPallet.textColor : colorPallet.yellow,
+                                  color: isPressed == 3? colorPallet.textColor : colorPallet.lightYellow,
                                 ),
                               ),
                               child: TextFormField(
@@ -328,17 +325,16 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                             children: [
                               Text('피보호자 아이디',
                                 style: TextStyle(
-                                  fontWeight: FontWeight.bold,
                                     fontSize: 24
                                 ),),
                               Container(
                                 margin: EdgeInsets.only(top: height*0.01),
                                 padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 5.0),
                                 decoration: BoxDecoration(
-                                  color: colorPallet.yellow,
+                                  color: colorPallet.lightYellow,
                                   borderRadius: BorderRadius.circular(15.0),
                                   border: Border.all(
-                                    color: isPressed == 4? colorPallet.textColor : colorPallet.yellow,
+                                    color: isPressed == 4? colorPallet.textColor : colorPallet.lightYellow,
                                   ),
                                 ),
                                 child: TextFormField(
@@ -400,7 +396,6 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                             children: [
                               Text('가족 구성원',
                                 style: TextStyle(
-                                  fontWeight: FontWeight.bold,
                                     fontSize: 24
                                 ),
                               ),
@@ -412,7 +407,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                   // color: colorPallet.yellow,
                                   borderRadius: BorderRadius.circular(15.0),
                                   border: Border.all(
-                                    color: isPressed == 5? colorPallet.textColor : colorPallet.yellow,
+                                    color: isPressed == 5? colorPallet.textColor : colorPallet.lightYellow,
                                   ),
                                 ),
                                 child: Container(
@@ -429,7 +424,9 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                       // 5 가족 구성원
                       SizedBox(height: height * 0.1,),
                       Container(
-                        child: ElevatedButton(
+                        width: width*0.9,
+                        height: height * 0.07,
+                        child: TextButton(
                             onPressed: _isButtonDisabled ? null : () async {
                               _tryValidation();
                               try {
@@ -511,7 +508,6 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 18,
-                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                         backgroundColor: Color(0xffFFC215),
@@ -535,24 +531,25 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                 );
                               }
                             },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                _isButtonDisabled ? colorPallet.lightYellow : colorPallet.goldYellow,)
+                            style: TextButton.styleFrom(
+                                backgroundColor: _isButtonDisabled ? Colors.white : colorPallet.goldYellow,
+                                shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                      color: Colors.black,
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(30)
+                                )
                             ),
-                            child: Container(
-                                width: 350,
-                                height: height * 0.07,
-                                alignment: Alignment.center,
-                                child: Text('가입하기',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      color: _isButtonDisabled ? colorPallet.textColor : Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    )
+                            child: Text('가입하기',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  color: _isButtonDisabled ? Colors.black : Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 )
                             )
+                          )
                         ),
-                      )
                     ],
                   ),
                 ),

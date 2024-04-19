@@ -22,9 +22,6 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
   String userPwCheck = "";
 
   int isPressed = 0;
-  var alertColor = Color(0xffB62E26);
-  var boxDefaultColor = Color(0xffFFE9B3);
-  var boxFocusedColor = Color(0xffA38130);
 
   void _tryValidation(){
     final isValid = _formKey.currentState!.validate();
@@ -69,17 +66,16 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                             Text('아이디',
                               style: TextStyle(
                                   fontSize: 24,
-                                  fontWeight: FontWeight.bold,
                               ),
                             ),
                             Container(
                               margin: EdgeInsets.only(top: height*0.01),
-                              padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 5.0),
+                              padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 7.0, left: 9.0),
                               decoration: BoxDecoration(
-                                color: boxDefaultColor,
+                                color: _colorPallet.lightYellow,
                                 borderRadius: BorderRadius.circular(15.0),
                                 border: Border.all(
-                                  color: isPressed == 1? boxFocusedColor : boxDefaultColor,
+                                  color: isPressed == 1? _colorPallet.textColor : _colorPallet.lightYellow,
                                 ),
                               ),
                               child: TextFormField(
@@ -106,7 +102,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                                       hintText: '이메일을 입력해 주세요',
                                       hintStyle: TextStyle(
                                           fontSize: 24,
-                                          color: boxFocusedColor,
+                                          color: _colorPallet.textColor,
                                       ),
                                       // errorText: !userId.contains('@') || !userId.contains('.') ? '올바른 이메일 형식을 입력해 주세요' : null, // 오류 메시지 표시
                                     ),
@@ -123,7 +119,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                               child: Text(
                                   '올바른 이메일 형식을 입력해 주세요',
                                 style: TextStyle(
-                                  color: alertColor,
+                                  color: _colorPallet.alertColor,
                                 ),
                               ),
                             )
@@ -139,16 +135,15 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                             Text('비밀번호',
                               style: TextStyle(
                                   fontSize: 24,
-                                  fontWeight: FontWeight.bold,
                               ),),
                             Container(
                               margin: EdgeInsets.only(top: height*0.01),
-                              padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 5.0),
+                              padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 7.0, left: 9.0),
                               decoration: BoxDecoration(
-                                color: boxDefaultColor,
+                                color: _colorPallet.lightYellow,
                                 borderRadius: BorderRadius.circular(15.0),
                                 border: Border.all(
-                                  color: isPressed == 2? boxFocusedColor : boxDefaultColor,
+                                  color: isPressed == 2? _colorPallet.textColor : _colorPallet.lightYellow,
                                 ),
                               ),
                               child: TextFormField(
@@ -175,7 +170,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                                   hintText: '비밀번호를 입력해 주세요',
                                   hintStyle: TextStyle(
                                       fontSize: 24,
-                                      color: boxFocusedColor,
+                                      color: _colorPallet.textColor,
                                   ),
                                 ),
                                 style: TextStyle(
@@ -188,7 +183,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                                 child: Text(
                                   '6글자 이상을 입력해 주세요',
                                   style: TextStyle(
-                                    color: alertColor,
+                                    color: _colorPallet.alertColor,
                                   ),
                                 ),
                               )
@@ -203,18 +198,17 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                           children: [
                             Text('비밀번호 확인',
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
                                  fontSize: 24
                               ),
                             ),
                             Container(
                               margin: EdgeInsets.only(top: height*0.01),
-                              padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 5.0),
+                              padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 7.0, left: 9.0),
                               decoration: BoxDecoration(
-                                color: boxDefaultColor,
+                                color: _colorPallet.lightYellow,
                                 borderRadius: BorderRadius.circular(15.0),
                                 border: Border.all(
-                                  color: isPressed == 3? boxFocusedColor : boxDefaultColor,
+                                  color: isPressed == 3? _colorPallet.textColor : _colorPallet.lightYellow,
                                 ),
                               ),
                               child: TextFormField(
@@ -243,7 +237,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                                     hintText: '비밀번호를 입력해 주세요',
                                     hintStyle: TextStyle(
                                         fontSize: 24,
-                                        color: boxFocusedColor,
+                                        color: _colorPallet.textColor,
                                     ),
                                   ),
                                   onSaved: (value){
@@ -259,7 +253,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                                 child: Text(
                                   userPw != userPwCheck ? '비밀번호가 일치하지 않습니다' : '6글자 이상을 입력해 주세요',
                                   style: TextStyle(
-                                    color: alertColor,
+                                    color: _colorPallet.alertColor,
                                   ),
                                 ),
                               )
@@ -269,7 +263,9 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                       // 비밀번호 확인
                       SizedBox(height: height*0.05),
                       Container(
-                        child: ElevatedButton(
+                        width: width*0.9,
+                        height: height*0.07,
+                        child: TextButton(
                             onPressed: !userId.contains('@') || !userId.contains('.') ||
                                 userPw.length <6 || userPw != userPwCheck ||
                                 userPwCheck.length < 6
@@ -296,34 +292,34 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      backgroundColor: Color(0xffFFC215),
+                                      backgroundColor: _colorPallet.lightYellow,
                                     )
                                 );
                               }
                             },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                              !userId.contains('@') || !userId.contains('.') ||
+                            style: TextButton.styleFrom(
+                              backgroundColor: !userId.contains('@') || !userId.contains('.') ||
                                   userPw.length <6 || userPw != userPwCheck ||
-                                  userPwCheck.length < 6 ? _colorPallet.lightYellow : _colorPallet.goldYellow,)
-                            ),
-                            child: Container(
-                                width: 350,
-                                height: height*0.07,
-                                alignment: Alignment.center,
-                                child: Text('다음',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      color: !userId.contains('@') || !userId.contains('.') ||
-                                          userPw.length <6 || userPw != userPwCheck ||
-                                          userPwCheck.length < 6 ? _colorPallet.textColor : Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    )
-                                )
+                                  userPwCheck.length < 6 ? Colors.white : _colorPallet.goldYellow,
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(30)
                             )
                         ),
-                      )
-                      // 다음 버튼
+                        child: Text('다음',
+                            style: TextStyle(
+                            fontSize: 24,
+                            color: !userId.contains('@') || !userId.contains('.') ||
+                              userPw.length <6 || userPw != userPwCheck ||
+                              userPwCheck.length < 6 ? Colors.black : Colors.white,
+                              fontWeight: FontWeight.bold,
+                            )
+                          )
+                        )
+                      ),
                     ],
                   ),
                 ),

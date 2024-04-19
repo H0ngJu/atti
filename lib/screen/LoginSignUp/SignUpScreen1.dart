@@ -1,7 +1,6 @@
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/data/SignUpController.dart';
-import 'package:atti/screen/LoginSignUp/LogInSignUpMainScreen.dart';
 import 'package:atti/screen/LogInSignUp/SignUpScreen2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,8 +17,6 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
   ColorPallet _colorPallet = ColorPallet();
   bool _isButtonDisabled = true;
   final SignUpController signUpController = Get.put(SignUpController());
-  Color borderColor = const Color(0xffFFF5DB);
-  Color pressedBorderColor = const Color(0xffFFC215);
   int isPressed = 0;
   void topBtnPressed() {
     setState(() {
@@ -54,170 +51,173 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // 상단 안내문
                   Container(
                     margin: EdgeInsets.only(top: 25),
                     child: Column(
                       children: [
                         Text(
-                          '회원선택',
+                          '회원 선택',
                           style: TextStyle(
-                            letterSpacing: 1.0,
+                            letterSpacing: 0.01,
                             fontSize: 24,
-                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ],
                     ),
                   ),
                   Text(
-                    '서비스 이용이 구분되니 신중히 선택해주세요',
+                    '서비스 이용이 구분되니 신중히 선택해주세요.',
                     style: TextStyle(
-                      color: Color(0xff7E7E7E),
+                      color: _colorPallet.grayColor,
                       fontSize: 20,
+                      letterSpacing: 0.01,
                     ),
                   ),
-                  SizedBox(height: height*0.02,),
+                  SizedBox(height : height*0.03,),
+                  // 보호자 피보호자 선택 버튼
                   Container(
-                    child: Column(
+                    child: Row(
                       children: [
-                        ElevatedButton(onPressed: (){
+                        TextButton(
+                          onPressed: (){
                           topBtnPressed();
                           signUpController.isPatient.value = true;
                         },
-                            style: ElevatedButton.styleFrom(
+                            style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,
-                              side: BorderSide(width: 2, color: isPressed == 1 ? pressedBorderColor : borderColor),
+                              side: BorderSide(
+                                  width: 1,
+                                  color: isPressed == 1 ? _colorPallet.textColor : Colors.black
+                              ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(
-                                  Radius.circular(15),
+                                  Radius.circular(30),
                                 ),
                               ),
                               elevation: 0,
                             ),
                             child: Container(
-                              width: 350,
-                              height: height*0.27,
-                              decoration: BoxDecoration(
-                                color: Color(0xffFFF5DB),
-                                image: DecorationImage(
-                                  image: AssetImage('lib/assets/images/membershipType_patient_bg.png'),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Container(
-                                margin: EdgeInsets.all(20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '피보호자',
-                                      style: TextStyle(
-                                        fontSize: 30,
-                                        color: isPressed == 1 ? Colors.black : Color(0xffA38130),
-                                        fontWeight: FontWeight.w700,
+                              width: width*0.4,
+                              height: height*0.3,
+                              child: Center(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '피보호자',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 30,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      '치매 증상을 지니셨나요?',
-                                      style: TextStyle(
-                                        color: isPressed == 1 ? Colors.black : Color(0xffA38130),
-                                        fontSize: 20,
+                                      SizedBox(height: height*0.01,),
+                                      Text(
+                                        '치매 증상을\n지니셨나요?',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 20,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            )),
-                        SizedBox(height: 10,),
-                        ElevatedButton(onPressed: (){
-                          botBtnPressed();
-                          signUpController.isPatient.value = false;
-                        },
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              side: BorderSide(width: 2, color: isPressed == 2 ? pressedBorderColor : borderColor),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              elevation: 0,
                             ),
-                            child: Container(
-                              width: 350,
-                              height: height*0.27,
-                              decoration: BoxDecoration(
-                                color: Color(0xffFFF5DB),
-                                image: DecorationImage(
-                                  image: AssetImage('lib/assets/images/membershipType_carer_bg.png'),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Container(
-                                margin: EdgeInsets.all(20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '보호자',
-                                      style: TextStyle(
-                                        fontSize: 30,
-                                        color: isPressed == 2 ? Colors.black : Color(0xffA38130),
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    Text(
-                                      '치매 환자의 보호자이신가요?',
-                                      style: TextStyle(
-                                        color: isPressed == 2 ? Colors.black : Color(0xffA38130),
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )),
                         SizedBox(
-                          height: 25,),
-                        Visibility(
-                            child: ElevatedButton(
-                                onPressed: _isButtonDisabled ? null : () async {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) {
-                                        return SignUpScreen2();
-                                      }
-                                      )
-                                  );
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                    _isButtonDisabled ? _colorPallet.lightYellow : _colorPallet.goldYellow,
-                                  ),
-                                ),
-                                child: Container(
-                                  width: 300,
-                                  height: height*0.07,
-                                  alignment: Alignment.center,
-                                  child: Text('다음',
+                          width: width*0.05,
+                        ),
+                        TextButton(
+                          onPressed: (){
+                            botBtnPressed();
+                            signUpController.isPatient.value = false;
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            side: BorderSide(
+                                width: 1,
+                                color: isPressed == 2 ? _colorPallet.textColor : Colors.black
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(30),
+                              ),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: Container(
+                            width: width*0.4,
+                            height: height*0.3,
+                            child: Center(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '보호자',
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 24,
-                                      color: _isButtonDisabled
-                                          ?_colorPallet.textColor
-                                          : Colors.white,
+                                      fontSize: 30,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                )
-                            )
-                        )
+                                  SizedBox(height: height*0.01,),
+                                  Text(
+                                    '치매 환자의\n보호자이신가요?',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  )
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(top: height*0.3),
+                      width: width*0.9,
+                      height: height*0.07,
+                      child: TextButton(
+                        onPressed: _isButtonDisabled ? null : () async {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return SignUpScreen2();
+                              }
+                              )
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                            backgroundColor: _isButtonDisabled ? Colors.white : _colorPallet.goldYellow,
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: _colorPallet.goldYellow,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(30)
+                            )
+                        ),
+                        child: Text('다음',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 24,
+                            color: _isButtonDisabled
+                                ?_colorPallet.textColor
+                                : Colors.white,
+                          ),
+                        ),
+                      )
+                  ),
                 ],
               )
             ),

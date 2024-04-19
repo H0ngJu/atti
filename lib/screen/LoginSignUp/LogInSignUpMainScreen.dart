@@ -64,7 +64,10 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                     ),
                     SizedBox(
                       width: width*0.9,
-                      child: Text("서비스 이용을 위해 로그인 해주세요. 만약 앱 사용이 처음이시라면 회원가입을 진행해주세요.",
+                    //   서비스 이용을 위해 로그인
+                    //   해주세요. 만약 앱 사용이 처음이라면
+                    // 회원가입을 진행해주세요
+                    child: Text("서비스 이용을 위해 로그인 해주세요. 만약 앱 사용이 처음이시라면 회원가입을 진행해주세요.",
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 24,

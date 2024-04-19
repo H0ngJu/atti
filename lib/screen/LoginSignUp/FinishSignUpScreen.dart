@@ -18,7 +18,6 @@ class _FinishSignUpScreenState extends State<FinishSignUpScreen> {
     final ColorPallet colorPallet = Get.put(ColorPallet());
 
     return Scaffold(
-      backgroundColor: Color(0xffFFC215),
       body: Stack(
         children: [
           Container(
@@ -26,20 +25,9 @@ class _FinishSignUpScreenState extends State<FinishSignUpScreen> {
             child: Text(
               '회원가입이\n완료되었어요!',
               style: TextStyle(
-                letterSpacing: 1.0,
+                letterSpacing: 0.1,
                 fontSize: 40,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: height*0.32, left: 20),
-            child: Text(
-              '방금 생성한 계정으로 로그인해서\n아띠를 만나러 가볼게요!',
-              style: TextStyle(
-                color: colorPallet.textColor,
-                letterSpacing: 1.0,
-                fontSize: 23,
+                color: Colors.black,
               ),
             ),
           ),
@@ -51,7 +39,7 @@ class _FinishSignUpScreenState extends State<FinishSignUpScreen> {
           Container(
             alignment: Alignment.center,
             margin: EdgeInsets.only(top: height*0.85, left: 10, right: 10),
-            child: ElevatedButton(
+            child: TextButton(
                 onPressed: () async {
                   Navigator.push(
                       context,
@@ -61,7 +49,7 @@ class _FinishSignUpScreenState extends State<FinishSignUpScreen> {
                       )
                   );
                 },
-                style: ElevatedButton.styleFrom(
+                style: TextButton.styleFrom(
                   backgroundColor: Colors.white,
                 ),
                 child: Container(
