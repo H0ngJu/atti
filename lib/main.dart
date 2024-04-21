@@ -28,10 +28,9 @@ import 'package:atti/screen/schedule/finish/ScheduleFinish1.dart';
 import 'package:atti/screen/schedule/register/ScheduleRegister1.dart';
 
 void main() async {
-  final notificationService = NotificationService();
   WidgetsFlutterBinding.ensureInitialized();
   //await notificationService.init();
-
+  //NotificationService.onBackgroundNotificationResponse();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -41,6 +40,7 @@ void main() async {
     appleProvider: AppleProvider.appAttest,
   );
   await dotenv.load(fileName: '.env');
+  final notificationService = NotificationService();
   runApp(MyApp(notificationService: notificationService));
 }
 

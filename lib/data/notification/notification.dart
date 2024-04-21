@@ -1,15 +1,15 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:atti/data/notification/notification_controller.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import '../../screen/routine/RoutineMain.dart';
-import '../../screen/schedule/ScheduleMain.dart';
 import '../routine/routine_model.dart';
 import '../routine/routine_service.dart';
 import '../schedule/schedule_model.dart';
@@ -17,6 +17,7 @@ import '../schedule/schedule_service.dart';
 import 'package:get/get.dart';
 
 class NotificationService {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   static final NotificationService _instance = NotificationService._();
   factory NotificationService() {
     return _instance;
@@ -25,6 +26,9 @@ class NotificationService {
 
   // 로컬 푸시 알림을 사용하기 위한 플러그인 인스턴스 생성
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  // 푸시 알림 스트림 생성
+  final StreamController<String?> streamController = StreamController<String?>.broadcast();
 
   Future<void> init(BuildContext context) async { // 초기화 메서드
     tz.initializeTimeZones();
@@ -40,19 +44,8 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.initialize(
         initializationSettings,
-
-        // 푸시알림 핸들링
-        onDidReceiveNotificationResponse: (NotificationResponse response) async {
-          if (response.payload == 'schedule') {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-              return ScheduleMain();
-            }));
-          } else if (response.payload == 'routine') {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-              return RoutineMain();
-            }));
-          }
-        }); // 로컬 푸시 알림 초기화
+        onDidReceiveNotificationResponse: onDidReceiveNotificationResponse
+        );
   }
 
   // 푸시 알림 권한 요청
@@ -95,6 +88,7 @@ class NotificationService {
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
+      payload: 'home'
     );
 
     await addNotification('매일 알림', '오늘 ${userName}님의 일과와 일정을 확인해보세요!', dailyTime, authController.isPatient);
@@ -132,7 +126,7 @@ class NotificationService {
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-      payload: 'weekly_notification',
+      payload: 'home',
     );
 
     await addNotification('주간 알림', '저번 주 ${userName}님의 보고서가 도착했어요!', nextMonday, false);
@@ -233,4 +227,25 @@ class NotificationService {
       return when;
     }
   }
+
+  // Foreground 상태(앱이 열린 상태에서 받은 경우)
+  void onDidReceiveNotificationResponse(NotificationResponse notificationResponse) async {
+    if (notificationResponse.payload != null || notificationResponse.payload!.isNotEmpty) {
+      print('------------ FOREGROUND PAYLOAD: ${notificationResponse.payload} ------------');
+      streamController.add(notificationResponse.payload); // Payload(전송 데이터)를 Stream에 추가합니다.
+    }
+  }
+
+  // Background 상태(앱이 닫힌 상태에서 받은 경우)
+  void onDidReceiveBackgroundNotificationResponse() async {
+    final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+    await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    // 앱이 Notification을 통해서 열린 경우라면 Payload(전송 데이터)를 Stream에 추가합니다.
+    if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+      String payload = notificationAppLaunchDetails!.notificationResponse?.payload ?? "";
+      print("BACKGROUND PAYLOAD: $payload");
+      streamController.add(payload);
+    }
+  }
+
 }

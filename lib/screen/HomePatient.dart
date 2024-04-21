@@ -62,6 +62,27 @@ class _HomePatientState extends State<HomePatient> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _fetchAndSpeakWeather();
     });
+    listenNotifications();
+  }
+
+  // 푸시 알림 스트림 리슨
+  void listenNotifications() {
+    NotificationService().streamController.stream.listen((String? payload) {
+      if (payload != null) {
+        print('@@@@@@@@@Received payload: $payload');
+        if (payload == 'schedule') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ScheduleMain()), // ScheduleMain 페이지로 이동
+          );
+        } else if (payload == 'routine') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => RoutineMain()), // RoutineMain 페이지로 이동
+          );
+        }
+      }
+    });
   }
 
   Future<void> _fetchData() async {

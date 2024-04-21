@@ -3,6 +3,7 @@ import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/notification/notification.dart';
 import 'package:atti/screen/schedule/register/ScheduleRegister1.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:atti/data/schedule/schedule_service.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
@@ -14,6 +15,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:timelines/timelines.dart';
 import '../../data/schedule/schedule_model.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class ScheduleMain extends StatefulWidget {
   const ScheduleMain({super.key});
@@ -63,9 +65,57 @@ class _ScheduleMainState extends State<ScheduleMain> {
     }
   }
 
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
 
   @override
   Widget build(BuildContext context) {
+
+    Future<void> _showFullScreenNotification() async {
+      await showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('Turn off your screen'),
+          content: const Text(
+              'to see the full-screen intent in 5 seconds, press OK and TURN '
+                  'OFF your screen'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await flutterLocalNotificationsPlugin.zonedSchedule(
+                    0,
+                    'scheduled title',
+                    'scheduled body',
+                    tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+                    const NotificationDetails(
+                        android: AndroidNotificationDetails(
+                            'full screen channel id', 'full screen channel name',
+                            channelDescription: 'full screen channel description',
+                            priority: Priority.high,
+                            importance: Importance.high,
+                            fullScreenIntent: true,
+
+                        )),
+                    androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+                    uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+                  payload: 'routine'
+                );
+
+                Navigator.pop(context);
+
+              },
+              child: const Text('OK'),
+            )
+          ],
+        ),
+      );
+    }
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -99,6 +149,10 @@ class _ScheduleMainState extends State<ScheduleMain> {
             SizedBox(height: 30),
             ScheduleCalendar(),
             SizedBox(height: 10),
+
+            ElevatedButton(onPressed: () async {
+              await _showFullScreenNotification();
+            }, child: Text('Show full-screen notification')),
 
             Container(
               width: MediaQuery.of(context).size.width,

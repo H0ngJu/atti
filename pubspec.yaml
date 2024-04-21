@@ -52,7 +52,7 @@ dependencies:
   step_progress_indicator: ^1.0.2
   intl: ^0.18.1
   firebase_storage: ^11.6.4
-  cloud_firestore: ^4.15.3
+  cloud_firestore: ^4.15.5
   firebase_auth: ^4.17.3
   flutter_localizations:
     sdk: flutter
