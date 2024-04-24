@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'dart:math';
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
+import 'package:atti/screen/Notice/FullScreenRoutine.dart';
 import 'package:atti/screen/memory/register/MemoryRegister1.dart';
 import 'package:atti/screen/routine/RoutineMain.dart';
 import 'package:atti/screen/schedule/ScheduleMain.dart';
@@ -75,10 +76,12 @@ class _HomePatientState extends State<HomePatient> {
             context,
             MaterialPageRoute(builder: (context) => ScheduleMain()), // ScheduleMain 페이지로 이동
           );
-        } else if (payload == 'routine') {
+        } else if (payload.startsWith('/routine/')) {
+          print('루틴 페이지로 라우팅');
+          String docRef = payload.substring('/routine/'.length);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => RoutineMain()), // RoutineMain 페이지로 이동
+            MaterialPageRoute(builder: (context) => FullScreenRoutine(docRef: docRef)), // RoutineMain 페이지로 이동
           );
         }
       }
