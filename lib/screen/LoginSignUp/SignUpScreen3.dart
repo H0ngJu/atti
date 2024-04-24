@@ -1,4 +1,5 @@
 import 'package:atti/commons/DetailPageTitle.dart';
+import 'package:atti/commons/ErrorMessageWidget.dart';
 import 'package:atti/data/SignUpController.dart';
 import 'package:atti/screen/LoginSignUp/FinishSignUpScreen.dart';
 import 'package:atti/screen/LoginSignUp/SignUpFamilyTag.dart';
@@ -191,14 +192,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                               ),
                             ),
                             if (isPressed == 1 && userName.length < 2)
-                              Container(
-                                child: Text(
-                                  "2글자 이상의 이름을 입력해 주세요",
-                                  style: TextStyle(
-                                    color: colorPallet.alertColor,
-                                  ),
-                                ),
-                              )
+                              ErrorMessageWidget(message: "2글자 이상의 이름을 입력해 주세요")
                           ],
                         ),
                       ),
@@ -304,14 +298,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                               ),
                             ),
                             if (isPressed == 3 && userPhoneNumber.length < 10)
-                              Container(
-                                child: Text(
-                                  "유효한 전화번호를 입력해 주세요",
-                                  style: TextStyle(
-                                    color: colorPallet.alertColor,
-                                  ),
-                                ),
-                              )
+                              ErrorMessageWidget(message: "유효한 전화번호를 입력해 주세요")
                           ],
                         ),
                       ),
@@ -375,14 +362,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                               ),
                               if (isPressed == 4 && (!userPatientEmail.contains('@') ||
                                   !userPatientEmail.contains('.')))
-                                Container(
-                                  child: Text(
-                                    "올바른 이메일 형식을 입력해 주세요",
-                                    style: TextStyle(
-                                      color: colorPallet.alertColor,
-                                    ),
-                                  ),
-                                )
+                                ErrorMessageWidget(message: "올바른 이메일 형식을 입력해 주세요")
                             ],
                           ),
                         ),

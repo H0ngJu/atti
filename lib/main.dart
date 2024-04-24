@@ -3,6 +3,7 @@ import 'package:atti/data/notification/notification.dart';
 import 'package:atti/screen/HomeCarer.dart';
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
 import 'package:atti/screen/LogInSignUp/SignUpScreen1.dart';
+import 'package:atti/screen/LogInSignUp/SignUpScreen2.dart';
 import 'package:atti/screen/LogInSignUp/SignUpScreen3.dart';
 import 'package:atti/screen/LoginSignUp/IntroPage.dart';
 import 'package:atti/screen/Notice/NoticeMain.dart';
@@ -66,7 +67,7 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: FinishSignUpScreen(),
+      home: SignUpScreen2(),
     );
   }
 }

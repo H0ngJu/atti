@@ -3,10 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class SignUpController extends GetxController {
+  RxInt isPressed = 0.obs;
   RxBool isPatient = true.obs;
   var userEmail = "".obs;
   var userPatientEmail = "".obs;
   var userPassword = "".obs;
+  var userPasswordCheck = "".obs;
   var userName = "".obs;
   DateTime? userBirthDate;
   var userPhoneNumber = "".obs;
