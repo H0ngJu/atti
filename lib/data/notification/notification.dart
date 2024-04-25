@@ -151,13 +151,13 @@ class NotificationService {
 
     final AndroidNotificationDetails androidNotificationDetails =
     AndroidNotificationDetails(
-      'scheduled_channel',
-      'Scheduled Notification Channel',
+      'channel id',
+      'channel name',
       channelDescription: 'This channel is used for scheduled notifications',
       importance: Importance.max,
       priority: Priority.high,
       //color: Color(0xffFFE9B3),
-      vibrationPattern: Int64List.fromList([0, 1000, 500, 1000]), // 0ms 대기, 1000ms 진동, 500ms 대기, 1000ms 진동
+      vibrationPattern: Int64List.fromList([0, 1000, 500, 1000]),
     );
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
@@ -188,16 +188,16 @@ class NotificationService {
     List<ScheduleModel>? allSchedule = await ScheduleService().getAllSchedules();
     if (allSchedule != null) {
       for (ScheduleModel schedule in allSchedule) {
-        DateTime notificationTime = schedule.time!.toDate().subtract(Duration(minutes: 30));
+        DateTime notificationTime = schedule.time!.toDate().subtract(Duration(hours: 1));
 
-        //만약 알림 시간이 현재 시간 이전이라면 10초 뒤로 설정
+        //현재 시간 이후의 알림에 대해서만 예약
         if (notificationTime.isAfter(DateTime.now())) {
           //notificationTime = DateTime.now().add(Duration(seconds: 10));
           await showDateTimeNotification(
               '일정 알림',
               '곧 \'${schedule.name}\'을(를) 하실 시간이에요!',
               notificationTime,
-              'schedule'
+              '/schedule/${schedule.reference!.id}'
           );
         }
       }

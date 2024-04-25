@@ -141,17 +141,22 @@ class _FullScreenRoutineState extends State<FullScreenRoutine> {
                 ),
                 SizedBox(height: height * 0.02,),
                 TextButton(onPressed: () async {
-                  await RoutineService().completeRoutine(widget.docRef as DocumentReference<Object?>, DateTime.now());
+                  DocumentReference<Object?> documentReference = firestore.doc('routine/${widget.docRef}');
+                  DateTime now = DateTime.now();
+                  DateTime FormattedTime = DateTime(now.year, now.month, now.day);
+                  print(FormattedTime);
+
+                  await RoutineService().completeRoutine(documentReference, FormattedTime);
                   await addNotification(
                       '하루 일과 알림',
                       '${authController.userName}님이 \'${routine?.name ?? ''}\' 일과를 완료하셨어요!',
                       DateTime.now(),
                       false);
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RoutineFinish(name: '\'${routine?.name ?? ''}\'\n일과를 완료했어요!')),
-                  );
+                   Navigator.push(
+                     context,
+                     MaterialPageRoute(builder: (context) => RoutineFinish(name: '\'${routine?.name ?? ''}\'\n일과를 완료했어요!')),
+                   );
                 },
                     child: Text('완료했어요', style: TextStyle(
                         color: Colors.white, fontSize: 24, ),),

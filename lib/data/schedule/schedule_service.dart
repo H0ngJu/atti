@@ -8,16 +8,18 @@ class ScheduleService {
   final firestore = FirebaseFirestore.instance;
   final AuthController authController = Get.put(AuthController());
 
-  // 일정 등록
-  Future<void> addSchedule(ScheduleModel schedule) async {
+  // 일정 등록 후 ScheduleModel 반환
+  Future<ScheduleModel> addSchedule(ScheduleModel schedule) async {
     try {
       schedule.patientId = authController.patientDocRef;
       schedule.createdAt = Timestamp.now();
       DocumentReference docRef = await firestore.collection('schedule').add(schedule.toJson());
       schedule.reference = docRef;
       await docRef.update(schedule.toJson());
+      return schedule; // 변경된 schedule 반환
     } catch (e) {
       print('Error adding schedule : $e');
+      throw Future.error('Error adding schedule : $e'); // 예외 다시 throw
     }
   }
 

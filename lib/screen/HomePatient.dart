@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:atti/screen/Notice/FullScreenRoutine.dart';
+import 'package:atti/screen/Notice/FullScreenSchedule1.dart';
 import 'package:atti/screen/memory/register/MemoryRegister1.dart';
 import 'package:atti/screen/routine/RoutineMain.dart';
 import 'package:atti/screen/schedule/ScheduleMain.dart';
@@ -28,6 +29,8 @@ import '../data/routine/routine_service.dart';
 import '../data/schedule/schedule_model.dart';
 import '../data/schedule/schedule_service.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+
+import 'Notice/FullScreenSchedule2.dart';
 
 class HomePatient extends StatefulWidget {
   const HomePatient({Key? key}) : super(key: key);
@@ -71,13 +74,19 @@ class _HomePatientState extends State<HomePatient> {
     NotificationService().streamController.stream.listen((String? payload) {
       if (payload != null) {
         print('@@@@@@@@@Received payload: $payload');
-        if (payload == 'schedule') {
+        if (payload.startsWith('/schedule1/')) {
+          String docRef = payload.substring('/schedule1/'.length);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ScheduleMain()), // ScheduleMain 페이지로 이동
+            MaterialPageRoute(builder: (context) => FullScreenSchedule(docRef: docRef)), // ScheduleMain 페이지로 이동
+          );
+        } else if (payload.startsWith('/schedule2/')) {
+          String docRef = payload.substring('/schedule2/'.length);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FullScreenSchedule2(docRef: docRef)),
           );
         } else if (payload.startsWith('/routine/')) {
-          print('루틴 페이지로 라우팅');
           String docRef = payload.substring('/routine/'.length);
           Navigator.push(
             context,

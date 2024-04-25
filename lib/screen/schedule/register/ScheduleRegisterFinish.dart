@@ -23,7 +23,7 @@ class ScheduleRegisterFinish extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.only(left: 15),
-                  child: Text('\'${scheduleController.schedule.value.name}\'\n일정을 등록했어요!',
+                  child: Text('\'${scheduleController.tmpScheduleName.value}\'\n일정을 등록했어요!',
                     style: TextStyle(
                       fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
                   ),),

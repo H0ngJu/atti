@@ -9,12 +9,14 @@ class ScheduleController extends GetxController {
   var schedule = ScheduleModel().obs;
   var tmpScheduleName = ''.obs;
 
-  void addSchedule() async {
+  Future<ScheduleModel> addSchedule() async { // Future<ScheduleModel> 반환 타입으로 변경
     try {
-      await scheduleService.addSchedule(schedule.value);
+      final addedSchedule = await scheduleService.addSchedule(schedule.value);
       clear();
+      return addedSchedule; // 추가된 ScheduleModel 반환
     } catch (e) {
       print('Error adding schedule: $e');
+      throw Future.error('Error adding schedule: $e'); // 예외 다시 throw
     }
   }
 
