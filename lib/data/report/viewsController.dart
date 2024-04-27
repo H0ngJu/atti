@@ -6,11 +6,12 @@ import 'package:atti/data/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:core';
 
 class ViewsModel {
   // 자료형
   final _db = FirebaseFirestore.instance;
-  String? patientId;
+  DocumentReference? patientId;
   Timestamp? createdAt;
   DocumentReference? memoryReference; // memoryViews에 저장하기 위해 받는 정보
   Map<DocumentReference, int>? memoryViews;
@@ -52,7 +53,7 @@ class ViewsModel {
 
 class ViewsService {
   final _db = FirebaseFirestore.instance;
-  AuthController _authController = AuthController();
+  final AuthController _authController = AuthController();
   Future<void> addViews(ViewsModel views) async {
     try {
       // 메모리를 조회한 유저 정보 받아오기 (환자일 경우에만)
@@ -61,18 +62,19 @@ class ViewsService {
           .where('userId', isEqualTo: _authController.loggedUser)
           .where('isPatient', isEqualTo: _authController.isPatient)
           .get();
-        if (userSnapshot.size > 0 && userSnapshot.docs[0]['isPatient']) { // authcontroller.ispatient == true로 나오는 불상사 발생
+        if (userSnapshot.size > 0 && userSnapshot.docs[0]['isPatient']) {
           // 오늘 날짜의 views Doc이 이미 존재하는지 확인
           DateTime now = DateTime.now();
           DateTime today = DateTime(now.year, now.month, now.day); // 시간, 분, 초, 밀리초는 모두 0으로 설정
           DateTime nextDay = DateTime(today.year, today.month, today.day + 1); // 설정한 날짜의 다음 날을 계산
           // 환자인 경우에만 이후 과정 진행
           // 유저 정보, 기간을 기준으로 문서 검색
+          DocumentReference patientRef = userSnapshot.docs[0]['reference'];
           QuerySnapshot snapshot = await _db
               .collection('views')
               .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(today)) // 설정한 날짜 이후의 문서를 찾습니다.
               .where('createdAt', isLessThan: Timestamp.fromDate(nextDay)) // 다음 날 이전의 문서를 찾습니다.
-              .where('patientId', isEqualTo: userSnapshot.docs[0]['reference'].path)
+              .where('patientId', isEqualTo: patientRef)
               .get();
           // Doc이 이미 존재한다면 : Doc 갱신
           if (snapshot.docs.length > 0) {
@@ -91,7 +93,7 @@ class ViewsService {
             views.memoryViews = {
               views.memoryReference!: 1 // memoryViews를 초기화
             };
-            views.patientId = userSnapshot.docs[0]['reference'].path;
+            views.patientId = userSnapshot.docs[0]['reference'];
             print(userSnapshot.docs[0]['reference'].path);
             DocumentReference docRef = await _db.collection('views').add(views.toJson());
             views.reference = docRef;
