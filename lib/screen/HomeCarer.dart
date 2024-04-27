@@ -2,6 +2,7 @@ import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:atti/screen/report/ReportDetail.dart';
 import 'package:atti/screen/report/ReportHistory.dart';
+import 'package:atti/screen/report/WeeklyData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,22 +18,6 @@ import '../data/routine/routine_model.dart';
 import '../data/routine/routine_service.dart';
 import '../data/schedule/schedule_model.dart';
 import '../data/schedule/schedule_service.dart';
-
-class User {
-  final String? name;
-  final int? incompleteRoutineCount;
-  final int? momoryRegistCount;
-  final String? emotion;
-  final String? mostMemory;
-
-  User({
-    this.name,
-    this.emotion,
-    this.incompleteRoutineCount,
-    this.mostMemory,
-    this.momoryRegistCount,
-  });
-}
 
 class HomeCarer extends StatefulWidget {
   const HomeCarer({Key? key}) : super(key: key);
@@ -129,17 +114,6 @@ class _HomeCarerState extends State<HomeCarer> {
     });
   }
 
-  // 사용자 dummy
-  final List<User> dummy = [
-    User(
-      name: '최한별',
-      //emotion: '즐거움',
-      momoryRegistCount: 5,
-      mostMemory: '놀이공원\n갔을때',
-      incompleteRoutineCount: 2,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -173,7 +147,7 @@ class _HomeCarerState extends State<HomeCarer> {
                 )),
             Container(
               margin: EdgeInsets.all(16),
-              child: HomeReport(dummy: dummy, context: context),
+              child: HomeReport(),
             )
           ],
         ),
@@ -341,9 +315,9 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
                             text:
                                 '${widget.doneRoutineCnt}/${widget.routineCnt}',
                             style: TextStyle(
-                                fontSize: 30,
-                                //fontWeight: FontWeight.bold,
-                                //color: Color(0xffFFC215)
+                              fontSize: 30,
+                              //fontWeight: FontWeight.bold,
+                              //color: Color(0xffFFC215)
                             )),
                       ],
                     ),
@@ -375,9 +349,9 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
                             text:
                                 '${widget.doneScheduleCnt}/${widget.scheduleCnt}',
                             style: TextStyle(
-                                fontSize: 30,
-                                //fontWeight: FontWeight.bold,
-                                //color: Color(0xffFFC215)
+                              fontSize: 30,
+                              //fontWeight: FontWeight.bold,
+                              //color: Color(0xffFFC215)
                             )),
                       ],
                     ),
@@ -390,64 +364,55 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
   }
 }
 
-class HomeReport extends StatelessWidget {
-  final List<User> dummy;
-  final BuildContext context;
+class HomeReport extends StatefulWidget {
+  const HomeReport({Key? key}) : super(key: key);
 
-  const HomeReport({Key? key, required this.dummy, required this.context})
-      : super(key: key);
+  @override
+  _HomeReportState createState() => _HomeReportState();
+}
 
-  Widget ContentCircle(insideCircle, title1, title2) {
-    return Container(
-      margin: EdgeInsets.all(2),
-      child: Column(
-        children: [
-          Container(
-            alignment: Alignment.center,
-            width: MediaQuery.of(context).size.width * 0.2,
-            height: MediaQuery.of(context).size.width * 0.2,
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-                border: Border.all(
-                    color: Color(0xffFFC215),
-                    style: BorderStyle.solid,
-                    width: 4)),
-            child: Text(
-              '${insideCircle}',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.visible,
-              maxLines: 2,
-            ),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                '${title1}',
-                style: TextStyle(fontSize: 18),
-              ),
-              Text(
-                '${title2}',
-                style: TextStyle(fontSize: 18),
-              )
-            ],
-          ),
-        ],
-      ),
-    );
+class _HomeReportState extends State<HomeReport> {
+  List<ScheduleModel> weeklySchedules = [];
+  List<RoutineModel> weeklyRoutines = [];
+  int totalSchedules = 0;
+  int totalRoutines = 0;
+  int doneSchedules = 0;
+  int doneRoutines = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchWeeklyData();
+  }
+
+  Future<void> _fetchWeeklyData() async {
+    DateTime now = DateTime.now();
+    DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    DateTime endOfWeek = startOfWeek.add(Duration(days: 6));
+
+    List<ScheduleModel> fetchedSchedules =
+        await ScheduleService().getSchedulesInRange(startOfWeek, endOfWeek);
+    List<RoutineModel> fetchedRoutines =
+        await RoutineService().getRoutinesInRange(startOfWeek, endOfWeek);
+
+    setState(() {
+      weeklySchedules = fetchedSchedules;
+      weeklyRoutines = fetchedRoutines;
+      totalSchedules = weeklySchedules.length;
+      totalRoutines = weeklyRoutines.length;
+      doneSchedules = weeklySchedules
+          .where((schedule) => schedule.isFinished ?? false)
+          .length;
+      doneRoutines = weeklyRoutines
+          .where((routine) =>
+              routine.isFinished != null &&
+              routine.isFinished!.values.any((v) => v))
+          .length;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    User user = dummy[0];
     final now = DateTime.now();
     final weekOfMonth = getWeekOfMonth(now);
     return Container(
@@ -464,31 +429,100 @@ class HomeReport extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.005,
           ),
           Container(
-            margin: EdgeInsets.only(top: 20),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15), color: Colors.white),
-            padding: EdgeInsets.all(10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+                border: Border.all(color: Color(0xffDDDDDD)),
+                borderRadius: BorderRadius.all(Radius.circular(15))),
+            child: Column(
               children: [
-                ContentCircle(user.incompleteRoutineCount, '미완료', '일과'),
-                SizedBox(
-                  width: 18,
+                Row(
+                  children: [
+                    Expanded(
+                        // 왼쪽 정렬을 위해 Expanded로 감싸줍니다.
+                        child: Container(
+                      margin: EdgeInsets.all(10),
+                      child: Text(
+                        '일과 완료율',
+                        style: TextStyle(
+                            fontFamily: 'PretendardRegular', fontSize: 24),
+                      ),
+                    )),
+                    Expanded(
+                        // 오른쪽 정렬을 위해 Expanded로 감싸줍니다.
+                        child: Container(
+                      margin: EdgeInsets.all(10),
+                      child: Text(
+                        '${(doneRoutines / totalRoutines * 100).toStringAsFixed(1)} %',
+                        textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
+                        style: TextStyle(
+                            color: Color(0xffA38130),
+                            fontFamily: 'PretendardRegular',
+                            fontSize: 24),
+                      ),
+                    ))
+                  ],
                 ),
-                ContentCircle(user.momoryRegistCount, '기억', '등록'),
-                SizedBox(
-                  width: 18,
+                Divider(color: Color(0xffDDDDDD)),
+                Row(
+                  children: [
+                    Expanded(
+                        // 왼쪽 정렬
+                        child: Container(
+                      margin: EdgeInsets.all(10),
+                      child: Text('일정 완료율',
+                          style: TextStyle(
+                              fontFamily: 'PretendardRegular', fontSize: 24)),
+                    )),
+                    Expanded(
+                        // 오른쪽 정렬
+                        child: Container(
+                      margin: EdgeInsets.all(10),
+                      child: Text(
+                        '${(doneSchedules / totalSchedules * 100).toStringAsFixed(1)} %',
+                        textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
+                        style: TextStyle(
+                            color: Color(0xffA38130),
+                            fontFamily: 'PretendardRegular',
+                            fontSize: 24),
+                      ),
+                    ))
+                  ],
                 ),
-                //ContentCircle(user.emotion, '회상', '감정'),
-                ContentCircle(user.mostMemory, '최다', '열람기억')
+                Divider(color: Color(0xffDDDDDD)),
+                Row(
+                  children: [
+                    Expanded(
+                        // 왼쪽 정렬
+                        child: Container(
+                      margin: EdgeInsets.all(10),
+                      child: Text('최다 열람 기억',
+                          style: TextStyle(
+                              fontFamily: 'PretendardRegular', fontSize: 24)),
+                    )),
+                    Expanded(
+                        // 오른쪽 정렬
+                        child: Container(
+                      margin: EdgeInsets.all(10),
+                      child: Text(
+                        '뭘까용',
+                        textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
+                        style: TextStyle(
+                            color: Color(0xffA38130),
+                            fontFamily: 'PretendardRegular',
+                            fontSize: 24),
+                      ),
+                    ))
+                  ],
+                )
               ],
             ),
+          ),
+          SizedBox(
+            height: 15,
           ),
           TextButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ReportDetail();
+                return WeeklySummaryWidget();
               }));
             },
             child: Text(
@@ -496,7 +530,8 @@ class HomeReport extends StatelessWidget {
               style: TextStyle(fontSize: 20, color: Color(0xffA38130)),
             ),
             style: ButtonStyle(
-              minimumSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 60)), // 가로 150, 세로 50
+              minimumSize: MaterialStateProperty.all(
+                  Size(MediaQuery.of(context).size.width, 60)), // 가로 150, 세로 50
               backgroundColor: MaterialStateProperty.all(Color(0xffFFF5DB)),
               padding: MaterialStateProperty.all(
                   EdgeInsets.symmetric(horizontal: 10)),
