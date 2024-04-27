@@ -1,5 +1,6 @@
 import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/screen/LogInSignUp/LogInScreen.dart';
+import 'package:atti/screen/LoginSignUp/NextBtn.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -36,18 +37,15 @@ class _FinishSignUpScreenState extends State<FinishSignUpScreen> {
               ),
             ),
           ),
-
           Container(
             alignment: Alignment.center,
             margin: EdgeInsets.only(top: height*0.85, left: 10, right: 10),
             child: TextButton(
                 onPressed: () async {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return LogInScreen();
-                      }
-                      )
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context)=>LogInScreen()),
+                    (Route<dynamic> route) => false,
                   );
                 },
                 style: TextButton.styleFrom(

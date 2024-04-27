@@ -1,10 +1,9 @@
 import 'package:atti/commons/ErrorMessageWidget.dart';
 import 'package:atti/commons/colorPallet.dart';
-import 'package:atti/data/signup_login/SignUpController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EntryField extends StatefulWidget {
+class LoginEntryField extends StatefulWidget {
   final String fieldName;
   final int fieldId;
   final String errorMessage;
@@ -13,7 +12,9 @@ class EntryField extends StatefulWidget {
   final TextInputType inputType;
   final Function(String) onChanged;
   final bool isPassword;
-  const EntryField({
+  int isPressed;
+
+  LoginEntryField({
     super.key,
     required this.fieldName,
     required this.fieldId,
@@ -23,13 +24,14 @@ class EntryField extends StatefulWidget {
     this.inputType = TextInputType.text,
     this.isPassword = false,
     required this.onChanged,
+    required this.isPressed,
   });
 
   @override
-  State<EntryField> createState() => _EntryFieldState();
+  State<LoginEntryField> createState() => _LoginEntryFieldState();
 }
 
-class _EntryFieldState extends State<EntryField> {
+class _LoginEntryFieldState extends State<LoginEntryField> {
   bool isFocused = false; // 추가된 상태
 
   @override
@@ -37,7 +39,6 @@ class _EntryFieldState extends State<EntryField> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     ColorPallet _colorPallet = ColorPallet();
-    SignUpController _signUpController = Get.find<SignUpController>();
 
     return Container(
       child: Column(
@@ -56,15 +57,15 @@ class _EntryFieldState extends State<EntryField> {
               color: _colorPallet.lightYellow,
               borderRadius: BorderRadius.circular(15.0),
               border: Border.all(
-                color: _signUpController.isPressed.value == widget.fieldId ? _colorPallet.textColor : _colorPallet.lightYellow,
+                color: widget.isPressed == widget.fieldId ? _colorPallet.textColor : _colorPallet.lightYellow,
               ),
             ),
             child: TextFormField(
               onTap: () {
-                  setState(() {
-                    _signUpController.isPressed.value = widget.fieldId;
-                  });
-                  print("isPressed = ${ _signUpController.isPressed.value}\nfieldId = ${widget.fieldId}");
+                setState(() {
+                  widget.isPressed = widget.fieldId;
+                });
+                print("isPressed = ${ widget.isPressed}\nfieldId = ${widget.fieldId}");
               },
               obscureText: widget.isPassword,
               onChanged: widget.onChanged,
@@ -82,7 +83,7 @@ class _EntryFieldState extends State<EntryField> {
               ),
             ),
           ),
-          if (_signUpController.isPressed.value == widget.fieldId && !widget.isValid)
+          if (widget.isPressed == widget.fieldId && !widget.isValid)
             ErrorMessageWidget(message: widget.errorMessage)
         ],
       ),

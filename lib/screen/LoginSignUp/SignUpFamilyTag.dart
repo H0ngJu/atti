@@ -1,5 +1,5 @@
 import 'package:atti/commons/colorPallet.dart';
-import 'package:atti/data/SignUpController.dart';
+import 'package:atti/data/signup_login/SignUpController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_tag_editor/tag_editor.dart';
