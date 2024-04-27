@@ -1,5 +1,5 @@
 import 'package:atti/commons/DetailPageTitle.dart';
-import 'package:atti/data/SignUpController.dart';
+import 'package:atti/data/signup_login/SignUpController.dart';
 import 'package:atti/screen/LogInSignUp/SignUpScreen3.dart';
 import 'package:atti/screen/LoginSignUp/EntryField.dart';
 import 'package:atti/screen/LoginSignUp/NextBtn.dart';
