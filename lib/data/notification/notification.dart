@@ -176,10 +176,10 @@ class NotificationService {
       allSchedule.forEach((schedule) async {
         DateTime notificationTime = schedule.time!.toDate().subtract(Duration(minutes: 30));
 
-        // 만약 알림 시간이 현재 시간 이전이라면 1분 뒤로 설정
-        // if (notificationTime.isBefore(DateTime.now())) {
-        //   notificationTime = DateTime.now().add(Duration(minutes: 1));
-        // }
+        //만약 알림 시간이 현재 시간 이전이라면 1분 뒤로 설정
+        if (notificationTime.isBefore(DateTime.now())) {
+          notificationTime = DateTime.now().add(Duration(minutes: 1));
+        }
 
         await showDateTimeNotification(
           '일정 알림',
@@ -208,9 +208,9 @@ class NotificationService {
         DateTime routineTime = DateTime(now.year, now.month, now.day, hour, minute);
 
         // 만약 루틴 시간이 현재 시간 이전이라면 1분 뒤로 설정
-        // if (routineTime.isBefore(now)) {
-        //   routineTime = now.add(Duration(minutes: 1));
-        // }
+        if (routineTime.isBefore(now)) {
+          routineTime = now.add(Duration(minutes: 1));
+        }
 
         await NotificationService().showDateTimeNotification(
           '하루 일과 알림',

@@ -92,6 +92,7 @@ class _LogInScreenState extends State<LogInScreen> {
                           isPressed: isPressed,
 
                       ),
+
 //                       SizedBox(height: height*0.02,),
 //                       Container(
 //                         child: Column(
@@ -297,6 +298,153 @@ class _LogInScreenState extends State<LogInScreen> {
 //                         ],
 //                       )
 //                       // 아이디 비밀번호 찾기
+
+//                       SizedBox(height: height*0.05,),
+//                       Container(
+//                         child: ElevatedButton(
+//                             onPressed: () async {
+//                               try {
+//                                 if (!userId.contains('@') || !userId.contains('.') || userPassword.length < 6) {
+//                                   throw ("이메일과 비밀번호를 확인해 주세요");
+//                                 }
+//                                 final credential = await _authentication.signInWithEmailAndPassword(
+//                                   email: userId,
+//                                   password: userPassword,
+//                                 );
+//                                 if (credential.user != null) {
+//
+//                                   print(credential.user!.uid);
+//
+//                                   QuerySnapshot snapshot = await _db
+//                                       .collection('user')
+//                                       .where('userId', isEqualTo: credential.user!.uid)
+//                                       .get();
+//                                   DocumentSnapshot document = snapshot.docs[0];
+//                                   isPatient = await (document.data() as Map<String, dynamic>)["isPatient"];
+//
+//                                   // 사용자 정보 저장
+//                                   final AuthController authController = Get.put(AuthController());
+//                                   authController.isPatient = document['isPatient'];
+//                                   print(authController.userName.value);
+//
+//                                   // 환자
+//                                   if (isPatient) {
+//                                     authController.patientDocRef = document.reference;
+//                                     print(authController.patientDocRef);
+//                                     authController.userName.value = document['userName'];
+//                                     authController.familyMember.value = List<String>.from(document['familyMember']);
+//                                     print(authController.isPatient);
+//                                     Navigator.push(
+//                                         context,
+//                                         MaterialPageRoute(builder: (context) {
+//                                           return HomePatient();
+//                                         }
+//                                         )
+//                                     );
+//                                   }
+//
+//                                   else { // 보호자인 경우
+//                                     print(authController.isPatient);
+//                                     var carerRef = _db.doc("user/" + document['patientDocId']);
+//
+//                                     QuerySnapshot carerSnapShot = await _db
+//                                         .collection('user')
+//                                         .where('reference', isEqualTo: carerRef)
+//                                         .get();
+//                                     DocumentSnapshot carerDoc = carerSnapShot.docs[0];
+//                                     authController.patientDocRef = carerRef;
+//                                     //print(authController.patientDocRef);
+//                                     authController.userName.value = carerDoc['userName'];
+//                                     authController.familyMember.value = List<String>.from(carerDoc['familyMember']);
+//                                     print(authController.familyMember.value);
+//                                     Navigator.push(
+//                                         context,
+//                                         MaterialPageRoute(builder: (context) {
+//                                           return HomeCarer();
+//                                         }
+//                                         )
+//                                     );
+// }
+//                                 }
+//                               } on FirebaseAuthException catch (e) {
+//                                 if (e.code == 'user-not-found') {
+//                                   ScaffoldMessenger.of(context).showSnackBar(
+//                                       SnackBar(
+//                                         content:
+//                                         Text('일치하는 아이디가 존재하지 않습니다',
+//                                           style: TextStyle(
+//                                             color: Colors.black,
+//                                             fontSize: 18,
+//                                             fontWeight: FontWeight.bold,
+//                                           ),
+//                                         ),
+//                                         backgroundColor: Color(0xffFFC215),
+//                                       )
+//                                   );
+//                                   print('일치하는 아이디가 존재하지 않습니다');
+//                                 } else if (e.code == 'wrong-password') {
+//                                   ScaffoldMessenger.of(context).showSnackBar(
+//                                       SnackBar(
+//                                         content:
+//                                         Text('비밀번호가 일지하지 않습니다',
+//                                           style: TextStyle(
+//                                             color: Colors.black,
+//                                             fontSize: 18,
+//                                             fontWeight: FontWeight.bold,
+//                                           ),
+//                                         ),
+//                                         backgroundColor: Color(0xffFFC215),
+//                                       )
+//                                   );
+//                                   print('비밀번호가 일지하지 않습니다.');
+//                                 }
+//                               }
+//                             },
+//                             style: ElevatedButton.styleFrom(
+//                               backgroundColor: colorPallet.lightYellow,
+//                             ),
+//                             child: Container(
+//                                 width: 300,
+//                                 height: height*0.07,
+//                                 alignment: Alignment.center,
+//                                 child: Text('로그인',
+//                                     style: TextStyle(
+//                                       fontWeight: FontWeight.w600,
+//                                       fontSize: 24,
+//                                       color: colorPallet.textColor,
+//                                     )
+//                                 )
+//                             )
+//                             // 로그인 버튼
+//                         ),
+//                       ),
+//                       SizedBox(height: height*0.01,),
+//                       Row(
+//                         children: [
+//                           TextButton(onPressed: (){}, child: Text('아이디 찾기',
+//                             style: TextStyle(
+//                               color: Color(0xffB3B3B3),
+//                               fontSize: 20,
+//                               ),
+//                             )
+//                           ),
+//                           Text('|',
+//                             style: TextStyle(
+//                                 color: Color(0xffB3B3B3),
+//                               fontSize: 20,
+//                             )
+//                           ),
+//                           TextButton(onPressed: (){}, child: Text('비밀번호 찾기',
+//                               style: TextStyle(
+//                                 color: Color(0xffB3B3B3),
+//                                 fontSize: 20,
+//                               )
+//                             )
+//                           ),
+//                         ],
+//                       )
+//                       // 아이디 비밀번호 찾기
+
                     ],
                   ),
                 ),

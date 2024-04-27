@@ -74,5 +74,27 @@ class ScheduleService {
     }
   }
 
+  Future<List<ScheduleModel>> getSchedulesInRange(DateTime startDate, DateTime endDate) async {
+    try {
+      // 입력된 시작 날짜와 종료 날짜의 시간을 조정
+      DateTime startOfRange = DateTime(startDate.year, startDate.month, startDate.day, 0, 0);
+      DateTime endOfRange = DateTime(endDate.year, endDate.month, endDate.day, 23, 59);
+
+      QuerySnapshot querySnapshot = await firestore.collection('schedule')
+          .where('time', isGreaterThanOrEqualTo: Timestamp.fromDate(startOfRange))
+          .where('time', isLessThanOrEqualTo: Timestamp.fromDate(endOfRange))
+          .where('patientId', isEqualTo: authController.patientDocRef) // 사용자 연결 추가
+          .get();
+
+      List<ScheduleModel> schedules = [];
+      for (var doc in querySnapshot.docs) {
+        schedules.add(ScheduleModel.fromSnapShot(doc as DocumentSnapshot<Map<String, dynamic>>));
+      }
+      return schedules;
+    } catch (e) {
+      print('Error getting schedules in range: $e');
+      return [];
+    }
+  }
 
 }

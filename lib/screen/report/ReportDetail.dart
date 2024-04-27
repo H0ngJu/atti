@@ -41,7 +41,7 @@ class ReportDetail extends StatelessWidget {
                       ],
                     ),
                     SizedBox(
-                        width: 135,
+                        width: 115,
                         child: ElevatedButton(
                             onPressed: () {
                               Get.to(ReportHistory());
@@ -81,14 +81,14 @@ class RoutineInfo extends StatelessWidget {
       {
         "date": '2월 12일 월요일',
         "time": [8, 20],
-        "img" : 'https://thumbnews.nateimg.co.kr/view610///news.nateimg.co.kr/orgImg/hr/2022/01/21/20220121000202_0.jpg',
+        "img" : 'https://cdn.chungbuk.go.kr/news/photo/202302/22273_15401_957.jpg',
         "name" : "산책하기",
-        "days" : ["월","수","금"]
+        "days" : ["월","화", "수", "목", "금", "토", "일"]
       },
       {
         "date": '2월 15일 목요일',
         "time": [10, 00],
-        "img" : 'https://thumbnews.nateimg.co.kr/view610///news.nateimg.co.kr/orgImg/hr/2022/01/21/20220121000202_0.jpg',
+        "img" : 'https://cdn.iusm.co.kr/news/photo/202303/1010149_559193_2921.jpg',
         "name" : "치매안심센터 방문",
         "days" : ["화","목"]
       }
@@ -107,7 +107,7 @@ class RoutineInfo extends StatelessWidget {
         ),
 
         Container(
-          height:  MediaQuery.of(context).size.height * 0.58 * 2,
+          height:  MediaQuery.of(context).size.height * 0.55 * 2,
           width: MediaQuery.of(context).size.width * 0.9,
           child: TimelineTheme(
             data: TimelineThemeData(
@@ -307,11 +307,11 @@ class MostViewMemory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String mostViewMemTime = '2020년대';
-    String mostViewMemTitle = '제주도 여행';
+    String mostViewMemTime = '2000년대';
+    String mostViewMemTitle = '놀이공원 갔을때';
     int mostViewMemNum = 3;
     String mostViewMemImg =
-        'https://img.freepik.com/premium-photo/air-plane-flying-in-a-beatiful-blue-sky-view-out-airplane-view-of-the-wing-of-the-plane-and-the-city-and-the-road-in-the-morning-at-dawnxa_131573-225.jpg';
+        'https://media.istockphoto.com/id/1350618504/photo/1980s-china-parents-and-daughter-old-photos-of-real-life.jpg?s=612x612&w=0&k=20&c=BVUihgRq603vBIxosTz0o1iwSIENCLKhepbzkOnQnW4=';
     return Container(
         margin: EdgeInsets.only(top: 10, bottom: 30),
         child: Column(
