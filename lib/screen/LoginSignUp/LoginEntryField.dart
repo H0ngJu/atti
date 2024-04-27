@@ -1,5 +1,6 @@
 import 'package:atti/commons/ErrorMessageWidget.dart';
 import 'package:atti/commons/colorPallet.dart';
+import 'package:atti/data/signup_login/LoginController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,7 +13,6 @@ class LoginEntryField extends StatefulWidget {
   final TextInputType inputType;
   final Function(String) onChanged;
   final bool isPassword;
-  int isPressed;
 
   LoginEntryField({
     super.key,
@@ -24,7 +24,6 @@ class LoginEntryField extends StatefulWidget {
     this.inputType = TextInputType.text,
     this.isPassword = false,
     required this.onChanged,
-    required this.isPressed,
   });
 
   @override
@@ -39,6 +38,7 @@ class _LoginEntryFieldState extends State<LoginEntryField> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     ColorPallet _colorPallet = ColorPallet();
+    LoginController _loginController = Get.find<LoginController>();
 
     return Container(
       child: Column(
@@ -57,15 +57,15 @@ class _LoginEntryFieldState extends State<LoginEntryField> {
               color: _colorPallet.lightYellow,
               borderRadius: BorderRadius.circular(15.0),
               border: Border.all(
-                color: widget.isPressed == widget.fieldId ? _colorPallet.textColor : _colorPallet.lightYellow,
+                color: _loginController.isPressed.value == widget.fieldId ? _colorPallet.textColor : _colorPallet.lightYellow,
               ),
             ),
             child: TextFormField(
               onTap: () {
                 setState(() {
-                  widget.isPressed = widget.fieldId;
+                  _loginController.isPressed.value = widget.fieldId;
                 });
-                print("isPressed = ${ widget.isPressed}\nfieldId = ${widget.fieldId}");
+                print("isPressed = ${_loginController.isPressed.value}\nfieldId = ${widget.fieldId}");
               },
               obscureText: widget.isPassword,
               onChanged: widget.onChanged,
@@ -83,7 +83,7 @@ class _LoginEntryFieldState extends State<LoginEntryField> {
               ),
             ),
           ),
-          if (widget.isPressed == widget.fieldId && !widget.isValid)
+          if ( _loginController.isPressed.value == widget.fieldId && !widget.isValid)
             ErrorMessageWidget(message: widget.errorMessage)
         ],
       ),
