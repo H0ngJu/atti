@@ -172,6 +172,7 @@ class _VoiceButtonState extends State<VoiceButton> {
   int _staticTimeout = 5; // 정적 상태 타임아웃 (2초)
   int _elapsedTime = 0;
   late List<ChatMessage> chatMessages = []; // 대화 리스트
+  late List<String> onlyUserMessages = []; // 사용자 응답만 저장
 
   @override
   void initState() {
@@ -225,7 +226,7 @@ class _VoiceButtonState extends State<VoiceButton> {
                 _appendMessage("User", message); // 사용자의 말을 메시지로 추가
                 _onUserMessage(message);
 
-                String response = await _chatbot.getResponse(message); // Chatbot으로부터 응답 받기
+                String response = await _chatbot.getResponse(message, widget.memory.img!); // Chatbot으로부터 응답 받기
                 _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
                 //_speakMessage(response);
                 _onApiResponse(response);
@@ -347,6 +348,7 @@ class _VoiceButtonState extends State<VoiceButton> {
           date: DateTime.now(),
         ));
         printChatMessages();
+        onlyUserMessages.add(message);
       });
     }
   }
@@ -462,6 +464,7 @@ class _VoiceButtonState extends State<VoiceButton> {
               child: ElevatedButton(
                   onPressed: () {
                     var chat = ChatMessage.messagesToJsonString(chatMessages);
+                    //print(onlyUserMessages);
                     Get.to(BeforeSave(memory : widget.memory, chat: chat));
                   },
                   style: ElevatedButton.styleFrom(

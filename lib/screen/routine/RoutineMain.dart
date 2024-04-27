@@ -212,8 +212,7 @@ class _RoutineMainState extends State<RoutineMain> {
         child: Timeline.tileBuilder(
           builder: TimelineTileBuilder.connectedFromStyle(
             indicatorStyleBuilder: (context, index) {
-              print(
-                  '${routinesBySelectedDay[index].name} : ${routinesBySelectedDay[index].isFinished![removeZ(_selectedDay.toString())]}');
+              //print('${routinesBySelectedDay[index].name} : ${routinesBySelectedDay[index].isFinished![removeZ(_selectedDay.toString())]}');
               bool isFinished =
                   routinesBySelectedDay[index].isFinished != null &&
                       routinesBySelectedDay[index]
@@ -221,7 +220,7 @@ class _RoutineMainState extends State<RoutineMain> {
                           .containsKey(removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')) &&
                       routinesBySelectedDay[index]
                           .isFinished![removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')]!;
-              print('here : ${isFinished}');
+              //print('here : ${isFinished}');
               return (isFinished
                   ? IndicatorStyle.dot
                   : IndicatorStyle.outlined);
