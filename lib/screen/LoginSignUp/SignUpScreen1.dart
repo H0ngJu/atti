@@ -1,6 +1,6 @@
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/colorPallet.dart';
-import 'package:atti/data/SignUpController.dart';
+import 'package:atti/data/signup_login/SignUpController.dart';
 import 'package:atti/screen/LogInSignUp/SignUpScreen2.dart';
 import 'package:atti/screen/LoginSignUp/CustomerTypeBtn.dart';
 import 'package:atti/screen/LoginSignUp/NextBtn.dart';

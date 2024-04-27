@@ -1,12 +1,11 @@
 import 'package:atti/commons/DetailPageTitle.dart';
-import 'package:atti/data/SignUpController.dart';
+import 'package:atti/data/signup_login/SignUpController.dart';
 import 'package:atti/screen/LoginSignUp/EntryField.dart';
 import 'package:atti/screen/LoginSignUp/FinishSignUpScreen.dart';
 import 'package:atti/screen/LoginSignUp/NextBtn.dart';
 import 'package:atti/screen/LoginSignUp/SignUpFamilyTag.dart';
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:bottom_picker/resources/arrays.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
