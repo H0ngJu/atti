@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: SignUpScreen2(),
+      home: SignUpScreen3(),
     );
   }
 }

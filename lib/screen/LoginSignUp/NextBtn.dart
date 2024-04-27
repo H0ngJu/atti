@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 class NextBtn extends StatelessWidget {
   final bool isButtonDisabled;
   final Widget nextPage;
+  final Function? onButtonClick;
+  final String? buttonName;
 
   const NextBtn({
     super.key,
     required this.isButtonDisabled,
-    required this.nextPage
+    required this.nextPage,
+    this.onButtonClick,
+    this.buttonName,
   });
 
   @override
@@ -23,6 +27,9 @@ class NextBtn extends StatelessWidget {
         height: height*0.07,
         child: TextButton(
           onPressed: isButtonDisabled ? null : () async {
+            if (onButtonClick != null) {
+              await onButtonClick!();
+            }
             Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => nextPage)
@@ -38,7 +45,7 @@ class NextBtn extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30)
               )
           ),
-          child: Text('다음',
+          child: Text(buttonName == null ? '다음' : buttonName!,
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 24,
