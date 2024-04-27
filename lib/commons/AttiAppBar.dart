@@ -45,6 +45,7 @@ class AttiAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
+        automaticallyImplyLeading: false,
         title: title,
         leading: showNotificationsIcon
             ? Container(
