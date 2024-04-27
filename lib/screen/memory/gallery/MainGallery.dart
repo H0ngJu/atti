@@ -139,7 +139,7 @@ class _MainGalleryState extends State<MainGallery> {
                             text:
                                 '\'${tagController.selectedTag.value}\' 기억을 모아봤어요',
                             style: TextStyle(
-                              fontSize: 30,
+                              fontSize: 26,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

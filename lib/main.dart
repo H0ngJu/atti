@@ -1,7 +1,7 @@
 import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/notification/notification.dart';
-import 'package:atti/screen/HomeCarer.dart';
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
+
 import 'package:atti/screen/LogInSignUp/SignUpScreen1.dart';
 import 'package:atti/screen/LogInSignUp/SignUpScreen2.dart';
 import 'package:atti/screen/LogInSignUp/SignUpScreen3.dart';
@@ -21,6 +21,7 @@ import 'package:atti/screen/chatbot/Chatbot.dart';
 import 'package:atti/screen/memory/gallery/MemoryDetail.dart';
 import 'package:atti/screen/schedule/ScheduleMain.dart';
 import 'package:atti/screen/memory/gallery/MainGallery.dart';
+
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -28,9 +29,6 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'firebase_options.dart';
-import 'package:atti/screen/HomePatient.dart';
-import 'package:atti/screen/schedule/finish/ScheduleFinish1.dart';
-import 'package:atti/screen/schedule/register/ScheduleRegister1.dart';
 
 void main() async {
   final notificationService = NotificationService();
