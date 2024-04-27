@@ -7,36 +7,32 @@ import 'dart:core';
 class ReportModel {
   // 자료형
   Timestamp? createdAt;
-  String? patientId;
-  Map<String, dynamic>? mostViews; // ++
+  DocumentReference<Map<String, dynamic>>? patientId;
+  Map<String, dynamic>? mostViews;
   List<Map<String, dynamic>>? unfinishedRoutine;
   Map<String, dynamic>? registeredMemoryCount;
-  DocumentReference? reference; // document 식별자
-  final _db = FirebaseFirestore.instance; // ++
   // json -> object (Firestore -> Flutter)
-  ReportModel.fromJson(dynamic json, this.reference) {
+  ReportModel.fromJson(dynamic json) {
     createdAt = json['createdAt'];
-    patientId = json['patientId'];
-    // patientId = _db.doc(json['patientId']); // ++
-    mostViews = json['mostViews'] as Map<String, dynamic>;
-    unfinishedRoutine = List<Map<String, String>>.from(json['unfinishedRoutine'].map((item) => Map<String, String>.from(item)));
-    registeredMemoryCount = json['registeredMemoryCount'] as Map<String, dynamic>; // 수정된 부분
-    // unfinishedRoutine = json['unfinishedRoutine'];
-    // registeredMemoryCount = json['registeredMemoryCount'];
-    reference = json['reference'];
+    // patientId 필드를 DocumentReference로 안전하게 캐스팅
+    patientId = json['patientId'] as DocumentReference<Map<String, dynamic>>;
+    mostViews = json['mostViews'] as Map<String, dynamic>? ?? {};
+    unfinishedRoutine = (json['unfinishedRoutine'] as List<dynamic>?)
+        ?.map((item) => Map<String, dynamic>.from(item))
+        .toList() ?? [];
+    registeredMemoryCount = json['registeredMemoryCount'] as Map<String, dynamic>? ?? {};
   }
 
   // Named Constructor with Initializer
   // snapshot 자료가 들어오면 이걸 다시 Initializer를 통해 fromJson Named Constructor를 실행함
   ReportModel.fromSnapShot(DocumentSnapshot<Object?> snapshot)
-      : this.fromJson(snapshot.data() as Map<String, dynamic>, snapshot.reference);
-
+      : this.fromJson(snapshot.data() as Map<String, dynamic>? ?? {});
 
   // Named Constructor with Initializer
   // 컬렉션 내에 특정 조건을 만족하는 데이터를 다 가지고 올때 사용
   ReportModel.fromQuerySnapshot(
       QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : this.fromJson(snapshot.data()!, snapshot.reference);
+      : this.fromJson(snapshot.data()!);
 
   // object -> json (Flutter -> Firebase)
   Map<String, dynamic> toJson() {
@@ -46,7 +42,6 @@ class ReportModel {
     map['mostViews'] = mostViews;
     map['unfinishedRoutine'] = unfinishedRoutine;
     map['registeredMemoryCount'] = registeredMemoryCount;
-    map['reference'] = reference;
     return map;
   }
 }
@@ -62,20 +57,25 @@ class ReportController {
       User? user = _authentication.currentUser;
       List<ReportModel> reports = [];
       print(user!.uid);
-      // 보호자 도큐먼트 받아오기
-      QuerySnapshot userSnapshot = await _db.collection('user')
-          .where('userId', isEqualTo: user.uid)
-          .get();
-      if (userSnapshot.docs.length > 0) {
-        // 보호자 도큐먼트 내 patientId로 레포트 쿼리
-        DocumentReference patientRef = _db.doc("user/"+userSnapshot.docs[0]["patientDocId"]);
-        QuerySnapshot reportsSnapshot = await _db.collection('report')
-            .where('patientId', isEqualTo: "/user/"+patientRef.id)
+      // 보호자 도큐먼트 받아오기 : uid로 userId 일치하는 user Doc 가져오기
+      QuerySnapshot userSnapshot;
+      if (user != null) {
+        userSnapshot = await _db.collection('user')
+            .where('userId', isEqualTo: user.uid)
             .get();
-        reportsSnapshot.docs.forEach((doc) {
-          // add함수에서 문제가 발생하는듯
-          reports.add(ReportModel.fromSnapShot(doc));
-        });
+        if (userSnapshot.docs.length > 0) {
+          // 보호자 도큐먼트 내 patientId로 레포트 쿼리
+          DocumentReference patientRef = _db.doc("user/"+userSnapshot.docs[0]["patientDocId"]);
+          QuerySnapshot reportsSnapshot = await _db.collection('report')
+              .where('patientId', isEqualTo: patientRef)
+              .get();
+          reportsSnapshot.docs.forEach((doc) {
+            reports.add(ReportModel.fromSnapShot(doc));
+          });
+        }
+      }
+      else {
+        print("error : logged user doesn't exist");
       }
       return reports;
     } catch (e) {
@@ -84,3 +84,7 @@ class ReportController {
     }
   }
 }
+
+// 1. 리포트 페이지에 들어가면 보호자의 user doc을 찾아 patient Doc Id를 찾는다
+// 2. patient Doc Id와 일치하는 patientId를 가진 report doc을 찾는다.
+// 3. report doc의 문서를 찾아와 보여준다.

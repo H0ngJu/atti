@@ -49,13 +49,12 @@ class RoutineService {
     }
   }
 
-
   Map<String, bool> createTimeMap(List<String>? days) {
     Map<String, bool> timeMap = {};
     DateTime now = DateTime.now();
     DateTime oneYearFromNow = DateTime(now.year + 1, now.month, now.day);
     if (days != null) {
-      for (var i = 0; i < 30; i++) {
+      for (var i = 0; i < 365; i++) {
         DateTime date = DateTime(now.year, now.month, now.day + i);
         String dayOfWeek = getDayOfWeek(date.weekday);
 
@@ -152,4 +151,53 @@ class RoutineService {
       print('Error completing routine: $e');
     }
   }
+  // 지정된 날짜 범위 내의 루틴 가져오기
+  Future<List<RoutineModel>> getRoutinesInRange(DateTime startDate, DateTime endDate) async {
+    try {
+      // 시작 날짜와 종료 날짜를 String 형태로 변환합니다.
+      String startString = '${startDate.year}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}';
+      String endString = '${endDate.year}-${endDate.month.toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(2, '0')}';
+
+      // Firestore에서 조건에 맞는 문서들을 조회합니다.
+      QuerySnapshot querySnapshot = await firestore
+          .collection('routine')
+          .where('patientId', isEqualTo: authController.patientDocRef)
+          .get();
+
+      List<RoutineModel> routines = [];
+
+      // 문서들을 순회하면서 조건에 맞는지 확인합니다.
+      for (var doc in querySnapshot.docs) {
+        RoutineModel routine = RoutineModel.fromJson(doc.data() as Map<String, dynamic>, doc.reference);
+
+        // 루틴의 isFinished 맵을 순회하면서 날짜 범위 내에 완료되지 않은 루틴이 있는지 확인합니다.
+        bool isInDateRange = routine.isFinished!.entries.any((entry) {
+          DateTime entryDate = DateTime.parse(entry.key);
+          return entryDate.isAfter(DateTime.parse(startString)) && entryDate.isBefore(DateTime.parse(endString)) && !entry.value;
+        });
+
+        // 조건에 맞는 경우 리스트에 추가합니다.
+        if (isInDateRange) {
+          routines.add(routine);
+        }
+      }
+
+      // 반환하기 전에, 루틴을 시간 순서대로 정렬합니다.
+      routines.sort((a, b) {
+        List<int>? timeA = a.time;
+        List<int>? timeB = b.time;
+        if (timeA![0] != timeB![0]) {
+          return timeA[0].compareTo(timeB[0]);
+        } else {
+          return timeA[1].compareTo(timeB[1]);
+        }
+      });
+
+      return routines;
+    } catch (e) {
+      print('Error getting routines in date range: $e');
+      return [];
+    }
+  }
+
 }

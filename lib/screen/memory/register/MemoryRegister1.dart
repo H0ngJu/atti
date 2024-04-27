@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'package:atti/screen/memory/register/MemoryRegister2.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
 
