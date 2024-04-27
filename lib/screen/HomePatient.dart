@@ -462,6 +462,7 @@ class IncompleteScheduleWidget extends StatelessWidget {
   final String name;
   final String location;
   final String memo;
+  final int idx;
   final DocumentReference docRef;
 
   const IncompleteScheduleWidget(
@@ -470,6 +471,7 @@ class IncompleteScheduleWidget extends StatelessWidget {
       required this.name,
       required this.location,
       required this.memo,
+      required this.idx,
       required this.docRef})
       : super(key: key);
 
@@ -501,6 +503,17 @@ class IncompleteScheduleWidget extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
+              flex: 1,
+                child: Container(
+                    decoration: BoxDecoration(
+                      //color: Color(0xffFFF5DB),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    padding: EdgeInsets.all(17),
+                    alignment: Alignment.center,
+                    child: Text(idx?.toString() ?? '',style: TextStyle(fontSize: 24) ))),
+            Expanded(
+              flex: 3,
               child: Container(
                 decoration: BoxDecoration(
                   //color: Color(0xffFFF5DB),
@@ -515,6 +528,7 @@ class IncompleteScheduleWidget extends StatelessWidget {
               ),
             ),
             Expanded(
+              flex: 3,
               child: Container(
                 padding: EdgeInsets.all(17),
                 alignment: Alignment.center,
@@ -636,7 +650,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                 ),
               )
             : Container(
-                padding: EdgeInsets.only(top: 17, right: 17, left: 17),
+                //padding: EdgeInsets.only(top: 17, right: 17, left: 17),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -651,7 +665,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                         ScheduleModel schedule = schedules[index];
                         return schedule.isFinished ?? false
                             ? CompleteScheduleWidget(
-                                time: DateFormat('HH시 mm분')
+                                time: DateFormat('a h:mm', 'ko_KR')
                                     .format(schedule.time!.toDate()),
                                 name: schedule.name!,
                                 location: schedule.location!,
@@ -659,7 +673,8 @@ class _HomeScheduleState extends State<HomeSchedule> {
                                 docRef: schedule.reference!,
                               )
                             : IncompleteScheduleWidget(
-                                time: DateFormat('HH시 mm분')
+                          idx: index,
+                                time: DateFormat('a h:mm', 'ko_KR')
                                     .format(schedule.time!.toDate()),
                                 name: schedule.name!,
                                 location: schedule.location!,
@@ -731,41 +746,47 @@ class RoutineWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded( flex: 1, child : ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Image.network(
-                url ?? '',
-                width: MediaQuery.of(context).size.width * 0.5,
-                height: MediaQuery.of(context).size.width * 0.5,
-                fit: BoxFit.cover,
+            Expanded(
+              flex: 1,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.network(
+                  url ?? '',
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: MediaQuery.of(context).size.width * 0.5,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),),
+            ),
             SizedBox(
               width: 10,
             ),
-            Expanded(flex: 1, child : Container(
-              padding: EdgeInsets.all(5),
-              height: MediaQuery.of(context).size.width * 0.5,
-              decoration: BoxDecoration(
-                  border: Border.all(
-                      style: BorderStyle.solid, color: Color(0xffDDDDDD)),
-                  borderRadius: BorderRadius.all(Radius.circular(15))),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    time ?? '',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                  Text(
-                    textAlign: TextAlign.center,
-                    name ?? '',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ],
+            Expanded(
+              flex: 1,
+              child: Container(
+                padding: EdgeInsets.all(5),
+                height: MediaQuery.of(context).size.width * 0.5,
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        style: BorderStyle.solid, color: Color(0xffDDDDDD)),
+                    borderRadius: BorderRadius.all(Radius.circular(15))),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      time ?? '',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    Text(
+                      textAlign: TextAlign.center,
+                      name ?? '',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ],
+                ),
               ),
-            ),),
+            ),
           ],
         ),
       ),
