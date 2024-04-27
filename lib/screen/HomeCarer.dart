@@ -2,7 +2,6 @@ import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:atti/screen/report/ReportDetail.dart';
 import 'package:atti/screen/report/ReportHistory.dart';
-import 'package:atti/screen/report/WeeklyData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -523,7 +522,7 @@ class _HomeReportState extends State<HomeReport> {
           TextButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return WeeklySummaryWidget();
+                return ReportDetail();
               }));
             },
             child: Text(
