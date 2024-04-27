@@ -108,16 +108,16 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
         Container(
           margin: EdgeInsets.only(bottom: 20),
           child: TextButton(
-            onPressed: () {
+            onPressed: () async {
               scheduleController.tmpScheduleName.value = scheduleController.schedule.value.name!;
-              scheduleController.addSchedule();
+              final updatedSchedule = await scheduleController.addSchedule();
 
-              if (authController.isPatient) { // 환자일때만 일정 알림 등록
+              if (authController.isPatient) {
                 notificationService.showDateTimeNotification(
-                    '일정 알림',
-                    '곧 \'${scheduleController.schedule.value.name}\'을(를) 하실 시간이에요!',
-                    scheduleController.schedule.value.time!.toDate().subtract(Duration(minutes: 30)),
-                    'schedule'
+                  '일정 알림',
+                  '곧 \'${updatedSchedule.name}\'을(를) 하실 시간이에요!',
+                  updatedSchedule.time!.toDate().subtract(Duration(hours: 1)),
+                  '/schedule1/${updatedSchedule.reference!.id}',
                 );
               }
 

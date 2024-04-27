@@ -9,7 +9,7 @@ class RoutineController extends GetxController {
   var routine = RoutineModel().obs;
   var tmpRoutineName = ''.obs;
 
-  void addRoutine() async {
+  Future<void> addRoutine() async {
     try {
       await routineService.addRoutine(routine.value);
       clear();
