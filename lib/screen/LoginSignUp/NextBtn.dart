@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 
 class NextBtn extends StatelessWidget {
   final bool isButtonDisabled;
-  final Widget nextPage;
+  final Widget? nextPage;
   final Function? onButtonClick;
   final String? buttonName;
 
   const NextBtn({
     super.key,
     required this.isButtonDisabled,
-    required this.nextPage,
+    this.nextPage,
     this.onButtonClick,
     this.buttonName,
   });
@@ -30,10 +30,12 @@ class NextBtn extends StatelessWidget {
             if (onButtonClick != null) {
               await onButtonClick!();
             }
-            Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => nextPage)
-            );
+            if (nextPage != null) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => nextPage!)
+              );
+            }
           },
           style: TextButton.styleFrom(
               backgroundColor: isButtonDisabled ? Colors.white : _colorPallet.goldYellow,
