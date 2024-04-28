@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:atti/commons/SimpleAppBar.dart';
 import 'package:atti/data/memory/memory_note_model.dart';
+import 'package:atti/data/report/dangerword_controller.dart';
 import 'package:atti/data/report/emotion_controller.dart';
 import 'package:atti/screen/chatbot/Chatbot.dart';
 import 'package:atti/screen/memory/chat/BeforeSave.dart';
@@ -48,8 +49,6 @@ List<String> HmmMsg = ['고민', '곰곰', '힘든', '힘들', ];  // 'lib/asset
 //List<String> NormalMsg = ['그렇군요', '군요', ]; // 'lib/assets/Atti/Normal.png'
 List<String> ShyMsg = ['걱정', '불안', '슬퍼', '슬프', '슬펐', '위로', '아프', '아파', '아팠', '우울'];  // 'lib/assets/Atti/Shy.png'
 List<String> SurprisedMsg = ['놀라', '놀랐', '깜짝', '신기', '대단', '멋지', '멋진', '특별',];  // 'lib/assets/Atti/Surprised.png'
-
-List<String> DangerWords = ['자살', '죽어야지', '죽겠다', '힘들', '외롭' '우울'];
 
 class Chat extends StatefulWidget {
   final MemoryNoteModel memory;
@@ -177,6 +176,7 @@ class _VoiceButtonState extends State<VoiceButton> {
   late List<ChatMessage> chatMessages = []; // 대화 리스트
   late List<String> onlyUserMessages = []; // 사용자 응답만 저장
   final EmotionController emotionController = Get.put(EmotionController());
+  final DangerWordController dangerWordController = Get.put(DangerWordController());
 
   @override
   void initState() {
@@ -424,6 +424,21 @@ class _VoiceButtonState extends State<VoiceButton> {
     });
   }
 
+  // 위험한 단어 포함 여부를 확인하고 해당 단어들을 리스트로 반환하는 함수
+  List<String> getDangerWords(List<String> messages) {
+    List<String> dangerWords = ['자살', '죽어야지', '죽으', '죽음', '죽겠다', '힘들', '외롭', '외로', '우울', ];
+    List<String> detectedWords = [];
+
+    for (String message in messages) {
+      for (String word in dangerWords) {
+        if (message.contains(word)) {
+          detectedWords.add(word);
+        }
+      }
+    }
+    return detectedWords;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -471,6 +486,11 @@ class _VoiceButtonState extends State<VoiceButton> {
                     //print(onlyUserMessages);
                     if (onlyUserMessages.isNotEmpty) {
                       _chatbot.emotionAnalysis(onlyUserMessages.join(' ')); // onlyUserMessages가 비어 있지 않은 경우에만 호출
+
+                      List<String> detectedDangerWords = getDangerWords(onlyUserMessages);
+                      if (detectedDangerWords.isNotEmpty) { // 위험 단어가 발견된 경우
+                        dangerWordController.addDangerWord(detectedDangerWords);
+                      }
                     }
 
                     Get.to(BeforeSave(memory : widget.memory, chat: chat));

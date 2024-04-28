@@ -123,10 +123,7 @@ class Chatbot {
 
     List<String> emotionsList = response.text!.split(',').map((e) => e.trim()).toList();
     emotionController.addEmotion(emotionsList);
-
   }
-
-
 
 
 }
