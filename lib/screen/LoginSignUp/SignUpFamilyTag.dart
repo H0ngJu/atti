@@ -1,5 +1,5 @@
 import 'package:atti/commons/colorPallet.dart';
-import 'package:atti/data/SignUpController.dart';
+import 'package:atti/data/signup_login/SignUpController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_tag_editor/tag_editor.dart';
@@ -13,6 +13,7 @@ class SignUpFamilyTag extends StatefulWidget {
 
 class _SignUpFamilyTagState extends State<SignUpFamilyTag> {
   final SignUpController signUpController = Get.put(SignUpController());
+  ColorPallet _colorPallet = ColorPallet();
   List<String> _values = [];
 
   onDelete(index) {
@@ -53,19 +54,19 @@ class _SignUpFamilyTagState extends State<SignUpFamilyTag> {
               isDense: true,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(color: Color(0xffFFE9B3), width: 3),
+                borderSide: BorderSide(color: _colorPallet.lightYellow, width: 1),
               ),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Color(0xffA38130), width: 1)
+                  borderSide: BorderSide(color: _colorPallet.textColor, width: 1)
               ),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Color(0xffFFE9B3), width: 3)
+                  borderSide: BorderSide(color: _colorPallet.lightYellow, width: 1)
               ),
               contentPadding: EdgeInsets.only(top: 15, bottom: 10, left: 15),
               filled: true,
-              fillColor: colorPallet.yellow,
+              fillColor: _colorPallet.lightYellow,
               hintText: '가족 구성원을 입력해주세요',
               hintStyle: TextStyle(color: Color(0xffA38130), fontSize: 24, fontWeight: FontWeight.normal)
           ),

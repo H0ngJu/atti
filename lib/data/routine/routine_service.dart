@@ -54,7 +54,7 @@ class RoutineService {
     DateTime now = DateTime.now();
     DateTime oneYearFromNow = DateTime(now.year + 1, now.month, now.day);
     if (days != null) {
-      for (var i = 0; i < 30; i++) {
+      for (var i = 0; i < 365; i++) {
         DateTime date = DateTime(now.year, now.month, now.day + i);
         String dayOfWeek = getDayOfWeek(date.weekday);
 

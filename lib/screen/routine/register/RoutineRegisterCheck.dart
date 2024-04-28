@@ -35,10 +35,10 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
                 ),
                 SizedBox(height: 30,),
                 RoutineBox(
-                  time: routineController.routine.value.time,
-                  name: routineController.routine.value.name,
-                  img: routineController.routine.value.img,
-                  days: routineController.routine.value.repeatDays,
+                  time: routineController.routine.value?.time ?? '',
+                  name: routineController.routine.value?.name ?? '',
+                  img: routineController.routine.value?.img ?? '',
+                  days: (routineController.routine.value?.repeatDays ?? []).map<String>((day) => day.toString()).toList(), // 형 변환 및 기본값 할당
                 ),
 
               ],
@@ -48,10 +48,10 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
           Container(
             margin: EdgeInsets.only(bottom: 20),
             child: TextButton(
-              onPressed: () {
+              onPressed: () async {
                 routineController.tmpRoutineName.value = routineController.routine.value.name!;
                 print(routineController.routine.value.repeatDays);
-                routineController.addRoutine();
+                await routineController.addRoutine();
 
                 if (authController.isPatient) {
                   notificationService.routineNotifications();

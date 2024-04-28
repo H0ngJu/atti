@@ -2,7 +2,6 @@ import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:atti/screen/report/ReportDetail.dart';
 import 'package:atti/screen/report/ReportHistory.dart';
-import 'package:atti/screen/report/WeeklyData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,7 @@ class _HomeCarerState extends State<HomeCarer> {
   final _authentication = FirebaseAuth.instance;
   final _db = FirebaseFirestore.instance;
   User? loggedUser;
-  final AuthController authController = Get.put(AuthController());
+  final AuthController authController = Get.find<AuthController>();
 
   DateTime _selectedDay = DateTime.now();
   List<ScheduleModel> schedulesBySelectedDay = []; // 선택된 날짜의 일정들이 반환되는 리스트
@@ -47,9 +46,10 @@ class _HomeCarerState extends State<HomeCarer> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      await _fetchData();
-    });
+    // Future.delayed(Duration.zero, () async {
+    //   await _fetchData();
+    _fetchData();
+    // });
     getCurrentUser();
     _requestNotificationPermissions();
   }
@@ -522,7 +522,7 @@ class _HomeReportState extends State<HomeReport> {
           TextButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return WeeklySummaryWidget();
+                return ReportDetail();
               }));
             },
             child: Text(

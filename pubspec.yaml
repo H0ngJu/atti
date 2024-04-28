@@ -52,7 +52,7 @@ dependencies:
   step_progress_indicator: ^1.0.2
   intl: ^0.18.1
   firebase_storage: ^11.6.4
-  cloud_firestore: ^4.15.3
+  cloud_firestore: ^4.15.5
   firebase_auth: ^4.17.3
   flutter_localizations:
     sdk: flutter
@@ -70,7 +70,8 @@ dependencies:
   flutter_dotenv: ^5.1.0
   dart_openai: ^5.0.0
   flutter_tts: ^3.8.5
-  google_generative_ai: ^0.2.3
+  google_generative_ai: ^0.3.1
+  firebase_messaging: ^14.7.19
 
 
 
@@ -106,6 +107,41 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  fonts:
+    - family: PretendardBlack
+      fonts:
+        - asset: lib/assets/fonts/Pretendard-Black.ttf
+    - family: PretendardBold
+      fonts:
+          - asset: lib/assets/fonts/Pretendard-Bold.ttf
+    - family: PretendardExtraBold
+      fonts:
+            - asset: lib/assets/fonts/Pretendard-ExtraBold.ttf
+    - family: PretendardExtraLight
+      fonts:
+            - asset: lib/assets/fonts/Pretendard-ExtraLight.ttf
+    - family: PretendardLight
+      fonts:
+            - asset: lib/assets/fonts/Pretendard-Light.ttf
+    - family: PretendardMedium
+      fonts:
+            - asset: lib/assets/fonts/Pretendard-Medium.ttf
+    - family: PretendardRegular
+      fonts:
+            - asset: lib/assets/fonts/Pretendard-Regular.ttf
+    - family: PretendardSemiBold
+      fonts:
+            - asset: lib/assets/fonts/Pretendard-SemiBold.ttf
+    - family: PretendardThin
+      fonts:
+            - asset: lib/assets/fonts/Pretendard-Thin.ttf
+    - family: UhBee
+      fonts:
+            - asset: lib/assets/fonts/UhBee Se_hyun.ttf
+    - family: UhBeeBold
+      fonts:
+            - asset: lib/assets/fonts/UhBee Se_hyun Bold.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

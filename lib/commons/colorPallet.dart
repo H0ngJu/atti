@@ -9,4 +9,5 @@ class ColorPallet extends GetxController {
   Color goldYellow = Color(0xffFFC215);
   Color textColor = Color(0xffA38130);
   Color alertColor = Color(0xffB62E26);
+  Color grayColor = Color(0xff7E7E7E);
 }
