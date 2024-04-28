@@ -48,6 +48,8 @@ List<String> HmmMsg = ['고민', '곰곰', '힘든', '힘들', ];  // 'lib/asset
 List<String> ShyMsg = ['걱정', '불안', '슬퍼', '슬프', '슬펐', '위로', '아프', '아파', '아팠', '우울'];  // 'lib/assets/Atti/Shy.png'
 List<String> SurprisedMsg = ['놀라', '놀랐', '깜짝', '신기', '대단', '멋지', '멋진', '특별',];  // 'lib/assets/Atti/Surprised.png'
 
+List<String> DangerWords = ['자살', '죽어야지', '죽겠다', '힘들', '외롭' '우울'];
+
 class Chat extends StatefulWidget {
   final MemoryNoteModel memory;
   const Chat({Key? key, required this.memory}) : super(key: key);
@@ -226,7 +228,7 @@ class _VoiceButtonState extends State<VoiceButton> {
                 _appendMessage("User", message); // 사용자의 말을 메시지로 추가
                 _onUserMessage(message);
 
-                String response = await _chatbot.getResponse(message, widget.memory.img!); // Chatbot으로부터 응답 받기
+                String response = await _chatbot.getResponse(message, widget.memory.img!, widget.memory.reference!); // Chatbot으로부터 응답 받기
                 _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
                 //_speakMessage(response);
                 _onApiResponse(response);
@@ -464,7 +466,11 @@ class _VoiceButtonState extends State<VoiceButton> {
               child: ElevatedButton(
                   onPressed: () {
                     var chat = ChatMessage.messagesToJsonString(chatMessages);
-                    //print(onlyUserMessages);
+                    print(onlyUserMessages);
+                    if (onlyUserMessages.isNotEmpty) {
+                      _chatbot.emotionAnalysis(onlyUserMessages.join(' ')); // onlyUserMessages가 비어 있지 않은 경우에만 호출
+                    }
+
                     Get.to(BeforeSave(memory : widget.memory, chat: chat));
                   },
                   style: ElevatedButton.styleFrom(
