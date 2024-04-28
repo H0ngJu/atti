@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
 import 'package:atti/screen/memory/gallery/GalleryOption.dart';
 import 'package:atti/screen/memory/gallery/MemoryDetail.dart';
+import 'package:atti/screen/memory/gallery/RecollectionDetail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,6 +12,7 @@ import 'package:get/get_core/src/get_main.dart';
 import '../../../data/auth_controller.dart';
 import '../../../data/memory/memory_note_model.dart';
 import '../../../data/memory/memory_note_service.dart';
+import 'RecollectionData.dart';
 import 'TagController.dart';
 
 class MainGallery extends StatefulWidget {
@@ -25,6 +29,7 @@ class _MainGalleryState extends State<MainGallery> {
   MemoryNoteService memoryNoteService = MemoryNoteService();
   List<MemoryNoteModel> memoryNotes = [];
   late int numberOfMemory;
+  late RecollectionData randomData;
 
   // bottom Navi logic
   int _selectedIndex = 0;
@@ -33,6 +38,7 @@ class _MainGalleryState extends State<MainGallery> {
   void initState() {
     super.initState();
     fetchData();
+    randomData = dummyData[Random().nextInt(dummyData.length)];
   }
 
   Future<void> fetchData() async {
@@ -113,7 +119,7 @@ class _MainGalleryState extends State<MainGallery> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffFFF5DB),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
@@ -147,39 +153,97 @@ class _MainGalleryState extends State<MainGallery> {
                       ),
                     ),
                   ),
-                  ElevatedButton(
+                  TextButton(
                     onPressed: () {
                       Get.to(GalleryOption());
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xffFFC215),
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      side: BorderSide(color: Colors.black),
                       shape: CircleBorder(),
                       minimumSize: Size(48, 48),
                     ),
                     child: Text(
-                      '순서\n변경',
-                      style: TextStyle(fontSize: 12, color: Colors.white),
+                      '나열\n변경',
+                      style: TextStyle(fontSize: 12, color: Colors.black),
                     ),
                   ),
                 ],
               ),
             ),
-            // GridView를 사용하여 2열로 메모리 정보를 표시합니다.
-            GridView.count(
-              crossAxisCount: 2,
-              // 열의 수를 2로 설정합니다.
-              crossAxisSpacing: 16,
-              // 열 간의 간격을 조정합니다.
-              mainAxisSpacing: 30,
-              // 행 간의 간격을 조정합니다.
-              shrinkWrap: true,
-              // GridView가 SingleChildScrollView와 함께 사용될 때 필요합니다.
-              physics: NeverScrollableScrollPhysics(),
-              // GridView가 스크롤되지 않도록 합니다.
-              children: memoryNotes!.map((memory) {
-                return GalleryContent(memory);
-              }).toList(),
+            SizedBox(height: 10),
+            Row(
+              // 이미지를 중앙 정렬하기 위한 Row 위젯
+              mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
+              children: [
+                Image(
+                    image: AssetImage('lib/assets/Atti/Stars.png'),
+                    width: MediaQuery.of(context).size.width * 0.5),
+              ],
             ),
+            SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
+            Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                  color: Color(0xffFFC215),
+                  borderRadius: BorderRadius.all(Radius.circular(15))),
+              child: Text(
+                  '사진을 눌러\n그 시절에 대해 이야기해요',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white, fontFamily: 'UhBee', fontSize: 25)),
+            ),
+            // GridView를 사용하여 2열로 메모리 정보를 표시합니다.
+            GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 30,
+              ),
+              itemCount: memoryNotes.length + 1, // 첫 번째 고정 아이템을 위해 +1을 합니다.
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(), // GridView가 스크롤되지 않도록 합니다.
+              itemBuilder: (context, index) {
+                // 첫 번째 아이템 처리
+                if (index == 0) {
+                  return GestureDetector(
+                    onTap: () {
+                        Get.to(RecollectionDetail(data: randomData));
+                    },
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(30),
+                              child: Image.network(
+                                '${randomData.img}',
+                                fit: BoxFit.cover,
+                                width: 150,
+                                height: 150,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              '${randomData.title}',
+                              style: TextStyle(fontSize: 24),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                } else {
+                  // 그 외의 아이템 처리
+                  MemoryNoteModel memory = memoryNotes[index - 1]; // 인덱스 조정
+                  return GalleryContent(memory);
+                }
+              },
+            ),
+
           ],
         ),
       ),
