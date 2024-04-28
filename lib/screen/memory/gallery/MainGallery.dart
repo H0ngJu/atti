@@ -5,6 +5,7 @@ import 'package:atti/data/memory/memory_note_controller.dart';
 import 'package:atti/screen/memory/gallery/GalleryOption.dart';
 import 'package:atti/screen/memory/gallery/MemoryDetail.dart';
 import 'package:atti/screen/memory/gallery/RecollectionDetail.dart';
+import 'package:atti/screen/memory/register/MemoryRegister1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -120,7 +121,8 @@ class _MainGalleryState extends State<MainGallery> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
+      body: Stack(
+        children : <Widget>[SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
@@ -246,7 +248,34 @@ class _MainGalleryState extends State<MainGallery> {
 
           ],
         ),
-      ),
+      ),Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: ElevatedButton(
+              onPressed: () {
+                Get.to(MemoryRegister1());
+              },
+              style: ElevatedButton.styleFrom(
+                elevation: 0, // 버튼의 그림자를 제거
+                backgroundColor: Color(0xffFFC215),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                minimumSize: Size(MediaQuery.of(context).size.width * 0.9, 50), // 버튼의 크기 설정
+              ),
+              child: Text(
+                '기억 추가하기',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'PretendardMedium',
+                    fontSize: 24),
+              ),
+            ),
+          ),
+        ),]),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
