@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../data/report/emotion_controller.dart';
 
 
 // class Chatbot {
@@ -51,6 +55,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Chatbot {
   final firestore = FirebaseFirestore.instance;
+  EmotionController emotionController = Get.put(EmotionController());
 
   Future<String> getResponse(var prompt, String img, DocumentReference docRef) async {
     await dotenv.load(fileName: '.env');
@@ -117,7 +122,7 @@ class Chatbot {
     print(response.text);
 
     List<String> emotionsList = response.text!.split(',').map((e) => e.trim()).toList();
-
+    emotionController.addEmotion(emotionsList);
 
   }
 

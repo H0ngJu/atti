@@ -90,6 +90,16 @@ class MemoryNoteService {
     await docRef.update({'imgDescription': imgDescription.text});
   }
 
+  // 감정 키워드 저장하기
+  Future<void> addEmotionKeyword(List<String> emotions) async {
+
+  }
+
+  // 위험 단어 저장하기
+  Future<void> addDangerWords(List<String> dangerWords) async {
+
+  }
+
   // 기억 가져오기
   Future<List<MemoryNoteModel>> getMemoryNote() async {
     try {

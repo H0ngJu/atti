@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:atti/commons/SimpleAppBar.dart';
 import 'package:atti/data/memory/memory_note_model.dart';
+import 'package:atti/data/report/emotion_controller.dart';
 import 'package:atti/screen/chatbot/Chatbot.dart';
 import 'package:atti/screen/memory/chat/BeforeSave.dart';
 import 'package:atti/screen/memory/chat/ChatBubble.dart';
@@ -175,6 +176,7 @@ class _VoiceButtonState extends State<VoiceButton> {
   int _elapsedTime = 0;
   late List<ChatMessage> chatMessages = []; // 대화 리스트
   late List<String> onlyUserMessages = []; // 사용자 응답만 저장
+  final EmotionController emotionController = Get.put(EmotionController());
 
   @override
   void initState() {
@@ -466,7 +468,7 @@ class _VoiceButtonState extends State<VoiceButton> {
               child: ElevatedButton(
                   onPressed: () {
                     var chat = ChatMessage.messagesToJsonString(chatMessages);
-                    print(onlyUserMessages);
+                    //print(onlyUserMessages);
                     if (onlyUserMessages.isNotEmpty) {
                       _chatbot.emotionAnalysis(onlyUserMessages.join(' ')); // onlyUserMessages가 비어 있지 않은 경우에만 호출
                     }
