@@ -89,6 +89,8 @@ class _MemoryRegisterCheckState extends State<MemoryRegisterCheck> {
               onPressed: () {
                 memoryNoteController.tmpImgTitle.value = memoryNoteController.memoryNote.value.imgTitle!;
                 memoryNoteController.addMemoryNote();
+
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => MemoryRegisterFinish()),

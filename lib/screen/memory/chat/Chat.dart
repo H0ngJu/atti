@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:atti/commons/SimpleAppBar.dart';
 import 'package:atti/data/memory/memory_note_model.dart';
+import 'package:atti/data/report/dangerword_controller.dart';
+import 'package:atti/data/report/emotion_controller.dart';
 import 'package:atti/screen/chatbot/Chatbot.dart';
 import 'package:atti/screen/memory/chat/BeforeSave.dart';
 import 'package:atti/screen/memory/chat/ChatBubble.dart';
@@ -173,6 +175,8 @@ class _VoiceButtonState extends State<VoiceButton> {
   int _elapsedTime = 0;
   late List<ChatMessage> chatMessages = []; // 대화 리스트
   late List<String> onlyUserMessages = []; // 사용자 응답만 저장
+  final EmotionController emotionController = Get.put(EmotionController());
+  final DangerWordController dangerWordController = Get.put(DangerWordController());
 
   @override
   void initState() {
@@ -226,7 +230,7 @@ class _VoiceButtonState extends State<VoiceButton> {
                 _appendMessage("User", message); // 사용자의 말을 메시지로 추가
                 _onUserMessage(message);
 
-                String response = await _chatbot.getResponse(message, widget.memory.img!); // Chatbot으로부터 응답 받기
+                String response = await _chatbot.getResponse(message, widget.memory.img!, widget.memory.reference!); // Chatbot으로부터 응답 받기
                 _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
                 //_speakMessage(response);
                 _onApiResponse(response);
@@ -420,6 +424,21 @@ class _VoiceButtonState extends State<VoiceButton> {
     });
   }
 
+  // 위험한 단어 포함 여부를 확인하고 해당 단어들을 리스트로 반환하는 함수
+  List<String> getDangerWords(List<String> messages) {
+    List<String> dangerWords = ['자살', '죽어야지', '죽으', '죽음', '죽겠다', '힘들', '외롭', '외로', '우울', ];
+    List<String> detectedWords = [];
+
+    for (String message in messages) {
+      for (String word in dangerWords) {
+        if (message.contains(word)) {
+          detectedWords.add(word);
+        }
+      }
+    }
+    return detectedWords;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -465,6 +484,15 @@ class _VoiceButtonState extends State<VoiceButton> {
                   onPressed: () {
                     var chat = ChatMessage.messagesToJsonString(chatMessages);
                     //print(onlyUserMessages);
+                    if (onlyUserMessages.isNotEmpty) {
+                      _chatbot.emotionAnalysis(onlyUserMessages.join(' ')); // onlyUserMessages가 비어 있지 않은 경우에만 호출
+
+                      List<String> detectedDangerWords = getDangerWords(onlyUserMessages);
+                      if (detectedDangerWords.isNotEmpty) { // 위험 단어가 발견된 경우
+                        dangerWordController.addDangerWord(detectedDangerWords);
+                      }
+                    }
+
                     Get.to(BeforeSave(memory : widget.memory, chat: chat));
                   },
                   style: ElevatedButton.styleFrom(
