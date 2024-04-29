@@ -49,20 +49,20 @@ class _ChatBubbleState extends State<ChatBubble> {
         margin: EdgeInsets.only(top: 20, bottom: 30),
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Color(0xffFFE9B3),
+          //color: Color(0xffFFE9B3),
           borderRadius: BorderRadius.circular(15),
-          boxShadow: [
+          /*boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.3),
               spreadRadius: 1,
               blurRadius: 4,
               offset: Offset(0, 3), // changes position of shadow
             ),
-          ],
+          ],*/
         ),
         child: Text(
           widget.message,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 20, fontFamily: 'PretendardMedium'),
           textAlign: TextAlign.center,
         ),
       ),
