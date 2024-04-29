@@ -16,7 +16,7 @@ import 'dart:math';
 List<String> imageNames = [
   'EatingStar.png',
   'Napping.png',
-  'RedingBook.png',
+  'ReadingBook.png',
   'Coffee.png',
   'Soccer.png',
   'Walking.png',
