@@ -51,14 +51,6 @@ class _ChatBubbleState extends State<ChatBubble> {
         decoration: BoxDecoration(
           //color: Color(0xffFFE9B3),
           borderRadius: BorderRadius.circular(15),
-          /*boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              spreadRadius: 1,
-              blurRadius: 4,
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-          ],*/
         ),
         child: Text(
           widget.message,

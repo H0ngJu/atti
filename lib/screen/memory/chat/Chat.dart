@@ -563,14 +563,6 @@ class _VoiceButtonState extends State<VoiceButton> {
           ),
           // 대화 종료 버튼
         ]);
-    // 얘는 임시로 말하는거 보여주려고 ..
-    /*Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              border: Border.all(width: 1, color: Color(0xffF6B818))),
-          child: Text('$_spokenText',
-              style: TextStyle(color: Colors.black, fontSize: 25)))*/
   }
 }
 
