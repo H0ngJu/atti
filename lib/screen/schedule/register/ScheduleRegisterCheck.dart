@@ -115,7 +115,7 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
               if (authController.isPatient) {
                 notificationService.showDateTimeNotification(
                   '일정 알림',
-                  '곧 \'${updatedSchedule.name}\'을(를) 하실 시간이에요!',
+                  '1시간 뒤 \'${updatedSchedule.name}\'을(를) 하실 시간이에요!',
                   updatedSchedule.time!.toDate().subtract(Duration(hours: 1)),
                   '/schedule1/${updatedSchedule.reference!.id}',
                 );

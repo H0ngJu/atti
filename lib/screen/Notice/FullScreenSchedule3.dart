@@ -1,4 +1,5 @@
 import 'package:atti/screen/HomePatient.dart';
+import 'package:atti/screen/schedule/register/ScheduleRegister2.dart';
 import 'package:flutter/material.dart';
 import '../../data/notification/notification_controller.dart';
 import '../../data/schedule/schedule_model.dart';
@@ -10,19 +11,18 @@ import 'package:intl/intl.dart';
 import '../memory/register/MemoryRegister2.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
 
-class FullScreenSchedule2 extends StatefulWidget {
-  const FullScreenSchedule2({super.key, required this.docRef});
+class FullScreenSchedule3 extends StatefulWidget {
+  const FullScreenSchedule3({super.key, required this.docRef});
   final String docRef;
 
   @override
-  State<FullScreenSchedule2> createState() => _FullScreenSchedule2State();
+  State<FullScreenSchedule3> createState() => _FullScreenSchedule3State();
 }
 
-class _FullScreenSchedule2State extends State<FullScreenSchedule2> {
+class _FullScreenSchedule3State extends State<FullScreenSchedule3> {
   final firestore = FirebaseFirestore.instance;
   final storage = FirebaseStorage.instance;
   ScheduleModel? schedule;
-
   final MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
 
   Future<void> _fetchData() async {
@@ -41,13 +41,11 @@ class _FullScreenSchedule2State extends State<FullScreenSchedule2> {
       print("데이터를 가져오는 중 에러가 발생했습니다: $e");
     }
   }
-
   @override
   void initState() {
     super.initState();
     _fetchData();
   }
-
   String getFormattedTime() {
     DateTime dateTime = schedule?.time?.toDate() ?? DateTime.now();
     var hour = dateTime.hour;
@@ -110,7 +108,7 @@ class _FullScreenSchedule2State extends State<FullScreenSchedule2> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: height * 0.02,),
-                Text('일정을 진행하고 있나요?',
+                Text('지금 기억 사진을 남길까요?',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                 ),
                 //SizedBox(height: height * 0.01,),
@@ -126,12 +124,11 @@ class _FullScreenSchedule2State extends State<FullScreenSchedule2> {
                     children: [
                       Expanded(
                         child: TextButton(onPressed: () async {
-                          await ScheduleService().completeSchedule(schedule!.reference!);
-                          Get.to(HomePatient());
+                          Get.to(ScheduleRegister2());
                         }, child: Padding(
                           padding: EdgeInsets.symmetric(vertical: 5),
                           child: Text('네', style: TextStyle(
-                            fontSize: 24, color: Colors.white, fontWeight: FontWeight.normal
+                              fontSize: 24, color: Colors.white, fontWeight: FontWeight.normal
                           ),),
                         ),
                           style: ButtonStyle(
@@ -152,7 +149,7 @@ class _FullScreenSchedule2State extends State<FullScreenSchedule2> {
                         }, child: Padding(
                           padding: EdgeInsets.symmetric(vertical: 5),
                           child: Text('아니요', style: TextStyle(
-                            fontSize: 24, color: Colors.black, fontWeight: FontWeight.normal
+                              fontSize: 24, color: Colors.black, fontWeight: FontWeight.normal
                           ),),
                         ),
                           style: ButtonStyle(

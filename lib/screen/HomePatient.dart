@@ -31,6 +31,7 @@ import '../data/schedule/schedule_service.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 import 'Notice/FullScreenSchedule2.dart';
+import 'Notice/FullScreenSchedule3.dart';
 
 class HomePatient extends StatefulWidget {
   const HomePatient({Key? key}) : super(key: key);
@@ -85,6 +86,12 @@ class _HomePatientState extends State<HomePatient> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => FullScreenSchedule2(docRef: docRef)),
+          );
+        } else if (payload.startsWith('/schedule3/')) {
+          String docRef = payload.substring('/schedule3/'.length);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FullScreenSchedule3(docRef: docRef)),
           );
         } else if (payload.startsWith('/routine/')) {
           String docRef = payload.substring('/routine/'.length);

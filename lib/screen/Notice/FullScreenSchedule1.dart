@@ -120,11 +120,6 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
           ),
           SizedBox(height: height * 0.02,),
           Container(
-            width: width * 0.9,
-            decoration: BoxDecoration(
-              color: Color(0xffFFECB5),
-              borderRadius: BorderRadius.circular(20)
-            ),
             child: Column(
               children: [
                 SizedBox(height: height * 0.02,),
@@ -160,21 +155,31 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
           ),
           SizedBox(height: height * 0.02,),
           TextButton(onPressed: () {
-            // 1시간 뒤 본알림 예약 ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+            // 일정 본알림 예약 ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
             notificationService.showDateTimeNotification(
               '일정 알림',
-              '곧 \'${schedule?.name}\'을(를) 하실 시간이에요!',
-              //schedule!.time!.toDate(),
-              schedule!.time!.toDate().subtract(Duration(minutes: 55)),
+              '\'${schedule?.name}\'일정을(를) 진행하고 있나요?',
+              schedule!.time!.toDate(),
               '/schedule2/${schedule?.reference!.id}',
             );
+
+            // 일정 시간 1시간 뒤 알림 예약 ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+            notificationService.showDateTimeNotification(
+              '일정 알림',
+              '\'${schedule?.name}\'일정의 기억 사진을 남길까요?',
+              schedule!.time!.toDate().add(Duration(hours: 1)),
+              '/schedule3/${schedule?.reference!.id}',
+            );
+
             Get.to(ScheduleMain());
           },
-              child: Text('네, 알겠어요', style: TextStyle(
-                fontSize: 20, color: Color(0xff616161),
-                decoration: TextDecoration.underline,
-                decorationColor: Color(0xff616161),
-              ),))
+            child: Text('알겠어요', style: TextStyle(
+              color: Colors.white, fontSize: 24, ),),
+            style: ButtonStyle(
+              backgroundColor:  MaterialStateProperty.all(Color(0xffFFC215)),
+              minimumSize: MaterialStateProperty.all(Size(width * 0.55, 40)),
+            ),
+          )
 
         ],
       ),
