@@ -8,6 +8,17 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../routine/RoutineFinish.dart';
+import 'dart:math';
+
+// 이미지 파일 이름 목록
+List<String> imageNames = [
+  'EatingStar.png',
+  'Napping.png',
+  'RedingBook.png',
+  'Coffee.png',
+  'Soccer.png',
+  'Walking.png',
+];
 
 class FullScreenRoutine extends StatefulWidget {
   const FullScreenRoutine({super.key, required this.docRef});
@@ -22,6 +33,8 @@ class _FullScreenRoutineState extends State<FullScreenRoutine> {
   final firestore = FirebaseFirestore.instance;
   final storage = FirebaseStorage.instance;
   RoutineModel? routine;
+  // 랜덤 이미지 파일 이름 선택
+  Random random = Random();
 
   String formatTime(List<int> time) {
     String period = "오전";
@@ -65,6 +78,8 @@ class _FullScreenRoutineState extends State<FullScreenRoutine> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
+    String randomImageName = imageNames[random.nextInt(imageNames.length)];
+
     return Scaffold(
       backgroundColor: Color(0xffFFF7E3),
       body: Column(
@@ -80,7 +95,7 @@ class _FullScreenRoutineState extends State<FullScreenRoutine> {
           SizedBox(height: height * 0.02,),
           Container(
             alignment: Alignment.center,
-            child: Image.asset('lib/assets/Atti/Coffee.png',
+            child: Image.asset('lib/assets/Atti/$randomImageName',
                 height: height * 0.26,
                 fit: BoxFit.fitHeight),
           ),

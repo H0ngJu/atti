@@ -9,7 +9,17 @@ import 'package:intl/intl.dart';
 import '../schedule/ScheduleMain.dart';
 import '../../../data/notification/notification.dart';
 import 'package:atti/data/notification/notification_controller.dart';
+import 'dart:math';
 
+// 이미지 파일 이름 목록
+List<String> imageNames = [
+  'EatingStar.png',
+  'Napping.png',
+  'RedingBook.png',
+  'Coffee.png',
+  'Soccer.png',
+  'Walking.png',
+];
 
 class FullScreenSchedule extends StatefulWidget {
   const FullScreenSchedule({super.key, required this.docRef});
@@ -24,6 +34,8 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
   final storage = FirebaseStorage.instance;
   ScheduleModel? schedule;
   NotificationService notificationService = NotificationService();
+  // 랜덤 이미지 파일 이름 선택
+  Random random = Random();
 
   String getFormattedTime(String mode) {
     DateTime dateTime;
@@ -78,6 +90,7 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    String randomImageName = imageNames[random.nextInt(imageNames.length)];
 
     return Scaffold(
       backgroundColor: Color(0xffFFF7E3),
@@ -94,7 +107,7 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
           SizedBox(height: height * 0.03,),
           Container(
             alignment: Alignment.center,
-            child: Image.asset('lib/assets/Atti/ReadingBook.png',
+            child: Image.asset('lib/assets/Atti/$randomImageName',
                 height: height * 0.27,
                 fit: BoxFit.fitHeight),
           ),

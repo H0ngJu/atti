@@ -10,6 +10,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import '../memory/register/MemoryRegister2.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
+import 'dart:math';
+
+// 이미지 파일 이름 목록
+List<String> imageNames = [
+  'EatingStar.png',
+  'Napping.png',
+  'RedingBook.png',
+  'Coffee.png',
+  'Soccer.png',
+  'Walking.png',
+];
 
 class FullScreenSchedule3 extends StatefulWidget {
   const FullScreenSchedule3({super.key, required this.docRef});
@@ -24,6 +35,7 @@ class _FullScreenSchedule3State extends State<FullScreenSchedule3> {
   final storage = FirebaseStorage.instance;
   ScheduleModel? schedule;
   final MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
+  Random random = Random();
 
   Future<void> _fetchData() async {
     try {
@@ -62,6 +74,7 @@ class _FullScreenSchedule3State extends State<FullScreenSchedule3> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    String randomImageName = imageNames[random.nextInt(imageNames.length)];
 
     return Scaffold(
       backgroundColor: Color(0xffFFF7E3),
@@ -78,7 +91,7 @@ class _FullScreenSchedule3State extends State<FullScreenSchedule3> {
           SizedBox(height: height * 0.03,),
           Container(
             alignment: Alignment.center,
-            child: Image.asset('lib/assets/Atti/Soccer.png',
+            child: Image.asset('lib/assets/Atti/$randomImageName',
                 height: height * 0.27,
                 fit: BoxFit.fitHeight),
           ),
