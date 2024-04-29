@@ -51,7 +51,7 @@ class _ScheduleRegister4State extends State<ScheduleRegister4> {
                         hintText: '추가로 기록할 내용이 있나요?',
                         hintStyle: TextStyle(fontSize: 24, color: Color(0xffA38130)),
                         filled: true, // 배경을 채움
-                        fillColor: Color(0xffFFE9B3),
+                        fillColor: Color(0xffFFF5DB),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: BorderSide.none,

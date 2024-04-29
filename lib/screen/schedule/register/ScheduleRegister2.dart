@@ -149,7 +149,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
                       style: TextStyle(fontSize: 24),
                       decoration: InputDecoration(
                         filled: true, // 배경을 채움
-                        fillColor: Color(0xffFFE9B3),
+                        fillColor: Color(0xffFFF5DB),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: BorderSide.none,
@@ -176,7 +176,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
                       style: TextStyle(fontSize: 24),
                       decoration: InputDecoration(
                         filled: true, // 배경을 채움
-                        fillColor: Color(0xffFFE9B3),
+                        fillColor: Color(0xffFFF5DB),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: BorderSide.none,
