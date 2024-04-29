@@ -184,7 +184,7 @@ class _GalleryOptionState extends State<GalleryOption> {
   }
 
   Widget SelectFamilyMemberButtons() {
-    List<String> displayTags = showAllTags ? tagList : tagList.take(6).toList();
+    List<String> displayTags = showAllTags ? tagList.take(6).toList() : tagList;
 
     return Column(
       children: [
