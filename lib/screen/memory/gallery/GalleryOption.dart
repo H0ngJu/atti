@@ -78,11 +78,11 @@ class _GalleryOptionState extends State<GalleryOption> {
         Container(
           margin: EdgeInsets.only(top: 10),
           decoration: BoxDecoration(
-              color: Color(0xffD9D9D9), borderRadius: BorderRadius.circular(25)),
+              color: Color(0xffFFF5DB), borderRadius: BorderRadius.circular(25)),
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
           child: Text(
             '${tagController.selectedTag.value}',
-            style: TextStyle(fontSize: 24, color: Color(0xff616161)),
+            style: TextStyle(fontSize: 24, color: Color(0xffA38130)),
           ),
         )
       ],
@@ -168,11 +168,14 @@ class _GalleryOptionState extends State<GalleryOption> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xffFFC215),
-                      minimumSize: Size(MediaQuery.of(context).size.width * 0.9, 48),
+                      minimumSize: Size(MediaQuery.of(context).size.width * 0.9, 50),
                     ),
                     child: Text(
                       '사진 나열하기',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'PretendardMedium',
+                          fontSize: 24),
                     ))),
           ],
         ),
@@ -181,7 +184,7 @@ class _GalleryOptionState extends State<GalleryOption> {
   }
 
   Widget SelectFamilyMemberButtons() {
-    List<String> displayTags = showAllTags ? tagList : tagList.take(6).toList();
+    List<String> displayTags = showAllTags ? tagList.take(6).toList() : tagList;
 
     return Column(
       children: [
@@ -210,7 +213,7 @@ class _GalleryOptionState extends State<GalleryOption> {
                     if (displayTags[index] == selectedTag) {
                       return Colors.white; // 선택됐을 때 텍스트 색상
                     } else {
-                      return Color(0xffA38130); // 선택되지 않았을 때 텍스트 색상
+                      return Colors.black; // 선택되지 않았을 때 텍스트 색상
                     }
                   },
                 ),
@@ -219,7 +222,16 @@ class _GalleryOptionState extends State<GalleryOption> {
                     if (displayTags[index] == selectedTag) {
                       return Color(0xffFFC215); // 선택됐을 때 배경색
                     } else {
-                      return Color(0xffFFF5DB); // 선택되지 않았을 때 배경색
+                      return Colors.white; // 선택되지 않았을 때 배경색
+                    }
+                  },
+                ),
+                side: MaterialStateProperty.resolveWith<BorderSide>(
+                      (states) {
+                    if (displayTags[index] == selectedTag) {
+                      return BorderSide(color: Colors.white); // 선택됐을 때 테두리 색상 및 두께
+                    } else {
+                      return BorderSide(color: Colors.black, width: 1.0); // 선택되지 않았을 때
                     }
                   },
                 ),
