@@ -62,7 +62,7 @@ class _ChatBubbleState extends State<ChatBubble> {
         ),
         child: Text(
           widget.message,
-          style: TextStyle(fontSize: 20, fontFamily: 'PretendardMedium'),
+          style: TextStyle(fontSize: 20, fontFamily: 'UhBee'),
           textAlign: TextAlign.center,
         ),
       ),
