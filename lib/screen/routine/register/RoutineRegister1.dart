@@ -29,7 +29,7 @@ class _RoutineRegister1State extends State<RoutineRegister1> {
               child: Column(
                 children: [
                   DetailPageTitle(
-                    title: '하루 일과 등록하기  ',
+                    title: '일과 등록하기  ',
                     description: '일과 이름을 입력해주세요',
                     totalStep: 3,
                     currentStep: 1,
@@ -48,7 +48,7 @@ class _RoutineRegister1State extends State<RoutineRegister1> {
                         hintText: '일과 이름이 무엇인가요?',
                         hintStyle: TextStyle(fontSize: 24, color: Color(0xffA38130)),
                         filled: true, // 배경을 채움
-                        fillColor: Color(0xffFFE9B3),
+                        fillColor: Color(0xffFFF5DB),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: BorderSide.none,

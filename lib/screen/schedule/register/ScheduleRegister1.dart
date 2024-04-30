@@ -52,7 +52,7 @@ class _ScheduleRegister1State extends State<ScheduleRegister1> {
                         hintText: '예정된 일정이 무엇인가요?',
                         hintStyle: TextStyle(fontSize: 24, color: Color(0xffA38130)),
                         filled: true, // 배경을 채움
-                        fillColor: Color(0xffFFE9B3),
+                        fillColor: Color(0xffFFF5DB),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: BorderSide.none,
