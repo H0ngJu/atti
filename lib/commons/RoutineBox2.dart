@@ -16,25 +16,41 @@ class RoutineBox2 extends StatefulWidget {
 class _RoutineBox2State extends State<RoutineBox2> {
   final RoutineController routineController = Get.put(RoutineController());
 
+
   @override
   Widget build(BuildContext context) {
+    // 시간 변환
+    String formattedTime = '';
+    if (widget.time != null && widget.time.length == 2) {
+      final int hour = widget.time[0];
+      final int minute = widget.time[1];
+      final bool isPM = hour >= 12; // 오후 여부 확인
+      int hour12 = hour > 12 ? hour - 12 : hour;
+      hour12 = hour12 == 0 ? 12 : hour12;
+      formattedTime = '${isPM ? '오후' : '오전'} ${hour12.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+    }
+
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     return Container(
-      padding: EdgeInsets.only(top: 15, bottom: 10, left: 20, right: 20),
+      padding: EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
       width: MediaQuery.of(context).size.width * 0.9,
       color: Colors.white,
+      alignment: Alignment.center,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
             children: [
               Container(
-                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: Color(0xff737373), width: 1,),
                 ),
-                child: Text(widget.time, style: TextStyle(fontSize: 22),),
+                child: Text(formattedTime, style: TextStyle(fontSize: 22),),
               ),
               SizedBox(width: 10,),
               Expanded(
@@ -46,7 +62,9 @@ class _RoutineBox2State extends State<RoutineBox2> {
             ],
           ),
           SizedBox(height: 10,),
-          Text(widget.name, style: TextStyle(fontSize: 30),),
+          Container(
+            width: width * 0.8,
+              child: Text(widget.name, style: TextStyle(fontSize: 30),)),
           SizedBox(height: 5,),
           Container(
             alignment: Alignment.center,

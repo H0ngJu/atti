@@ -22,58 +22,61 @@ class _ScheduleBoxState extends State<ScheduleBox> {
   @override
   Widget build(BuildContext context) {
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Container(
-              padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Color(0xff737373), width: 1,),
-              ),
-              child: Text(widget.time, style: TextStyle(fontSize: 22),),
-            ),
-            SizedBox(width: 10,),
-            Expanded(
-              child: Container(
-                color: Color(0xffE1E1E1),
-                height: 1,
-              ),
-            )
-          ],
-        ),
-        SizedBox(height: 10,),
-        Container(
-          padding: EdgeInsets.only(top: 10, bottom: 10, left: 15),
-          width: MediaQuery.of(context).size.width * 0.9,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.black, width: 1,),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      padding: EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              if (widget.name != null) Text(widget.name!, style: TextStyle(
-                fontSize: 30,
-              ),),
-              SizedBox(height: 5,),
-              Row(
-                children: [
-                  Text('장소', style: TextStyle(fontSize: 20),),
-                  SizedBox(width: 10),
-                  if (widget.location != null) Text(widget.location!, style: TextStyle(
-                    fontSize: 20, color: Colors.black
-                  ),),
-                ],
+              Container(
+                padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Color(0xff737373), width: 1,),
+                ),
+                child: Text(widget.time, style: TextStyle(fontSize: 22),),
               ),
+              SizedBox(width: 10,),
+              Expanded(
+                child: Container(
+                  color: Color(0xffE1E1E1),
+                  height: 1,
+                ),
+              )
             ],
           ),
-        ),
-      ],
+          SizedBox(height: 10,),
+          Container(
+            padding: EdgeInsets.only(top: 10, bottom: 10, left: 15),
+            width: MediaQuery.of(context).size.width * 0.9,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(color: Colors.black, width: 1,),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (widget.name != null) Text(widget.name!, style: TextStyle(
+                  fontSize: 30,
+                ),),
+                SizedBox(height: 5,),
+                Row(
+                  children: [
+                    Text('장소', style: TextStyle(fontSize: 20),),
+                    SizedBox(width: 10),
+                    if (widget.location != null) Text(widget.location!, style: TextStyle(
+                      fontSize: 20, color: Colors.black
+                    ),),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
