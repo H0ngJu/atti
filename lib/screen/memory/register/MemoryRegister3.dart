@@ -109,7 +109,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
         items: _era
             .map((e) => DropdownMenuItem(
           value: e,
-          child: Text(e, style: TextStyle(fontSize: 24, fontWeight: FontWeight.normal),),
+          child: Text(e, style: TextStyle(fontSize: 24, fontWeight: FontWeight.normal, color: Color(0xffA38130)),),
         ))
             .toList(),
         onChanged: (value) {
@@ -125,7 +125,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
           ),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Color(0xffFFE9B3), width: 2)
+              borderSide: BorderSide(color: Color(0xffA38130), width: 1)
           ),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
@@ -133,12 +133,12 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
           ),
           filled: true,
           fillColor: Color(0xffFFF5DB),
-          iconColor: Color(0xffFFC215),
+          iconColor: Color(0xffA38130),
           contentPadding: EdgeInsets.only(top:5, bottom: 5, left: 15),
         ),
         dropdownColor: Color(0xffFFF5DB),
-        iconDisabledColor: Color(0xffFFC215),
-        iconEnabledColor: Color(0xffFFC215),
+        iconDisabledColor: Color(0xffA38130),
+        iconEnabledColor: Color(0xffA38130),
         iconSize: 50,
       ),
     );

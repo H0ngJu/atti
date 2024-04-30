@@ -31,8 +31,10 @@ android {
     ndkVersion flutter.ndkVersion
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -70,13 +72,8 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "androidx.multidex:multidex:2.0.1"
+    implementation platform('com.google.firebase:firebase-bom:29.0.2')
+    implementation "com.google.firebase:firebase-analytics"
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
-    // 아래 코드는 앱체크토큰 오류를 해결하기 위한 코드
-    // Import the BoM for the Firebase platform
-    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
-
-    // Add the dependency for the App Check library
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation("com.google.firebase:firebase-appcheck")
 }

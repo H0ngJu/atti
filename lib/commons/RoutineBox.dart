@@ -50,8 +50,9 @@ class _RoutineBoxState extends State<RoutineBox> {
       padding: EdgeInsets.only(top: 15, bottom: 10, left: 20, right: 20),
       width: MediaQuery.of(context).size.width * 0.9,
       decoration: BoxDecoration(
-        color: Color(0xffFFE9B3),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.black)
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,7 +69,7 @@ class _RoutineBoxState extends State<RoutineBox> {
             child: Container(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: widget.img != null && widget.img.contains('firebasestorage')
+                child: widget.img != null && widget.img.contains('http')
                     ? Image.network(
                   widget.img,
                   width: double.infinity,
@@ -95,7 +96,7 @@ class _RoutineBoxState extends State<RoutineBox> {
             children: [
               SizedBox(),
               Text(generateRepeatText(widget.days), style: TextStyle(
-                fontSize: 24, color: Color(0xffA38130)
+                fontSize: 24, color: Colors.black
               ),),
             ],
           )

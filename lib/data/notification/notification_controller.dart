@@ -5,7 +5,7 @@ import '../auth_controller.dart';
 final AuthController authController = Get.put(AuthController());
 
 class NotificationModel {
-  String? uid; // 사용자의 UID
+  DocumentReference? patientDocRef; // 사용자의 UID
   String? title; // 카테고리
   String? message;
   Timestamp? time;
@@ -13,7 +13,7 @@ class NotificationModel {
   bool? isPatient;
 
   NotificationModel({
-    this.uid,
+    this.patientDocRef,
     this.title,
     this.message,
     this.time,
@@ -22,7 +22,7 @@ class NotificationModel {
   });
 
   NotificationModel.fromJson(Map<String, dynamic> json)
-      : uid = json['uid'],
+      : patientDocRef = json['patientDocRef'],
         title = json['title'],
         message = json['message'],
         reference = json['reference'],
@@ -31,7 +31,7 @@ class NotificationModel {
 
   // Named constructor to create NotificationModel from DocumentSnapshot
   NotificationModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot)
-      : uid = snapshot.data()?['uid'],
+      : patientDocRef = snapshot.data()?['patientDocRef'],
         title = snapshot.data()?['title'],
         message = snapshot.data()?['message'],
         reference = snapshot.reference,
@@ -40,7 +40,7 @@ class NotificationModel {
 
   // Named constructor to create NotificationModel from QueryDocumentSnapshot
   NotificationModel.fromQuerySnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : uid = snapshot.data()['uid'],
+      : patientDocRef = snapshot.data()['patientDocRef'],
         title = snapshot.data()['title'],
         message = snapshot.data()['message'],
         reference = snapshot.reference,
@@ -50,7 +50,7 @@ class NotificationModel {
   // Convert NotificationModel to JSON format
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['uid'] = uid;
+    map['patientDocRef'] = patientDocRef;
     map['title'] = title;
     map['message'] = message;
     map['reference'] = reference;
@@ -77,7 +77,7 @@ Future<void> addNotification(String title, String body, DateTime dateTime, bool 
 
   if (querySnapshot.docs.isEmpty) {
     NotificationModel notification = NotificationModel(
-      uid: authController.loggedUser,
+      patientDocRef: authController.patientDocRef,
       title: title,
       message: body,
       time: Timestamp.fromDate(dateTime),
@@ -85,8 +85,9 @@ Future<void> addNotification(String title, String body, DateTime dateTime, bool 
     );
 
     try {
-      DocumentReference docRef = await FirebaseFirestore.instance.collection(
-          'notification').add(notification.toJson());
+      DocumentReference docRef = await FirebaseFirestore.instance
+          .collection('notification')
+          .add(notification.toJson());
       print('Notification saved to Firestore successfully!');
 
       notification.reference = docRef;
@@ -105,7 +106,7 @@ Future<void> addNotification(String title, String body, DateTime dateTime, bool 
       DateTime now = DateTime.now();
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('notification')
-          .where('uid', isEqualTo: authController.loggedUser)
+          .where('patientDocRef', isEqualTo: authController.patientDocRef)
           .where('isPatient', isEqualTo: authController.isPatient)
           .get();
 

@@ -2,6 +2,8 @@ import 'dart:ffi';
 import 'dart:math';
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
+import 'package:atti/screen/Notice/FullScreenRoutine.dart';
+import 'package:atti/screen/Notice/FullScreenSchedule1.dart';
 import 'package:atti/screen/memory/register/MemoryRegister1.dart';
 import 'package:atti/screen/routine/RoutineMain.dart';
 import 'package:atti/screen/schedule/ScheduleMain.dart';
@@ -27,6 +29,9 @@ import '../data/routine/routine_service.dart';
 import '../data/schedule/schedule_model.dart';
 import '../data/schedule/schedule_service.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+
+import 'Notice/FullScreenSchedule2.dart';
+import 'Notice/FullScreenSchedule3.dart';
 
 class HomePatient extends StatefulWidget {
   const HomePatient({Key? key}) : super(key: key);
@@ -61,6 +66,41 @@ class _HomePatientState extends State<HomePatient> {
     _requestNotificationPermissions();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _fetchAndSpeakWeather();
+    });
+    listenNotifications();
+  }
+
+  // 푸시 알림 스트림 리슨
+  void listenNotifications() {
+    NotificationService().streamController.stream.listen((String? payload) {
+      if (payload != null) {
+        print('@@@@@@@@@Received payload: $payload');
+        if (payload.startsWith('/schedule1/')) {
+          String docRef = payload.substring('/schedule1/'.length);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FullScreenSchedule(docRef: docRef)), // ScheduleMain 페이지로 이동
+          );
+        } else if (payload.startsWith('/schedule2/')) {
+          String docRef = payload.substring('/schedule2/'.length);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FullScreenSchedule2(docRef: docRef)),
+          );
+        } else if (payload.startsWith('/schedule3/')) {
+          String docRef = payload.substring('/schedule3/'.length);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FullScreenSchedule3(docRef: docRef)),
+          );
+        } else if (payload.startsWith('/routine/')) {
+          String docRef = payload.substring('/routine/'.length);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FullScreenRoutine(docRef: docRef)), // RoutineMain 페이지로 이동
+          );
+        }
+      }
     });
   }
 
@@ -98,7 +138,6 @@ class _HomePatientState extends State<HomePatient> {
   }
 
   Future<void> _fetchAndSpeakWeather() async {
-
     // 요일을 반환하는 함수
     String _getWeekday(int weekday) {
       switch (weekday) {
@@ -120,6 +159,7 @@ class _HomePatientState extends State<HomePatient> {
           return '';
       }
     }
+
     String weekday = _getWeekday(_selectedDay.weekday);
     final List<String> greetings = [
       '안녕하세요',
@@ -224,15 +264,16 @@ class _HomePatientState extends State<HomePatient> {
       final temperature = data['main']['temp'];
       final humidity = data['main']['humidity'];
       final weatherStatus = data['weather'][0]['description'];
-      final weatherTranslation = weatherTranslations[weatherStatus.toLowerCase()];
+      final weatherTranslation =
+          weatherTranslations[weatherStatus.toLowerCase()];
       setState(() {
         if (weatherTranslation != null) {
           _weatherDescription =
-          '현재 날씨는 $weatherTranslation이며, 온도는 $temperature도, 습도는 $humidity% 입니다.';
+              '현재 날씨는 $weatherTranslation이며, 온도는 $temperature도, 습도는 $humidity% 입니다.';
         } else {
           // 만약 매핑된 한글이 없는 경우에는 영어로
           _weatherDescription =
-          '현재 날씨는 $description이며, 온도는 $temperature도, 습도는 $humidity% 입니다.';
+              '현재 날씨는 $description이며, 온도는 $temperature도, 습도는 $humidity% 입니다.';
         }
       });
     } else {
@@ -250,6 +291,7 @@ class _HomePatientState extends State<HomePatient> {
     await flutterTts.setPitch(1);
     await flutterTts.speak(message);
   }
+
   /*Future<void> _speakWeather() async {
     await flutterTts.setLanguage('ko-KR');
     await flutterTts.setPitch(1);
@@ -290,13 +332,13 @@ class _HomePatientState extends State<HomePatient> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffFFF5DB),
+      backgroundColor: Colors.white,
       appBar: AttiAppBar(
         title: Image.asset(
           'lib/assets/logo2.png',
           width: 150,
         ),
-        showNotificationsIcon: true,
+        showNotificationsIcon: false,
         showPersonIcon: false,
       ),
       body: SingleChildScrollView(
@@ -310,21 +352,15 @@ class _HomePatientState extends State<HomePatient> {
                         bottomRight: Radius.circular(30))),
                 child: HomePatientTop(userName: authController.userName.value)),
             Container(
-                margin: EdgeInsets.all(16),
-                child: HomeTodaySummary(
-                  scheduleCnt: numberOfSchedules,
-                  routineCnt: numberOfRoutines,
-                )),
-            Container(
               margin: EdgeInsets.all(16),
-              child: HomeSchedule(
-                schedulesBySelectedDay: schedulesBySelectedDay,
+              child: HomeRoutine(
+                routinesBySelectedDay: routinesBySelectedDay,
               ),
             ),
             Container(
               margin: EdgeInsets.all(16),
-              child: HomeRoutine(
-                routinesBySelectedDay: routinesBySelectedDay,
+              child: HomeSchedule(
+                schedulesBySelectedDay: schedulesBySelectedDay,
               ),
             ),
             Container(
@@ -354,6 +390,20 @@ class HomePatientTop extends StatefulWidget {
 
 class _HomePatientTopState extends State<HomePatientTop> {
   final AuthController authController = Get.put(AuthController());
+  final List<String> greetingMsg = [
+    '안녕하세요',
+    '만나서 반가워요!',
+    '오늘 하루 아띠와 함께해요!',
+    '잘 주무셨나요?'
+  ];
+  late final int index; // `late` 키워드를 사용하여 나중에 초기화됨을 명시
+
+  @override
+  void initState() {
+    super.initState();
+    final Random random = Random();
+    index = random.nextInt(greetingMsg.length); // 여기에서 `index` 초기화
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -362,6 +412,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
     // 시간 가져오기
     DateTime now = DateTime.now();
     String weekday = _getWeekday(now.weekday);
+    String formattedTime = DateFormat('a h시 mm분이에요', 'ko_KR').format(now);
 
     return Container(
       margin: EdgeInsets.only(left: 16, right: 16),
@@ -396,20 +447,26 @@ class _HomePatientTopState extends State<HomePatientTop> {
             ],
           ),
           SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
-          RichText(
-            text: TextSpan(
-              style: TextStyle(color: Colors.black, fontSize: 24, height: 1.2),
-              children: [
-                TextSpan(text: '오늘은\n'),
-                TextSpan(
-                    text: '${now.year}년 ${now.month}월 ${now.day}일 ${weekday}',
-                    style:
-                        TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-                TextSpan(text: ' 이에요.'),
-              ],
-            ),
+          Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                color: Color(0xffFFC215),
+                borderRadius: BorderRadius.all(Radius.circular(15))),
+            child: Text(
+                '오늘은\n${now.year}년 ${now.month}월 ${now.day}일 ${weekday}',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white, fontFamily: 'UhBee', fontSize: 25)),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 30),
+          Container(
+            child: Text(
+              '${formattedTime}',
+              style: TextStyle(fontSize: 30),
+              textAlign: TextAlign.left,
+            ),
+          )
         ],
       ),
     );
@@ -438,6 +495,549 @@ class _HomePatientTopState extends State<HomePatientTop> {
   }
 }
 
+// 일정이 있어요
+// 미완료 스케줄 위젯
+class IncompleteScheduleWidget extends StatelessWidget {
+  final String time;
+  final String name;
+  final String location;
+  final String memo;
+  final int idx;
+  final DocumentReference docRef;
+
+  const IncompleteScheduleWidget(
+      {Key? key,
+      required this.time,
+      required this.name,
+      required this.location,
+      required this.memo,
+      required this.idx,
+      required this.docRef})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (_) {
+              return ScheduleModal(
+                time: time,
+                location: location,
+                name: name,
+                memo: memo,
+                docRef: docRef,
+              );
+            });
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 17),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+            color: Color(0xffDDDDDD),
+            width: 2,
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 1,
+                child: Container(
+                    decoration: BoxDecoration(
+                      //color: Color(0xffFFF5DB),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    padding: EdgeInsets.all(17),
+                    alignment: Alignment.center,
+                    child: Text(idx?.toString() ?? '',style: TextStyle(fontSize: 24) ))),
+            Expanded(
+              flex: 3,
+              child: Container(
+                decoration: BoxDecoration(
+                  //color: Color(0xffFFF5DB),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                padding: EdgeInsets.all(17),
+                alignment: Alignment.center,
+                child: Text(
+                  time ?? '',
+                  style: TextStyle(fontSize: 24),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Container(
+                padding: EdgeInsets.all(17),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Text(
+                  name ?? '',
+                  style: TextStyle(fontSize: 24),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//완료 스케줄 위젯
+class CompleteScheduleWidget extends StatelessWidget {
+  final String time;
+  final String name;
+  final String location;
+  final String memo;
+  final DocumentReference docRef;
+
+  const CompleteScheduleWidget(
+      {Key? key,
+      required this.time,
+      required this.name,
+      required this.location,
+      required this.docRef,
+      required this.memo})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (_) {
+              return ScheduleModal(
+                time: time,
+                location: location,
+                name: name,
+                memo: memo,
+                docRef: docRef,
+              );
+            });
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 17),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+            color: Color(0xffDDDDDD),
+            width: 2,
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(17),
+            color: Color(0xffDDDDDD),
+            child: Text('\'$name\' 일정 완료', style: TextStyle(fontSize: 24)),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class HomeSchedule extends StatefulWidget {
+  final List<ScheduleModel> schedulesBySelectedDay;
+
+  const HomeSchedule({Key? key, required this.schedulesBySelectedDay})
+      : super(key: key);
+
+  @override
+  State<HomeSchedule> createState() => _HomeScheduleState();
+}
+
+class _HomeScheduleState extends State<HomeSchedule> {
+  @override
+  Widget build(BuildContext context) {
+    List<ScheduleModel> schedules = widget.schedulesBySelectedDay;
+
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                '일정이 있어요\n알람으로 알려드릴게요!',
+                style: TextStyle(fontSize: 30),
+                textAlign: TextAlign.left,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 11),
+        schedules.isEmpty // 일정이 없을 때
+            ? Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                padding: EdgeInsets.all(20),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    border: Border.all(
+                        style: BorderStyle.solid, color: Color(0xffDDDDDD))),
+                child: Text(
+                  '등록된 일정이 없어요',
+                  style: TextStyle(fontSize: 24),
+                ),
+              )
+            : Container(
+                //padding: EdgeInsets.only(top: 17, right: 17, left: 17),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+                child: Column(
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: schedules.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        ScheduleModel schedule = schedules[index];
+                        return schedule.isFinished ?? false
+                            ? CompleteScheduleWidget(
+                                time: DateFormat('a h:mm', 'ko_KR')
+                                    .format(schedule.time!.toDate()),
+                                name: schedule.name!,
+                                location: schedule.location!,
+                                memo: schedule.memo ?? '',
+                                docRef: schedule.reference!,
+                              )
+                            : IncompleteScheduleWidget(
+                          idx: index,
+                                time: DateFormat('a h:mm', 'ko_KR')
+                                    .format(schedule.time!.toDate()),
+                                name: schedule.name!,
+                                location: schedule.location!,
+                                memo: schedule.memo ?? '',
+                                docRef: schedule.reference!,
+                              );
+                      },
+                    )
+                  ],
+                ),
+              ),
+      ],
+    );
+  }
+}
+
+// 이 일은 하셨나요? 가로 스크롤
+// 루틴 위젯
+class RoutineWidget extends StatelessWidget {
+  final String? time;
+  final String? name;
+  final String? url;
+  final bool? done;
+  final List<String>? days;
+  final date;
+  final DocumentReference? docRef;
+  final List<int>? originalTime;
+
+  const RoutineWidget(
+      {Key? key,
+      this.time,
+      this.name,
+      this.url,
+      this.done,
+      this.days,
+      this.docRef,
+      this.date,
+      this.originalTime})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Color iconColor =
+        done == true ? Colors.green : Colors.grey; // done이 true이면 초록색, 아니면 회색
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (_) {
+              return RoutineModal(
+                img: url!,
+                name: name!,
+                days: days!,
+                docRef: docRef!,
+                date: date,
+                time: originalTime!,
+                onCompleted: () {},
+              );
+            });
+      },
+      child: Container(
+        //margin: EdgeInsets.all(15),
+        //padding: EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 1,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.network(
+                  url ?? '',
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: MediaQuery.of(context).size.width * 0.5,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                padding: EdgeInsets.all(5),
+                height: MediaQuery.of(context).size.width * 0.5,
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        style: BorderStyle.solid, color: Color(0xffDDDDDD)),
+                    borderRadius: BorderRadius.all(Radius.circular(15))),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      time ?? '',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    Text(
+                      textAlign: TextAlign.center,
+                      name ?? '',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HomeRoutine extends StatefulWidget {
+  final List<RoutineModel> routinesBySelectedDay;
+
+  const HomeRoutine({Key? key, required this.routinesBySelectedDay})
+      : super(key: key);
+
+  @override
+  State<HomeRoutine> createState() => _HomeRoutineState();
+}
+
+class _HomeRoutineState extends State<HomeRoutine> {
+  DateTime _selectedDay = DateTime.now();
+
+  @override
+  Widget build(BuildContext context) {
+    //User user = widget.dummy[0];
+    //List<Routine>? routines = user.routines;
+    List<RoutineModel> routines = widget.routinesBySelectedDay;
+
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                '지금은 이 일을 할 시간이에요!',
+                style: TextStyle(fontSize: 30),
+                textAlign: TextAlign.left,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 11),
+        routines.isEmpty
+            ? Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                padding: EdgeInsets.all(20),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    border: Border.all(
+                        style: BorderStyle.solid, color: Color(0xffDDDDDD))),
+                child: Text(
+                  '예정된 일과가 없어요',
+                  style: TextStyle(fontSize: 24),
+                ),
+              )
+            : _buildRoutineWidget(routines.first),
+      ],
+    );
+  }
+
+  Widget _buildRoutineWidget(RoutineModel routine) {
+    final List<int>? time = routine.time;
+    String formattedTime = '';
+    if (time != null && time.length == 2) {
+      final int hour = time[0];
+      final int minute = time[1];
+      final bool isPM = hour >= 12; // 오후 여부 확인
+      int hour12 = hour > 12 ? hour - 12 : hour;
+      hour12 = hour12 == 0 ? 12 : hour12;
+      formattedTime =
+          '${isPM ? '오후' : '오전'} ${hour12.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+    }
+    bool isFinished = routine.isFinished != null &&
+        routine.isFinished!.containsKey(
+            _selectedDay.toString().substring(0, 10) + ' 00:00:00.000') &&
+        routine.isFinished![
+            _selectedDay.toString().substring(0, 10) + ' 00:00:00.000']!;
+    return RoutineWidget(
+        time: formattedTime,
+        name: routine.name,
+        url: routine.img,
+        done: isFinished,
+        days: routine.repeatDays,
+        date: DateTime.now().toString(),
+        docRef: routine.reference,
+        originalTime: routine.time);
+  }
+}
+
+// 기억
+class HomeMemory extends StatefulWidget {
+  const HomeMemory({Key? key}) : super(key: key);
+
+  @override
+  _HomeMemoryState createState() => _HomeMemoryState();
+}
+
+class _HomeMemoryState extends State<HomeMemory> {
+  MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
+  MemoryNoteService memoryNoteService = MemoryNoteService();
+  List<MemoryNoteModel> memoryNotes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    List<MemoryNoteModel> fetchedNotes =
+        await memoryNoteService.getMemoryNote();
+
+    setState(() {
+      memoryNotes = fetchedNotes;
+    });
+  }
+
+  MemoryNoteModel getRandomMemoryNote() {
+    if (memoryNotes.isEmpty)
+      return MemoryNoteModel(); // Return empty model if list is empty
+    final Random random = Random();
+    final int randomIndex = random.nextInt(memoryNotes.length);
+    return memoryNotes[randomIndex];
+  }
+
+  @override
+  @override
+  Widget build(BuildContext context) {
+    final MemoryNoteModel randomMemoryNote = getRandomMemoryNote();
+
+    return Column(
+      children: [
+        Text(
+          '오늘을 내 기억에 남기시겠어요?',
+          style: TextStyle(fontSize: 28),
+          textAlign: TextAlign.left,
+        ),
+        SizedBox(height: 11),
+        Container(
+          padding: EdgeInsets.all(17),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: Colors.white,
+          ),
+          child: Column(
+            children: [
+              randomMemoryNote.img != null
+                  ? Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            width: (MediaQuery.of(context).size.width - 66) / 2,
+                            height: 260,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage('${randomMemoryNote.img}'),
+                                fit: BoxFit.cover,
+                                opacity: 0.4,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${randomMemoryNote.imgTitle}',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color(0xff737373),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Text(
+                      '저장된 기억이 없어요',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color(0xff737373),
+                      ),
+                    ),
+              SizedBox(
+                height: 17,
+              ),
+              SizedBox(
+                width: 380,
+                height: 60,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Color(0xffFFC215)),
+                  ),
+                  onPressed: () {
+                    Get.to(MemoryRegister1());
+                  },
+                  child: Text(
+                    '내 기억에 담기',
+                    style: TextStyle(fontSize: 24, color: Colors.black),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// 사용하지 않는 위젯
 // 오늘의 일정, 일과
 class HomeTodaySummary extends StatefulWidget {
   final int? scheduleCnt;
@@ -530,502 +1130,5 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
         ),
       ],
     );
-  }
-}
-
-// 일정이 있어요
-// 미완료 스케줄 위젯
-class IncompleteScheduleWidget extends StatelessWidget {
-  final String time;
-  final String name;
-  final String location;
-  final String memo;
-  final DocumentReference docRef;
-
-  const IncompleteScheduleWidget({Key? key, required this.time, required this.name, required this.location, required this.memo, required this.docRef})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: (){
-        showDialog(context: context, builder: (_) {
-          return ScheduleModal(
-            time: time,
-            location: location,
-            name: name,
-            memo: memo,
-            docRef: docRef,
-          );
-        });
-      },
-      child: Container(
-        margin: EdgeInsets.only(bottom: 17),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(
-            color: Color(0xffFFC215),
-            width: 2,
-          ),
-        ),
-      child : Row(
-            children: [
-              Expanded(
-                child: Container(
-                  decoration : BoxDecoration( color: Color(0xffFFF5DB),borderRadius: BorderRadius.circular(15),),
-                  padding: EdgeInsets.all(17),
-                  alignment: Alignment.center,
-                  child: Text(
-                    time ?? '',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(17),
-                  alignment: Alignment.center,
-                  decoration : BoxDecoration( color: Colors.white,borderRadius: BorderRadius.circular(15),),
-                  child: Text(
-                    name ?? '',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ),
-              ),
-              ],
-            ),
-      ),
-    );
-  }
-}
-
-//완료 스케줄 위젯
-class CompleteScheduleWidget extends StatelessWidget {
-  final String time;
-  final String name;
-  final String location;
-  final String memo;
-  final DocumentReference docRef;
-
-  const CompleteScheduleWidget({Key? key, required this.time, required this.name, required this.location, required this.docRef, required this.memo})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: (){
-        showDialog(context: context, builder: (_) {
-          return ScheduleModal(
-            time: time,
-            location: location,
-            name: name,
-            memo: memo,
-            docRef: docRef,
-          );
-        });
-      },
-      child: Container(
-        margin: EdgeInsets.only(bottom: 17),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(
-            color: Color(0xffFFC215),
-            width: 2,
-          ),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(17),
-            color: Color(0xffFFF5DB),
-            child: Text('\'$name\' 일정 완료', style: TextStyle(fontSize: 24)),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class HomeSchedule extends StatefulWidget {
-  final List<ScheduleModel> schedulesBySelectedDay;
-
-  const HomeSchedule({Key? key, required this.schedulesBySelectedDay})
-      : super(key: key);
-
-  @override
-  State<HomeSchedule> createState() => _HomeScheduleState();
-}
-
-class _HomeScheduleState extends State<HomeSchedule> {
-  @override
-  Widget build(BuildContext context) {
-    List<ScheduleModel> schedules = widget.schedulesBySelectedDay;
-
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                '일정이 있어요',
-                style: TextStyle(fontSize: 30),
-                textAlign: TextAlign.left,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Get.to(ScheduleMain());
-              },
-              child: Text(
-                '전체보기',
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xffFFC215),
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 11),
-        schedules.isEmpty // 일정이 없을 때
-            ? Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                padding: EdgeInsets.all(20),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                ),
-                child: Text(
-                  '등록된 일정이 없어요',
-                  style: TextStyle(fontSize: 24),
-                ),
-              )
-            : Container(
-                padding: EdgeInsets.only(top: 17, right: 17, left: 17),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                ),
-                child: Column(
-                  children: [
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: schedules.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        ScheduleModel schedule = schedules[index];
-                        return schedule.isFinished ?? false
-                            ? CompleteScheduleWidget(
-                                time: DateFormat('HH시 mm분')
-                                    .format(schedule.time!.toDate()),
-                                name: schedule.name!,
-                                location: schedule.location!,
-                                memo: schedule.memo ?? '',
-                                docRef: schedule.reference!,
-                              )
-                            : IncompleteScheduleWidget(
-                                time: DateFormat('HH시 mm분')
-                                    .format(schedule.time!.toDate()),
-                                name: schedule.name!,
-                                location: schedule.location!,
-                                memo: schedule.memo ?? '',
-                                docRef: schedule.reference!,
-                              );
-                      },
-                    )
-                  ],
-                ),
-              ),
-      ],
-    );
-  }
-
-
-}
-
-// 이 일은 하셨나요? 가로 스크롤
-// 루틴 위젯
-class RoutineWidget extends StatelessWidget {
-  final String? time;
-  final String? name;
-  final String? url;
-  final bool? done;
-  final List<String>? days;
-  final date;
-  final DocumentReference? docRef;
-  final List<int>? originalTime;
-
-  const RoutineWidget({Key? key, this.time, this.name, this.url, this.done, this.days, this.docRef, this.date, this.originalTime})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Color iconColor =
-        done == true ? Colors.green : Colors.grey; // done이 true이면 초록색, 아니면 회색
-    return GestureDetector(
-      onTap: (){
-        showDialog(context: context, builder: (_) {
-          return RoutineModal(
-            img: url!,
-            name: name!,
-            days: days!,
-            docRef: docRef!,
-            date: date,
-            time: originalTime!,
-            onCompleted: (){},
-          );
-        });
-      },
-      child: Container(
-        margin: EdgeInsets.all(15),
-        padding: EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Image.network(
-                url ?? '',
-                width: 292,
-                height: 200,
-                fit: BoxFit.cover,
-              ),
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                Text(
-                  time ?? '',
-                  style: TextStyle(fontSize: 24),
-                ),
-                IconButton(
-                  onPressed: () {print('done: $done');},
-                  icon: Icon(
-                    Icons.check_circle,
-                    color: iconColor,
-                  ),
-                )
-              ],
-            ),
-            Text(
-              name ?? '',
-              style: TextStyle(fontSize: 24),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class HomeRoutine extends StatefulWidget {
-  final List<RoutineModel> routinesBySelectedDay;
-
-  const HomeRoutine({Key? key, required this.routinesBySelectedDay})
-      : super(key: key);
-
-  @override
-  State<HomeRoutine> createState() => _HomeRoutineState();
-}
-
-class _HomeRoutineState extends State<HomeRoutine> {
-  DateTime _selectedDay = DateTime.now();
-  @override
-  Widget build(BuildContext context) {
-    //User user = widget.dummy[0];
-    //List<Routine>? routines = user.routines;
-    List<RoutineModel> routines = widget.routinesBySelectedDay;
-
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                '이 일은 하셨나요?',
-                style: TextStyle(fontSize: 30),
-                textAlign: TextAlign.left,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Get.to(RoutineMain());
-              },
-              child: Text(
-                '전체보기',
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xffFFC215),
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 11),
-        Container(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: routines?.map((routines) {
-                    final List<int>? time = routines.time;
-                    String formattedTime = '';
-                    if (time != null && time.length == 2) {
-                      final int hour = time[0];
-                      final int minute = time[1];
-                      final bool isPM = hour >= 12; // 오후 여부 확인
-                      int hour12 = hour > 12 ? hour - 12 : hour;
-                      hour12 = hour12 == 0 ? 12 : hour12;
-                      formattedTime =
-                          '${isPM ? '오후' : '오전'} ${hour12.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
-                    }
-                    // isFinished가 true인지 확인하여 해당하는 값으로 설정
-
-                    bool isFinished = routines.isFinished != null &&
-                        routines.isFinished!.containsKey(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000') &&
-                        routines.isFinished![_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000']!;
-                    //print('${routines.isFinished}');
-                    return RoutineWidget(
-                      time: formattedTime,
-                      name: routines.name,
-                      url: routines.img,
-                      done: isFinished,
-                      // done: routines.isFinished![_selectedDay.toString().replaceAll('Z', '')]! ?? false,
-                      days: routines.repeatDays,
-                      date: DateTime.now().toString(),
-                      docRef: routines.reference,
-                      originalTime: routines.time
-                    );
-                  }).toList() ??
-                  [],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class HomeMemory extends StatefulWidget {
-  const HomeMemory({Key? key}) : super(key: key);
-
-  @override
-  _HomeMemoryState createState() => _HomeMemoryState();
-}
-
-class _HomeMemoryState extends State<HomeMemory> {
-  MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
-  MemoryNoteService memoryNoteService = MemoryNoteService();
-  List<MemoryNoteModel> memoryNotes = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
-    List<MemoryNoteModel> fetchedNotes =
-    await memoryNoteService.getMemoryNote();
-
-    setState(() {
-      memoryNotes = fetchedNotes;
-    });
-  }
-
-  MemoryNoteModel getRandomMemoryNote() {
-    if (memoryNotes.isEmpty) return MemoryNoteModel(); // Return empty model if list is empty
-    final Random random = Random();
-    final int randomIndex = random.nextInt(memoryNotes.length);
-    return memoryNotes[randomIndex];
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final MemoryNoteModel randomMemoryNote = getRandomMemoryNote();
-
-    return Column(children: [
-      Text(
-        '오늘을 내 기억에 남겨보세요!',
-        style: TextStyle(fontSize: 28),
-        textAlign: TextAlign.left,
-      ),
-      SizedBox(height: 11),
-      Container(
-        padding: EdgeInsets.all(17),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15), color: Colors.white),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    width: (MediaQuery.of(context).size.width - 66) / 2,
-                    height: 260,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage('${randomMemoryNote.img}'), // Use random image URL
-                            fit: BoxFit.cover,
-                            // 이미지가 Container에 맞게 잘리지 않도록 적절하게 조정
-                            opacity: 0.4),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Center(
-                      child: Text(
-                        '${randomMemoryNote.imgTitle}', // You might want to replace this text with actual data from the model
-                        style:
-                        TextStyle(fontSize: 20, color: Color(0xff737373)),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 17,
-            ),
-            Text(
-              '오늘 하루를 보내며서 기억하고 싶은 특별한 순간이 있나요?',
-              style: TextStyle(fontSize: 24),
-            ),
-            SizedBox(
-              height: 17,
-            ),
-            SizedBox(
-              width: 380,
-              height: 60,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor:
-                  MaterialStateProperty.all<Color>(Color(0xffFFC215)),
-                ),
-                onPressed: () {
-                  Get.to(MemoryRegister1());
-                },
-                child: Text(
-                  '내 기억에 담기',
-                  style: TextStyle(fontSize: 24, color: Colors.black),
-                ),
-              ),
-            )
-          ],
-        ),
-      )
-    ]);
   }
 }

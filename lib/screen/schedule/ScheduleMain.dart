@@ -3,6 +3,7 @@ import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/notification/notification.dart';
 import 'package:atti/screen/schedule/register/ScheduleRegister1.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:atti/data/schedule/schedule_service.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
@@ -62,7 +63,6 @@ class _ScheduleMainState extends State<ScheduleMain> {
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -234,8 +234,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
             //connectorStyle: ConnectorStyle.dashedLine,
             connectorStyleBuilder: (context, index) => ConnectorStyle.dashedLine,
             lastConnectorStyle: ConnectorStyle.dashedLine,
-            contentsAlign: ContentsAlign.basic,
-            //indicatorStyle: IndicatorStyle.dot,
+            //contentsAligIndicatorStyle.dot,
             contentsBuilder: (context, index) => Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
 
@@ -245,7 +244,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
                   // 타일 클릭 시 모달창
                   showDialog(context: context, builder: (_) {
                     return ScheduleModal(
-                      time: DateFormat('HH시 mm분').format(schedulesBySelectedDay[index].time!.toDate()),
+                      time: DateFormat('a h시 mm분', 'ko_KR').format(schedulesBySelectedDay[index].time!.toDate()),
                       location: schedulesBySelectedDay[index].location!,
                       name: schedulesBySelectedDay[index].name!,
                       memo: schedulesBySelectedDay[index].memo,
@@ -264,7 +263,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
                       ), ),
                     SizedBox(height: 10,),
                     ScheduleBox(
-                      time: DateFormat('HH시 mm분').format(schedulesBySelectedDay[index].time!.toDate()),
+                      time: DateFormat('a hh:mm', 'ko_KR').format(schedulesBySelectedDay[index].time!.toDate()),
                       location: schedulesBySelectedDay[index].location,
                       name: schedulesBySelectedDay[index].name,
                     ),

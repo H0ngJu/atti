@@ -33,9 +33,17 @@ class _ReportHistoryState extends State<ReportHistory> {
               future: reports,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator(); // 로딩 중일 때는 로딩 인디케이터 표시
+                  return Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 10.0,
+                    ),
+                  );
+                  // 로딩 중일 때는 로딩 인디케이터 표시
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}'); // 에러 발생 시 에러 메시지 표시
+                  print('Error: ${snapshot.error}');
+                  return Text('리포트를 불러오는 데 실패했습니다! 잠시 후 다시 시도해 주세요.',
+                    textAlign: TextAlign.center,
+                  ); // 에러 발생 시 에러 메시지 표시
                 } else {
                   var reports = snapshot.data!;
                   // 실제 데이터가 준비되었을 때 렌더링하려는 위젯
@@ -59,7 +67,7 @@ class _ReportHistoryState extends State<ReportHistory> {
                               Container(
                                 margin: EdgeInsets.only(bottom: 10),
                                 child: Text(
-                                  '${reports[0].patientId}',
+                                  '${reports[0].patientId}', // 확인완
                                   style: TextStyle(
                                       fontSize: 24, fontWeight: FontWeight.bold),
                                 ),

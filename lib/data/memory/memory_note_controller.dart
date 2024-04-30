@@ -8,10 +8,13 @@ class MemoryNoteController extends GetxController {
   final MemoryNoteService memoryNoteService = MemoryNoteService();
   var memoryNote = MemoryNoteModel().obs;
   var tmpImgTitle = ''.obs;
+  var documentReference; // 도큐먼트 레퍼런스를 저장할 변수 추가
 
   void addMemoryNote() async {
     try {
-      await memoryNoteService.addMemoryNote(memoryNote.value);
+      documentReference = await memoryNoteService.addMemoryNote(memoryNote.value);
+      await memoryNoteService.callGeminiAPI(memoryNote.value, documentReference);
+
       clear();
     } catch (e) {
       print('Error adding memory note: $e');
