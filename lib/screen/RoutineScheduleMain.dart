@@ -130,6 +130,9 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     }
   }
 
+  String removeZ(String dateTimeString) {
+    return dateTimeString.replaceAll('Z', '');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -237,6 +240,14 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
               shrinkWrap: true,
               itemCount: routinesBySelectedDay.length,
               itemBuilder: (context, index) {
+                bool isFinished =
+                    routinesBySelectedDay[index].isFinished != null &&
+                        routinesBySelectedDay[index]
+                            .isFinished!
+                            .containsKey(removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')) &&
+                        routinesBySelectedDay[index]
+                            .isFinished![removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')]!;
+
                 return GestureDetector(
                   onTap: () {
                     showDialog(
@@ -257,6 +268,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     time: routinesBySelectedDay[index].time!,
                     img: routinesBySelectedDay[index].img!,
                     name: routinesBySelectedDay[index].name!,
+                    isFinished: isFinished
                   ),
                 );
               },
@@ -296,32 +308,46 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
               ),
             ),
             //SizedBox(height: height * 0.03,),
-            ListView.builder(
-              primary: false,
-              shrinkWrap: true,
-              itemCount: schedulesBySelectedDay.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) {
-                          return ScheduleModal(
-                            time: DateFormat('a h시 mm분', 'ko_KR').format(schedulesBySelectedDay[index].time!.toDate()),
-                            location: schedulesBySelectedDay[index].location!,
-                            name: schedulesBySelectedDay[index].name!,
-                            memo: schedulesBySelectedDay[index].memo,
-                            docRef: schedulesBySelectedDay[index].reference!,
-                          );
-                        });
+            schedulesBySelectedDay.length > 0
+                ? ListView.builder(
+                    primary: false,
+                    shrinkWrap: true,
+                    itemCount: schedulesBySelectedDay.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) {
+                                return ScheduleModal(
+                                  time: DateFormat('a h시 mm분', 'ko_KR')
+                                      .format(schedulesBySelectedDay[index].time!.toDate()),
+                                  location: schedulesBySelectedDay[index].location!,
+                                  name: schedulesBySelectedDay[index].name!,
+                                  memo: schedulesBySelectedDay[index].memo,
+                                  docRef: schedulesBySelectedDay[index].reference!,
+                                );
+                              });
+                        },
+                        child: ScheduleBox(
+                          time: DateFormat('a hh:mm', 'ko_KR')
+                              .format(schedulesBySelectedDay[index].time!.toDate()),
+                          location: schedulesBySelectedDay[index].location,
+                          name: schedulesBySelectedDay[index].name,
+                          isFinished: schedulesBySelectedDay[index].isFinished,
+                        ),
+                      );
                   },
-                  child: ScheduleBox(
-                    time: DateFormat('a hh:mm', 'ko_KR').format(schedulesBySelectedDay[index].time!.toDate()),
-                    location: schedulesBySelectedDay[index].location,
-                    name: schedulesBySelectedDay[index].name,
+            )
+                : Container(
+                  child: Column(
+                    children: [
+                      SizedBox(height: height * 0.05,),
+                      Text("오늘은 예정된 일과가 없네요!",
+                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500)),
+                      SizedBox(height: height * 0.05,),
+                    ],
                   ),
-                );
-              },
             ),
             SizedBox(height: height * 0.03,),
 

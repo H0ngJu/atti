@@ -9,10 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ScheduleBox extends StatefulWidget {
-  const ScheduleBox({super.key, this.time, this.name, this.location});
+  const ScheduleBox({super.key, this.time, this.name, this.location, this.isFinished});
   final time;
   final name;
   final location;
+  final isFinished;
 
   @override
   State<ScheduleBox> createState() => _ScheduleBoxState();
@@ -36,7 +37,11 @@ class _ScheduleBoxState extends State<ScheduleBox> {
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: Color(0xff737373), width: 1,),
                 ),
-                child: Text(widget.time, style: TextStyle(fontSize: 22),),
+                child: Text(widget.time, style: TextStyle(
+                  fontSize: 22,
+                  color: widget.isFinished ? Color(0xff868686) : Colors.black,
+                ),
+                ),
               ),
               SizedBox(width: 10,),
               Expanded(
@@ -54,21 +59,26 @@ class _ScheduleBoxState extends State<ScheduleBox> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: Colors.black, width: 1,),
+              border: Border.all(color: Color(0xffDDDDDD), width: 1,),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (widget.name != null) Text(widget.name!, style: TextStyle(
                   fontSize: 30,
+                  color: widget.isFinished ? Color(0xff868686) : Colors.black,
                 ),),
                 SizedBox(height: 5,),
                 Row(
                   children: [
-                    Text('장소', style: TextStyle(fontSize: 20),),
+                    Text('장소', style: TextStyle(
+                      fontSize: 20,
+                      color: widget.isFinished ? Color(0xff868686) : Colors.black,
+                    ),),
                     SizedBox(width: 10),
                     if (widget.location != null) Text(widget.location!, style: TextStyle(
-                      fontSize: 20, color: Colors.black
+                      fontSize: 20,
+                      color: widget.isFinished ? Color(0xff868686) : Colors.black,
                     ),),
                   ],
                 ),

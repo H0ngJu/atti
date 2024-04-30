@@ -4,10 +4,11 @@ import 'dart:io';
 import '../data/routine/routine_controller.dart';
 
 class RoutineBox2 extends StatefulWidget {
-  const RoutineBox2({super.key, required this.time, required this.name, required this.img,});
+  const RoutineBox2({super.key, required this.time, required this.name, required this.img, required this.isFinished});
   final time;
   final name;
   final img;
+  final isFinished;
 
   @override
   State<RoutineBox2> createState() => _RoutineBox2State();
@@ -50,7 +51,10 @@ class _RoutineBox2State extends State<RoutineBox2> {
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: Color(0xff737373), width: 1,),
                 ),
-                child: Text(formattedTime, style: TextStyle(fontSize: 22),),
+                child: Text(formattedTime, style: TextStyle(
+                    fontSize: 22,
+                    color: widget.isFinished ? Color(0xff868686) : Colors.black,
+                ),),
               ),
               SizedBox(width: 10,),
               Expanded(
@@ -64,7 +68,12 @@ class _RoutineBox2State extends State<RoutineBox2> {
           SizedBox(height: 10,),
           Container(
             width: width * 0.8,
-              child: Text(widget.name, style: TextStyle(fontSize: 30),)),
+              child: Text(widget.name, style: TextStyle(
+                  fontSize: 30,
+                  color: widget.isFinished ? Color(0xff868686) : Colors.black,
+              ),
+            )
+          ),
           SizedBox(height: 5,),
           Container(
             alignment: Alignment.center,
@@ -73,23 +82,33 @@ class _RoutineBox2State extends State<RoutineBox2> {
             child: Container(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: widget.img != null && widget.img.contains('http')
-                    ? Image.network(
-                  widget.img,
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                  alignment: Alignment.center,
-                )
-                    : (widget.img != null && File(widget.img!).existsSync())
-                    ? Image.file(
-                  File(routineController.routine.value.img!),
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                  alignment: Alignment.center,
-                )
-                    : Container(),
+                child: widget.isFinished
+                    ? ColorFiltered(
+                      colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
+                      child: Image.network(
+                        widget.img,
+                        width: double.infinity,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.center,
+                      ),
+                    )
+                    : Image.network(
+                      widget.img,
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
+                      alignment: Alignment.center,
+                    ),
+                //     : (widget.img != null && File(widget.img!).existsSync())
+                //     ? Image.file(
+                //   File(routineController.routine.value.img!),
+                //   width: double.infinity,
+                //   height: double.infinity,
+                //   fit: BoxFit.cover,
+                //   alignment: Alignment.center,
+                // )
+                //     : Container(),
               ),
             ),
 
