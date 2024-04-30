@@ -106,7 +106,6 @@ class MyApp extends StatelessWidget {
         '/schedule': (context) => ScheduleMain(),
         '/routine': (context) => RoutineMain(),
       },
-
     );
   }
 }
