@@ -54,8 +54,8 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   List<ScheduleModel> todaySchedules = [];
   DateTime today = DateTime.now();
   String todayInWeek = DateFormat('E', 'ko-KR').format(DateTime.now());
-  late String ttsMsg;
-  late String selectedMessage;
+  String ttsMsg = '';
+  String selectedMessage = '';
 
   final AuthController authController = Get.put(AuthController());
   final RoutineController routineController = Get.put(RoutineController());
@@ -274,7 +274,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                   color: Color(0xffFFC215),
                   borderRadius: BorderRadius.all(Radius.circular(15))),
               child: Text(
-                  selectedMessage,
+                  selectedMessage ?? '',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white, fontFamily: 'UhBee', fontSize: 25)),
