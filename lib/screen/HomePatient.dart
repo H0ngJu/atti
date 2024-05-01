@@ -396,13 +396,31 @@ class _HomePatientTopState extends State<HomePatientTop> {
     '오늘 하루 아띠와 함께해요!',
     '잘 주무셨나요?'
   ];
+  final List<String> topImg = [
+    'lib/assets/Atti/standingAtti.png',
+    'lib/assets/Atti/rainy.png',
+    'lib/assets/Atti/autumn.png',
+    'lib/assets/Atti/spring.png',
+    'lib/assets/Atti/summer.png',
+    'lib/assets/Atti/sunny.png',
+    'lib/assets/Atti/winter.png',
+
+  ];
   late final int index; // `late` 키워드를 사용하여 나중에 초기화됨을 명시
+  late String selectedImage;
 
   @override
   void initState() {
     super.initState();
     final Random random = Random();
     index = random.nextInt(greetingMsg.length); // 여기에서 `index` 초기화
+    selectedImage = getRandomImage();
+  }
+
+  String getRandomImage() {
+    final random = Random();
+    int index = random.nextInt(topImg.length);
+    return topImg[index];
   }
 
   @override
@@ -442,8 +460,8 @@ class _HomePatientTopState extends State<HomePatientTop> {
             mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
             children: [
               Image(
-                  image: AssetImage('lib/assets/Atti/standingAtti.png'),
-                  width: MediaQuery.of(context).size.width * 0.8),
+                  image: AssetImage(selectedImage),
+                  width: MediaQuery.of(context).size.width * 0.55),
             ],
           ),
           SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분

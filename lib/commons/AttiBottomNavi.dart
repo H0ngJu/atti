@@ -28,34 +28,22 @@ class CustomBottomNavigationBar extends StatelessWidget {
       type: BottomNavigationBarType.fixed,
       items: [
         _buildBottomNavigationBarItem(
-          tappedIcon: 'lib/assets/icons/memory_yellow.svg',
+          tappedIcon: 'lib/assets/icons/memory_black.svg',
           untappedIcon: 'lib/assets/icons/memory_white.svg',
           label: '내 기억',
           isSelected: currentIndex == 0,
 
         ),
         _buildBottomNavigationBarItem(
-          tappedIcon: 'lib/assets/icons/camera_yellow.svg',
-          untappedIcon: 'lib/assets/icons/camera_white.svg',
-          label: '기억하기',
-          isSelected: currentIndex == 1,
-        ),
-        _buildBottomNavigationBarItem(
-          tappedIcon: 'lib/assets/icons/home_yellow.svg',
+          tappedIcon: 'lib/assets/icons/home_black.svg',
           untappedIcon: 'lib/assets/icons/home_white.svg',
           label: '홈',
           isSelected: currentIndex == 2,
         ),
         _buildBottomNavigationBarItem(
-          tappedIcon: 'lib/assets/icons/routine_yellow.svg',
-          untappedIcon: 'lib/assets/icons/routine_white.svg',
-          label: '하루 일과',
-          isSelected: currentIndex == 3,
-        ),
-        _buildBottomNavigationBarItem(
-          tappedIcon: 'lib/assets/icons/schedule_yellow.svg',
-          untappedIcon: 'lib/assets/icons/schedule_white.svg',
-          label: '일정',
+          tappedIcon: 'lib/assets/icons/RShome_black.svg',
+          untappedIcon: 'lib/assets/icons/RShome_white.svg',
+          label: '일과/일정',
           isSelected: currentIndex == 4,
         ),
       ],
