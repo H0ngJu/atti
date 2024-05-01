@@ -79,25 +79,31 @@ class _HomePatientState extends State<HomePatient> {
           String docRef = payload.substring('/schedule1/'.length);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => FullScreenSchedule(docRef: docRef)), // ScheduleMain 페이지로 이동
+            MaterialPageRoute(
+                builder: (context) =>
+                    FullScreenSchedule(docRef: docRef)), // ScheduleMain 페이지로 이동
           );
         } else if (payload.startsWith('/schedule2/')) {
           String docRef = payload.substring('/schedule2/'.length);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => FullScreenSchedule2(docRef: docRef)),
+            MaterialPageRoute(
+                builder: (context) => FullScreenSchedule2(docRef: docRef)),
           );
         } else if (payload.startsWith('/schedule3/')) {
           String docRef = payload.substring('/schedule3/'.length);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => FullScreenSchedule3(docRef: docRef)),
+            MaterialPageRoute(
+                builder: (context) => FullScreenSchedule3(docRef: docRef)),
           );
         } else if (payload.startsWith('/routine/')) {
           String docRef = payload.substring('/routine/'.length);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => FullScreenRoutine(docRef: docRef)), // RoutineMain 페이지로 이동
+            MaterialPageRoute(
+                builder: (context) =>
+                    FullScreenRoutine(docRef: docRef)), // RoutineMain 페이지로 이동
           );
         }
       }
@@ -320,7 +326,7 @@ class _HomePatientState extends State<HomePatient> {
   }
 
   // bottom Navi logic
-  int _selectedIndex = 2;
+  int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -396,13 +402,30 @@ class _HomePatientTopState extends State<HomePatientTop> {
     '오늘 하루 아띠와 함께해요!',
     '잘 주무셨나요?'
   ];
+  final List<String> topImg = [
+    'lib/assets/Atti/standingAtti.png',
+    'lib/assets/Atti/rainy.png',
+    'lib/assets/Atti/autumn.png',
+    'lib/assets/Atti/spring.png',
+    'lib/assets/Atti/summer.png',
+    'lib/assets/Atti/sunny.png',
+    'lib/assets/Atti/winter.png',
+  ];
   late final int index; // `late` 키워드를 사용하여 나중에 초기화됨을 명시
+  late String selectedImage;
 
   @override
   void initState() {
     super.initState();
     final Random random = Random();
     index = random.nextInt(greetingMsg.length); // 여기에서 `index` 초기화
+    selectedImage = getRandomImage();
+  }
+
+  String getRandomImage() {
+    final random = Random();
+    int index = random.nextInt(topImg.length);
+    return topImg[index];
   }
 
   @override
@@ -442,8 +465,8 @@ class _HomePatientTopState extends State<HomePatientTop> {
             mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
             children: [
               Image(
-                  image: AssetImage('lib/assets/Atti/standingAtti.png'),
-                  width: MediaQuery.of(context).size.width * 0.8),
+                  image: AssetImage(selectedImage),
+                  width: MediaQuery.of(context).size.width * 0.55),
             ],
           ),
           SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
@@ -543,7 +566,7 @@ class IncompleteScheduleWidget extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              flex: 1,
+                flex: 1,
                 child: Container(
                     decoration: BoxDecoration(
                       //color: Color(0xffFFF5DB),
@@ -551,7 +574,8 @@ class IncompleteScheduleWidget extends StatelessWidget {
                     ),
                     padding: EdgeInsets.all(17),
                     alignment: Alignment.center,
-                    child: Text(idx?.toString() ?? '',style: TextStyle(fontSize: 24) ))),
+                    child: Text(idx?.toString() ?? '',
+                        style: TextStyle(fontSize: 24)))),
             Expanded(
               flex: 3,
               child: Container(
@@ -713,7 +737,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                                 docRef: schedule.reference!,
                               )
                             : IncompleteScheduleWidget(
-                          idx: index,
+                                idx: index,
                                 time: DateFormat('a h:mm', 'ko_KR')
                                     .format(schedule.time!.toDate()),
                                 name: schedule.name!,
@@ -929,6 +953,8 @@ class _HomeMemoryState extends State<HomeMemory> {
   MemoryNoteService memoryNoteService = MemoryNoteService();
   List<MemoryNoteModel> memoryNotes = [];
 
+
+
   @override
   void initState() {
     super.initState();
@@ -952,10 +978,79 @@ class _HomeMemoryState extends State<HomeMemory> {
     return memoryNotes[randomIndex];
   }
 
-  @override
+  Widget CalenderContainer(day, date, url) {
+    return Container(
+      height: MediaQuery.of(context).size.height*0.2,
+
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            //padding: EdgeInsets.only(top: 10, bottom: 10, left: 3, right: 3),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+            //margin: EdgeInsets.all(1),
+            child : Column(
+            children : [Text(
+            '${day}',
+            style: TextStyle(
+                color: Color(0xff737373),
+                fontFamily: 'PretendardLight',
+                fontSize: 15),
+          ),
+          Text(
+            '${date}',
+            style: TextStyle(
+                color: Color(0xff737373),
+                fontFamily: 'PretendardLight',
+                fontSize: 15),
+          ),]),),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: url.isNotEmpty
+                ? Image.network(
+              url,
+              width: MediaQuery.of(context).size.width * 0.1,
+              height: MediaQuery.of(context).size.width * 0.15,
+              fit: BoxFit.cover,
+            )
+                : Container(), // url이 없는 경우 대체 위젯
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final MemoryNoteModel randomMemoryNote = getRandomMemoryNote();
+    // 현재 날짜에서 일주일의 시작(일요일)으로 설정
+    final DateTime now = DateTime.now();
+    List<String> weekdaysKorean = ['일', '월', '화', '수', '목', '금', '토'];  // 리스트를 일요일부터 시작하도록 수정
+    final int todayWeekday = now.weekday;
+    final DateTime startOfWeek = now.subtract(Duration(days: todayWeekday % 7)); // 일요일부터 시작하도록 수정
+
+    List<Widget> daysWidgets = List.generate(7, (index) {
+      // 각 날짜와 요일을 계산
+      DateTime dayDate = startOfWeek.add(Duration(days: index));
+      String dayName = weekdaysKorean[dayDate.weekday % 7]; // 변경된 부분: DateFormat을 사용하지 않고 직접 요일의 첫 글자를 구함
+      int dayNumber = dayDate.day;
+
+      // 해당 날짜에 해당하는 메모리 노트의 URL 찾기
+      String url = memoryNotes.firstWhere((note) {
+        if (note.createdAt == null) return false;
+        // Convert Timestamp to DateTime
+        DateTime createdAtDate = note.createdAt!.toDate();
+
+        return createdAtDate.year == dayDate.year &&
+            createdAtDate.month == dayDate.month &&
+            createdAtDate.day == dayDate.day;
+      }, orElse: () => MemoryNoteModel()).img ?? '';
+
+
+      // CalenderContainer 위젯 반환
+      return CalenderContainer(dayName, dayNumber, url);  // CalenderContainer 구현에 따라 다를 수 있음
+    });
+
 
     return Column(
       children: [
@@ -965,73 +1060,9 @@ class _HomeMemoryState extends State<HomeMemory> {
           textAlign: TextAlign.left,
         ),
         SizedBox(height: 11),
-        Container(
-          padding: EdgeInsets.all(17),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Colors.white,
-          ),
-          child: Column(
-            children: [
-              randomMemoryNote.img != null
-                  ? Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            width: (MediaQuery.of(context).size.width - 66) / 2,
-                            height: 260,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage('${randomMemoryNote.img}'),
-                                fit: BoxFit.cover,
-                                opacity: 0.4,
-                              ),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '${randomMemoryNote.imgTitle}',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Color(0xff737373),
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  : Text(
-                      '저장된 기억이 없어요',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Color(0xff737373),
-                      ),
-                    ),
-              SizedBox(
-                height: 17,
-              ),
-              SizedBox(
-                width: 380,
-                height: 60,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Color(0xffFFC215)),
-                  ),
-                  onPressed: () {
-                    Get.to(MemoryRegister1());
-                  },
-                  child: Text(
-                    '내 기억에 담기',
-                    style: TextStyle(fontSize: 24, color: Colors.black),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [...daysWidgets,]),
       ],
     );
   }

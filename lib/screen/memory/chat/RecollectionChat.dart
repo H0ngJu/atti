@@ -8,12 +8,15 @@ import 'package:atti/screen/chatbot/Chatbot.dart';
 import 'package:atti/screen/memory/chat/BeforeSave.dart';
 import 'package:atti/screen/memory/chat/ChatBubble.dart';
 import 'package:atti/screen/memory/chat/ChatHistory.dart';
+import 'package:atti/screen/memory/gallery/RecollectionData.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
+
+import '../../chatbot/RecollectionChatbot.dart';
 
 class ChatMessage {
   final String sender; // I or ATTI
@@ -92,18 +95,17 @@ List<String> SurprisedMsg = [
   '특별',
 ]; // 'lib/assets/Atti/Surprised.png'
 
-class Chat extends StatefulWidget {
-  final MemoryNoteModel memory;
+class RecollectionChat extends StatefulWidget {
+  final RecollectionData recollection;
 
-  const Chat({Key? key, required this.memory}) : super(key: key);
+  const RecollectionChat({Key? key, required this.recollection}) : super(key: key);
 
   @override
-  State<Chat> createState() => _ChatState();
+  State<RecollectionChat> createState() => _RecollectionChatState();
 }
 
-class _ChatState extends State<Chat> {
+class _RecollectionChatState extends State<RecollectionChat> {
   String _currentMessage = '대화를 시작하려면 마이크 버튼을 누르세요'; // 내가 한 대화
-  //String _msgToVoice = '대화를 시작하려면 마이크 버튼을 누르세요'; // TTS되는 메시지
 
   final FlutterTts flutterTts = FlutterTts();
   String _currentImage = 'lib/assets/Atti/default1.png'; // 기본 이미지 설정
@@ -114,8 +116,6 @@ class _ChatState extends State<Chat> {
     flutterTts.setLanguage("ko-KR");
     flutterTts.setPitch(1);
     _speakMessage(_currentMessage);
-    //_speakMessage(_msgToVoice);
-    //_startTimer();
   }
 
   void _speakMessage(String message) async {
@@ -126,7 +126,7 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('\'${widget.memory.imgTitle}\'기억 회상 대화'),
+        title: Text('\'${widget.recollection.title}\'기억 회상 대화'),
       ),
       body: Stack(children: [
         Container(
@@ -144,31 +144,16 @@ class _ChatState extends State<Chat> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                     child: Image.network(
-                      '${widget.memory.img}',
+                      '${widget.recollection.img}',
                       fit: BoxFit.contain,
                       width: MediaQuery.of(context).size.width * 0.35,
                       height: MediaQuery.of(context).size.height * 0.3,
                     ),
                   )),
-              /*Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // 메세지에 따른 이미지 변화 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-                  Image(
-                    image: AssetImage(_currentImage),
-                    height: MediaQuery.of(context).size.height * 0.3,
-                  ),
-                ],
-              ),*/
               VoiceButton(
                 updatedMessage: (message) {
-                  // updatedMessage: (message, role) {
                   setState(() {
                     _currentMessage = message;
-
-                    // if (role == "Assistant") {   <- 콜백에 role도 받아와서 아띠일때만 state업뎃할라햇음
-                    //   _msgToVoice = message;
-                    // }
                   });
                 },
                 updatedImage: (image) {
@@ -177,9 +162,7 @@ class _ChatState extends State<Chat> {
                     _currentImage = image;
                   });
                 },
-                memory: widget.memory,
-                //updatedMessage: _onUserMessage, // 사용자가 말할 때 호출되는 콜백 함수 전달
-              ),
+                recollection: widget.recollection,),
             ],
           ),
         ),
@@ -200,16 +183,16 @@ class _ChatState extends State<Chat> {
 
 // 대화기록, 마이크, 대화 종료 버튼
 class VoiceButton extends StatefulWidget {
-  final MemoryNoteModel memory;
+  final RecollectionData recollection;
   final Function(String) updatedMessage;
 
   //final Function(String, String) updatedMessage;
   final Function(String) updatedImage; // 이미지 업데이트 콜백 추가
   const VoiceButton(
       {Key? key,
-      required this.updatedMessage,
-      required this.memory,
-      required this.updatedImage})
+        required this.updatedMessage,
+        required this.recollection,
+        required this.updatedImage})
       : super(key: key);
 
   @override
@@ -218,7 +201,7 @@ class VoiceButton extends StatefulWidget {
 
 class _VoiceButtonState extends State<VoiceButton> {
   String _currentMessage = '대화를 시작하려면\n마이크 버튼을 누르세요';
-  final _chatbot = Chatbot();
+  final _chatbot = RecollectionChatbot();
   stt.SpeechToText _speech = stt.SpeechToText();
   String _spokenText = '버튼을 누르고 음성을 입력';
   bool _isListening = false;
@@ -228,7 +211,7 @@ class _VoiceButtonState extends State<VoiceButton> {
   late List<String> onlyUserMessages = []; // 사용자 응답만 저장
   final EmotionController emotionController = Get.put(EmotionController());
   final DangerWordController dangerWordController =
-      Get.put(DangerWordController());
+  Get.put(DangerWordController());
 
   @override
   void initState() {
@@ -268,23 +251,16 @@ class _VoiceButtonState extends State<VoiceButton> {
             _spokenText = result.recognizedWords;
           });
           String message = result.recognizedWords ?? "";
-          // _appendMessage("User", message); // 사용자의 말을 메시지로 추가
-          // _onUserMessage(message);
-
-          // 일정 시간 동안 아무런 결과가 없으면 음성 인식 종료로 판단하고 API 호출
           Future.delayed(Duration(seconds: 2), () async {
             if (_spokenText == message) {
-              // 1초 동안 결과가 변하지 않았다면
               try {
-                // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 수정한 부분 : _appendMessage, _onUserMessage 함수 호출 여기로 변경
-                // (여러번 보내는거 해결하기 위해 사용자 말 끝나면 메시지 추가)
-                _appendMessage("User", message); // 사용자의 말을 메시지로 추가
+                _appendMessage("User", message);
                 _onUserMessage(message);
 
                 String response = await _chatbot.getResponse(
                     message,
-                    widget.memory.img!,
-                    widget.memory.reference!); // Chatbot으로부터 응답 받기
+                    widget.recollection.img!,
+                ); // Chatbot으로부터 응답 받기
                 _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
                 //_speakMessage(response);
                 _onApiResponse(response);
@@ -299,59 +275,19 @@ class _VoiceButtonState extends State<VoiceButton> {
           });
         },
       );
-      // _speech.listen(
-      //   onResult: (result) async {
-      //     setState(() {
-      //       _spokenText = result.recognizedWords;
-      //     });
-      //     String message = result.recognizedWords ?? "";
-      //     //print('here : $message');
-      //     _appendMessage("User", message); // 사용자의 말을 메시지로 추가
-      //     setState(() {
-      //       _isListening = false;
-      //     });
-      //     _stopListening(); // Listening 중지
-      //     _onUserMessage(message);
-      //
-      //     try {
-      //       String response = await _chatbot.getResponse(message); // Chatbot으로부터 응답 받기
-      //       _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
-      //       _onApiResponse(response);
-      //     } catch (e) {
-      //       print("Error: $e");
-      //     } finally {
-      //       setState(() {
-      //         _isListening = false;
-      //       });
-      //     }
-      //   },
-      // );
     } else {
       print("Speech recognition not available");
     }
   }
 
-  // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 수정한 부분
-  // 메시지 추가
   void _appendMessage(String role, String message) {
     if (role == "Assistant") {
-      // <- 아띠 메시지만 _currentMessage로 업데이트되게 함 (if문빼면 사용자 메시지도 출력)
       setState(() {
         _currentMessage = message;
         widget.updatedMessage(_currentMessage);
       });
     }
 
-    // 이건 하려다 잘 안된 부분이라죠 ㅋㅋ
-    // if (role == "Assistant") { // 아띠 메시지 -> 화면에 텍스트로도 띄우고 + TTS도 함
-    //   setState(() {
-    //     _currentMessage = message;
-    //     widget.updatedMessage(_currentMessage, "Assistant");
-    //   });
-    // } else { // 내 메시지 -> 화면에만 띄움
-    //   _currentMessage = message;
-    //   widget.updatedMessage(_currentMessage, "I");
-    // }
   }
 
   void _resetStaticTimer() {
@@ -362,7 +298,6 @@ class _VoiceButtonState extends State<VoiceButton> {
 
   void _startStaticTimer() {
     _resetStaticTimer();
-    // 1초마다 정적 시간을 증가 -> 타이머 시작.
     Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         _elapsedTime++;
@@ -422,7 +357,6 @@ class _VoiceButtonState extends State<VoiceButton> {
     }
   }
 
-  // API가 응답할 때 호출되는 함수 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
   void _onApiResponse(String response) {
     setState(() {
       List<List<String>> emotionLists = [
@@ -433,21 +367,17 @@ class _VoiceButtonState extends State<VoiceButton> {
         SadMsg,
         SurprisedMsg
       ];
-      // 응답 메시지에 따른 이미지 변화 확인
       for (int i = 0; i < emotionLists.length; i++) {
         for (String emotion in emotionLists[i]) {
           if (response.contains(emotion)) {
-            // 해당 감정에 해당하는 이미지 표시
-            //print("챗봇 응답이 ${emotion}을 포함함!!!!!!!!!");
             _showEmotionImage(i);
             return;
           }
         }
       }
-      // 모든 감정 리스트에 해당하지 않으면 기본 이미지 표시
+
       _showEmotionImage(-1);
 
-      // 대화 리스트에 API 응답 메시지 추가
       chatMessages.add(ChatMessage(
         sender: 'ATTI',
         text: response,
@@ -464,7 +394,7 @@ class _VoiceButtonState extends State<VoiceButton> {
           widget.updatedImage('lib/assets/Atti/worried.png');
           break;
         case 1: // CalmMsg
-          widget.updatedImage('lib/assets/Atti/default2.png');
+          widget.updatedImage('lib/assets/Atti/dafault2.png');
           break;
         case 2: // FunnyMsg
           widget.updatedImage('lib/assets/Atti/excited.png');
@@ -479,7 +409,7 @@ class _VoiceButtonState extends State<VoiceButton> {
           widget.updatedImage('lib/assets/Atti/astonished.png');
           break;
         default:
-          widget.updatedImage('lib/assets/Atti/default1.png'); // 기본 이미지
+          widget.updatedImage('lib/assets/Atti/dafault1.png'); // 기본 이미지
           break;
       }
     });
@@ -523,7 +453,7 @@ class _VoiceButtonState extends State<VoiceButton> {
               onPressed: _isListening ? _stopListening : _toggleListening,
               style: ElevatedButton.styleFrom(
                   backgroundColor:
-                      _isListening ? Color(0xff231FAD) : Color(0xffFFC215),
+                  _isListening ? Color(0xff231FAD) : Color(0xffFFC215),
                   shape: CircleBorder()),
               child: Icon(
                 _isListening ? Icons.stop : Icons.mic,
@@ -545,14 +475,12 @@ class _VoiceButtonState extends State<VoiceButton> {
                         .join(' ')); // onlyUserMessages가 비어 있지 않은 경우에만 호출
 
                     List<String> detectedDangerWords =
-                        getDangerWords(onlyUserMessages);
+                    getDangerWords(onlyUserMessages);
                     if (detectedDangerWords.isNotEmpty) {
                       // 위험 단어가 발견된 경우
                       dangerWordController.addDangerWord(detectedDangerWords);
                     }
                   }
-
-                  Get.to(BeforeSave(memory: widget.memory, chat: chat));
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xffFFF5DB), shape: CircleBorder()),
@@ -621,55 +549,55 @@ class _SlideUpPanelState extends State<SlideUpPanel> {
                   topLeft: Radius.circular(30), topRight: Radius.circular(30))),
           child: _isPanelOpen
               ? Container(
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        size: 50,
-                        color: Color(0xffFFC215),
-                      ),
-                      Text(
-                        '사진 닫기',
-                        style:
-                            TextStyle(fontSize: 20, color: Color(0xffA38130)),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.01,
-                      ),
-                      Image.network(
-                        '${widget.memory.img}',
-                        fit: BoxFit.cover,
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        height: MediaQuery.of(context).size.height * 0.2,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 10),
-                        child: Wrap(
-                          spacing: 10, // 각 행의 간격을 조절합니다.
-                          children: tagList.map((tag) {
-                            return TagContainer(tag);
-                          }).toList(),
-                        ),
-                      ),
-                    ],
+            child: Column(
+              children: [
+                Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  size: 50,
+                  color: Color(0xffFFC215),
+                ),
+                Text(
+                  '사진 닫기',
+                  style:
+                  TextStyle(fontSize: 20, color: Color(0xffA38130)),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.01,
+                ),
+                Image.network(
+                  '${widget.memory.img}',
+                  fit: BoxFit.cover,
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.2,
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Wrap(
+                    spacing: 10, // 각 행의 간격을 조절합니다.
+                    children: tagList.map((tag) {
+                      return TagContainer(tag);
+                    }).toList(),
                   ),
-                )
+                ),
+              ],
+            ),
+          )
               : Container(
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.keyboard_arrow_up_rounded,
-                        size: 50,
-                        color: Color(0xffFFC215),
-                      ),
-                      Text(
-                        '사진 보기',
-                        style:
-                            TextStyle(fontSize: 20, color: Color(0xffA38130)),
-                      )
-                    ],
-                  ),
-                )),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.keyboard_arrow_up_rounded,
+                  size: 50,
+                  color: Color(0xffFFC215),
+                ),
+                Text(
+                  '사진 보기',
+                  style:
+                  TextStyle(fontSize: 20, color: Color(0xffA38130)),
+                )
+              ],
+            ),
+          )),
     );
   }
 }
