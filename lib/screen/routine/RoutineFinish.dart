@@ -14,29 +14,24 @@ class RoutineFinish extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffFFC215),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: Column(
-              children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  margin: EdgeInsets.only(left: 15),
-                  child: Text(name, style: TextStyle(
-                      fontSize: 40, fontWeight: FontWeight.w600, color: Colors.white
-                  ),),
-                ),
-                SizedBox(height: 20,),
-                Container(
-                  //margin: EdgeInsets.only(left: 50),
-                  child: Image.asset('lib/assets/images/finish_atti.png',
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
-              ],
-            ),
+          Container(
+            alignment: Alignment.bottomCenter,
+            child: Image.asset('lib/assets/images/new_finish_atti.png'),
+          ),
+          Column(
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height * 0.07),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                margin: EdgeInsets.only(left: 15),
+                child: Text('${name}', style: TextStyle(
+                    fontSize: 36, fontWeight: FontWeight.w600, color: Colors.white
+                ),),
+              ),
+              SizedBox(height: 20,),
+            ],
           ),
           Container(
             alignment: Alignment.bottomCenter,
