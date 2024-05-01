@@ -33,6 +33,9 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     return Scaffold(
         body: Column(
       children: [
@@ -46,7 +49,7 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                 currentStep: 1,
               ),
               SizedBox(
-                height: 30,
+                height: height * 0.04,
               ),
               _image != null
                   ? Container(
@@ -55,19 +58,59 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                       //height: 280,
                       child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄움
                     )
-                  : GestureDetector(
-                      onTap: () {
-                        getImage(ImageSource.gallery);
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        child: Image.asset(
-                          'lib/assets/images/imgpick.png',
-                          width: 230,
-                          fit: BoxFit.fitWidth,
+                  : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            getImage(ImageSource.camera);
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black, width: 1),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            child: Column(
+                              children: [
+                                SizedBox(height: height * 0.06,),
+                                Text('카메라', style: TextStyle(fontSize: 28, ),),
+                                SizedBox(height: height * 0.02,),
+                                Text('지금 사진을\n찍을까요?', style: TextStyle(fontSize: 20),),
+                                SizedBox(height: height * 0.07,),
+                              ],
+                            )
+                          ),
+                        ),
+                      SizedBox(width: width * 0.03,),
+                      GestureDetector(
+                        onTap: () {
+                          getImage(ImageSource.gallery);
+                        },
+                        child: Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black, width: 1),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Column(
+                              children: [
+                                SizedBox(height: height * 0.06,),
+                                Text('갤러리', style: TextStyle(fontSize: 28, ),),
+                                SizedBox(height: height * 0.02,),
+                                Text('찍어둔 사진이\n있나요?', style: TextStyle(fontSize: 20),),
+                                SizedBox(height: height * 0.07,),
+                              ],
+                            )
                         ),
                       ),
-                    ),
+
+
+
+                    ],
+                  ),
             ],
           ),
         ),
@@ -106,18 +149,22 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                     ),
                     TextButton(
                       onPressed: () {
-                        getImage(ImageSource.gallery);
+                        Navigator.pop(context);
                       },
                       child: Text(
                         '다시 선택',
                         style:
-                            TextStyle(color: Color(0xffA38130), fontSize: 20),
+                            TextStyle(color: Colors.black, fontSize: 20),
                       ),
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Color(0xffFFF5DB)),
+                            MaterialStateProperty.all(Colors.white),
                         minimumSize: MaterialStateProperty.all(
                             Size(MediaQuery.of(context).size.width * 0.43, 50)),
+                        side: MaterialStateProperty.all(BorderSide(
+                          color: Colors.black, // 외곽선 색상 설정
+                          width: 1, // 외곽선 두께 설정
+                        )),
                       ),
                     ),
                   ],

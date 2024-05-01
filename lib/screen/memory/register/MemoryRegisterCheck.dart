@@ -37,7 +37,7 @@ class _MemoryRegisterCheckState extends State<MemoryRegisterCheck> {
                   margin: EdgeInsets.only(left: 15),
                   width: MediaQuery.of(context).size.width * 0.9,
                   alignment: Alignment.centerLeft,
-                  child: Text(memoryNoteController.memoryNote.value.era.toString(),
+                  child: Text('${memoryNoteController.memoryNote.value.era.toString()}년대',
                     textAlign: TextAlign.left, style: TextStyle(
                     fontSize: 24,
                   ),),

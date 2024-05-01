@@ -97,7 +97,7 @@ class _RoutineRegister2State extends State<RoutineRegister2> {
                         //SizedBox(height: 30.0),
                         Container(
                           margin: EdgeInsets.only(left: 15),
-                          child: Text('하루일과 등록하기  ', style: TextStyle(
+                          child: Text('일과 등록하기  ', style: TextStyle(
                               fontSize: 24, fontWeight: FontWeight.w500
                           ),),
                         ),
@@ -124,8 +124,8 @@ class _RoutineRegister2State extends State<RoutineRegister2> {
                   margin: EdgeInsets.only(left: 15),
                   width: MediaQuery.of(context).size.width * 0.9,
                   alignment: Alignment.centerLeft,
-                  child: Text('일과를 반복할 시간을 선택해주세요', textAlign: TextAlign.left, style: TextStyle(
-                    fontSize: 24,
+                  child: Text('반복할 시간을 선택해주세요', textAlign: TextAlign.left, style: TextStyle(
+                    fontSize: 28, fontWeight: FontWeight.w500
                   ),),
                 ),
                 SizedBox(height: 10,),
@@ -140,7 +140,7 @@ class _RoutineRegister2State extends State<RoutineRegister2> {
                     style: TextStyle(fontSize: 24),
                     decoration: InputDecoration(
                       filled: true, // 배경을 채움
-                      fillColor: Color(0xffFFE9B3),
+                      fillColor: Color(0xffFFF5DB),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: BorderSide.none,
@@ -157,8 +157,8 @@ class _RoutineRegister2State extends State<RoutineRegister2> {
                   margin: EdgeInsets.only(left: 15),
                   width: MediaQuery.of(context).size.width * 0.9,
                   alignment: Alignment.centerLeft,
-                  child: Text('일과를 반복할 요일을 선택해주세요', textAlign: TextAlign.left, style: TextStyle(
-                    fontSize: 24,
+                  child: Text('반복할 요일을 선택해주세요', textAlign: TextAlign.left, style: TextStyle(
+                      fontSize: 28, fontWeight: FontWeight.w500
                   ),),
                 ),
                 SizedBox(height: 10,),

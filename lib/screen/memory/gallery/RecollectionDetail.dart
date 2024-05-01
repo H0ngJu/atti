@@ -3,6 +3,7 @@ import 'package:atti/data/report/viewsController.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/commons/SimpleAppBar.dart';
 import 'package:atti/screen/memory/chat/Chat.dart';
+import 'package:atti/screen/memory/chat/RecollectionChat.dart';
 import 'package:atti/screen/memory/gallery/GalleryOption.dart';
 import 'package:atti/screen/memory/gallery/RecollectionData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,6 +14,32 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../../data/memory/memory_note_model.dart';
+
+class RecollectionModel {
+  // 자료형
+  DocumentReference? patientId;
+  String? img;
+  String? imgTitle;
+  int? era;
+  String? chat;
+  Map<String, dynamic>? selectedFamilyMember;
+  List<String>? keyword;
+  Timestamp? createdAt;
+  DocumentReference? reference; // document 식별자
+
+  // 생성자
+  RecollectionModel({
+    this.patientId,
+    this.img,
+    this.imgTitle,
+    this.era,
+    this.chat,
+    this.selectedFamilyMember,
+    this.keyword,
+    this.createdAt,
+    this.reference
+  });
+}
 
 class RecollectionDetail extends StatelessWidget {
   final RecollectionData data;
@@ -108,6 +135,7 @@ class RecollectionDetail extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // 버튼 클릭 이벤트
+                  Get.to(RecollectionChat(recollection: data));
                 },
                 style: ElevatedButton.styleFrom(
                   elevation: 0, // 버튼의 그림자를 제거

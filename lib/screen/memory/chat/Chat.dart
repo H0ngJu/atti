@@ -189,7 +189,7 @@ class _ChatState extends State<Chat> {
           right: MediaQuery.of(context).size.width * 0.05,
           child: Image(
             image: AssetImage(_currentImage),
-            height: MediaQuery.of(context).size.height * 0.3,
+            height: MediaQuery.of(context).size.height * 0.2,
             //width: MediaQuery.of(context).size.width*0.9,
           ),
         ),
@@ -464,7 +464,7 @@ class _VoiceButtonState extends State<VoiceButton> {
           widget.updatedImage('lib/assets/Atti/worried.png');
           break;
         case 1: // CalmMsg
-          widget.updatedImage('lib/assets/Atti/dafault2.png');
+          widget.updatedImage('lib/assets/Atti/default2.png');
           break;
         case 2: // FunnyMsg
           widget.updatedImage('lib/assets/Atti/excited.png');
@@ -479,7 +479,7 @@ class _VoiceButtonState extends State<VoiceButton> {
           widget.updatedImage('lib/assets/Atti/astonished.png');
           break;
         default:
-          widget.updatedImage('lib/assets/Atti/dafault1.png'); // 기본 이미지
+          widget.updatedImage('lib/assets/Atti/default1.png'); // 기본 이미지
           break;
       }
     });

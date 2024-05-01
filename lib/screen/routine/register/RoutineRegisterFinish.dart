@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atti/data/routine/routine_controller.dart';
 
+import '../../RoutineScheduleMain.dart';
 import '../RoutineMain.dart';
 
 class RoutineRegisterFinish extends StatefulWidget {
@@ -28,7 +29,7 @@ class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.only(left: 15),
-                  child: Text('\'${routineController.tmpRoutineName.value}\'\n하루 일과를 등록했어요!',
+                  child: Text('\'${routineController.tmpRoutineName.value}\'\n일과를 등록했어요!',
                     style: TextStyle(
                         fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
                     ),),
@@ -51,7 +52,7 @@ class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RoutineMain()),
+                  MaterialPageRoute(builder: (context) => RoutineScheduleMain()),
                 );
               },
               child: Text('하루 일과로 돌아가기', style: TextStyle(color: Colors.black, fontSize: 20),),
