@@ -72,12 +72,9 @@ class EmotionService {
       DocumentReference docRef = querySnapshot.docs.first.reference;
       List<String> currentEmotionsList = List<String>.from(querySnapshot.docs.first.get('emotionsList'));
 
-      // 새로운 감정 리스트를 Set으로 변환하여 중복을 없앤 후 다시 리스트로 변환
-      Set<String> updatedEmotionsSet = Set<String>.from(currentEmotionsList);
-      updatedEmotionsSet.addAll(emotion.emotionsList!);
-      List<String> updatedEmotionsList = updatedEmotionsSet.toList();
+      currentEmotionsList.addAll(emotion.emotionsList!);
 
-      await docRef.update({'emotionsList': updatedEmotionsList});
+      await docRef.update({'emotionsList': currentEmotionsList});
     } else {
       // 해당 주의 도큐먼트가 존재하지 않는 경우, 생성
       DocumentReference docRef = await weeklyEmotionCollection.add({
