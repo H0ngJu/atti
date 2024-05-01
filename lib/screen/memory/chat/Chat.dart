@@ -118,6 +118,25 @@ class _ChatState extends State<Chat> {
     await flutterTts.speak(message);
   }
 
+  void _showImageDialog(String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          backgroundColor: Colors.white,
+          content: ClipRRect(
+            borderRadius: BorderRadius.circular(15.0),
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,7 +155,9 @@ class _ChatState extends State<Chat> {
                 speaker: _speaker,
                 //onTextChanged: onBubbleTextChanged,
               ),
-              Container(
+              GestureDetector(
+                onTap: () => _showImageDialog('${widget.memory.img}'),
+                child: Container(
                   alignment: Alignment.center,
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -146,7 +167,9 @@ class _ChatState extends State<Chat> {
                       width: MediaQuery.of(context).size.width * 0.35,
                       height: MediaQuery.of(context).size.height * 0.3,
                     ),
-                  )),
+                  ),
+                ),
+              ),
               VoiceButton(
                 role: "Assistant",
                 //updatedMessage: (message) {
