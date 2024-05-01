@@ -136,6 +136,7 @@ class _RecollectionChatState extends State<RecollectionChat> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ChatBubble(
+                speaker: "I",
                 message: _currentMessage,
                 //onTextChanged: onBubbleTextChanged,
               ),
