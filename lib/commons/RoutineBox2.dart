@@ -85,13 +85,39 @@ class _RoutineBox2State extends State<RoutineBox2> {
                 child: widget.isFinished
                     ? ColorFiltered(
                       colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
-                      child: Image.network(
-                        widget.img,
-                        width: double.infinity,
-                        height: double.infinity,
-                        fit: BoxFit.cover,
-                        alignment: Alignment.center,
-                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(widget.img),
+                            fit: BoxFit.cover,
+                          )
+                        ),
+                        child: Container(
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.all(50),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xffF5F5F5),
+                          ),
+                          child: Center(
+                            child: Text(
+                              '완료',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                      // Image.network(
+                      //   widget.img,
+                      //   width: double.infinity,
+                      //   height: double.infinity,
+                      //   fit: BoxFit.cover,
+                      //   alignment: Alignment.center,
+                      // ),
                     )
                     : Image.network(
                       widget.img,

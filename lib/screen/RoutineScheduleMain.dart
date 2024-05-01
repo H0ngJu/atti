@@ -216,9 +216,9 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     //width: MediaQuery.of(context).size.width * 0.9,
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      '${DateFormat('M월 dd일 EEEE', 'ko_KR').format(_selectedDay)} 일과',
+                      '${DateFormat('M월 d일 EEEE', 'ko_KR').format(_selectedDay)} 일과',
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 27, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
                     ),
                   ),
                   TextButton(onPressed: () {
@@ -291,9 +291,9 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     //width: MediaQuery.of(context).size.width * 0.9,
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      '${DateFormat('M월 dd일 EEEE', 'ko_KR').format(_selectedDay)} 일정',
+                      '${DateFormat('M월 d일 EEEE', 'ko_KR').format(_selectedDay)} 일정',
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 27, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
                     ),
                   ),
                   TextButton(onPressed: () {

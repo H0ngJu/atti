@@ -61,27 +61,55 @@ class _ScheduleBoxState extends State<ScheduleBox> {
               borderRadius: BorderRadius.circular(15),
               border: Border.all(color: Color(0xffDDDDDD), width: 1,),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (widget.name != null) Text(widget.name!, style: TextStyle(
-                  fontSize: 30,
-                  color: widget.isFinished ? Color(0xff868686) : Colors.black,
-                ),),
-                SizedBox(height: 5,),
-                Row(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('장소', style: TextStyle(
-                      fontSize: 20,
+                    if (widget.name != null) Text(widget.name!, style: TextStyle(
+                      fontSize: 30,
                       color: widget.isFinished ? Color(0xff868686) : Colors.black,
                     ),),
-                    SizedBox(width: 10),
-                    if (widget.location != null) Text(widget.location!, style: TextStyle(
-                      fontSize: 20,
-                      color: widget.isFinished ? Color(0xff868686) : Colors.black,
-                    ),),
+                    SizedBox(height: 5,),
+                    Row(
+                      children: [
+                        Text('장소', style: TextStyle(
+                          fontSize: 20,
+                          color: widget.isFinished ? Color(0xff868686) : Colors.black,
+                        ),),
+                        SizedBox(width: 10),
+                        if (widget.location != null) Text(widget.location!, style: TextStyle(
+                          fontSize: 20,
+                          color: widget.isFinished ? Color(0xff868686) : Colors.black,
+                        ),),
+                      ],
+                    ),
                   ],
                 ),
+                widget.isFinished ?
+                Container(
+                  margin: EdgeInsets.only(right: 15),
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xffF5F5F5),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '완료',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                )
+                    : SizedBox()
+
+
               ],
             ),
           ),
