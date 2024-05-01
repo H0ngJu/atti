@@ -39,7 +39,7 @@ class RoutineScheduleMain extends StatefulWidget {
 }
 
 class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
-  int _selectedIndex = 4;
+  int _selectedIndex = 2;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;

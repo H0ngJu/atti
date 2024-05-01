@@ -320,7 +320,7 @@ class _HomePatientState extends State<HomePatient> {
   }
 
   // bottom Navi logic
-  int _selectedIndex = 2;
+  int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
     setState(() {

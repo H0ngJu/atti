@@ -38,13 +38,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
           tappedIcon: 'lib/assets/icons/home_black.svg',
           untappedIcon: 'lib/assets/icons/home_white.svg',
           label: '홈',
-          isSelected: currentIndex == 2,
+          isSelected: currentIndex == 1,
         ),
         _buildBottomNavigationBarItem(
           tappedIcon: 'lib/assets/icons/RShome_black.svg',
           untappedIcon: 'lib/assets/icons/RShome_white.svg',
           label: '일과/일정',
-          isSelected: currentIndex == 4,
+          isSelected: currentIndex == 2,
         ),
       ],
     );
@@ -75,15 +75,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
   void _onItemTapped(int index) {
     if (index == 0) {
       Get.to(MainGallery());
-    } else if (index == 1) {
-      Get.to(MemoryRegister1());
-    } else if (index == 2 && authController.isPatient ) {
+    } else if (index == 1 && authController.isPatient ) {
       Get.to(HomePatient());
-    } else if(index == 2 && !authController.isPatient){
+    } else if(index == 1 && !authController.isPatient){
       Get.to(HomeCarer());
-    }else if (index == 3) {
-      Get.to(RoutineMain());
-    } else if (index == 4) {
+    }else if (index == 2) {
       Get.to(RoutineScheduleMain());
     } else {
       onTap(index);
