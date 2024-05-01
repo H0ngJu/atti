@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/data/schedule/schedule_controller.dart';
 
+import '../../RoutineScheduleMain.dart';
 import '../ScheduleMain.dart';
 
 class ScheduleRegisterFinish extends StatelessWidget {
@@ -46,7 +47,7 @@ class ScheduleRegisterFinish extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ScheduleMain()),
+                  MaterialPageRoute(builder: (context) => RoutineScheduleMain()),
                 );
               },
               child: Text('일정으로 돌아가기', style: TextStyle(color: Colors.black, fontSize: 20),),
