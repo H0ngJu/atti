@@ -23,8 +23,8 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
   @override
   Widget build(BuildContext context) {
     DateTime? dateTime = scheduleController.schedule.value.time?.toDate();
-    String formattedDate = dateTime != null ? DateFormat('yyyy년 MM월 dd일', 'ko_KR').format(dateTime) : '';
-    String formattedTime = dateTime != null ? DateFormat('a hh시 mm분', 'ko_KR').format(dateTime) : '';
+    String formattedDate = dateTime != null ? DateFormat('yyyy년 M월 d일', 'ko_KR').format(dateTime) : '';
+    String formattedTime = dateTime != null ? DateFormat('a h시 mm분', 'ko_KR').format(dateTime) : '';
 
     return Scaffold(
       body: Column(children: [
@@ -123,21 +123,8 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
           child: TextButton(
             onPressed: () async {
               scheduleController.tmpScheduleName.value = scheduleController.schedule.value.name!;
-              final updatedSchedule = await scheduleController.addSchedule();
 
-              if (authController.isPatient) {
-                notificationService.showDateTimeNotification(
-                  '일정 알림',
-                  '1시간 뒤 \'${updatedSchedule.name}\'을(를) 하실 시간이에요!',
-                  updatedSchedule.time!.toDate().subtract(Duration(hours: 1)),
-                  '/schedule1/${updatedSchedule.reference!.id}',
-                );
-              }
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ScheduleRegisterFinish()),
-              );
+              Get.to(ScheduleRegisterFinish());
             },
             child: Text('등록하기', style: TextStyle(color: Colors.white, fontSize: 20),),
             style: ButtonStyle(

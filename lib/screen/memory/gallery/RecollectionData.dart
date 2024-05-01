@@ -12,6 +12,7 @@ class RecollectionData {
   });
 }
 
+
 // Step 2: 더미 데이터 생성
 final List<RecollectionData> dummyData = [
   RecollectionData(

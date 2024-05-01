@@ -50,14 +50,17 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
             margin: EdgeInsets.only(bottom: 20),
             child: TextButton(
               onPressed: isButtonEnabled ? () async {
+
                 setState(() {
                   isButtonEnabled = false; // 버튼 비활성화
                 });
 
-                routineController.tmpRoutineName.value = routineController.routine.value.name!;
-                print(routineController.routine.value.repeatDays);
-                await routineController.addRoutine();
+                String tmpName = routineController.routine.value.name!;
+                String tmpImg = routineController.routine.value.img!;
+                List<int> tmpTime = routineController.routine.value.time!;
 
+                //print(routineController.routine.value.repeatDays);
+                await routineController.addRoutine();
                 if (authController.isPatient) {
                   notificationService.routineNotifications();
                 }
@@ -68,7 +71,9 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
 
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RoutineRegisterFinish()),
+                  MaterialPageRoute(builder: (context) => RoutineRegisterFinish(
+                    name: tmpName, time: tmpTime, img: tmpImg,
+                  )),
                 );
               } : null, // 버튼이 비활성화되면 onPressed를 null로 설정하여 클릭이 불가능하도록 함
               child: Text('등록', style: TextStyle(color: Colors.white, fontSize: 20),),
