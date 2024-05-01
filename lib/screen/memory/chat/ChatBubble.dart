@@ -1,16 +1,15 @@
-import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 class ChatBubble extends StatefulWidget {
   final String message;
+  final String speaker;
+
   //final Function(String) onTextChanged;
 
-  const ChatBubble({
-    Key? key,
-    required this.message,
-  }) : super(key: key);
+  const ChatBubble({Key? key, required this.message, required this.speaker})
+      : super(key: key);
 
   @override
   State<ChatBubble> createState() => _ChatBubbleState();
@@ -26,6 +25,11 @@ class _ChatBubbleState extends State<ChatBubble> {
     flutterTts.setLanguage("ko-KR");
     flutterTts.setPitch(1);
     //_speakMessage(widget.message); // Speak initial message
+    printSpeaker();
+  }
+
+  void printSpeaker() {
+    print("here : " + widget.speaker);
   }
 
   // message tts 읽기
@@ -37,7 +41,7 @@ class _ChatBubbleState extends State<ChatBubble> {
   @override
   void didUpdateWidget(covariant ChatBubble oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.message != oldWidget.message) {
+    if (widget.message != oldWidget.message && widget.speaker == "Assistant") {
       _speakMessage(widget.message);
     }
   }
@@ -54,7 +58,8 @@ class _ChatBubbleState extends State<ChatBubble> {
         ),
         child: Text(
           widget.message,
-          style: TextStyle(fontSize: 20, fontFamily: 'UhBee'),
+          style: TextStyle(fontSize: 20, fontFamily: 'UhBee',
+          color: widget.speaker == "Assistant" ? Color(0xffA38130) : Colors.black),
           textAlign: TextAlign.center,
         ),
       ),
