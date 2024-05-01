@@ -29,12 +29,19 @@ class NextButton extends StatelessWidget {
         child: Text(
           content,
           style: TextStyle(fontSize: 20,
-          color: isEnabled ? Colors.white : Color(0xffA38130)),
+          color: isEnabled ? Colors.white : Colors.black),
         ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(
-              isEnabled ? Color(0xffFFC215) : Color(0xffFFF5DB)), // 비활성화일 때 색상을 조절
+              isEnabled ? Color(0xffFFC215) : Colors.white), // 비활성화일 때 색상을 조절
           minimumSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width * 0.9, 50)),
+          side: MaterialStateProperty.resolveWith<BorderSide>((Set<MaterialState> states) {
+
+            if (!isEnabled) { // isEnabled가 false일 때만 검은색 테두리를 추가
+              return BorderSide(color: Colors.black, width: 1);
+            }
+            return BorderSide.none; // 테두리 없음
+          }),
         ),
       ),
     );

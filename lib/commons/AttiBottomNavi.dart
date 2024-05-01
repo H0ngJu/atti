@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../data/auth_controller.dart';
+import '../screen/RoutineScheduleMain.dart';
 import '../screen/memory/register/MemoryRegister1.dart';
 import '../screen/routine/RoutineMain.dart';
 import '../screen/schedule/ScheduleMain.dart';
@@ -95,7 +96,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
     }else if (index == 3) {
       Get.to(RoutineMain());
     } else if (index == 4) {
-      Get.to(ScheduleMain());
+      Get.to(RoutineScheduleMain());
     } else {
       onTap(index);
     }

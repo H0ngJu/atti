@@ -28,4 +28,28 @@ final List<RecollectionData> dummyData = [
       description: '1970년대 한국의 드라마 \"여로\"는 한국 방송사상 중요한 작품 중 하나로, 한국 전쟁 이후의 혼란스러운 사회 상황 속에서 살아가는 사람들의 삶과 사랑, 그리고 희망에 대한 이야기를 담고 있습니다. 당시의 사회적, 정치적 상황을 반영하며, 인간의 본성과 갈등, 가족 간의 사랑과 우정 등 다양한 주제를 다루었습니다. '
           '\"여로\"는 그 당시 대중문화에서 드문 형식의 드라마였으며, 한국 드라마의 발전에 있어 중요한 이정표를 세운 작품으로 평가받고 있습니다. 특히, 당시 사회적으로 금기시되었던 여러 주제들을 다루면서 시청자들에게 큰 반향을 일으켰고, 많은 사람들에게 깊은 인상을 남겼습니다.'
   ),
+  RecollectionData(
+      img: "atti/lib/assets/recollectionData/rubberShoes.jpg",
+      title: "고무신",
+      year: 1940, // 미정
+      description: "짚신에 비해 질 좋고 신기 편했던 고무신은 대중들이 사랑하는 신발이었다. 가격도 저렴하고 논 근처를 지나다 더러워지면 물로 씻어 깨끗하게 관리하기 좋았다. 사람들은 일할 때는 검정 고무신을 신고 외출할 때는 흰 고무신을 신었다."
+  ),
+  RecollectionData(
+      img: "atti/lib/assets/recollectionData/RetroLunchBox.png",
+      title: "도시락 난로",
+      year: 1960,
+      description: "겨울, 도시락을 따뜻하게 유지하기 위해 교실에 피운 난로 위에 도시락을 올려두곤 했다. 도시락을 가장 아래 놓으면 누룽지를 만들 수 있었다."
+  ),
+  RecollectionData(
+      img: "atti/lib/assets/recollectionData/oilStove.jpeg",
+      title: "석유 곤로",
+      year: 1970,
+      description: "석유 곤로는 연탄 없이도 따뜻한 밥과 라면을 먹을 수 있게 해 주었다. 석유 곤로를 사용하려면 석유를 사다 두고 심지를 적절한 시기에 바꿔줘야 했다. \"곤로 고쳐요~ 심지 갈아요~\" 그 시절 골목에서 들을 수 있던 소리다."
+  ),
+  RecollectionData(
+      img: "atti/lib/assets/recollectionData/pass.jpg",
+      title: "통행금지",
+      year: 1950,
+      description: "그시절에는 야간 통행 금지가 있었다. 통행금지 시간이 다가오면 사람들은 분주히 집을 향했다. 크리스마스 이브와 12월 31일은 유일하게 통행금지가 없는 날이었다."
+  ),
 ];

@@ -1,5 +1,8 @@
+import 'package:atti/screen/RoutineScheduleMain.dart';
 import 'package:flutter/material.dart';
 import 'package:atti/commons/BottomNextButton.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import 'RoutineMain.dart';
 
@@ -40,10 +43,7 @@ class RoutineFinish extends StatelessWidget {
             margin: EdgeInsets.only(bottom: 20),
             child: TextButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RoutineMain()),
-                );
+                Get.to(RoutineScheduleMain());
               },
               child: Text('하루 일과로 돌아가기', style: TextStyle(color: Colors.black, fontSize: 20),),
               style: ButtonStyle(

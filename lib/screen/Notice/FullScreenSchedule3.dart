@@ -1,3 +1,5 @@
+import 'package:atti/screen/HomePatient.dart';
+import 'package:atti/screen/schedule/register/ScheduleRegister2.dart';
 import 'package:flutter/material.dart';
 import '../../data/notification/notification_controller.dart';
 import '../../data/schedule/schedule_model.dart';
@@ -6,9 +8,8 @@ import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import '../schedule/ScheduleMain.dart';
-import '../../../data/notification/notification.dart';
-import 'package:atti/data/notification/notification_controller.dart';
+import '../memory/register/MemoryRegister2.dart';
+import 'package:atti/data/memory/memory_note_controller.dart';
 import 'dart:math';
 
 // 이미지 파일 이름 목록
@@ -21,52 +22,27 @@ List<String> imageNames = [
   'Walking.png',
 ];
 
-class FullScreenSchedule extends StatefulWidget {
-  const FullScreenSchedule({super.key, required this.docRef});
+class FullScreenSchedule3 extends StatefulWidget {
+  const FullScreenSchedule3({super.key, required this.docRef});
   final String docRef;
 
   @override
-  State<FullScreenSchedule> createState() => _FullScreenScheduleState();
+  State<FullScreenSchedule3> createState() => _FullScreenSchedule3State();
 }
 
-class _FullScreenScheduleState extends State<FullScreenSchedule> {
+class _FullScreenSchedule3State extends State<FullScreenSchedule3> {
   final firestore = FirebaseFirestore.instance;
   final storage = FirebaseStorage.instance;
   ScheduleModel? schedule;
-  NotificationService notificationService = NotificationService();
-  // 랜덤 이미지 파일 이름 선택
+  final MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
   Random random = Random();
 
-  String getFormattedTime(String mode) {
-    DateTime dateTime;
-    if (mode == 'future') {
-      dateTime = DateTime.now().add(Duration(hours: 1));
-    } else {
-      dateTime = schedule?.time?.toDate() ?? DateTime.now();
-    }
-    var hour = dateTime.hour;
-    final minute = dateTime.minute;
-
-    String timeOfDay = '오전';
-    if (hour >= 12) {
-      timeOfDay = '오후';
-      if (hour > 12) hour -= 12;
-    }
-    return '$timeOfDay ${hour.toString().padLeft(2, '0')}시 ${minute.toString().padLeft(2, '0')}분';
-  }
-
   Future<void> _fetchData() async {
-    if (widget.docRef.isEmpty) {
-      print("문서 참조가 비어있습니다.");
-      return;
-    }
-
     try {
       DocumentSnapshot<Map<String, dynamic>> docSnapshot = await firestore
           .collection('schedule')
           .doc(widget.docRef)
           .get();
-
       if (docSnapshot.exists) {
         schedule = ScheduleModel.fromSnapShot(docSnapshot);
         setState(() {});
@@ -77,13 +53,21 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
       print("데이터를 가져오는 중 에러가 발생했습니다: $e");
     }
   }
-
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      await _fetchData();
-    });
+    _fetchData();
+  }
+  String getFormattedTime() {
+    DateTime dateTime = schedule?.time?.toDate() ?? DateTime.now();
+    var hour = dateTime.hour;
+    final minute = dateTime.minute;
+    String timeOfDay = '오전';
+    if (hour >= 12) {
+      timeOfDay = '오후';
+      if (hour > 12) hour -= 12;
+    }
+    return '$timeOfDay ${hour.toString().padLeft(2, '0')}시 ${minute.toString().padLeft(2, '0')}분';
   }
 
   @override
@@ -115,7 +99,7 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
           TextButton(
             onPressed: () {
             },
-            child: Text(getFormattedTime('now'),
+            child: Text(getFormattedTime(),
               style: TextStyle(
                   fontSize: 24,
                   color: Color(0xffA38130),
@@ -134,63 +118,68 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
           SizedBox(height: height * 0.02,),
           Container(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: height * 0.02,),
-                Text('1시간 뒤 일정이 있어요',
+                Text('지금 기억 사진을 남길까요?',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                 ),
+                //SizedBox(height: height * 0.01,),
                 Text('\'${schedule?.name}\'',
                   style: TextStyle(fontSize: 28, color: Color(0xffA38130), fontWeight: FontWeight.w600),
                 ),
-                SizedBox(height: height * 0.02,),
-                Container(
-                  width: width * 0.77,
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Color(0xffA38130), width: 1),
-                  ),
-                  child: Column(
+                SizedBox(height: height * 0.07,),
+
+                SizedBox(
+                  width: width * 0.8,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('시간 : ${getFormattedTime('future')}', style: TextStyle(
-                        fontSize: 24, color: Color(0xffA38130)
-                      ),),
-                      Text('장소 : ${schedule?.location ?? ''}', style: TextStyle(
-                          fontSize: 24, color: Color(0xffA38130)
-                      ),)
+                      Expanded(
+                        child: TextButton(onPressed: () async {
+                          Get.to(ScheduleRegister2());
+                        }, child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: Text('네', style: TextStyle(
+                              fontSize: 24, color: Colors.white, fontWeight: FontWeight.normal
+                          ),),
+                        ),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15), // 모서리를 더 작게 조정
+                              ),
+
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: width * 0.03,),
+                      Expanded(
+                        child: TextButton(onPressed: () {
+                          Get.to(HomePatient());
+                        }, child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: Text('아니요', style: TextStyle(
+                              fontSize: 24, color: Colors.black, fontWeight: FontWeight.normal
+                          ),),
+                        ),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(Color(0xffFFECB5)),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15), // 모서리를 더 작게 조정
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
-                SizedBox(height: height * 0.05,),
+                SizedBox(height: height * 0.05,)
               ],
-            ),
-          ),
-          SizedBox(height: height * 0.02,),
-          TextButton(onPressed: () {
-            // 일정 본알림 예약 ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-            notificationService.showDateTimeNotification(
-              '일정 알림',
-              '\'${schedule?.name}\'일정을(를) 진행하고 있나요?',
-              schedule!.time!.toDate(),
-              '/schedule2/${schedule?.reference!.id}',
-            );
-
-            // 일정 시간 1시간 뒤 알림 예약 ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-            notificationService.showDateTimeNotification(
-              '일정 알림',
-              '\'${schedule?.name}\'일정의 기억 사진을 남길까요?',
-              schedule!.time!.toDate().add(Duration(hours: 1)),
-              '/schedule3/${schedule?.reference!.id}',
-            );
-
-            Get.to(ScheduleMain());
-          },
-            child: Text('알겠어요', style: TextStyle(
-              color: Colors.white, fontSize: 24, ),),
-            style: ButtonStyle(
-              backgroundColor:  MaterialStateProperty.all(Color(0xffFFC215)),
-              minimumSize: MaterialStateProperty.all(Size(width * 0.55, 40)),
             ),
           )
 
@@ -199,5 +188,3 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
     );
   }
 }
-
-
