@@ -103,7 +103,7 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> {
   String _currentMessage = '대화를 시작하려면 마이크 버튼을 누르세요'; // 내가 한 대화
-  //String _msgToVoice = '대화를 시작하려면 마이크 버튼을 누르세요'; // TTS되는 메시지
+  late String _speaker = "Assistant";
 
   final FlutterTts flutterTts = FlutterTts();
   String _currentImage = 'lib/assets/Atti/default1.png'; // 기본 이미지 설정
@@ -111,11 +111,7 @@ class _ChatState extends State<Chat> {
   @override
   void initState() {
     super.initState();
-    flutterTts.setLanguage("ko-KR");
-    flutterTts.setPitch(1);
     _speakMessage(_currentMessage);
-    //_speakMessage(_msgToVoice);
-    //_startTimer();
   }
 
   void _speakMessage(String message) async {
@@ -137,6 +133,7 @@ class _ChatState extends State<Chat> {
             children: [
               ChatBubble(
                 message: _currentMessage,
+                speaker: _speaker,
                 //onTextChanged: onBubbleTextChanged,
               ),
               Container(
@@ -150,21 +147,13 @@ class _ChatState extends State<Chat> {
                       height: MediaQuery.of(context).size.height * 0.3,
                     ),
                   )),
-              /*Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // 메세지에 따른 이미지 변화 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-                  Image(
-                    image: AssetImage(_currentImage),
-                    height: MediaQuery.of(context).size.height * 0.3,
-                  ),
-                ],
-              ),*/
               VoiceButton(
-                updatedMessage: (message) {
-                  // updatedMessage: (message, role) {
+                role: "Assistant",
+                //updatedMessage: (message) {
+                updatedMessage: (message, role) {
                   setState(() {
                     _currentMessage = message;
+                    _speaker = role;
 
                     // if (role == "Assistant") {   <- 콜백에 role도 받아와서 아띠일때만 state업뎃할라햇음
                     //   _msgToVoice = message;
@@ -190,7 +179,6 @@ class _ChatState extends State<Chat> {
           child: Image(
             image: AssetImage(_currentImage),
             height: MediaQuery.of(context).size.height * 0.2,
-            //width: MediaQuery.of(context).size.width*0.9,
           ),
         ),
       ]),
@@ -201,7 +189,8 @@ class _ChatState extends State<Chat> {
 // 대화기록, 마이크, 대화 종료 버튼
 class VoiceButton extends StatefulWidget {
   final MemoryNoteModel memory;
-  final Function(String) updatedMessage;
+  final String role;
+  final Function(String, String) updatedMessage;
 
   //final Function(String, String) updatedMessage;
   final Function(String) updatedImage; // 이미지 업데이트 콜백 추가
@@ -209,7 +198,8 @@ class VoiceButton extends StatefulWidget {
       {Key? key,
       required this.updatedMessage,
       required this.memory,
-      required this.updatedImage})
+      required this.updatedImage,
+      required this.role})
       : super(key: key);
 
   @override
@@ -286,7 +276,6 @@ class _VoiceButtonState extends State<VoiceButton> {
                     widget.memory.img!,
                     widget.memory.reference!); // Chatbot으로부터 응답 받기
                 _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
-                //_speakMessage(response);
                 _onApiResponse(response);
               } catch (e) {
                 print("Error: $e");
@@ -299,33 +288,6 @@ class _VoiceButtonState extends State<VoiceButton> {
           });
         },
       );
-      // _speech.listen(
-      //   onResult: (result) async {
-      //     setState(() {
-      //       _spokenText = result.recognizedWords;
-      //     });
-      //     String message = result.recognizedWords ?? "";
-      //     //print('here : $message');
-      //     _appendMessage("User", message); // 사용자의 말을 메시지로 추가
-      //     setState(() {
-      //       _isListening = false;
-      //     });
-      //     _stopListening(); // Listening 중지
-      //     _onUserMessage(message);
-      //
-      //     try {
-      //       String response = await _chatbot.getResponse(message); // Chatbot으로부터 응답 받기
-      //       _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
-      //       _onApiResponse(response);
-      //     } catch (e) {
-      //       print("Error: $e");
-      //     } finally {
-      //       setState(() {
-      //         _isListening = false;
-      //       });
-      //     }
-      //   },
-      // );
     } else {
       print("Speech recognition not available");
     }
@@ -334,24 +296,24 @@ class _VoiceButtonState extends State<VoiceButton> {
   // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 수정한 부분
   // 메시지 추가
   void _appendMessage(String role, String message) {
-    if (role == "Assistant") {
+    /*if (role == "Assistant") {
       // <- 아띠 메시지만 _currentMessage로 업데이트되게 함 (if문빼면 사용자 메시지도 출력)
       setState(() {
         _currentMessage = message;
         widget.updatedMessage(_currentMessage);
       });
-    }
+    }*/
 
     // 이건 하려다 잘 안된 부분이라죠 ㅋㅋ
-    // if (role == "Assistant") { // 아띠 메시지 -> 화면에 텍스트로도 띄우고 + TTS도 함
-    //   setState(() {
-    //     _currentMessage = message;
-    //     widget.updatedMessage(_currentMessage, "Assistant");
-    //   });
-    // } else { // 내 메시지 -> 화면에만 띄움
-    //   _currentMessage = message;
-    //   widget.updatedMessage(_currentMessage, "I");
-    // }
+    if (role == "Assistant") { // 아띠 메시지 -> 화면에 텍스트로도 띄우고 + TTS도 함
+       setState(() {
+         _currentMessage = message;
+         widget.updatedMessage(_currentMessage, "Assistant");
+       });
+     } else { // 내 메시지 -> 화면에만 띄움
+       _currentMessage = message;
+       widget.updatedMessage(_currentMessage, "I");
+     }
   }
 
   void _resetStaticTimer() {
