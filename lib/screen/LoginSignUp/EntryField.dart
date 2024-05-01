@@ -1,6 +1,6 @@
 import 'package:atti/commons/ErrorMessageWidget.dart';
 import 'package:atti/commons/colorPallet.dart';
-import 'package:atti/data/SignUpController.dart';
+import 'package:atti/data/signup_login/SignUpController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

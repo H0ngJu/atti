@@ -26,14 +26,6 @@ class ScheduleMain extends StatefulWidget {
 class _ScheduleMainState extends State<ScheduleMain> {
   final AuthController authController = Get.put(AuthController());
 
-  int _selectedIndex = 4;
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      // 해당 인덱스로 페이지 변경
-    });
-  }
-
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
   CalendarFormat _calendarFormat = CalendarFormat.week;
@@ -129,10 +121,6 @@ class _ScheduleMainState extends State<ScheduleMain> {
             )
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }
@@ -244,7 +232,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
                   // 타일 클릭 시 모달창
                   showDialog(context: context, builder: (_) {
                     return ScheduleModal(
-                      time: DateFormat('HH시 mm분').format(schedulesBySelectedDay[index].time!.toDate()),
+                      time: DateFormat('a h시 mm분', 'ko_KR').format(schedulesBySelectedDay[index].time!.toDate()),
                       location: schedulesBySelectedDay[index].location!,
                       name: schedulesBySelectedDay[index].name!,
                       memo: schedulesBySelectedDay[index].memo,
@@ -263,7 +251,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
                       ), ),
                     SizedBox(height: 10,),
                     ScheduleBox(
-                      time: DateFormat('HH시 mm분').format(schedulesBySelectedDay[index].time!.toDate()),
+                      time: DateFormat('a hh:mm', 'ko_KR').format(schedulesBySelectedDay[index].time!.toDate()),
                       location: schedulesBySelectedDay[index].location,
                       name: schedulesBySelectedDay[index].name,
                     ),

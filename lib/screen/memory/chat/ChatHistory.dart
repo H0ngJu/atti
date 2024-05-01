@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 
-
 class Message {
   final String sender;
   final String text;
@@ -21,11 +20,13 @@ class Message {
       date: DateTime.parse(json['date']),
     );
   }
+
   static Future<List<Message>> getMessage(String path) async {
     String chatString = await ChatController.getChat(path);
     chatString = "[" + chatString + "]";
     List<dynamic> chatList = jsonDecode(chatString);
-    List<Message> chat = chatList.map((json) => Message.fromJson(json)).toList();
+    List<Message> chat =
+        chatList.map((json) => Message.fromJson(json)).toList();
     return chat;
   }
 }
@@ -62,7 +63,8 @@ class ChatHistory extends StatelessWidget {
                         ),
                         Text(
                           '\'${memory.imgTitle}\' 기억',
-                          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -71,7 +73,8 @@ class ChatHistory extends StatelessWidget {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: messages.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return ChatMessage(message: messages[index], messages: messages);
+                        return ChatMessage(
+                            message: messages[index], messages: messages);
                       },
                     ),
                   ],
@@ -97,57 +100,65 @@ class ChatMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-        child : Column(
-      crossAxisAlignment: message.sender == 'I'
-          ? CrossAxisAlignment.end
-          : CrossAxisAlignment.start,
-      children: <Widget>[
-        if (_showDate(message, messages)) // 날짜를 표시해야 하는 경우
-          Center(
-            child: Container(
-              margin: EdgeInsets.symmetric(vertical: 20),
-              child : Text(
-              _formatDate(message.date),
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.grey,
-              ),
-            ),
-          ),),
-        Row(
-          mainAxisAlignment: message.sender == 'I'
-              ? MainAxisAlignment.end
-              : MainAxisAlignment.start,
+        margin: EdgeInsets.symmetric(vertical: 10),
+        child: Column(
+          crossAxisAlignment: message.sender == 'I'
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
           children: <Widget>[
-            if (message.sender == 'Atti')
-              CircleAvatar(
-                backgroundImage: AssetImage('lib/assets/Atti/AttiFace.png'),
+            if (_showDate(message, messages)) // 날짜를 표시해야 하는 경우
+              Center(
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 20),
+                  child: Text(
+                    _formatDate(message.date),
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
               ),
-            SizedBox(width: 8),
-            Container(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.7,
-              ),
-              padding: EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                color: message.sender == 'I'
-                    ? Color(0xffFFE9B3)
-                    : Color(0xffFFF5DB),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Text(
-                message.text, // 메시지 출력
-                style: TextStyle(fontSize: 16.0),
-              ),
+            Row(
+              mainAxisAlignment: message.sender == 'I'
+                  ? MainAxisAlignment.end
+                  : MainAxisAlignment.start,
+              children: <Widget>[
+                if (message.sender == 'Atti')
+                  CircleAvatar(
+                    backgroundImage: AssetImage('lib/assets/Atti/AttiFace.png'),
+                  ),
+                SizedBox(width: 8),
+                Container(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.7,
+                  ),
+                  padding: EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    color: message.sender == 'I'
+                        ? Color(0xffFFE9B3)
+                        : Colors.white,
+                    border: Border.all(
+                        color: message.sender == 'I'
+                            ? Colors.white
+                            : Colors.black),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        bottomRight: message.sender == 'I'
+                            ? Radius.circular(0)
+                            : Radius.circular(15),
+                    bottomLeft: message.sender == 'I' ? Radius.circular(15) : Radius.circular(0),
+                    topRight: Radius.circular(15)),
+                  ),
+                  child: Text(
+                    message.text, // 메시지 출력
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ),
+              ],
             ),
           ],
-        ),
-      ],)
-    );
+        ));
   }
 
   bool _showDate(Message message, List<Message> messages) {

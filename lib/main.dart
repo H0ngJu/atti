@@ -1,5 +1,6 @@
 import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/notification/notification.dart';
+import 'package:atti/screen/LogInSignUp/LogInScreen.dart';
 import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
 
 import 'package:atti/screen/LogInSignUp/SignUpScreen1.dart';
@@ -105,7 +106,6 @@ class MyApp extends StatelessWidget {
         '/schedule': (context) => ScheduleMain(),
         '/routine': (context) => RoutineMain(),
       },
-
     );
   }
 }

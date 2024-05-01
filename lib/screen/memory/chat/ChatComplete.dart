@@ -1,15 +1,81 @@
-import 'package:atti/screen/memory/gallery/MainGallery.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:math' as math;
+import '../../../data/auth_controller.dart';
+import '../../../data/memory/memory_note_controller.dart';
+import '../../../data/memory/memory_note_model.dart';
+import '../../../data/memory/memory_note_service.dart';
+import '../gallery/MainGallery.dart';
+import '../gallery/MemoryDetail.dart';
 
-class ChatComplete extends StatelessWidget {
-  const ChatComplete({Key? key}) : super(key: key);
+class ChatComplete extends StatefulWidget {
+  @override
+  _ChatCompleteState createState() => _ChatCompleteState();
+}
+
+class _ChatCompleteState extends State<ChatComplete> {
+  AuthController authController = Get.put(AuthController());
+  MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
+  MemoryNoteService memoryNoteService = MemoryNoteService();
+  List<MemoryNoteModel> memoryNotes = [];
+  late int numberOfMemory;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    List<MemoryNoteModel> fetchedNotes =
+        await memoryNoteService.getMemoryNote();
+
+    memoryNotes = fetchedNotes;
+
+    setState(() {
+      numberOfMemory = memoryNotes.length;
+    });
+  }
+
+  Widget GalleryContent(memory) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(MemoryDetail(memory: memory));
+      },
+      child: Container(
+        child: Column(
+          children: [
+            Container(
+              height: 150, // 고정 높이 지정
+              width: 150, // 고정 너비 지정
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: Image.network(
+                  '${memory.img}',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Text(
+                '${memory.imgTitle}',
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    List<MemoryNoteModel> randomMemoryNotes =
+        selectRandomMemoryNotes(memoryNotes, 3); // 기억 랜덤하게 3개 뽑기
+
     return Scaffold(
       backgroundColor: Color(0xffFFF5DB),
-      //appBar: AppBar(),
       body: SingleChildScrollView(
         child: Container(
           margin: EdgeInsets.only(
@@ -17,32 +83,85 @@ class ChatComplete extends StatelessWidget {
               left: 16,
               right: 16),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 child: Text(
                   '\'돌잔치\'회상 대화가 저장되었어요!',
-                  style: TextStyle(fontSize: 40, color: Color(0xffA38130)),
+                  style: TextStyle(
+                      fontSize: 40,
+                      color: Colors.black,
+                      fontFamily: 'PretendardMedium'),
                 ),
               ),
-              Image.asset('lib/assets/Atti/ChatDone.png',
-                  width: MediaQuery.of(context).size.width * 0.85),
+              SizedBox(height: 20,),
+              Container(
+                child: Text(
+                  '다른 기억도 열람해보세요!',
+                  style:
+                      TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
+                ),
+              ),
+              SizedBox(height: 20,),
+              // 기존의 GalleryContent(memoryNotes[0]), 부분을 아래의 코드로 대체하세요.
+              if (randomMemoryNotes.length >= 2)
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(child: GalleryContent(randomMemoryNotes[0])),
+                        SizedBox(width: 16), // 간격 조정
+                        Expanded(child: GalleryContent(randomMemoryNotes[1])),
+                      ],
+                    ),
+                    GalleryContent(randomMemoryNotes[2]),
+                  ],
+                ),
+              SizedBox(height: 80),
               SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: 60,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Get.to(MainGallery());
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white),
-                      child: Text(
-                        '내 기억으로 돌아가기',
-                        style: TextStyle(fontSize: 24, color: Colors.black),
-                      )))
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: 60,
+                child: TextButton(
+                  onPressed: () {
+                    Get.to(MainGallery());
+                  },
+                  style:
+                      TextButton.styleFrom(backgroundColor: Color(0xffFFC215)),
+                  child: Text(
+                    '내 기억으로 돌아가기',
+                    style: TextStyle(fontSize: 24, color: Colors.white),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  // 주어진 리스트에서 랜덤으로 n개의 항목을 선택하는 함수
+  List<MemoryNoteModel> selectRandomMemoryNotes(
+      List<MemoryNoteModel> notes, int n) {
+    var random = math.Random();
+    // 리스트의 길이가 n보다 작거나 같으면 전체 리스트 반환
+    if (notes.length <= n) {
+      return List.from(notes);
+    }
+    // 랜덤으로 n개의 항목 선택
+    var randomNotes = <MemoryNoteModel>[];
+    var usedIndexes = <int>{};
+    while (randomNotes.length < n) {
+      int index = random.nextInt(notes.length);
+      if (!usedIndexes.contains(index)) {
+        randomNotes.add(notes[index]);
+        usedIndexes.add(index);
+      }
+    }
+    return randomNotes;
   }
 }

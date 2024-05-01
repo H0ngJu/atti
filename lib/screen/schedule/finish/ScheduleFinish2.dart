@@ -1,6 +1,7 @@
 // 피그마 '일정 완료하기 2' 화면
 import 'package:atti/screen/memory/register/MemoryRegister1.dart';
 import 'package:flutter/material.dart';
+import '../../RoutineScheduleMain.dart';
 import '../ScheduleMain.dart';
 
 
@@ -58,7 +59,7 @@ class ScheduleFinish2 extends StatelessWidget {
                 TextButton(onPressed: (){
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ScheduleMain()),
+                    MaterialPageRoute(builder: (context) => RoutineScheduleMain()),
                   );
                 }, child: Text('아니요', style: TextStyle(color: Color(0xffA38130), fontSize: 20),),
                   style: ButtonStyle(
