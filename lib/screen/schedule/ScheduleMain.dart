@@ -26,14 +26,6 @@ class ScheduleMain extends StatefulWidget {
 class _ScheduleMainState extends State<ScheduleMain> {
   final AuthController authController = Get.put(AuthController());
 
-  int _selectedIndex = 4;
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      // 해당 인덱스로 페이지 변경
-    });
-  }
-
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
   CalendarFormat _calendarFormat = CalendarFormat.week;
@@ -129,10 +121,6 @@ class _ScheduleMainState extends State<ScheduleMain> {
             )
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }

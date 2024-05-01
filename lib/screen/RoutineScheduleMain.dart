@@ -20,6 +20,7 @@ import 'package:atti/screen/schedule/register/ScheduleRegister1.dart';
 import 'dart:math';
 import '../commons/RoutineBox2.dart';
 import '../data/schedule/schedule_service.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 // 이미지 파일 이름 목록
 List<String> imageNames = [
@@ -47,6 +48,15 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     });
   }
 
+  // 일정일과 요약 설명 & TTS
+  FlutterTts flutterTts = FlutterTts();
+  List<RoutineModel> todayRoutines = [];
+  List<ScheduleModel> todaySchedules = [];
+  DateTime today = DateTime.now();
+  String todayInWeek = DateFormat('E', 'ko-KR').format(DateTime.now());
+  late String ttsMsg;
+  late String selectedMessage;
+
   final AuthController authController = Get.put(AuthController());
   final RoutineController routineController = Get.put(RoutineController());
   Random random = Random();
@@ -59,11 +69,13 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   int? numberOfRoutines;
   String selectedDayInWeek = DateFormat('E', 'ko-KR').format(DateTime.now()); // 선택한 날짜의 요일
 
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
       await _fetchData();
+      _makeTTsMessage();
     });
   }
 
@@ -71,6 +83,10 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     List<ScheduleModel>? fetchedSchedules = await ScheduleService().getSchedulesByDate(_selectedDay);
     List<RoutineModel> fetchedRoutines =
     await RoutineService().getRoutinesByDay(selectedDayInWeek);
+
+    // tts를 위한 오늘의 일정, 일과
+    todayRoutines = await RoutineService().getRoutinesByDay(todayInWeek);
+    todaySchedules = await ScheduleService().getSchedulesByDate(today);
 
     if (fetchedSchedules != null) {
       setState(() {
@@ -94,6 +110,63 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
         routinesBySelectedDay = [];
         numberOfRoutines = 0;
       });
+    }
+  }
+
+  Future<void> _makeTTsMessage() async {
+    List<String> ttsMessages = [];
+
+    // 오늘의 일정 메시지 생성
+    if (todaySchedules.isNotEmpty) {
+      String ttsScheduleMessage = '오늘은 ';
+      for (int i = 0; i < todaySchedules.length; i++) {
+        ttsScheduleMessage += DateFormat('a h시 mm분', 'ko_KR').format(todaySchedules[i].time!.toDate()) +
+            '에 ' +
+            todaySchedules[i].name! +
+            (i == todaySchedules.length - 1 ? ' 일정이 있어요!' : ', ');
+      }
+      ttsMessages.add(ttsScheduleMessage);
+    }
+
+    // 오늘의 루틴 메시지 생성
+    if (todayRoutines.isNotEmpty) {
+      DateTime currentTime = DateTime.now();
+      todayRoutines.sort((a, b) {
+        int aHour = a.time![0];
+        int aMinute = a.time![1];
+        int bHour = b.time![0];
+        int bMinute = b.time![1];
+        Duration aDuration = Duration(hours: aHour, minutes: aMinute);
+        Duration bDuration = Duration(hours: bHour, minutes: bMinute);
+        return aDuration.compareTo(bDuration);
+      });
+
+      String? closestRoutine;
+      for (int i = 0; i < todayRoutines.length; i++) {
+        int routineHour = todayRoutines[i].time![0];
+        int routineMinute = todayRoutines[i].time![1];
+        DateTime routineTime = DateTime(today.year, today.month, today.day, routineHour, routineMinute);
+        if (routineTime.isAfter(currentTime)) {
+          closestRoutine = todayRoutines[i].name;
+          break;
+        }
+      }
+
+      if (closestRoutine != null) {
+        String ttsRoutineMessage = '$closestRoutine가 아직 완료되지 않았어요.';
+        ttsMessages.add(ttsRoutineMessage);
+      }
+    }
+
+    // 랜덤하게 메시지 선택 및 TTS 실행
+    if (ttsMessages.isNotEmpty) {
+      Random random = Random();
+      int index = random.nextInt(ttsMessages.length);
+      selectedMessage = ttsMessages[index];
+
+      await flutterTts.setLanguage('ko-KR');
+      await flutterTts.setPitch(1);
+      await flutterTts.speak(selectedMessage);
     }
   }
 
@@ -201,7 +274,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                   color: Color(0xffFFC215),
                   borderRadius: BorderRadius.all(Radius.circular(15))),
               child: Text(
-                  '어쩌구가 아직\n완료되지 않았어요',
+                  selectedMessage,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white, fontFamily: 'UhBee', fontSize: 25)),
@@ -216,9 +289,9 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     //width: MediaQuery.of(context).size.width * 0.9,
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      '${DateFormat('M월 dd일 EEEE', 'ko_KR').format(_selectedDay)} 일과',
+                      '${DateFormat('M월 d일 EEEE', 'ko_KR').format(_selectedDay)} 일과',
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 27, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
                     ),
                   ),
                   TextButton(onPressed: () {
@@ -291,9 +364,9 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     //width: MediaQuery.of(context).size.width * 0.9,
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      '${DateFormat('M월 dd일 EEEE', 'ko_KR').format(_selectedDay)} 일정',
+                      '${DateFormat('M월 d일 EEEE', 'ko_KR').format(_selectedDay)} 일정',
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 27, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
                     ),
                   ),
                   TextButton(onPressed: () {

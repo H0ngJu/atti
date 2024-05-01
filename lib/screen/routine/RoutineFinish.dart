@@ -13,7 +13,7 @@ class RoutineFinish extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffFFEEBC),
+      backgroundColor: Color(0xffFFC215),
       body: Column(
         children: [
           Expanded(
@@ -24,7 +24,7 @@ class RoutineFinish extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.only(left: 15),
                   child: Text(name, style: TextStyle(
-                      fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
+                      fontSize: 40, fontWeight: FontWeight.w600, color: Colors.white
                   ),),
                 ),
                 SizedBox(height: 20,),
@@ -45,7 +45,7 @@ class RoutineFinish extends StatelessWidget {
               onPressed: () {
                 Get.to(RoutineScheduleMain());
               },
-              child: Text('하루 일과로 돌아가기', style: TextStyle(color: Colors.black, fontSize: 20),),
+              child: Text('일과/일정으로 돌아가기', style: TextStyle(color: Colors.black, fontSize: 20),),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.white),
                 minimumSize: MaterialStateProperty.all(
