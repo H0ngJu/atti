@@ -8,6 +8,7 @@ import 'package:atti/screen/chatbot/Chatbot.dart';
 import 'package:atti/screen/memory/chat/BeforeSave.dart';
 import 'package:atti/screen/memory/chat/ChatBubble.dart';
 import 'package:atti/screen/memory/chat/ChatHistory.dart';
+import 'package:atti/screen/memory/gallery/MainGallery.dart';
 import 'package:atti/screen/memory/gallery/RecollectionData.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -499,6 +500,7 @@ class _VoiceButtonState extends State<VoiceButton> {
             margin: EdgeInsets.only(top: 20, right: 25),
             child: ElevatedButton(
                 onPressed: () {
+                  Get.to(MainGallery());
                   var chat = ChatMessage.messagesToJsonString(chatMessages);
                   //print(onlyUserMessages);
                   if (onlyUserMessages.isNotEmpty) {
