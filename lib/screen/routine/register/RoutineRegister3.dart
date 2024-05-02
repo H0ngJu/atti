@@ -36,8 +36,8 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
         children: [
           Expanded(child: Column(children: [
             DetailPageTitle(
-              title: '하루일과 등록하기  ',
-              description: '\'${routineController.routine.value.name}\' 와(과) 관련된\n사진을 선택해주세요',
+              title: '일과 등록하기  ',
+              description: '해당 일과와 관련된 사진을 \n선택해주세요',
               totalStep: 3, currentStep: 3,
             ),
             SizedBox(height: 30,),
@@ -103,13 +103,13 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
                   child: Text(
                     '다시 선택',
                     style:
-                    TextStyle(color: Color(0xffA38130), fontSize: 20),
+                    TextStyle(color: Colors.black, fontSize: 20),
                   ),
                   style: ButtonStyle(
-                    backgroundColor:
-                    MaterialStateProperty.all(Color(0xffFFF5DB)),
+                    backgroundColor: MaterialStateProperty.all(Colors.white),
                     minimumSize: MaterialStateProperty.all(
                         Size(MediaQuery.of(context).size.width * 0.43, 50)),
+                    side: MaterialStateProperty.all(BorderSide(color: Colors.black, width: 1.0)),
                   ),
                 ),
               ],

@@ -8,6 +8,17 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../routine/RoutineFinish.dart';
+import 'dart:math';
+
+// 이미지 파일 이름 목록
+List<String> imageNames = [
+  'EatingStar.png',
+  'Napping.png',
+  'ReadingBook.png',
+  'Coffee.png',
+  'Soccer.png',
+  'Walking.png',
+];
 
 class FullScreenRoutine extends StatefulWidget {
   const FullScreenRoutine({super.key, required this.docRef});
@@ -22,6 +33,8 @@ class _FullScreenRoutineState extends State<FullScreenRoutine> {
   final firestore = FirebaseFirestore.instance;
   final storage = FirebaseStorage.instance;
   RoutineModel? routine;
+  // 랜덤 이미지 파일 이름 선택
+  Random random = Random();
 
   String formatTime(List<int> time) {
     String period = "오전";
@@ -65,23 +78,25 @@ class _FullScreenRoutineState extends State<FullScreenRoutine> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
+    String randomImageName = imageNames[random.nextInt(imageNames.length)];
+
     return Scaffold(
       backgroundColor: Color(0xffFFF7E3),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: height * 0.07,),
+          SizedBox(height: height * 0.05,),
           Container(
             alignment: Alignment.center,
             child: Image.asset('lib/assets/logo3.png',
             height: height * 0.04,
             fit: BoxFit.fitWidth),
           ),
-          SizedBox(height: height * 0.03,),
+          SizedBox(height: height * 0.02,),
           Container(
             alignment: Alignment.center,
-            child: Image.asset('lib/assets/Atti/Coffee.png',
-                height: height * 0.27,
+            child: Image.asset('lib/assets/Atti/$randomImageName',
+                height: height * 0.26,
                 fit: BoxFit.fitHeight),
           ),
           SizedBox(height: height * 0.03,),
@@ -106,28 +121,20 @@ class _FullScreenRoutineState extends State<FullScreenRoutine> {
           ),
           SizedBox(height: height * 0.02,),
           Container(
-            width: width * 0.9,
-            decoration: BoxDecoration(
-              color: Color(0xffFFECB5),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0),
-                bottomLeft: Radius.circular(0.0), bottomRight: Radius.circular(0.0),
-              ),
-            ),
             child: Column(
               children: [
-                SizedBox(height: height * 0.02,),
+                //SizedBox(height: height * 0.02,),
                 Text('일과를 할 시간이에요',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                 ),
                 Text('\'${routine?.name ?? ''}\'',
                   style: TextStyle(fontSize: 28, color: Color(0xffA38130), fontWeight: FontWeight.w600),
                 ),
-                SizedBox(height: height * 0.01,),
+                SizedBox(height: height * 0.02,),
                 Container(
                   alignment: Alignment.center,
                   width: width * 0.8,
-                  height: height * 0.25,
+                  height: height * 0.23,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: Image.network(
@@ -139,7 +146,7 @@ class _FullScreenRoutineState extends State<FullScreenRoutine> {
                     ),
                   ),
                 ),
-                SizedBox(height: height * 0.02,),
+                SizedBox(height: height * 0.04,),
                 TextButton(onPressed: () async {
                   DocumentReference<Object?> documentReference = firestore.doc('routine/${widget.docRef}');
                   DateTime now = DateTime.now();
@@ -162,8 +169,7 @@ class _FullScreenRoutineState extends State<FullScreenRoutine> {
                         color: Colors.white, fontSize: 24, ),),
                     style: ButtonStyle(
                       backgroundColor:  MaterialStateProperty.all(Color(0xffFFC215)),
-                      minimumSize: MaterialStateProperty.all(
-                          Size(width * 0.55, height * 0.03)),
+                      minimumSize: MaterialStateProperty.all(Size(width * 0.55, 40)),
                     ),
                 ),
                 SizedBox(height: height * 0.02,)

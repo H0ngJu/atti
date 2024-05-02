@@ -24,13 +24,6 @@ class RoutineMain extends StatefulWidget {
 class _RoutineMainState extends State<RoutineMain> {
   final RoutineController routineController = Get.put(RoutineController());
   final AuthController authController = Get.put(AuthController());
-  int _selectedIndex = 3;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
@@ -137,10 +130,6 @@ class _RoutineMainState extends State<RoutineMain> {
             )
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }

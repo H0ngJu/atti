@@ -1,16 +1,16 @@
-import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 class ChatBubble extends StatefulWidget {
   final String message;
+  final String speaker;
+  final bool isTTSEnabled;
+
   //final Function(String) onTextChanged;
 
-  const ChatBubble({
-    Key? key,
-    required this.message,
-  }) : super(key: key);
+  const ChatBubble({Key? key, required this.message, required this.speaker, required this.isTTSEnabled})
+      : super(key: key);
 
   @override
   State<ChatBubble> createState() => _ChatBubbleState();
@@ -26,6 +26,11 @@ class _ChatBubbleState extends State<ChatBubble> {
     flutterTts.setLanguage("ko-KR");
     flutterTts.setPitch(1);
     //_speakMessage(widget.message); // Speak initial message
+    printSpeaker();
+  }
+
+  void printSpeaker() {
+    print("here : " + widget.speaker);
   }
 
   // message tts 읽기
@@ -37,7 +42,7 @@ class _ChatBubbleState extends State<ChatBubble> {
   @override
   void didUpdateWidget(covariant ChatBubble oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.message != oldWidget.message) {
+    if (widget.message != oldWidget.message && widget.speaker == "Assistant" && widget.isTTSEnabled) {
       _speakMessage(widget.message);
     }
   }
@@ -46,23 +51,16 @@ class _ChatBubbleState extends State<ChatBubble> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: EdgeInsets.only(top: 20, bottom: 30),
-        padding: EdgeInsets.all(20),
+        margin: EdgeInsets.only(top: 20),
+        padding: EdgeInsets.only(top: 10, bottom: 10),
         decoration: BoxDecoration(
-          color: Color(0xffFFE9B3),
+          //color: Color(0xffFFE9B3),
           borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              spreadRadius: 1,
-              blurRadius: 4,
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-          ],
         ),
         child: Text(
           widget.message,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 20, fontFamily: 'UhBee',
+          color: widget.speaker == "Assistant" ? Color(0xffA38130) : Colors.black),
           textAlign: TextAlign.center,
         ),
       ),

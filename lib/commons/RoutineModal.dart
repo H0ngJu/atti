@@ -27,21 +27,10 @@ class RoutineModal extends StatelessWidget {
   final DocumentReference docRef;
   final date;
 
-  String generateRepeatText(List<String> days) {
-    String repeatText = '';
-
-    for (int i = 0; i < days.length; i++) {
-      if (i == days.length - 1) {
-        repeatText += days[i];
-      } else {
-        repeatText += days[i] + ', ';
-      }
-    }
-    return '$repeatText 반복';
-  }
-
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+
     String formattedTime = '';
     if (time != null && time.length == 2) {
       final int hour = time[0];
@@ -53,11 +42,11 @@ class RoutineModal extends StatelessWidget {
     }
 
     return AlertDialog(
-      contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+      contentPadding: EdgeInsets.fromLTRB(20, 5, 20, 0),
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.zero,
       content: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.7,
+        height: MediaQuery.of(context).size.height * 0.65,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -72,10 +61,9 @@ class RoutineModal extends StatelessWidget {
                 )
               ],
             ),
-            Text(generateRepeatText(days), style: TextStyle(
-              fontSize: 24, color: Color(0xffA38130),
-            ),),
-            SizedBox(height: 10,),
+            // Text(generateRepeatText(days), style: TextStyle(
+            //   fontSize: 24, color: Color(0xffA38130),
+            // ),),
             Container(
               alignment: Alignment.center,
               width: MediaQuery.of(context).size.width * 0.8,
@@ -91,7 +79,7 @@ class RoutineModal extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: height * 0.03,),
             Container(
               alignment: Alignment.center,
               child: Column(
@@ -101,11 +89,11 @@ class RoutineModal extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.04,),
 
             if (authController.isPatient)
               Container(
-                margin: EdgeInsets.only(bottom: 20),
+                //margin: EdgeInsets.only(bottom: 20),
                 child: TextButton(
                   onPressed: () async {
                     await RoutineService().completeRoutine(docRef, date);
@@ -122,7 +110,7 @@ class RoutineModal extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => RoutineFinish(name: '\'${name}\'\n일과를 완료했어요!')),
                     );
                   },
-                  child: Text('하루 일과 완료하기', style: TextStyle(color: Colors.white, fontSize: 20),),
+                  child: Text('완료했어요', style: TextStyle(color: Colors.white, fontSize: 20),),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
                     minimumSize: MaterialStateProperty.all(
