@@ -371,54 +371,24 @@ class HomeReport extends StatefulWidget {
   _HomeReportState createState() => _HomeReportState();
 }
 class _HomeReportState extends State<HomeReport> {
-  List<ScheduleModel> weeklySchedules = [];
-  List<RoutineModel> weeklyRoutines = [];
-  int totalSchedules = 0;
-  int totalRoutines = 0;
-  int doneSchedules = 0;
-  int doneRoutines = 0;
 
   @override
   void initState() {
     super.initState();
-    _fetchWeeklyData();
     _fetchReport();
   }
 
-  Future<void> _fetchWeeklyData() async {
-    DateTime now = DateTime.now();
-    DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    DateTime endOfWeek = startOfWeek.add(Duration(days: 6));
-
-    List<ScheduleModel> fetchedSchedules =
-        await ScheduleService().getSchedulesInRange(startOfWeek, endOfWeek);
-    List<RoutineModel> fetchedRoutines =
-        await RoutineService().getRoutinesInRange(startOfWeek, endOfWeek);
-
-    setState(() {
-      weeklySchedules = fetchedSchedules;
-      weeklyRoutines = fetchedRoutines;
-      totalSchedules = weeklySchedules.length;
-      totalRoutines = weeklyRoutines.length;
-      doneSchedules = weeklySchedules
-          .where((schedule) => schedule.isFinished ?? false)
-          .length;
-      doneRoutines = weeklyRoutines
-          .where((routine) =>
-              routine.isFinished != null &&
-              routine.isFinished!.values.any((v) => v))
-          .length;
-    });
-  }
-
-  // ==================================================================================================
   final AuthController _authController = Get.find<AuthController>();
   var currentReport;
   var reportData;
   var reportPeriod;
   var scheduleCompletion;
   var routineCompletion;
-  var highestViewedMemoryName;
+  var highestViewedMemory;
+  int totalSchedules = 0;
+  int totalRoutines = 0;
+  int completedSchedules = 0;
+  int completedRoutines = 0;
 
   Future<void> _fetchReport() async {
     DateTime now = DateTime.now();
@@ -432,46 +402,29 @@ class _HomeReportState extends State<HomeReport> {
       reportPeriod = currentReport['reportPeriod'];
       scheduleCompletion = currentReport['scheduleCompletion'];
       routineCompletion = currentReport['routineCompletion'];
-      // 기본적으로 firstEntry로 설정하고 비교를 시작합니다.
-      var highestViewedEntry = currentReport['mostViews'].entries.first;
+      highestViewedMemory = currentReport['highestViewedMemory'];
 
-      // 모든 항목을 순회하며 가장 높은 값을 찾습니다.
-      currentReport['mostViews'].forEach((key, value) {
-        if (value > highestViewedEntry.value) {
-          highestViewedEntry = MapEntry(key, value);
-        }
+      // routineCompletion 맵을 순회하며 totalRoutines와 completedRoutines 값을 갱신
+      routineCompletion.forEach((date, data) {
+        int total = (data['total'] as num?)?.toInt() ?? 0; // num을 int로 변환, 기본값 0
+        int completed = (data['completed'] as num?)?.toInt() ?? 0; // 위와 동일
+
+        totalRoutines += total;
+        completedRoutines += completed;
       });
-      var highestViewedMemory = highestViewedEntry.value;
-      // 여기에서도 var 키워드를 제거하여 인스턴스 변수이자 this.highestViewedMemoryName에 직접 할당
-      highestViewedMemoryName = highestViewedMemory['imgTitle'];
+      scheduleCompletion.forEach((date, data) {
+        int total = (data['total'] as num?)?.toInt() ?? 0; // num을 int로 변환, 기본값 0
+        int completed = (data['completed'] as num?)?.toInt() ?? 0; // 위와 동일
 
-      // print('${fetchedReports}');
-      print('${reportPeriod} ${scheduleCompletion} ${routineCompletion} ${highestViewedMemoryName}');
+        totalSchedules += total;
+        completedSchedules += completed;
+      });
     });
   }
-  // ==================================================================================================
 
   @override
   Widget build(BuildContext context) {
-    // ======================================================================================
 
-
-    // int getWeekNumber(String isoDateString) {
-    //   // ISO 문자열을 DateTime 객체로 변환
-    //   DateTime date = DateTime.parse(isoDateString);
-    //
-    //   // 달의 첫째 날 객체를 생성
-    //   DateTime firstDayOfMonth = DateTime(date.year, date.month, 1);
-    //
-    //   // 첫째 날로부터의 날짜 차이를 계산하여 몇 번째 주인지 계산 (7로 나눔)
-    //   // 이 계산은 첫째 날을 주차 계산에 포함시키기 위해 date와 firstDayOfMonth 차이에 1을 더함
-    //   int weekNumber = ((date.difference(firstDayOfMonth).inDays + 1) / 7).ceil();
-    //
-    //   return weekNumber;
-    // }
-
-
-    // ======================================================================================
 
     final startDay = DateTime.parse(reportPeriod[0]);
     final weekOfMonth = getWeekOfMonth(startDay);
@@ -510,7 +463,9 @@ class _HomeReportState extends State<HomeReport> {
                         child: Container(
                       margin: EdgeInsets.all(10),
                       child: Text(
-                        '${(doneRoutines / totalRoutines * 100).toStringAsFixed(1)} %',
+                        totalRoutines != 0 ?
+                          '${(completedRoutines / totalRoutines * 100).toStringAsFixed(1)} %':
+                          "지난 주 일과가 없어요",
                         textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
                         style: TextStyle(
                             color: Color(0xffA38130),
@@ -536,7 +491,9 @@ class _HomeReportState extends State<HomeReport> {
                         child: Container(
                       margin: EdgeInsets.all(10),
                       child: Text(
-                        '${(doneSchedules / totalSchedules * 100).toStringAsFixed(1)} %',
+                        totalSchedules != 0 ?
+                          '${(completedSchedules / totalSchedules * 100).toStringAsFixed(1)} %':
+                          "지난 주 일정이 없어요",
                         textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
                         style: TextStyle(
                             color: Color(0xffA38130),
@@ -562,7 +519,7 @@ class _HomeReportState extends State<HomeReport> {
                         child: Container(
                       margin: EdgeInsets.all(10),
                       child: Text(
-                        '뭘까용',
+                        highestViewedMemory.length > 0 ? "${highestViewedMemory}" : "열람한 기억이 없어요",
                         textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
                         style: TextStyle(
                             color: Color(0xffA38130),
