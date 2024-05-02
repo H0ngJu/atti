@@ -133,6 +133,7 @@ class Chatbot {
     var response = await chat.sendMessage(Content.text(prompt));
     var endTime = DateTime.now();
     print('챗봇 응답 생성 시간: ${endTime.difference(startTime)}');
+    print(response.text);
     return response.text!;
   }
 

@@ -260,7 +260,7 @@ class _VoiceButtonState extends State<VoiceButton> {
 
                 String response = await _chatbot.getRecollectionResponse(
                     message,
-                    widget.recollection.description
+                    widget.recollection.description!
                 ); // Chatbot으로부터 응답 받기
                 _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
                 //_speakMessage(response);
