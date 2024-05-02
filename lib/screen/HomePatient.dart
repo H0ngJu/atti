@@ -737,7 +737,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                                 docRef: schedule.reference!,
                               )
                             : IncompleteScheduleWidget(
-                                idx: index,
+                                idx: index+1,
                                 time: DateFormat('a h:mm', 'ko_KR')
                                     .format(schedule.time!.toDate()),
                                 name: schedule.name!,
@@ -877,6 +877,8 @@ class _HomeRoutineState extends State<HomeRoutine> {
     //List<Routine>? routines = user.routines;
     List<RoutineModel> routines = widget.routinesBySelectedDay;
 
+    RoutineModel? nearestRoutine = _findNearestRoutine(routines);
+
     return Column(
       children: [
         Row(
@@ -891,7 +893,7 @@ class _HomeRoutineState extends State<HomeRoutine> {
           ],
         ),
         SizedBox(height: 11),
-        routines.isEmpty
+        nearestRoutine == null
             ? Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 padding: EdgeInsets.all(20),
@@ -906,9 +908,30 @@ class _HomeRoutineState extends State<HomeRoutine> {
                   style: TextStyle(fontSize: 24),
                 ),
               )
-            : _buildRoutineWidget(routines.first),
+        : _buildRoutineWidget(nearestRoutine),
       ],
     );
+  }
+
+  RoutineModel? _findNearestRoutine(List<RoutineModel> routines) {
+    final now = DateTime.now(); // 현재 시간
+    final today = DateTime(now.year, now.month, now.day); // 오늘 날짜
+    RoutineModel? nearestRoutine;
+    Duration shortestDuration = Duration(days: 365); // 임의의 긴 시간
+
+    for (var routine in routines) {
+      if (routine.time != null && routine.time!.length == 2) {
+        final routineTime = DateTime(
+            today.year, today.month, today.day, routine.time![0], routine.time![1]);
+        final duration = routineTime.difference(now);
+        // 현재 시간 이후가면서 가장 가까운 시간 찾기
+        if (duration > Duration.zero && duration < shortestDuration) {
+          nearestRoutine = routine;
+          shortestDuration = duration;
+        }
+      }
+    }
+    return nearestRoutine;
   }
 
   Widget _buildRoutineWidget(RoutineModel routine) {
