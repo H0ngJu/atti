@@ -1,3 +1,4 @@
+import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/report/reportController.dart';
 import 'package:atti/screen/report/ReportDetail.dart';
 import 'package:flutter/material.dart';
@@ -13,105 +14,99 @@ class ReportHistory extends StatefulWidget {
 }
 
 class _ReportHistoryState extends State<ReportHistory> {
+  final AuthController _authController = Get.find<AuthController>();
   int _addItemCnt = 0;
-  ReportController reportController = ReportController();
-  late Future<List<dynamic>> reports;
   var thisMonth = '${DateTime.now().year}-${DateTime.now().month}';
+  List<String> reportPeriods = [];
 
   @override
   void initState() {
     super.initState();
-    reports = reportController.getReport(); // getReport 호출을 initState에서 수행
+    _fetchReport();
   }
+
+  Future<void> _fetchReport() async {
+    DateTime now = DateTime.now();
+    DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    DateTime endOfWeek = startOfWeek.add(Duration(days: 6));
+
+    var fetchedReports = await _authController.carerReports;
+    if (fetchedReports.isNotEmpty) {
+      reportPeriods = fetchedReports.map<String>((snapshot) {
+        var reportPeriod = snapshot.data()['reportPeriod'];
+        return List<String>.from(reportPeriod);
+      }).toList(); // 결과를 리스트로 변환
+    }
+    setState(() {
+      reportPeriods = reportPeriods;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: AppBar(),
         body: SingleChildScrollView(
-          child: FutureBuilder<List<dynamic>>(
-              future: reports,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 10.0,
-                    ),
-                  );
-                  // 로딩 중일 때는 로딩 인디케이터 표시
-                } else if (snapshot.hasError) {
-                  print('Error: ${snapshot.error}');
-                  return Text('리포트를 불러오는 데 실패했습니다! 잠시 후 다시 시도해 주세요.',
-                    textAlign: TextAlign.center,
-                  ); // 에러 발생 시 에러 메시지 표시
-                } else {
-                  var reports = snapshot.data!;
-                  // 실제 데이터가 준비되었을 때 렌더링하려는 위젯
-                  return Container(
-                      margin: EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(bottom: 10),
-                                child: Text(
-                                  '이번 달',
-                                  style: TextStyle(
-                                      fontSize: 24, fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              // 아래 container는 reports를 확인하기 위한 코드
-                              Container(
-                                margin: EdgeInsets.only(bottom: 10),
-                                child: Text(
-                                  '${reports[0].patientId}', // 확인완
-                                  style: TextStyle(
-                                      fontSize: 24, fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  margin: EdgeInsets.only(bottom: 10),
-                                  child: Text('이전 받은 기록 보고',
-                                      style: TextStyle(
-                                          fontSize: 24, fontWeight: FontWeight.bold))),
-                              ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _addItemCnt += 2; // 버튼을 누를 때마다 추가 아이템 개수 업데이트
-                                  });
-                                },
-                                child: Text(
-                                  '이전 기록 보고 더보기',
-                                  style: TextStyle(fontSize: 24, color: Colors.white),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color(0xffFFC215),
-                                    padding: EdgeInsets.symmetric(vertical: 10)),
-                              ))
-                        ],
+          child: Container(
+              margin: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Text(
+                          '이번 달',
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                          margin: EdgeInsets.only(bottom: 10),
+                          child: Text('이전 받은 기록 보고',
+                              style: TextStyle(
+                                  fontSize: 24, fontWeight: FontWeight.bold))),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _addItemCnt += 2; // 버튼을 누를 때마다 추가 아이템 개수 업데이트
+                          });
+                        },
+                        child: Text(
+                          '이전 기록 보고 더보기',
+                          style: TextStyle(fontSize: 24, color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xffFFC215),
+                            padding: EdgeInsets.symmetric(vertical: 10)),
                       )
-                  );
-                }}),
-        ));
+                  ),
+                  ReportHistoryContainer(
+                    date: [],
+                  ),
+                ],
+              )
+          ),
+        )
+    );
   }
 }
 
