@@ -446,15 +446,15 @@ class _HomePatientTopState extends State<HomePatientTop> {
           SizedBox(height: 25),
           RichText(
             text: TextSpan(
-              style: TextStyle(color: Colors.black, height: 1.2),
+              style: TextStyle(color: Colors.black, height: 1.2,fontFamily: 'PretendardRegular'),
               children: [
                 TextSpan(
                   text: '${widget.userName}님\n',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
                 TextSpan(
-                  text: '안녕하세요?',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  text: '만나서 반가워요!',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, fontFamily: 'PretendardSemiBold'),
                 ),
               ],
             ),
@@ -486,7 +486,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
           Container(
             child: Text(
               '${formattedTime}',
-              style: TextStyle(fontSize: 30),
+              style: TextStyle(fontSize: 30, fontFamily: 'PretendardMedium'),
               textAlign: TextAlign.left,
             ),
           )
@@ -575,7 +575,7 @@ class IncompleteScheduleWidget extends StatelessWidget {
                     padding: EdgeInsets.all(17),
                     alignment: Alignment.center,
                     child: Text(idx?.toString() ?? '',
-                        style: TextStyle(fontSize: 24)))),
+                        style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular')))),
             Expanded(
               flex: 3,
               child: Container(
@@ -587,7 +587,7 @@ class IncompleteScheduleWidget extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   time ?? '',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
               ),
             ),
@@ -602,7 +602,7 @@ class IncompleteScheduleWidget extends StatelessWidget {
                 ),
                 child: Text(
                   name ?? '',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
               ),
             ),
@@ -661,7 +661,7 @@ class CompleteScheduleWidget extends StatelessWidget {
             alignment: Alignment.center,
             padding: EdgeInsets.all(17),
             color: Color(0xffDDDDDD),
-            child: Text('\'$name\' 일정 완료', style: TextStyle(fontSize: 24)),
+            child: Text('\'$name\' 일정 완료', style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular')),
           ),
         ),
       ),
@@ -691,7 +691,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
             Expanded(
               child: Text(
                 '일정이 있어요\n알람으로 알려드릴게요!',
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(fontSize: 30, fontFamily: 'PretendardMedium'),
                 textAlign: TextAlign.left,
               ),
             ),
@@ -710,7 +710,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                         style: BorderStyle.solid, color: Color(0xffDDDDDD))),
                 child: Text(
                   '등록된 일정이 없어요',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
               )
             : Container(
@@ -814,11 +814,17 @@ class RoutineWidget extends StatelessWidget {
               flex: 1,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: Image.network(
+                child:
+                ColorFiltered(
+                  colorFilter: (done ?? false)
+                      ? ColorFilter.mode(Colors.grey, BlendMode.saturation)
+                      : ColorFilter.mode(Colors.transparent, BlendMode.saturation),
+                  child : Image.network(
                   url ?? '',
                   width: MediaQuery.of(context).size.width * 0.5,
                   height: MediaQuery.of(context).size.width * 0.5,
                   fit: BoxFit.cover,
+                ),
                 ),
               ),
             ),
@@ -840,13 +846,21 @@ class RoutineWidget extends StatelessWidget {
                   children: [
                     Text(
                       time ?? '',
-                      style: TextStyle(fontSize: 24),
+                      style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                     ),
                     Text(
                       textAlign: TextAlign.center,
                       name ?? '',
-                      style: TextStyle(fontSize: 24),
+                      style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                     ),
+                    Text(
+                        done ?? false ?  '완료' : '',
+                      style: TextStyle(
+                      fontFamily: 'PretendardRegular',
+                        fontSize: 24,
+                        color: Color(0xffA38130)
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -886,7 +900,7 @@ class _HomeRoutineState extends State<HomeRoutine> {
             Expanded(
               child: Text(
                 '지금은 이 일을 할 시간이에요!',
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(fontSize: 30, fontFamily: 'PretendardMedium'),
                 textAlign: TextAlign.left,
               ),
             ),
@@ -905,10 +919,10 @@ class _HomeRoutineState extends State<HomeRoutine> {
                         style: BorderStyle.solid, color: Color(0xffDDDDDD))),
                 child: Text(
                   '예정된 일과가 없어요',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
               )
-        : _buildRoutineWidget(nearestRoutine),
+        : _buildRoutineWidget(routines.first),
       ],
     );
   }
@@ -1092,7 +1106,7 @@ class _HomeMemoryState extends State<HomeMemory> {
       children: [
         Text(
           '오늘을 내 기억에 남기시겠어요?',
-          style: TextStyle(fontSize: 28),
+          style: TextStyle(fontSize: 28, fontFamily: 'PretendardMedium'),
           textAlign: TextAlign.left,
         ),
         SizedBox(height: 11),
