@@ -114,48 +114,57 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   }
 
   Future<void> _makeTTsMessage() async {
-    List<String> ttsMessages = [];
+    List<String> ttsMessages = ['오늘은 어떤 일정이 있으신가요?', '일정과 일과를 할 시간이 되면 아띠가 알려드릴게요!'];
+
+    // 오늘 날짜
+    DateTime today = DateTime.now();
 
     // 오늘의 일정 메시지 생성
-    if (todaySchedules.isNotEmpty) {
-      String ttsScheduleMessage = '오늘은 ';
-      for (int i = 0; i < todaySchedules.length; i++) {
-        ttsScheduleMessage += DateFormat('a h시 mm분', 'ko_KR').format(todaySchedules[i].time!.toDate()) +
-            '에 ' +
-            todaySchedules[i].name! +
-            (i == todaySchedules.length - 1 ? ' 일정이 있어요!' : ', ');
+    if (_selectedDay.year == today.year && _selectedDay.month == today.month && _selectedDay.day == today.day) {
+      if (todaySchedules.isNotEmpty) {
+        String ttsScheduleMessage = '오늘은 ';
+        for (int i = 0; i < todaySchedules.length; i++) {
+          ttsScheduleMessage += DateFormat('a h시 m분', 'ko_KR').format(todaySchedules[i].time!.toDate()) +
+              '에 ' +
+              todaySchedules[i].name! +
+              (i == todaySchedules.length - 1 ? ' 일정이 있어요!' : ', ');
+        }
+        ttsMessages.add(ttsScheduleMessage);
       }
-      ttsMessages.add(ttsScheduleMessage);
-    }
 
-    // 오늘의 루틴 메시지 생성
-    if (todayRoutines.isNotEmpty) {
-      DateTime currentTime = DateTime.now();
-      todayRoutines.sort((a, b) {
-        int aHour = a.time![0];
-        int aMinute = a.time![1];
-        int bHour = b.time![0];
-        int bMinute = b.time![1];
-        Duration aDuration = Duration(hours: aHour, minutes: aMinute);
-        Duration bDuration = Duration(hours: bHour, minutes: bMinute);
-        return aDuration.compareTo(bDuration);
-      });
+      // 오늘의 루틴 메시지 생성
+      if (todayRoutines.isNotEmpty) {
+        DateTime currentTime = DateTime.now();
+        todayRoutines.sort((a, b) {
+          int aHour = a.time![0];
+          int aMinute = a.time![1];
+          int bHour = b.time![0];
+          int bMinute = b.time![1];
+          Duration aDuration = Duration(hours: aHour, minutes: aMinute);
+          Duration bDuration = Duration(hours: bHour, minutes: bMinute);
+          return aDuration.compareTo(bDuration);
+        });
 
-      String? closestRoutine;
-      for (int i = 0; i < todayRoutines.length; i++) {
-        int routineHour = todayRoutines[i].time![0];
-        int routineMinute = todayRoutines[i].time![1];
-        DateTime routineTime = DateTime(today.year, today.month, today.day, routineHour, routineMinute);
-        if (routineTime.isAfter(currentTime)) {
-          closestRoutine = todayRoutines[i].name;
-          break;
+        String? closestRoutine;
+        for (int i = 0; i < todayRoutines.length; i++) {
+          int routineHour = todayRoutines[i].time![0];
+          int routineMinute = todayRoutines[i].time![1];
+          DateTime routineTime = DateTime(today.year, today.month, today.day, routineHour, routineMinute);
+          if (routineTime.isAfter(currentTime)) {
+            closestRoutine = todayRoutines[i].name;
+            break;
+          }
+        }
+
+        if (closestRoutine != null) {
+          String ttsRoutineMessage = '$closestRoutine가 아직 완료되지 않았어요.';
+          ttsMessages.add(ttsRoutineMessage);
         }
       }
-
-      if (closestRoutine != null) {
-        String ttsRoutineMessage = '$closestRoutine가 아직 완료되지 않았어요.';
-        ttsMessages.add(ttsRoutineMessage);
-      }
+    } else {
+      // 오늘이 아닌 경우 메시지 출력
+      ttsMessages.add('일과와 일정을 확인해보세요!');
+      ttsMessages.add('함께 일과와 일정을 계획해볼까요?');
     }
 
     // 랜덤하게 메시지 선택 및 TTS 실행
@@ -308,7 +317,8 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
             //SizedBox(height: height * 0.05,),
 
             // 여기에 seletexDay에 해당하는 루틴들을 추가
-            ListView.builder(
+            routinesBySelectedDay.length > 0
+            ? ListView.builder(
               primary: false,
               shrinkWrap: true,
               itemCount: routinesBySelectedDay.length,
@@ -345,6 +355,21 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                   ),
                 );
               },
+            )
+            : Container(
+              margin: EdgeInsets.only(top: 15, bottom: 15),
+              width: MediaQuery.of(context).size.width * 0.9,
+              padding: EdgeInsets.all(20),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  border: Border.all(
+                      style: BorderStyle.solid, color: Color(0xffDDDDDD))),
+              child: Text(
+                '예정된 일과가 없어요',
+                style: TextStyle(fontSize: 24),
+              ),
             ),
             SizedBox(height: height * 0.01,),
             SizedBox(
@@ -413,16 +438,21 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                   },
             )
                 : Container(
-                  child: Column(
-                    children: [
-                      SizedBox(height: height * 0.05,),
-                      Text("오늘은 예정된 일과가 없네요!",
-                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500)),
-                      SizedBox(height: height * 0.05,),
-                    ],
+              margin: EdgeInsets.only(top: 15),
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  padding: EdgeInsets.all(20),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      border: Border.all(
+                          style: BorderStyle.solid, color: Color(0xffDDDDDD))),
+                  child: Text(
+                    '등록된 일정이 없어요',
+                    style: TextStyle(fontSize: 24),
                   ),
-            ),
-            SizedBox(height: height * 0.03,),
+                ),
+                SizedBox(height: height * 0.03,),
 
           ],
         ),
