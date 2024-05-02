@@ -28,7 +28,7 @@ class HomeCarer extends StatefulWidget {
 
 class _HomeCarerState extends State<HomeCarer> {
   // bottom Navi logic
-  int _selectedIndex = 2;
+  int _selectedIndex = 1;
   final _authentication = FirebaseAuth.instance;
   final _db = FirebaseFirestore.instance;
   User? loggedUser;
