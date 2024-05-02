@@ -317,7 +317,8 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
             //SizedBox(height: height * 0.05,),
 
             // 여기에 seletexDay에 해당하는 루틴들을 추가
-            ListView.builder(
+            routinesBySelectedDay.length > 0
+            ? ListView.builder(
               primary: false,
               shrinkWrap: true,
               itemCount: routinesBySelectedDay.length,
@@ -354,6 +355,21 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                   ),
                 );
               },
+            )
+            : Container(
+              margin: EdgeInsets.only(top: 15, bottom: 15),
+              width: MediaQuery.of(context).size.width * 0.9,
+              padding: EdgeInsets.all(20),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  border: Border.all(
+                      style: BorderStyle.solid, color: Color(0xffDDDDDD))),
+              child: Text(
+                '예정된 일과가 없어요',
+                style: TextStyle(fontSize: 24),
+              ),
             ),
             SizedBox(height: height * 0.01,),
             SizedBox(
@@ -422,16 +438,21 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                   },
             )
                 : Container(
-                  child: Column(
-                    children: [
-                      SizedBox(height: height * 0.05,),
-                      Text("오늘은 예정된 일과가 없네요!",
-                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500)),
-                      SizedBox(height: height * 0.05,),
-                    ],
+              margin: EdgeInsets.only(top: 15),
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  padding: EdgeInsets.all(20),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      border: Border.all(
+                          style: BorderStyle.solid, color: Color(0xffDDDDDD))),
+                  child: Text(
+                    '등록된 일정이 없어요',
+                    style: TextStyle(fontSize: 24),
                   ),
-            ),
-            SizedBox(height: height * 0.03,),
+                ),
+                SizedBox(height: height * 0.03,),
 
           ],
         ),
