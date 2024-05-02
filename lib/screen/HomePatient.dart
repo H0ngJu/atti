@@ -922,7 +922,7 @@ class _HomeRoutineState extends State<HomeRoutine> {
                   style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
               )
-        : _buildRoutineWidget(routines.first),
+        : _buildRoutineWidget(nearestRoutine),
       ],
     );
   }
