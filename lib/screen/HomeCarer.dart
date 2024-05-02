@@ -121,7 +121,7 @@ class _HomeCarerState extends State<HomeCarer> {
       backgroundColor: Colors.white,
       appBar: AttiAppBar(
         title: Image.asset(
-          'lib/assets/logo2.png',
+          'lib/assets/AttiBlack.png',
           width: 150,
         ),
         showNotificationsIcon: true,
