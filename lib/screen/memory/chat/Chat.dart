@@ -273,7 +273,6 @@ class _VoiceButtonState extends State<VoiceButton> {
 
                 String response = await _chatbot.getResponse(
                     message,
-                    widget.memory.img!,
                     widget.memory.reference!); // Chatbot으로부터 응답 받기
                 _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
                 _onApiResponse(response);

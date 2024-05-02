@@ -202,7 +202,7 @@ class VoiceButton extends StatefulWidget {
 
 class _VoiceButtonState extends State<VoiceButton> {
   String _currentMessage = '대화를 시작하려면\n마이크 버튼을 누르세요';
-  final _chatbot = RecollectionChatbot();
+  final _chatbot = Chatbot();
   stt.SpeechToText _speech = stt.SpeechToText();
   String _spokenText = '버튼을 누르고 음성을 입력';
   bool _isListening = false;
@@ -258,9 +258,9 @@ class _VoiceButtonState extends State<VoiceButton> {
                 _appendMessage("User", message);
                 _onUserMessage(message);
 
-                String response = await _chatbot.getResponse(
+                String response = await _chatbot.getRecollectionResponse(
                     message,
-                    widget.recollection.img!,
+                    widget.recollection.description
                 ); // Chatbot으로부터 응답 받기
                 _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
                 //_speakMessage(response);
