@@ -341,7 +341,7 @@ class _HomePatientState extends State<HomePatient> {
       backgroundColor: Colors.white,
       appBar: AttiAppBar(
         title: Image.asset(
-          'lib/assets/logo2.png',
+          'lib/assets/AttiBlack.png',
           width: 150,
         ),
         showNotificationsIcon: false,
@@ -446,15 +446,15 @@ class _HomePatientTopState extends State<HomePatientTop> {
           SizedBox(height: 25),
           RichText(
             text: TextSpan(
-              style: TextStyle(color: Colors.black, height: 1.2),
+              style: TextStyle(color: Colors.black, height: 1.2,fontFamily: 'PretendardRegular'),
               children: [
                 TextSpan(
                   text: '${widget.userName}님\n',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
                 TextSpan(
-                  text: '안녕하세요?',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  text: '만나서 반가워요!',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, fontFamily: 'PretendardSemiBold'),
                 ),
               ],
             ),
@@ -486,7 +486,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
           Container(
             child: Text(
               '${formattedTime}',
-              style: TextStyle(fontSize: 30),
+              style: TextStyle(fontSize: 30, fontFamily: 'PretendardMedium'),
               textAlign: TextAlign.left,
             ),
           )
@@ -575,7 +575,7 @@ class IncompleteScheduleWidget extends StatelessWidget {
                     padding: EdgeInsets.all(17),
                     alignment: Alignment.center,
                     child: Text(idx?.toString() ?? '',
-                        style: TextStyle(fontSize: 24)))),
+                        style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular')))),
             Expanded(
               flex: 3,
               child: Container(
@@ -587,7 +587,7 @@ class IncompleteScheduleWidget extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   time ?? '',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
               ),
             ),
@@ -602,7 +602,7 @@ class IncompleteScheduleWidget extends StatelessWidget {
                 ),
                 child: Text(
                   name ?? '',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
               ),
             ),
@@ -661,7 +661,7 @@ class CompleteScheduleWidget extends StatelessWidget {
             alignment: Alignment.center,
             padding: EdgeInsets.all(17),
             color: Color(0xffDDDDDD),
-            child: Text('\'$name\' 일정 완료', style: TextStyle(fontSize: 24)),
+            child: Text('\'$name\' 일정 완료', style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular')),
           ),
         ),
       ),
@@ -691,7 +691,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
             Expanded(
               child: Text(
                 '일정이 있어요\n알람으로 알려드릴게요!',
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(fontSize: 30, fontFamily: 'PretendardMedium'),
                 textAlign: TextAlign.left,
               ),
             ),
@@ -710,7 +710,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                         style: BorderStyle.solid, color: Color(0xffDDDDDD))),
                 child: Text(
                   '등록된 일정이 없어요',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
               )
             : Container(
@@ -737,7 +737,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                                 docRef: schedule.reference!,
                               )
                             : IncompleteScheduleWidget(
-                                idx: index,
+                                idx: index+1,
                                 time: DateFormat('a h:mm', 'ko_KR')
                                     .format(schedule.time!.toDate()),
                                 name: schedule.name!,
@@ -814,11 +814,17 @@ class RoutineWidget extends StatelessWidget {
               flex: 1,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: Image.network(
+                child:
+                ColorFiltered(
+                  colorFilter: (done ?? false)
+                      ? ColorFilter.mode(Colors.grey, BlendMode.saturation)
+                      : ColorFilter.mode(Colors.transparent, BlendMode.saturation),
+                  child : Image.network(
                   url ?? '',
                   width: MediaQuery.of(context).size.width * 0.5,
                   height: MediaQuery.of(context).size.width * 0.5,
                   fit: BoxFit.cover,
+                ),
                 ),
               ),
             ),
@@ -840,13 +846,21 @@ class RoutineWidget extends StatelessWidget {
                   children: [
                     Text(
                       time ?? '',
-                      style: TextStyle(fontSize: 24),
+                      style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                     ),
                     Text(
                       textAlign: TextAlign.center,
                       name ?? '',
-                      style: TextStyle(fontSize: 24),
+                      style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                     ),
+                    Text(
+                        done ?? false ?  '완료' : '',
+                      style: TextStyle(
+                      fontFamily: 'PretendardRegular',
+                        fontSize: 24,
+                        color: Color(0xffA38130)
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -877,6 +891,8 @@ class _HomeRoutineState extends State<HomeRoutine> {
     //List<Routine>? routines = user.routines;
     List<RoutineModel> routines = widget.routinesBySelectedDay;
 
+    RoutineModel? nearestRoutine = _findNearestRoutine(routines);
+
     return Column(
       children: [
         Row(
@@ -884,14 +900,14 @@ class _HomeRoutineState extends State<HomeRoutine> {
             Expanded(
               child: Text(
                 '지금은 이 일을 할 시간이에요!',
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(fontSize: 30, fontFamily: 'PretendardMedium'),
                 textAlign: TextAlign.left,
               ),
             ),
           ],
         ),
         SizedBox(height: 11),
-        routines.isEmpty
+        nearestRoutine == null
             ? Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 padding: EdgeInsets.all(20),
@@ -903,12 +919,33 @@ class _HomeRoutineState extends State<HomeRoutine> {
                         style: BorderStyle.solid, color: Color(0xffDDDDDD))),
                 child: Text(
                   '예정된 일과가 없어요',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
               )
-            : _buildRoutineWidget(routines.first),
+        : _buildRoutineWidget(nearestRoutine),
       ],
     );
+  }
+
+  RoutineModel? _findNearestRoutine(List<RoutineModel> routines) {
+    final now = DateTime.now(); // 현재 시간
+    final today = DateTime(now.year, now.month, now.day); // 오늘 날짜
+    RoutineModel? nearestRoutine;
+    Duration shortestDuration = Duration(days: 365); // 임의의 긴 시간
+
+    for (var routine in routines) {
+      if (routine.time != null && routine.time!.length == 2) {
+        final routineTime = DateTime(
+            today.year, today.month, today.day, routine.time![0], routine.time![1]);
+        final duration = routineTime.difference(now);
+        // 현재 시간 이후가면서 가장 가까운 시간 찾기
+        if (duration > Duration.zero && duration < shortestDuration) {
+          nearestRoutine = routine;
+          shortestDuration = duration;
+        }
+      }
+    }
+    return nearestRoutine;
   }
 
   Widget _buildRoutineWidget(RoutineModel routine) {
@@ -953,8 +990,6 @@ class _HomeMemoryState extends State<HomeMemory> {
   MemoryNoteService memoryNoteService = MemoryNoteService();
   List<MemoryNoteModel> memoryNotes = [];
 
-
-
   @override
   void initState() {
     super.initState();
@@ -979,40 +1014,45 @@ class _HomeMemoryState extends State<HomeMemory> {
   }
 
   Widget CalenderContainer(day, date, url) {
-    return Container(
-      height: MediaQuery.of(context).size.height*0.2,
+    final DateTime now = DateTime.now();
 
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.2,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            //padding: EdgeInsets.only(top: 10, bottom: 10, left: 3, right: 3),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+            padding: EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
+            decoration: BoxDecoration(
+                color: now.day == date ? Color(0xffFFF5DB) : Colors.white,
+                borderRadius: BorderRadius.circular(20)),
             //margin: EdgeInsets.all(1),
-            child : Column(
-            children : [Text(
-            '${day}',
-            style: TextStyle(
-                color: Color(0xff737373),
-                fontFamily: 'PretendardLight',
-                fontSize: 15),
+            child: Column(children: [
+              Text(
+                '${day}',
+                style: TextStyle(
+                    color: Color(0xff737373),
+                    fontFamily: 'PretendardLight',
+                    fontSize: 15),
+              ),
+              Text(
+                '${date}',
+                style: TextStyle(
+                    color: Color(0xff737373),
+                    fontFamily: 'PretendardLight',
+                    fontSize: 15),
+              ),
+            ]),
           ),
-          Text(
-            '${date}',
-            style: TextStyle(
-                color: Color(0xff737373),
-                fontFamily: 'PretendardLight',
-                fontSize: 15),
-          ),]),),
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: url.isNotEmpty
                 ? Image.network(
-              url,
-              width: MediaQuery.of(context).size.width * 0.1,
-              height: MediaQuery.of(context).size.width * 0.15,
-              fit: BoxFit.cover,
-            )
+                    url,
+                    width: MediaQuery.of(context).size.width * 0.1,
+                    height: MediaQuery.of(context).size.width * 0.15,
+                    fit: BoxFit.cover,
+                  )
                 : Container(), // url이 없는 경우 대체 위젯
           ),
         ],
@@ -1025,44 +1065,54 @@ class _HomeMemoryState extends State<HomeMemory> {
     final MemoryNoteModel randomMemoryNote = getRandomMemoryNote();
     // 현재 날짜에서 일주일의 시작(일요일)으로 설정
     final DateTime now = DateTime.now();
-    List<String> weekdaysKorean = ['일', '월', '화', '수', '목', '금', '토'];  // 리스트를 일요일부터 시작하도록 수정
+    List<String> weekdaysKorean = [
+      '일',
+      '월',
+      '화',
+      '수',
+      '목',
+      '금',
+      '토'
+    ]; // 리스트를 일요일부터 시작하도록 수정
     final int todayWeekday = now.weekday;
-    final DateTime startOfWeek = now.subtract(Duration(days: todayWeekday % 7)); // 일요일부터 시작하도록 수정
+    final DateTime startOfWeek =
+        now.subtract(Duration(days: todayWeekday % 7)); // 일요일부터 시작하도록 수정
 
     List<Widget> daysWidgets = List.generate(7, (index) {
       // 각 날짜와 요일을 계산
       DateTime dayDate = startOfWeek.add(Duration(days: index));
-      String dayName = weekdaysKorean[dayDate.weekday % 7]; // 변경된 부분: DateFormat을 사용하지 않고 직접 요일의 첫 글자를 구함
+      String dayName = weekdaysKorean[
+          dayDate.weekday % 7]; // 변경된 부분: DateFormat을 사용하지 않고 직접 요일의 첫 글자를 구함
       int dayNumber = dayDate.day;
 
       // 해당 날짜에 해당하는 메모리 노트의 URL 찾기
       String url = memoryNotes.firstWhere((note) {
-        if (note.createdAt == null) return false;
-        // Convert Timestamp to DateTime
-        DateTime createdAtDate = note.createdAt!.toDate();
+            if (note.createdAt == null) return false;
+            // Convert Timestamp to DateTime
+            DateTime createdAtDate = note.createdAt!.toDate();
 
-        return createdAtDate.year == dayDate.year &&
-            createdAtDate.month == dayDate.month &&
-            createdAtDate.day == dayDate.day;
-      }, orElse: () => MemoryNoteModel()).img ?? '';
-
+            return createdAtDate.year == dayDate.year &&
+                createdAtDate.month == dayDate.month &&
+                createdAtDate.day == dayDate.day;
+          }, orElse: () => MemoryNoteModel()).img ??
+          '';
 
       // CalenderContainer 위젯 반환
-      return CalenderContainer(dayName, dayNumber, url);  // CalenderContainer 구현에 따라 다를 수 있음
+      return CalenderContainer(
+          dayName, dayNumber, url); // CalenderContainer 구현에 따라 다를 수 있음
     });
-
 
     return Column(
       children: [
         Text(
           '오늘을 내 기억에 남기시겠어요?',
-          style: TextStyle(fontSize: 28),
+          style: TextStyle(fontSize: 28, fontFamily: 'PretendardMedium'),
           textAlign: TextAlign.left,
         ),
         SizedBox(height: 11),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [...daysWidgets,]),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          ...daysWidgets,
+        ]),
       ],
     );
   }

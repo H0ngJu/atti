@@ -29,7 +29,7 @@ class HomeCarer extends StatefulWidget {
 
 class _HomeCarerState extends State<HomeCarer> {
   // bottom Navi logic
-  int _selectedIndex = 2;
+  int _selectedIndex = 1;
   final _authentication = FirebaseAuth.instance;
   final _db = FirebaseFirestore.instance;
   User? loggedUser;
@@ -49,10 +49,7 @@ class _HomeCarerState extends State<HomeCarer> {
   @override
   void initState() {
     super.initState();
-    // Future.delayed(Duration.zero, () async {
-    //   await _fetchData();
     _fetchData();
-    // });
     getCurrentUser();
     _requestNotificationPermissions();
   }
@@ -100,7 +97,7 @@ class _HomeCarerState extends State<HomeCarer> {
     try {
       final user = _authentication.currentUser;
       print("loggedUser: ${user!.uid}");
-      print("check: ${authController.userName.value}");
+      print("check: ${authController.patientName.value}");
       if (user != null) {
         loggedUser = user as User?;
       }
@@ -123,7 +120,7 @@ class _HomeCarerState extends State<HomeCarer> {
       backgroundColor: Colors.white,
       appBar: AttiAppBar(
         title: Image.asset(
-          'lib/assets/logo2.png',
+          'lib/assets/AttiBlack.png',
           width: 150,
         ),
         showNotificationsIcon: true,
@@ -138,13 +135,13 @@ class _HomeCarerState extends State<HomeCarer> {
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(30),
                         bottomRight: Radius.circular(30))),
-                child: HomePatientTop(userName: authController.userName.value)),
+                child: HomePatientTop(patientName: authController.patientName.value)),
             Container(
                 margin: EdgeInsets.all(16),
                 child: HomeTodaySummary(
                   scheduleCnt: numberOfSchedules,
                   routineCnt: numberOfRoutines,
-                  userName: authController.userName.value,
+                  patientName: authController.patientName.value,
                   doneScheduleCnt: numberOfDoneSchedules,
                   doneRoutineCnt: numberOfDoneRoutines,
                 )),
@@ -165,9 +162,9 @@ class _HomeCarerState extends State<HomeCarer> {
 
 // 메인 첫 화면
 class HomePatientTop extends StatefulWidget {
-  final String userName;
+  final String patientName;
 
-  const HomePatientTop({Key? key, required this.userName}) : super(key: key);
+  const HomePatientTop({Key? key, required this.patientName}) : super(key: key);
 
   @override
   State<HomePatientTop> createState() => _HomePatientTopState();
@@ -178,7 +175,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
 
   @override
   Widget build(BuildContext context) {
-    String userName = widget.userName; // userName 받음
+    String patientName = widget.patientName;
     // 시간 가져오기
     DateTime now = DateTime.now();
     String weekday = _getWeekday(now.weekday);
@@ -195,7 +192,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
               style: TextStyle(color: Colors.black, height: 1.2),
               children: [
                 TextSpan(
-                  text: '${widget.userName} 보호자님\n',
+                  text: '${widget.patientName} 보호자님\n',
                   style: TextStyle(fontSize: 24),
                 ),
                 TextSpan(
@@ -262,13 +259,13 @@ class HomeTodaySummary extends StatefulWidget {
   final int? doneScheduleCnt;
   final int? routineCnt;
   final int? doneRoutineCnt;
-  final String userName;
+  final String patientName;
 
   const HomeTodaySummary(
       {Key? key,
       required this.scheduleCnt,
       required this.routineCnt,
-      required this.userName,
+      required this.patientName,
       required this.doneScheduleCnt,
       required this.doneRoutineCnt})
       : super(key: key);
@@ -286,7 +283,7 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
         children: [
           Container(
             child: Text(
-              '${widget.userName}님이 진행하고 있어요!',
+              '${widget.patientName}님이 진행하고 있어요!',
               style: TextStyle(fontSize: 28, fontFamily: 'PretendardMedium'),
             ),
           ),

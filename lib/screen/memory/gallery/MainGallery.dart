@@ -180,7 +180,7 @@ class _MainGalleryState extends State<MainGallery> {
               children: [
                 Image(
                     image: AssetImage('lib/assets/Atti/Stars.png'),
-                    width: MediaQuery.of(context).size.width * 0.5),
+                    width: MediaQuery.of(context).size.width * 0.46),
               ],
             ),
             SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
@@ -245,7 +245,7 @@ class _MainGalleryState extends State<MainGallery> {
                 }
               },
             ),
-
+SizedBox(height: 60,)
           ],
         ),
       ),Positioned(
