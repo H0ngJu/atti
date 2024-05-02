@@ -50,8 +50,8 @@ class _ChatBubbleState extends State<ChatBubble> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: EdgeInsets.only(top: 20, bottom: 30),
-        padding: EdgeInsets.all(20),
+        margin: EdgeInsets.only(top: 20),
+        padding: EdgeInsets.only(top: 10, bottom: 10),
         decoration: BoxDecoration(
           //color: Color(0xffFFE9B3),
           borderRadius: BorderRadius.circular(15),
