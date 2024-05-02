@@ -86,7 +86,7 @@ class SignUpController extends GetxController {
           userInfo = {
             "userId": newUser.user!.uid, // auth의 유저 식별자
             "createdAt": DateTime.now(),
-            "patientDocId": patientDocId,
+            "patientDocId": patientDocId.id,
             "isPatient": isPatient.value,
             "phoneNumber": userPhoneNumber.value,
             "userName": userName.value
