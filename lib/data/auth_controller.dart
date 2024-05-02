@@ -8,6 +8,7 @@ class AuthController extends GetxController {
   var userName = ''.obs;
   RxList<String> familyMember = <String>[].obs;
   late DocumentReference patientDocRef;
+  RxString patientName = "".obs;
 
   @override
   void onInit() {
@@ -32,7 +33,21 @@ class AuthController extends GetxController {
         }
         // 보호자일 경우 : patientDocRef는 db.doc(user/ + patientDocId)
         else {
-          patientDocRef = FirebaseFirestore.instance.doc('user/'+userDoc['patientDocId']);
+          patientDocRef = await FirebaseFirestore.instance.doc('user/'+userDoc['patientDocId']);
+          // 문서에서 데이터를 비동기적으로 가져옴
+          await patientDocRef.get().then((DocumentSnapshot documentSnapshot) {
+            if (documentSnapshot.exists) {
+              // 'userName' 키를 이용해 사용자 이름 가져옴
+              patientName.value = documentSnapshot['userName'];
+              // patientName이 성공적으로 설정됨
+              print(patientName.value);
+            } else {
+              print("Document does not exist.");
+            }
+          }).catchError((error) {
+            // 에러 처리
+            print("Error getting document: $error");
+          });
         }
       } else {
         print("No documents found");
