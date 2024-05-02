@@ -15,7 +15,7 @@ class ReportHistory extends StatefulWidget {
 class _ReportHistoryState extends State<ReportHistory> {
   int _addItemCnt = 0;
   ReportController reportController = ReportController();
-  late Future<List<ReportModel>> reports;
+  late Future<List<dynamic>> reports;
   var thisMonth = '${DateTime.now().year}-${DateTime.now().month}';
 
   @override
@@ -29,7 +29,7 @@ class _ReportHistoryState extends State<ReportHistory> {
     return Scaffold(
         appBar: AppBar(),
         body: SingleChildScrollView(
-          child: FutureBuilder<List<ReportModel>>(
+          child: FutureBuilder<List<dynamic>>(
               future: reports,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -72,10 +72,6 @@ class _ReportHistoryState extends State<ReportHistory> {
                                       fontSize: 24, fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              // for (var report in reports)
-                              //   var reportEntry = report.registeredMemoryCount.entries
-                              //   if (report.registeredMemoryCount.entries.entry.key.substring(6,7) == thisMonth.substring(5))
-                              //     ReportHistoryContainer(date: date)
                             ],
                           ),
                           SizedBox(
@@ -90,18 +86,6 @@ class _ReportHistoryState extends State<ReportHistory> {
                                   child: Text('이전 받은 기록 보고',
                                       style: TextStyle(
                                           fontSize: 24, fontWeight: FontWeight.bold))),
-                              // ListView(
-                              //   shrinkWrap: true,
-                              //   physics: NeverScrollableScrollPhysics(),
-                              //   children: List.generate(datedummy.length,
-                              //     (index) {
-                              //       if (datedummy[index][0].substring(6,7) != thisMonth.substring(5)) {
-                              //         return ReportHistoryContainer(date: datedummy[index]);
-                              //       } else {
-                              //         return Container(); // 아무 것도 보여주지 않는 빈 컨테이너 반환
-                              //       }}
-                              //   ),
-                            // )
                               ],
                           ),
                           SizedBox(

@@ -1,5 +1,6 @@
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
+import 'package:atti/data/report/reportController.dart';
 import 'package:atti/screen/report/ReportDetail.dart';
 import 'package:atti/screen/report/ReportHistory.dart';
 import 'package:atti/screen/report/ReportNew.dart';
@@ -43,6 +44,7 @@ class _HomeCarerState extends State<HomeCarer> {
   int? numberOfRoutines; // 선택된 요일의 루틴 개수
   int? numberOfDoneRoutines; // 선택된 날짜의 완료된 일과 개수
   String selectedDayInWeek = DateFormat('E', 'ko-KR').format(DateTime.now());
+
 
   @override
   void initState() {
@@ -360,7 +362,7 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
                 ),
               ),
             ],
-          )
+          ),
         ]);
   }
 }
@@ -371,7 +373,6 @@ class HomeReport extends StatefulWidget {
   @override
   _HomeReportState createState() => _HomeReportState();
 }
-
 class _HomeReportState extends State<HomeReport> {
   List<ScheduleModel> weeklySchedules = [];
   List<RoutineModel> weeklyRoutines = [];
@@ -384,6 +385,7 @@ class _HomeReportState extends State<HomeReport> {
   void initState() {
     super.initState();
     _fetchWeeklyData();
+    _fetchReport();
   }
 
   Future<void> _fetchWeeklyData() async {
@@ -412,17 +414,76 @@ class _HomeReportState extends State<HomeReport> {
     });
   }
 
+  // ==================================================================================================
+  final AuthController _authController = Get.find<AuthController>();
+  var currentReport;
+  var reportData;
+  var reportPeriod;
+  var scheduleCompletion;
+  var routineCompletion;
+  var highestViewedMemoryName;
+
+  Future<void> _fetchReport() async {
+    DateTime now = DateTime.now();
+    DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    DateTime endOfWeek = startOfWeek.add(Duration(days: 6));
+
+    var fetchedReports = await _authController.carerReports;
+
+    setState(() {
+      currentReport = fetchedReports[0];
+      reportPeriod = currentReport['reportPeriod'];
+      scheduleCompletion = currentReport['scheduleCompletion'];
+      routineCompletion = currentReport['routineCompletion'];
+      // 기본적으로 firstEntry로 설정하고 비교를 시작합니다.
+      var highestViewedEntry = currentReport['mostViews'].entries.first;
+
+      // 모든 항목을 순회하며 가장 높은 값을 찾습니다.
+      currentReport['mostViews'].forEach((key, value) {
+        if (value > highestViewedEntry.value) {
+          highestViewedEntry = MapEntry(key, value);
+        }
+      });
+      var highestViewedMemory = highestViewedEntry.value;
+      // 여기에서도 var 키워드를 제거하여 인스턴스 변수이자 this.highestViewedMemoryName에 직접 할당
+      highestViewedMemoryName = highestViewedMemory['imgTitle'];
+
+      // print('${fetchedReports}');
+      print('${reportPeriod} ${scheduleCompletion} ${routineCompletion} ${highestViewedMemoryName}');
+    });
+  }
+  // ==================================================================================================
+
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final weekOfMonth = getWeekOfMonth(now);
+    // ======================================================================================
+
+
+    // int getWeekNumber(String isoDateString) {
+    //   // ISO 문자열을 DateTime 객체로 변환
+    //   DateTime date = DateTime.parse(isoDateString);
+    //
+    //   // 달의 첫째 날 객체를 생성
+    //   DateTime firstDayOfMonth = DateTime(date.year, date.month, 1);
+    //
+    //   // 첫째 날로부터의 날짜 차이를 계산하여 몇 번째 주인지 계산 (7로 나눔)
+    //   // 이 계산은 첫째 날을 주차 계산에 포함시키기 위해 date와 firstDayOfMonth 차이에 1을 더함
+    //   int weekNumber = ((date.difference(firstDayOfMonth).inDays + 1) / 7).ceil();
+    //
+    //   return weekNumber;
+    // }
+
+
+    // ======================================================================================
+
+    final startDay = DateTime.parse(reportPeriod[0]);
+    final weekOfMonth = getWeekOfMonth(startDay);
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '${now.month}월 ${weekOfMonth}주차 기록 보고',
+          Text('${startDay.month}월 ${weekOfMonth}주차 기록 보고',
             style: TextStyle(fontSize: 30, fontFamily: 'PretendardMedium'),
             textAlign: TextAlign.left,
           ),
@@ -527,7 +588,7 @@ class _HomeReportState extends State<HomeReport> {
               }));
             },
             child: Text(
-              '${now.month}월 ${weekOfMonth}주차 기록 보고 보기',
+              '${startDay.month}월 ${weekOfMonth}주차 기록 보고 보기',
               style: TextStyle(fontSize: 20, color: Color(0xffA38130)),
             ),
             style: ButtonStyle(
