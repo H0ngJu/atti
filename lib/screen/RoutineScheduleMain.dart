@@ -157,7 +157,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
         }
 
         if (closestRoutine != null) {
-          String ttsRoutineMessage = '$closestRoutine가 아직 완료되지 않았어요.';
+          String ttsRoutineMessage = '$closestRoutine(이)가 아직 완료되지 않았어요.';
           ttsMessages.add(ttsRoutineMessage);
         }
       }

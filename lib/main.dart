@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/notification/notification.dart';
 import 'package:atti/screen/LogInSignUp/LogInScreen.dart';
@@ -102,7 +104,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(),
       initialRoute: initialRoute,
       routes: {
-        '/': (context) => LogInScreen(),
+        '/': (context) => IntroPage(),
         '/schedule': (context) => ScheduleMain(),
         '/routine': (context) => RoutineMain(),
       },
