@@ -1,3 +1,4 @@
+import 'package:atti/data/report/reportController.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +10,7 @@ class AuthController extends GetxController {
   RxList<String> familyMember = <String>[].obs;
   late DocumentReference patientDocRef;
   RxString patientName = "".obs;
+  var carerReports = ReportController().getReport();
 
   @override
   void onInit() {
@@ -39,8 +41,6 @@ class AuthController extends GetxController {
             if (documentSnapshot.exists) {
               // 'userName' 키를 이용해 사용자 이름 가져옴
               patientName.value = documentSnapshot['userName'];
-              // patientName이 성공적으로 설정됨
-              print(patientName.value);
             } else {
               print("Document does not exist.");
             }
