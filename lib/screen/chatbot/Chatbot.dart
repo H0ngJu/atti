@@ -14,7 +14,7 @@ class Chatbot {
   final firestore = FirebaseFirestore.instance;
   EmotionController emotionController = Get.put(EmotionController());
 
-  Future<String> getResponse(var prompt, DocumentReference docRef) async {
+  Stream<String> getResponse(var prompt, DocumentReference docRef) async* {
     await dotenv.load(fileName: '.env');
     final String apiKey = dotenv.env['GEMINI_API_KEY']!;
     if (apiKey == null) {
@@ -53,11 +53,13 @@ class Chatbot {
     ]);
 
     var startTime = DateTime.now();
-    var response = await chat.sendMessage(Content.text(prompt));
+    var response = await chat.sendMessageStream(Content.text(prompt));
     var endTime = DateTime.now();
     print('챗봇 응답 생성 시간: ${endTime.difference(startTime)}');
-    print(response.text);
-    return response.text!;
+    await for (final chunk in response) {
+      //print(chunk.text);
+      yield chunk.text!;
+    }
   }
 
   // 감정 분석
@@ -73,7 +75,7 @@ class Chatbot {
       model: 'gemini-1.5-pro-latest',
       apiKey: apiKey,
       generationConfig: GenerationConfig(
-        maxOutputTokens: 70,
+        maxOutputTokens: 10,
         temperature: 0.7,
       ),
       requestOptions: RequestOptions(apiVersion: 'v1beta'),
@@ -95,7 +97,7 @@ class Chatbot {
   }
 
   // 그때그시절 대화용 함수
-  Future<String> getRecollectionResponse(var prompt, String description) async {
+  Stream<String> getRecollectionResponse(var prompt, String description) async* {
     await dotenv.load(fileName: '.env');
     final String apiKey = dotenv.env['GEMINI_API_KEY']!;
     if (apiKey == null) {
@@ -130,11 +132,13 @@ class Chatbot {
     ]);
 
     var startTime = DateTime.now();
-    var response = await chat.sendMessage(Content.text(prompt));
+    var response = await chat.sendMessageStream(Content.text(prompt));
     var endTime = DateTime.now();
     print('챗봇 응답 생성 시간: ${endTime.difference(startTime)}');
-    print(response.text);
-    return response.text!;
+    await for (final chunk in response) {
+      print(chunk.text);
+      yield chunk.text!;
+    }
   }
 
 
