@@ -302,8 +302,9 @@ class _VoiceButtonState extends State<VoiceButton> {
                   // 청크를 글자 단위로 분해
                   for (var char in chunk.split('')) {
                     //print('fullResponse : ${fullResponse}');
+                    fullResponse += char;
                     _appendMessage("Assistant", fullResponse); // 각 글자를 화면에 출력
-                    fullResponse += char; // 전체 응답에 글자 추가
+                    print(fullResponse);
                   }
                 }, onDone: () { // 스트림이 완료되면 전체 응답을 _currentMessage에 설정
                   print('fullResponse : ${fullResponse}');

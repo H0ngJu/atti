@@ -29,6 +29,12 @@ class Chatbot {
         maxOutputTokens: 70,
         temperature: 0.7,
       ),
+      safetySettings: [
+        SafetySetting(HarmCategory.dangerousContent, HarmBlockThreshold.high),
+        SafetySetting(HarmCategory.harassment, HarmBlockThreshold.high),
+        SafetySetting(HarmCategory.hateSpeech, HarmBlockThreshold.high),
+        SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.high)
+      ],
       requestOptions: RequestOptions(apiVersion: 'v1beta'),
       systemInstruction: Content.text(
           '''
@@ -109,9 +115,15 @@ class Chatbot {
       model: 'gemini-1.5-pro-latest',
       apiKey: apiKey,
       generationConfig: GenerationConfig(
-        maxOutputTokens: 70,
+        maxOutputTokens: 100,
         temperature: 0.7,
       ),
+      safetySettings: [
+        SafetySetting(HarmCategory.dangerousContent, HarmBlockThreshold.high),
+        SafetySetting(HarmCategory.harassment, HarmBlockThreshold.high),
+        SafetySetting(HarmCategory.hateSpeech, HarmBlockThreshold.high),
+        SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.high)
+      ],
       requestOptions: RequestOptions(apiVersion: 'v1beta'),
       systemInstruction: Content.text(
           '''
