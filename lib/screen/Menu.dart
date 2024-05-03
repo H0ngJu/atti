@@ -34,8 +34,7 @@ class _MenuState extends State<Menu> {
       print("check: ${authController.patientName.value}");
       if (user != null) {
         loggedUser = user as User?;
-      }
-      ;
+      };
     } catch (e) {
       print(e);
     }
