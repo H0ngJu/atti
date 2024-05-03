@@ -1,7 +1,13 @@
+import 'package:atti/screen/HomeCarer.dart';
+import 'package:atti/screen/HomePatient.dart';
+import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
 import 'package:atti/screen/RoutineScheduleMain.dart';
 import 'package:atti/screen/memory/gallery/MainGallery.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../data/auth_controller.dart';
 
 class Menu extends StatefulWidget {
   const Menu({Key? key}) : super(key: key);
@@ -11,6 +17,33 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
+  final _authentication = FirebaseAuth.instance;
+  User? loggedUser;
+  final AuthController authController = Get.find<AuthController>();
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
+
+  void getCurrentUser() {
+    try {
+      final user = _authentication.currentUser;
+      print("loggedUser: ${user!.uid}");
+      print("check: ${authController.patientName.value}");
+      if (user != null) {
+        loggedUser = user as User?;
+      }
+      ;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +84,9 @@ class _MenuState extends State<Menu> {
             height: 20,
           ),
           GestureDetector(
-              onTap: () {},
+              onTap: () {
+                authController.isPatient ? Get.to(HomePatient()) : Get.to(HomeCarer());
+              },
               child: Container(
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
@@ -127,7 +162,14 @@ class _MenuState extends State<Menu> {
                   ],
                 ),
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      try {
+                        await _authentication.signOut();
+                        Get.offAll(LogInSignUpMainScreen());
+                      } catch (error) {
+                        print("로그아웃 실패: $error");
+                      }
+                    },
                     style: TextButton.styleFrom(backgroundColor: Colors.black),
                     child: Text(
                       '로그아웃',
