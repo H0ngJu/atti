@@ -166,6 +166,7 @@ class _MenuState extends State<Menu> {
                     onPressed: () async {
                       try {
                         await FirebaseAuth.instance.signOut();
+                        authController.logout();
                         print(authController.userName);
                         Get.offAll(() => LogInSignUpMainScreen());
                       } catch (error) {

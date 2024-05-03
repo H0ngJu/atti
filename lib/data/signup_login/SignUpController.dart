@@ -89,7 +89,8 @@ class SignUpController extends GetxController {
             "patientDocId": patientDocId.id,
             "isPatient": isPatient.value,
             "phoneNumber": userPhoneNumber.value,
-            "userName": userName.value
+            "userName": userName.value,
+            "userEmail": userEmail.value,
           };
         }
         // 문서 레퍼런스 업데이트
