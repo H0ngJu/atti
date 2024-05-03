@@ -5,10 +5,11 @@ import 'package:flutter_tts/flutter_tts.dart';
 class ChatBubble extends StatefulWidget {
   final String message;
   final String speaker;
+  final bool isTTSEnabled;
 
   //final Function(String) onTextChanged;
 
-  const ChatBubble({Key? key, required this.message, required this.speaker})
+  const ChatBubble({Key? key, required this.message, required this.speaker, required this.isTTSEnabled})
       : super(key: key);
 
   @override
@@ -41,7 +42,7 @@ class _ChatBubbleState extends State<ChatBubble> {
   @override
   void didUpdateWidget(covariant ChatBubble oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.message != oldWidget.message && widget.speaker == "Assistant") {
+    if (widget.message != oldWidget.message && widget.speaker == "Assistant" && widget.isTTSEnabled) {
       _speakMessage(widget.message);
     }
   }
