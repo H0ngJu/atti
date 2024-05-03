@@ -345,7 +345,7 @@ class _HomePatientState extends State<HomePatient> {
           width: 150,
         ),
         showNotificationsIcon: false,
-        showMenu: false,
+        showMenu: true,
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -7,6 +7,7 @@ class AuthController extends GetxController {
   String? loggedUser = FirebaseAuth.instance.currentUser?.uid;
   bool isPatient = true;
   var userName = ''.obs;
+  var userEmail = ''.obs;
   RxList<String> familyMember = <String>[].obs;
   late DocumentReference patientDocRef;
   RxString patientName = "".obs;
@@ -28,6 +29,7 @@ class AuthController extends GetxController {
         var userDoc = userSnapshot.docs.first;
         isPatient = userDoc['isPatient'];
         userName.value = userDoc['userName'];
+        userEmail.value = userDoc['userEmail'];
         // 환자일 경우 : patientDocRef는 본인의 reference, familymember 초기화 필요
         if (isPatient) {
           familyMember.value = List<String>.from(userDoc['familyMember']);

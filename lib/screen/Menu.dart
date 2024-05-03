@@ -156,24 +156,27 @@ class _MenuState extends State<Menu> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('최한별', style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'PretendardRegular'),),
-                    Text('아이디', style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'PretendardRegular')),
+                    Text('${authController.userName}', style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'PretendardRegular'),),
+                    Text('${authController.userEmail}', style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'PretendardRegular')),
                   ],
                 ),
                 TextButton(
                     onPressed: () async {
                       try {
-                        await _authentication.signOut();
-                        Get.offAll(LogInSignUpMainScreen());
+                        await FirebaseAuth.instance.signOut();
+                        print(authController.userName);
+                        Get.offAll(() => LogInSignUpMainScreen());
                       } catch (error) {
                         print("로그아웃 실패: $error");
                       }
                     },
-                    style: TextButton.styleFrom(backgroundColor: Colors.black),
+                    style: TextButton.styleFrom(backgroundColor: Colors.black, padding: EdgeInsets.all(20)),
                     child: Text(
                       '로그아웃',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(fontFamily : 'PretendardMedium', fontSize: 20,color: Colors.white),
                     ))
               ],
             ),
