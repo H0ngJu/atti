@@ -124,7 +124,7 @@ class _HomeCarerState extends State<HomeCarer> {
           width: 150,
         ),
         showNotificationsIcon: true,
-        showPersonIcon: false,
+        showMenu: true,
       ),
       body: SingleChildScrollView(
         child: Column(
