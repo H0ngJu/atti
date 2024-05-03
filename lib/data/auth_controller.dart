@@ -56,5 +56,9 @@ class AuthController extends GetxController {
       print("auth Error : ${e.toString()}");
     }
   }
+
+  void logout() {
+
+  }
 }
 
