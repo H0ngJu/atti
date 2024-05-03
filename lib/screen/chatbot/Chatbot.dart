@@ -63,7 +63,7 @@ class Chatbot {
     var endTime = DateTime.now();
     print('챗봇 응답 생성 시간: ${endTime.difference(startTime)}');
     await for (final chunk in response) {
-      //print(chunk.text);
+      print(chunk.text);
       yield chunk.text!;
     }
   }
