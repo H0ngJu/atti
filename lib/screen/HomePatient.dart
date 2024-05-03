@@ -345,7 +345,7 @@ class _HomePatientState extends State<HomePatient> {
           width: 150,
         ),
         showNotificationsIcon: false,
-        showPersonIcon: false,
+        showMenu: true,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -402,8 +402,18 @@ class _HomePatientTopState extends State<HomePatientTop> {
     '오늘 하루 아띠와 함께해요!',
     '잘 주무셨나요?'
   ];
-  final List<String> topImg = [
+  final List<String> defaultImg = [
     'lib/assets/Atti/standingAtti.png',
+    'lib/assets/Atti/Cofee.png',
+    'lib/assets/Atti/EatingStar.png',
+    'lib/assets/Atti/Napping.png',
+    'lib/assets/Atti/Normal.png',
+    'lib/assets/Atti/ReadingBook.png',
+    'lib/assets/Atti/Soccer.png',
+    'lib/assets/Atti/Stars.png',
+    'lib/assets/Atti/Walking.png',
+  ];
+  final List<String> topImg = [
     'lib/assets/Atti/rainy.png',
     'lib/assets/Atti/autumn.png',
     'lib/assets/Atti/spring.png',
@@ -424,8 +434,8 @@ class _HomePatientTopState extends State<HomePatientTop> {
 
   String getRandomImage() {
     final random = Random();
-    int index = random.nextInt(topImg.length);
-    return topImg[index];
+    int index = random.nextInt(defaultImg.length);
+    return defaultImg[index];
   }
 
   @override
