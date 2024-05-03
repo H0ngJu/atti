@@ -1,6 +1,6 @@
 import 'package:atti/data/auth_controller.dart';
-import 'package:atti/data/report/reportController.dart';
-import 'package:atti/screen/report/ReportDetail.dart';
+import 'package:atti/screen/report/_ReportDetail.dart';
+import 'package:atti/screen/report/ReportNew.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -16,8 +16,13 @@ class ReportHistory extends StatefulWidget {
 class _ReportHistoryState extends State<ReportHistory> {
   final AuthController _authController = Get.find<AuthController>();
   int _addItemCnt = 0;
-  var thisMonth = '${DateTime.now().year}-${DateTime.now().month}';
-  List<String> reportPeriods = [];
+  var thisMonth = '${DateTime
+      .now()
+      .year}-${DateTime
+      .now()
+      .month}';
+  List<List<String>> reportPeriods = [];
+  int monthIdx = 0; // 이번 달과 일치하는 month의 인덱스를 세기 위한 변수
 
   @override
   void initState() {
@@ -26,21 +31,26 @@ class _ReportHistoryState extends State<ReportHistory> {
   }
 
   Future<void> _fetchReport() async {
-    DateTime now = DateTime.now();
-    DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    DateTime endOfWeek = startOfWeek.add(Duration(days: 6));
-
     var fetchedReports = await _authController.carerReports;
-    if (fetchedReports.isNotEmpty) {
-      reportPeriods = fetchedReports.map<String>((snapshot) {
-        var reportPeriod = snapshot.data()['reportPeriod'];
-        return List<String>.from(reportPeriod);
-      }).toList(); // 결과를 리스트로 변환
+    String thisMonth = '${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}';
+    for (Map<String, dynamic> report in fetchedReports) {
+      List<String> periodList = List<String>.from(report['reportPeriod']);
+      reportPeriods.add(periodList);
+      if (periodList.isNotEmpty && periodList[0].startsWith(thisMonth)) {
+        monthIdx++;
+      }
     }
-    setState(() {
-      reportPeriods = reportPeriods;
-    });
   }
+
+  void updateAddItemCnt() {
+    var reportPeriodsCount = reportPeriods.length; // reportPeriods 배열의 원소 개수
+    if (_addItemCnt + monthIdx + 2 <= reportPeriodsCount) {
+      _addItemCnt += 2; // _addItemCnt를 2 증가
+    } else if (_addItemCnt + monthIdx < reportPeriodsCount) {
+      _addItemCnt = reportPeriodsCount - monthIdx; // _addItemCnt를 조정하여 최대치에 도달하도록 함
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +73,11 @@ class _ReportHistoryState extends State<ReportHistory> {
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                       ),
+                      for (int i = 0; i < monthIdx; i++)
+                        ReportHistoryContainer(
+                          date: reportPeriods[i],
+                          indx: i,
+                        ),
                     ],
                   ),
                   SizedBox(
@@ -76,7 +91,14 @@ class _ReportHistoryState extends State<ReportHistory> {
                           margin: EdgeInsets.only(bottom: 10),
                           child: Text('이전 받은 기록 보고',
                               style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold))),
+                                  fontSize: 24, fontWeight: FontWeight.bold)
+                          )
+                      ),
+                      for (int i = 0; i < _addItemCnt; i++)
+                        ReportHistoryContainer(
+                          date: reportPeriods[monthIdx + i],
+                          indx: i,
+                        ),
                     ],
                   ),
                   SizedBox(
@@ -87,7 +109,7 @@ class _ReportHistoryState extends State<ReportHistory> {
                       child: ElevatedButton(
                         onPressed: () {
                           setState(() {
-                            _addItemCnt += 2; // 버튼을 누를 때마다 추가 아이템 개수 업데이트
+                            updateAddItemCnt();
                           });
                         },
                         child: Text(
@@ -99,9 +121,6 @@ class _ReportHistoryState extends State<ReportHistory> {
                             padding: EdgeInsets.symmetric(vertical: 10)),
                       )
                   ),
-                  ReportHistoryContainer(
-                    date: [],
-                  ),
                 ],
               )
           ),
@@ -112,8 +131,9 @@ class _ReportHistoryState extends State<ReportHistory> {
 
 class ReportHistoryContainer extends StatefulWidget {
   final List<String> date;
+  final int indx;
 
-  const ReportHistoryContainer({Key? key, required this.date}) : super(key: key);
+  const ReportHistoryContainer({Key? key, required this.date, required this.indx}) : super(key: key);
 
   @override
   State<ReportHistoryContainer> createState() => _ReportHistoryContainerState();
@@ -137,7 +157,7 @@ class _ReportHistoryContainerState extends State<ReportHistoryContainer> {
 
     return GestureDetector(
         onTap: () {
-          Get.to(ReportDetail());
+          Get.to(ReportNew(indx: widget.indx));
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 16),

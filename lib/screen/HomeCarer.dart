@@ -1,7 +1,7 @@
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:atti/data/report/reportController.dart';
-import 'package:atti/screen/report/ReportDetail.dart';
+import 'package:atti/screen/report/_ReportDetail.dart';
 import 'package:atti/screen/report/ReportHistory.dart';
 import 'package:atti/screen/report/ReportNew.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -538,7 +538,7 @@ class _HomeReportState extends State<HomeReport> {
           TextButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ReportNew();
+                return ReportNew(indx: 0); // ============================================================================= 0 맞는지 체크
               }));
             },
             child: Text(
