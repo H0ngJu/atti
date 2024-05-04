@@ -101,7 +101,15 @@ class RoutineModal extends StatelessWidget {
                         '하루 일과 알림',
                         '${authController.userName}님이 \'${name}\' 일과를 완료하셨어요!',
                         DateTime.now(),
-                        false);
+                        false
+                    );
+
+                    await addFinishNotification(
+                        '하루 일과 알림',
+                        '${authController.userName}님이 \'${name}\' 일과를 완료하셨어요!',
+                        DateTime.now(),
+                        false
+                    );
 
                     onCompleted(); // 콜백함수 추가
 

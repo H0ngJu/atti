@@ -304,10 +304,10 @@ class _VoiceButtonState extends State<VoiceButton> {
                     //print('fullResponse : ${fullResponse}');
                     fullResponse += char;
                     _appendMessage("Assistant", fullResponse); // 각 글자를 화면에 출력
-                    print(fullResponse);
+                    //print(fullResponse);
                   }
                 }, onDone: () { // 스트림이 완료되면 전체 응답을 _currentMessage에 설정
-                  print('fullResponse : ${fullResponse}');
+                  //print('fullResponse : ${fullResponse}');
                   updateTTSEnabled(true);
                   _onApiResponse(fullResponse);
                 });
@@ -334,7 +334,7 @@ class _VoiceButtonState extends State<VoiceButton> {
   // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 수정한 부분
   // 메시지 추가
   void _appendMessage(String role, String message) {
-    print('_appendMessage 실행');
+    //print('_appendMessage 실행');
     if (role == "Assistant") { // 아띠 메시지 -> 화면에 텍스트로도 띄우고 + TTS도 함
        setState(() {
          _screenMessage = message;

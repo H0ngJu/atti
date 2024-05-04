@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,6 +19,7 @@ class SignUpController extends GetxController {
   var userPasswordCheck = "".obs;
   var userName = "".obs;
   var userPhoneNumber = "".obs;
+  String? userFCMToken = "";
 
   // 보호자 전용 데이터
   late DocumentReference patientDocId;
@@ -39,7 +41,7 @@ class SignUpController extends GetxController {
   }
 
   void signUp() async {
-    // 피보호자
+    // 보호자
     if (!isPatient.value) {
       // 유저가 입력한 환자 계정이 존재하는지 확인
       QuerySnapshot snapshot = await _db
@@ -56,6 +58,10 @@ class SignUpController extends GetxController {
     }
     print(userEmail.value);
     print(userPassword.value);
+
+    // 현재 디바이스의 FCM 토큰 저장
+    userFCMToken = await FirebaseMessaging.instance.getToken();
+
     try {
       // 회원가입
       final newUser = await _authentication
@@ -79,6 +85,7 @@ class SignUpController extends GetxController {
             "phoneNumber": userPhoneNumber.value,
             "userName": userName.value,
             "userEmail": userEmail.value,
+            "userFCMToken": userFCMToken
           };
         }
         // 보호자
@@ -91,6 +98,7 @@ class SignUpController extends GetxController {
             "phoneNumber": userPhoneNumber.value,
             "userName": userName.value,
             "userEmail": userEmail.value,
+            "userFCMToken": userFCMToken
           };
 
         }
