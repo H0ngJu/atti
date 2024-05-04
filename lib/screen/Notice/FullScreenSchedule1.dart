@@ -187,7 +187,7 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
               schedule!.time!.toDate().add(Duration(hours: 1)),
               '/schedule3/${schedule?.reference!.id}',
             );
-            Get.to(RoutineScheduleMain());
+            SystemNavigator.pop();
           },
             child: Text('알겠어요', style: TextStyle(
               color: Colors.white, fontSize: 24, ),),
