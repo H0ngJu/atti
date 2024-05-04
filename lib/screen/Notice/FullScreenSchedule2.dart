@@ -1,5 +1,6 @@
 import 'package:atti/screen/HomePatient.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../data/notification/notification_controller.dart';
 import '../../data/schedule/schedule_model.dart';
 import 'package:atti/data/schedule/schedule_service.dart';
@@ -140,7 +141,18 @@ class _FullScreenSchedule2State extends State<FullScreenSchedule2> {
                       Expanded(
                         child: TextButton(onPressed: () async {
                           await ScheduleService().completeSchedule(schedule!.reference!);
-                          Get.to(HomePatient());
+                          await addNotification(
+                              '일정 알림',
+                              '${authController.userName}님이 \'${schedule!.name}\' 일정을 완료하셨어요!',
+                              DateTime.now(),
+                              false);
+                          await addFinishNotification(
+                              '일정 알림',
+                              '${authController.userName}님이 \'${schedule!.name}\' 일정을 완료하셨어요!',
+                              DateTime.now(),
+                              false);
+
+                          SystemNavigator.pop();
                         }, child: Padding(
                           padding: EdgeInsets.symmetric(vertical: 5),
                           child: Text('네', style: TextStyle(
@@ -161,7 +173,7 @@ class _FullScreenSchedule2State extends State<FullScreenSchedule2> {
                       SizedBox(width: width * 0.03,),
                       Expanded(
                         child: TextButton(onPressed: () {
-                          Get.to(HomePatient());
+                          SystemNavigator.pop();
                         }, child: Padding(
                           padding: EdgeInsets.symmetric(vertical: 5),
                           child: Text('아니요', style: TextStyle(

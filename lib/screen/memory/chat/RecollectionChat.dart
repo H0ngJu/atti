@@ -309,7 +309,7 @@ class _VoiceButtonState extends State<VoiceButton> {
                     fullResponse += char; // 전체 응답에 글자 추가
                   }
                 }, onDone: () { // 스트림이 완료되면 전체 응답을 _currentMessage에 설정
-                  print('fullResponse : ${fullResponse}');
+                  //print('fullResponse : ${fullResponse}');
                   updateTTSEnabled(true);
                   _onApiResponse(fullResponse);
                 });

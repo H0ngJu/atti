@@ -16,7 +16,8 @@ class _IntroPageState extends State<IntroPage> {
   @override
   void initState() {
     super.initState();
-    final AuthController authController = Get.put(AuthController());
+    AuthController authController = Get.put(AuthController());
+    authController.init();
     Future.delayed(Duration(seconds: 2), () {
       if (authController.loggedUser != null) {
         // 로그인한 유저가 있는 경우

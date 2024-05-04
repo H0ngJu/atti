@@ -68,6 +68,7 @@ class NotificationModel {
   }
 
 }
+
 // 알림 데이터 저장하기
 Future<void> addNotification(String title, String body, DateTime dateTime, bool isPatient) async {
   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -96,31 +97,59 @@ Future<void> addNotification(String title, String body, DateTime dateTime, bool 
       print('Error saving notification to Firestore: $e');
     }
   }
+}
+
+// 환자가 일정 및 일과 완료 시 별도의 컬렉션에 알림 정보 저장
+Future<void> addFinishNotification(String title, String body, DateTime dateTime, bool isPatient) async {
+  QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('notification_finish')
+      .get();
+
+  NotificationModel notification = NotificationModel(
+    patientDocRef: authController.patientDocRef,
+    title: title,
+    message: body,
+    time: Timestamp.fromDate(dateTime),
+    isPatient: isPatient,
+  );
+
+  try {
+    DocumentReference docRef = await FirebaseFirestore.instance
+        .collection('notification_finish')
+        .add(notification.toJson());
+    print('Notification saved to Firestore successfully!');
+
+    notification.reference = docRef;
+    await docRef.update({'reference': docRef});
+  } catch (e) {
+    print('Error saving notification to Firestore: $e');
+  }
+
+}
 
 
 // 알림 데이터 불러오기
-  Future<List<NotificationModel>> getNotification() async {
-    List<NotificationModel> notifications = [];
+Future<List<NotificationModel>> getNotification() async {
+  List<NotificationModel> notifications = [];
 
-    try {
-      DateTime now = DateTime.now();
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('notification')
-          .where('patientDocRef', isEqualTo: authController.patientDocRef)
-          .where('isPatient', isEqualTo: authController.isPatient)
-          .get();
+  try {
+    DateTime now = DateTime.now();
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('notification')
+        .where('patientDocRef', isEqualTo: authController.patientDocRef)
+        .where('isPatient', isEqualTo: authController.isPatient)
+        .get();
 
-      querySnapshot.docs.forEach((doc) { // 현재 시간 이전의 알림만 선택
-        NotificationModel notification = NotificationModel.fromSnapshot(
-            doc as DocumentSnapshot<Map<String, dynamic>>);
-        if (notification.time!.toDate().isBefore(now)) {
-          notifications.add(notification);
-        }
-      });
-      return notifications;
-    } catch (e) {
-      print('Error loading notifications from Firestore: $e');
-      return [];
-    }
+    querySnapshot.docs.forEach((doc) { // 현재 시간 이전의 알림만 선택
+      NotificationModel notification = NotificationModel.fromSnapshot(
+          doc as DocumentSnapshot<Map<String, dynamic>>);
+      if (notification.time!.toDate().isBefore(now)) {
+        notifications.add(notification);
+      }
+    });
+    return notifications;
+  } catch (e) {
+    print('Error loading notifications from Firestore: $e');
+    return [];
   }
 }
