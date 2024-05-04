@@ -77,7 +77,7 @@ class NotificationService {
 
     DocumentSnapshot userDocSnapshot = await FirebaseFirestore.instance
         .collection('user')
-        .doc(authController.patientDocRef.id)
+        .doc(authController.patientDocRef!.id)
         .get();
     String userName = userDocSnapshot['userName'];
 
@@ -111,7 +111,7 @@ class NotificationService {
 
     DocumentSnapshot userDocSnapshot = await FirebaseFirestore.instance
         .collection('user')
-        .doc(authController.patientDocRef.id)
+        .doc(authController.patientDocRef!.id)
         .get();
     String userName = userDocSnapshot['userName'];
 

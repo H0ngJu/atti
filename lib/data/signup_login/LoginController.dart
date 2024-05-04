@@ -1,3 +1,4 @@
+import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/report/reportController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 class LoginController extends GetxController {
   final FirebaseAuth _authentication = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  AuthController _authController = Get.put(AuthController());
+
 
   // 로그인 시 사용하는 데이터
   RxInt isPressed = 0.obs;
@@ -26,6 +29,7 @@ class LoginController extends GetxController {
           .get();
       DocumentSnapshot document = snapshot.docs[0];
       isPatient = await (document.data() as Map<String, dynamic>)["isPatient"];
+      // _authController.login();
       return true;
     } on FirebaseAuthException catch (e) {
       print("Error : ${e}");
