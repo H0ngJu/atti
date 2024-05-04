@@ -1,4 +1,6 @@
+import 'package:atti/screen/RoutineScheduleMain.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../data/notification/notification_controller.dart';
 import '../../data/schedule/schedule_model.dart';
 import 'package:atti/data/schedule/schedule_service.dart';
@@ -170,6 +172,7 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
           TextButton(onPressed: () {
             // 일정 본알림 예약 ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
             notificationService.showDateTimeNotification(
+              2,
               '일정 알림',
               '\'${schedule?.name}\'일정을(를) 진행하고 있나요?',
               schedule!.time!.toDate(),
@@ -178,13 +181,13 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
 
             // 일정 시간 1시간 뒤 알림 예약 ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
             notificationService.showDateTimeNotification(
+              2,
               '일정 알림',
               '\'${schedule?.name}\'일정의 기억 사진을 남길까요?',
               schedule!.time!.toDate().add(Duration(hours: 1)),
               '/schedule3/${schedule?.reference!.id}',
             );
-
-            Get.to(ScheduleMain());
+            Get.to(RoutineScheduleMain());
           },
             child: Text('알겠어요', style: TextStyle(
               color: Colors.white, fontSize: 24, ),),
