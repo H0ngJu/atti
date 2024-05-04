@@ -233,7 +233,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
               width: width * 0.9,
               alignment: Alignment.centerLeft,
               child: Text(
-                '${authController.userName.value}님의',
+                '${authController.patientName.value}님의',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 24,

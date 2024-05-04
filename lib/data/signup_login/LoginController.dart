@@ -1,5 +1,6 @@
 import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/report/reportController.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,11 +24,21 @@ class LoginController extends GetxController {
         email: userEmail.value,
         password: userPassword.value,
       );
+
+      // FCM 토큰 가져오기
+      String? userFCMToken = await FirebaseMessaging.instance.getToken();
+
       QuerySnapshot snapshot = await _db
           .collection('user')
           .where('userId', isEqualTo: credential.user!.uid)
           .get();
       DocumentSnapshot document = snapshot.docs[0];
+
+      // 사용자 정보 업데이트
+      await _db.collection('user').doc(document.id).update({
+        'userFCMToken': userFCMToken,
+      });
+
       isPatient = await (document.data() as Map<String, dynamic>)["isPatient"];
       // _authController.login();
       return true;
