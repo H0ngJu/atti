@@ -141,6 +141,17 @@ class _FullScreenSchedule2State extends State<FullScreenSchedule2> {
                       Expanded(
                         child: TextButton(onPressed: () async {
                           await ScheduleService().completeSchedule(schedule!.reference!);
+                          await addNotification(
+                              '일정 알림',
+                              '${authController.userName}님이 \'${schedule!.name}\' 일정을 완료하셨어요!',
+                              DateTime.now(),
+                              false);
+                          await addFinishNotification(
+                              '일정 알림',
+                              '${authController.userName}님이 \'${schedule!.name}\' 일정을 완료하셨어요!',
+                              DateTime.now(),
+                              false);
+
                           SystemNavigator.pop();
                         }, child: Padding(
                           padding: EdgeInsets.symmetric(vertical: 5),

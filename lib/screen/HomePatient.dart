@@ -139,7 +139,7 @@ class _HomePatientState extends State<HomePatient> {
     notificationService.showDailyNotification();
 
     if (authController.isPatient) {
-      notificationService.scheduleNotifications();
+      //notificationService.scheduleNotifications();
       notificationService.routineNotifications();
     }
   }
