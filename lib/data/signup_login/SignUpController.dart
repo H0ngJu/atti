@@ -92,18 +92,22 @@ class SignUpController extends GetxController {
             "userName": userName.value,
             "userEmail": userEmail.value,
           };
+
         }
         // 문서 레퍼런스 업데이트
         var docRef = await _db
             .collection("user")
             .add(userInfo);
+        if (!isPatient.value) {
+          await patientDocId.update({
+            'carerRef': docRef
+          });
+        }
         await docRef.update({ "reference": docRef});
       }
     } catch (e) {
       // 회원가입 실패 시 에러 메시지 출력
       print("회원가입 실패: $e");
-      // 실패 메시지를 사용자에게 표시하는 로직을 여기에 추가하세요. 예를 들어 Flutter에서는:
-      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("회원가입 실패: $e")));
     }
   }
 }
