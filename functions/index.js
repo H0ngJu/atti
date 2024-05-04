@@ -10,20 +10,6 @@ admin.initializeApp();
 // 3. 위험단어 분석
 // ====================================================================================
 
-// ====================================================================================
-// 데이터 구조
-// createdAt vvvvvvvvvvvvvv
-// mostViews vvvvvvvvvvvvvv
-// patientId vvvvvvvvvvvvvv
-// registeredMemoryCount vvvvvvvvvvvvvv
-// unfinishedRoutine vvvvvvvvvvvvvv
-// weeklyEmotion vvvvvvvvvvvvvv
-// new) 일별 일정 완료율 = {날짜 : 완료율, 날짜: 완료율, ...} + unfinishedSchedule vvvvvvvvvvvvvv
-// new) 일별 일과 완료율 = {날짜 : 완료율, 날짜: 완료율, ...} + unfinishedRoutine vvvvvvvvvvvvvv
-// new) 위험 단어 분석
-// new) reportPeriod = [시작요일, 끝요일]
-// ====================================================================================
-
 // // getdatatest 성공! get set 성공 ^_^
 // exports.getdatatest = onSchedule("* * * * *", async (event) => {
 //   const userSnapshot = await admin
@@ -38,7 +24,7 @@ admin.initializeApp();
 
 exports.weeklyReport = onSchedule(
   {
-    schedule: "0 0 * * *", // 00시 00분 실행되는 코드
+    schedule: "* * * * *", // 00시 00분 실행되는 코드
     // schedule: "0 0 * * 0", // 매주 일요일에서 월요일로 넘어가는 자정에 실행되도록
     region: "asia-northeast3",
     timeZone: "Asia/Seoul",
@@ -129,13 +115,31 @@ exports.weeklyReport = onSchedule(
       let mostViewedMemories = Object.entries(viewCounts)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 3);
+
       // 가장 많이 조회된 메모리를 보고서 데이터에 추가
+      let tmp = 0,
+        tmpRef = "";
       reportData.mostViews = {};
       if (mostViewedMemories && mostViewedMemories.forEach) {
         mostViewedMemories.forEach(([memoryRef, views]) => {
+          if (tmp < views) {
+            tmp = views;
+            tmpRef = memoryRef;
+          }
           reportData.mostViews[memoryRef] = views;
         });
       }
+      let tmpDocSnapshot;
+      let highestViewedMemory = "";
+      if (tmpRef.length > 0) {
+        tmpDocSnapshot = await admin.firestore().doc(tmpRef).get();
+        if (tmpDocSnapshot.exists) {
+          highestViewedMemory = tmpDocSnapshot.data()["imgTitle"];
+          reportData.testData = tmpDocSnapshot.data();
+        }
+      }
+      reportData.testData = tmpRef;
+      reportData.highestViewedMemory = highestViewedMemory;
 
       // registered Memory Count ====================================================================
       // registered Memory 일별 카운팅
