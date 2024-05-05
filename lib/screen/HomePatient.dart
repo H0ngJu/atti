@@ -48,6 +48,20 @@ class _HomePatientState extends State<HomePatient> {
   final AuthController authController = Get.put(AuthController());
   String _weatherDescription = '';
   FlutterTts flutterTts = FlutterTts();
+  String weatherStatus = '';
+  final List<String> defaultImg = [
+    'lib/assets/Atti/standingAtti.png',
+    'lib/assets/Atti/Coffee.png',
+    'lib/assets/Atti/EatingStar.png',
+    'lib/assets/Atti/Napping.png',
+    'lib/assets/Atti/Normal.png',
+    'lib/assets/Atti/ReadingBook.png',
+    'lib/assets/Atti/Soccer.png',
+    'lib/assets/Atti/Stars.png',
+    'lib/assets/Atti/Walking.png',
+  ];
+  final List<String> topImg = [];
+  late String selectedImage = '';
 
   DateTime _selectedDay = DateTime.now();
   List<ScheduleModel> schedulesBySelectedDay = []; // 선택된 날짜의 일정들이 반환되는 리스트
@@ -69,6 +83,7 @@ class _HomePatientState extends State<HomePatient> {
       _fetchAndSpeakWeather();
     });
     listenNotifications();
+    //selectedImage = updateImagesBasedOnWeather(weatherStatus);
   }
 
   // 푸시 알림 스트림 리슨
@@ -270,7 +285,9 @@ class _HomePatientState extends State<HomePatient> {
       final description = data['weather'][0]['description'];
       final temperature = data['main']['temp'];
       final humidity = data['main']['humidity'];
-      final weatherStatus = data['weather'][0]['description'];
+      weatherStatus = data['weather'][0]['description'];
+      print("weather " + weatherStatus);
+      selectedImage = updateImagesBasedOnWeather(weatherStatus);
       final weatherTranslation =
           weatherTranslations[weatherStatus.toLowerCase()];
       setState(() {
@@ -299,18 +316,44 @@ class _HomePatientState extends State<HomePatient> {
     await flutterTts.speak(message);
   }
 
-  /*Future<void> _speakWeather() async {
-    await flutterTts.setLanguage('ko-KR');
-    await flutterTts.setPitch(1);
-    await flutterTts.speak(_weatherDescription);
-  }*/
+  // 날씨와 계절에 따라 이미지 리스트를 업데이트하고 랜덤 이미지를 반환하는 함수
+  String updateImagesBasedOnWeather(String weatherStatus) {
+    // 계절 이미지를 가져옵니다.
+    String seasonImage = getSeason();
 
-  /*@override
-  void initState() {
-    super.initState();
-    getCurrentUser();
-    _requestNotificationPermissions();
-  }*/
+    print("1 " + weatherStatus);
+    // 날씨에 따라 특정 이미지를 추가합니다.
+    if (weatherStatus.contains('rain') || weatherStatus.contains('mist') || weatherStatus.contains('drizzel')) {
+      topImg.add('lib/assets/Atti/rainy.png');
+    }
+    if (weatherStatus.contains('clear')) {
+      topImg.add('lib/assets/Atti/sunny.png');
+    }
+
+    // 계절 이미지를 추가합니다.
+    topImg.add('lib/assets/Atti/$seasonImage');
+
+    // 기본 이미지 리스트에 topImg 리스트를 추가합니다.
+    List<String> updatedImgList = List.from(defaultImg)..addAll(topImg);
+    print("here" + '${updatedImgList}');
+    // 업데이트된 리스트에서 랜덤 이미지를 선택합니다.
+    final random = Random();
+    int index = random.nextInt(updatedImgList.length);
+    return updatedImgList[index];
+  }
+
+  String getSeason() {
+    int month = DateTime.now().month; // 현재 월을 가져옵니다.
+    if (month >= 3 && month <= 5) {
+      return 'spring.png';
+    } else if (month >= 6 && month <= 8) {
+      return 'summer.png';
+    } else if (month >= 9 && month <= 11) {
+      return 'autumn.png';
+    } else {
+      return 'winter.png';
+    }
+  }
 
   void getCurrentUser() {
     try {
@@ -357,7 +400,10 @@ class _HomePatientState extends State<HomePatient> {
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(30),
                         bottomRight: Radius.circular(30))),
-                child: HomePatientTop(userName: authController.userName.value)),
+                child: HomePatientTop(
+                  userName: authController.userName.value,
+                  selectedImage: selectedImage,
+                )),
             Container(
               margin: EdgeInsets.all(16),
               child: HomeRoutine(
@@ -388,8 +434,11 @@ class _HomePatientState extends State<HomePatient> {
 // 메인 첫 화면
 class HomePatientTop extends StatefulWidget {
   final String userName;
+  final String selectedImage;
 
-  const HomePatientTop({Key? key, required this.userName}) : super(key: key);
+  const HomePatientTop(
+      {Key? key, required this.userName, required this.selectedImage})
+      : super(key: key);
 
   @override
   State<HomePatientTop> createState() => _HomePatientTopState();
@@ -403,40 +452,16 @@ class _HomePatientTopState extends State<HomePatientTop> {
     '오늘 하루 아띠와 함께해요!',
     '잘 주무셨나요?'
   ];
-  final List<String> defaultImg = [
-    'lib/assets/Atti/standingAtti.png',
-    'lib/assets/Atti/Cofee.png',
-    'lib/assets/Atti/EatingStar.png',
-    'lib/assets/Atti/Napping.png',
-    'lib/assets/Atti/Normal.png',
-    'lib/assets/Atti/ReadingBook.png',
-    'lib/assets/Atti/Soccer.png',
-    'lib/assets/Atti/Stars.png',
-    'lib/assets/Atti/Walking.png',
-  ];
-  final List<String> topImg = [
-    'lib/assets/Atti/rainy.png',
-    'lib/assets/Atti/autumn.png',
-    'lib/assets/Atti/spring.png',
-    'lib/assets/Atti/summer.png',
-    'lib/assets/Atti/sunny.png',
-    'lib/assets/Atti/winter.png',
-  ];
   late final int index; // `late` 키워드를 사용하여 나중에 초기화됨을 명시
-  late String selectedImage;
+  //late String _selectedImage;
+  //String _weatherStatus = '';
 
   @override
   void initState() {
     super.initState();
     final Random random = Random();
     index = random.nextInt(greetingMsg.length); // 여기에서 `index` 초기화
-    selectedImage = getRandomImage();
-  }
-
-  String getRandomImage() {
-    final random = Random();
-    int index = random.nextInt(defaultImg.length);
-    return defaultImg[index];
+    //_selectedImage = widget.selectedImage;
   }
 
   @override
@@ -457,27 +482,44 @@ class _HomePatientTopState extends State<HomePatientTop> {
           SizedBox(height: 25),
           RichText(
             text: TextSpan(
-              style: TextStyle(color: Colors.black, height: 1.2,fontFamily: 'PretendardRegular'),
+              style: TextStyle(
+                  color: Colors.black,
+                  height: 1.2,
+                  fontFamily: 'PretendardRegular'),
               children: [
                 TextSpan(
                   text: '${widget.userName}님\n',
-                  style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
+                  style:
+                      TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
                 TextSpan(
                   text: '만나서 반가워요!',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, fontFamily: 'PretendardSemiBold'),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                      fontFamily: 'PretendardSemiBold'),
                 ),
               ],
             ),
           ),
           SizedBox(height: 14), // 간격을 추가하여 텍스트와 이미지를 구분
           Row(
-            // 이미지를 중앙 정렬하기 위한 Row 위젯
             mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
             children: [
-              Image(
-                  image: AssetImage(selectedImage),
-                  width: MediaQuery.of(context).size.width * 0.55),
+              widget.selectedImage.isNotEmpty // selectedImage가 비어있지 않다면 이미지를 표시
+                  ? Image(
+                      image: AssetImage(widget.selectedImage),
+                      width: MediaQuery.of(context).size.width * 0.55,
+                    )
+                  : Container(
+                      // selectedImage가 비어있거나 로딩 중일 때
+                      width: MediaQuery.of(context).size.width * 0.55,
+                      height: MediaQuery.of(context).size.width *
+                          0.55, // 이미지와 동일한 비율로 설정
+                      child: Center(
+                        child: CircularProgressIndicator(), // 로딩 인디케이터 표시
+                      ),
+                    ),
             ],
           ),
           SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
@@ -586,7 +628,8 @@ class IncompleteScheduleWidget extends StatelessWidget {
                     padding: EdgeInsets.all(17),
                     alignment: Alignment.center,
                     child: Text(idx?.toString() ?? '',
-                        style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular')))),
+                        style: TextStyle(
+                            fontSize: 24, fontFamily: 'PretendardRegular')))),
             Expanded(
               flex: 3,
               child: Container(
@@ -598,7 +641,8 @@ class IncompleteScheduleWidget extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   time ?? '',
-                  style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
+                  style:
+                      TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
               ),
             ),
@@ -613,7 +657,8 @@ class IncompleteScheduleWidget extends StatelessWidget {
                 ),
                 child: Text(
                   name ?? '',
-                  style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
+                  style:
+                      TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
               ),
             ),
@@ -672,7 +717,9 @@ class CompleteScheduleWidget extends StatelessWidget {
             alignment: Alignment.center,
             padding: EdgeInsets.all(17),
             color: Color(0xffDDDDDD),
-            child: Text('\'$name\' 일정 완료', style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular')),
+            child: Text('\'$name\' 일정 완료',
+                style:
+                    TextStyle(fontSize: 24, fontFamily: 'PretendardRegular')),
           ),
         ),
       ),
@@ -721,7 +768,8 @@ class _HomeScheduleState extends State<HomeSchedule> {
                         style: BorderStyle.solid, color: Color(0xffDDDDDD))),
                 child: Text(
                   '등록된 일정이 없어요',
-                  style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
+                  style:
+                      TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
               )
             : Container(
@@ -748,7 +796,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                                 docRef: schedule.reference!,
                               )
                             : IncompleteScheduleWidget(
-                                idx: index+1,
+                                idx: index + 1,
                                 time: DateFormat('a h:mm', 'ko_KR')
                                     .format(schedule.time!.toDate()),
                                 name: schedule.name!,
@@ -825,17 +873,17 @@ class RoutineWidget extends StatelessWidget {
               flex: 1,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child:
-                ColorFiltered(
+                child: ColorFiltered(
                   colorFilter: (done ?? false)
                       ? ColorFilter.mode(Colors.grey, BlendMode.saturation)
-                      : ColorFilter.mode(Colors.transparent, BlendMode.saturation),
-                  child : Image.network(
-                  url ?? '',
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: MediaQuery.of(context).size.width * 0.5,
-                  fit: BoxFit.cover,
-                ),
+                      : ColorFilter.mode(
+                          Colors.transparent, BlendMode.saturation),
+                  child: Image.network(
+                    url ?? '',
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    height: MediaQuery.of(context).size.width * 0.5,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -857,20 +905,21 @@ class RoutineWidget extends StatelessWidget {
                   children: [
                     Text(
                       time ?? '',
-                      style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
+                      style: TextStyle(
+                          fontSize: 24, fontFamily: 'PretendardRegular'),
                     ),
                     Text(
                       textAlign: TextAlign.center,
                       name ?? '',
-                      style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
+                      style: TextStyle(
+                          fontSize: 24, fontFamily: 'PretendardRegular'),
                     ),
                     Text(
-                        done ?? false ?  '완료' : '',
+                      done ?? false ? '완료' : '',
                       style: TextStyle(
-                      fontFamily: 'PretendardRegular',
-                        fontSize: 24,
-                        color: Color(0xffA38130)
-                      ),
+                          fontFamily: 'PretendardRegular',
+                          fontSize: 24,
+                          color: Color(0xffA38130)),
                     )
                   ],
                 ),
@@ -930,10 +979,11 @@ class _HomeRoutineState extends State<HomeRoutine> {
                         style: BorderStyle.solid, color: Color(0xffDDDDDD))),
                 child: Text(
                   '예정된 일과가 없어요',
-                  style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
+                  style:
+                      TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
               )
-        : _buildRoutineWidget(nearestRoutine),
+            : _buildRoutineWidget(nearestRoutine),
       ],
     );
   }
@@ -946,8 +996,8 @@ class _HomeRoutineState extends State<HomeRoutine> {
 
     for (var routine in routines) {
       if (routine.time != null && routine.time!.length == 2) {
-        final routineTime = DateTime(
-            today.year, today.month, today.day, routine.time![0], routine.time![1]);
+        final routineTime = DateTime(today.year, today.month, today.day,
+            routine.time![0], routine.time![1]);
         final duration = routineTime.difference(now);
         // 현재 시간 이후가면서 가장 가까운 시간 찾기
         if (duration > Duration.zero && duration < shortestDuration) {
