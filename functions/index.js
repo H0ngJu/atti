@@ -11,7 +11,7 @@ admin.initializeApp();
 // 3. 위험단어 분석
 // ====================================================================================
 
-// // getdatatest 성공! get set 성공 ^_^
+ // getdatatest 성공! get set 성공 ^_^
 // exports.getdatatest = onSchedule("* * * * *", async (event) => {
 //   const userSnapshot = await admin
 //     .firestore()
@@ -265,6 +265,8 @@ exports.weeklyReport = onSchedule(
   }
 );
 
+//======================================================================
+
 exports.sendNotificationOnFinish = functions.firestore
     .document('notification_finish/{documentId}')
     .onCreate((snap, context) => {
@@ -274,9 +276,13 @@ exports.sendNotificationOnFinish = functions.firestore
         console.log(message);
 
         // patientDocRef를 이용하여 환자 문서에서 보호자의 레퍼런스를 가져옴
-        return admin.firestore().doc(documentData.patientDocRef).get().then(patientDoc => {
-            const carerRef = patientDoc.data().carerRef;
-            console.log(documentData.patientDocRef);
+        const patientDocRefPath = documentData.patientDocRef.path;
+        console.log(patientDocRefPath);
+
+        // patientDocRef를 이용하여 환자 문서에서 보호자의 레퍼런스를 가져옴
+        return admin.firestore().doc(patientDocRefPath).get().then(patientDoc => {
+            const carerRef = patientDoc.data().carerRef.path;
+
             console.log(carerRef);
 
             // 보호자 레퍼런스를 이용하여 보호자 문서에서 FCM 토큰을 가져옴
