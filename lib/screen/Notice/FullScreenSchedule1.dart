@@ -175,7 +175,8 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
               2,
               '일정 알림',
               '\'${schedule?.name}\'일정을(를) 진행하고 있나요?',
-              schedule!.time!.toDate(),
+              //schedule!.time!.toDate(),
+              schedule!.time!.toDate().subtract(Duration(minutes:57)),
               '/schedule2/${schedule?.reference!.id}',
             );
 
@@ -184,7 +185,8 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
               2,
               '일정 알림',
               '\'${schedule?.name}\'일정의 기억 사진을 남길까요?',
-              schedule!.time!.toDate().add(Duration(hours: 1)),
+              //schedule!.time!.toDate().add(Duration(hours: 1)),
+              schedule!.time!.toDate().subtract(Duration(minutes:55)),
               '/schedule3/${schedule?.reference!.id}',
             );
             SystemNavigator.pop();
