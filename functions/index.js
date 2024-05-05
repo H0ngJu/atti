@@ -25,8 +25,8 @@ admin.initializeApp();
 
 exports.weeklyReport = onSchedule(
   {
-    schedule: "0 0 * * *", // 00시 00분 실행되는 코드
-    // schedule: "0 0 * * 0", // 매주 일요일에서 월요일로 넘어가는 자정에 실행되도록
+    // schedule: "* * * * *", // 00시 00분 실행되는 코드
+    schedule: "0 0 * * 0", // 매주 일요일에서 월요일로 넘어가는 자정에 실행되도록
     region: "asia-northeast3",
     timeZone: "Asia/Seoul",
   },
@@ -143,10 +143,8 @@ exports.weeklyReport = onSchedule(
         tmpDocSnapshot = await admin.firestore().doc(tmpRef).get();
         if (tmpDocSnapshot.exists) {
           highestViewedMemory = tmpDocSnapshot.data()["imgTitle"];
-          reportData.testData = tmpDocSnapshot.data();
         }
       }
-      reportData.testData = tmpRef;
       reportData.highestViewedMemory = highestViewedMemory;
 
       // registered Memory Count ====================================================================
@@ -170,7 +168,32 @@ exports.weeklyReport = onSchedule(
       reportData.registerdMemoryCount = Object.fromEntries(weekMap);
 
       // unfinishedRoutine ==========================================================================
+      // 월요일과 일요일 사이의 모든 날짜를 생성하는 함수
+      function getDatesBetween(startDate, endDate) {
+        let dates = [];
+        // 시작 날짜로부터 루프 시작
+        let currentDate = new Date(startDate);
+        // endDate를 포함하도록 <= 조건 사용
+        while (currentDate <= endDate) {
+          // 날짜를 YYYY-MM-DD 형식의 문자열로 변환하여 배열에 추가
+          dates.push(currentDate.toISOString().split("T")[0]);
+          // currentDate를 다음 날짜로 업데이트
+          currentDate = new Date(
+            currentDate.setDate(currentDate.getDate() + 1)
+          );
+        }
+        return dates;
+      }
+      let allDatesBetween = getDatesBetween(monday, sunday);
+
       let routineCompletion = {};
+
+      allDatesBetween.forEach((date) => {
+        if (!routineCompletion[date]) {
+          routineCompletion[date] = { total: 0, completed: 0 };
+        }
+      });
+
       let unfinishedRoutines = [];
       if (routineSnapshot && routineSnapshot.forEach) {
         routineSnapshot.forEach((doc) => {
@@ -181,19 +204,20 @@ exports.weeklyReport = onSchedule(
           Object.keys(isFinished).forEach((date) => {
             const dateObj = new Date(date);
             const isFinishedStatus = isFinished[date];
+            const dateString = dateObj.toISOString().split("T")[0];
             // 지정한 기간 내의 날짜인지 확인
             if (dateObj >= monday && dateObj <= sunday) {
               // routineCompletionRate에 해당 날짜가 이미 있으면 값을 업데이트, 없으면 초기화
-              if (!routineCompletion[date]) {
-                routineCompletion[date] = { total: 0, completed: 0 };
+              if (!routineCompletion[dateString]) {
+                routineCompletion[dateString] = { total: 0, completed: 0 };
               }
 
               // total 스케줄 수 증가
-              routineCompletion[date].total += 1;
+              routineCompletion[dateString].total += 1;
 
               // 완료된 경우, completed 스케줄 수 증가
               if (isFinishedStatus) {
-                routineCompletion[date].completed += 1;
+                routineCompletion[dateString].completed += 1;
               }
               // 지난 주 월요일 이후이며 일요일 이전의 날짜이고, 완료되지 않은 경우
               if (!isFinishedStatus) {
@@ -234,8 +258,15 @@ exports.weeklyReport = onSchedule(
       reportData.weeklyEmotion = weeklyEmotion;
 
       // unfinishedSchedule =======================================================================
-      let unfinishedSchedule = [];
       let scheduleCompletion = {};
+
+      allDatesBetween.forEach((date) => {
+        if (!scheduleCompletion[date]) {
+          scheduleCompletion[date] = { total: 0, completed: 0 };
+        }
+      });
+
+      let unfinishedSchedule = [];
       if (scheduleSnapshot && scheduleSnapshot.forEach) {
         scheduleSnapshot.forEach((doc) => {
           const data = doc.data();
@@ -243,8 +274,7 @@ exports.weeklyReport = onSchedule(
 
           // 날짜를 yyyy-mm-dd 형식의 문자열로 변환
           const date = data.createdAt.toDate().toISOString().split("T")[0];
-
-          // 해당 날짜에 대한 정보가 없으면 초기화
+          // 해당 날짜에 대한 데이터가 없으면 초기화
           if (!scheduleCompletion[date]) {
             scheduleCompletion[date] = { total: 0, completed: 0 };
           }
@@ -260,6 +290,7 @@ exports.weeklyReport = onSchedule(
           }
         });
       }
+
       reportData.unfinishedSchedule = unfinishedSchedule;
       reportData.scheduleCompletion = scheduleCompletion;
 
