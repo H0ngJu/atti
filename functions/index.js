@@ -1,5 +1,6 @@
 // The Cloud Functions for Firebase SDK to set up triggers and logging.
 const { onSchedule } = require("firebase-functions/v2/scheduler");
+const functions = require('firebase-functions');
 const admin = require("firebase-admin");
 admin.initializeApp();
 
@@ -10,7 +11,7 @@ admin.initializeApp();
 // 3. 위험단어 분석
 // ====================================================================================
 
-// // getdatatest 성공! get set 성공 ^_^
+ // getdatatest 성공! get set 성공 ^_^
 // exports.getdatatest = onSchedule("* * * * *", async (event) => {
 //   const userSnapshot = await admin
 //     .firestore()
@@ -292,3 +293,45 @@ exports.weeklyReport = onSchedule(
     }
   }
 );
+
+//======================================================================
+
+exports.sendNotificationOnFinish = functions.firestore
+    .document('notification_finish/{documentId}')
+    .onCreate((snap, context) => {
+        const documentData = snap.data();
+        const title = documentData.title; // 알림 제목
+        const message = documentData.message; // 알림 본문
+        console.log(message);
+
+        // patientDocRef를 이용하여 환자 문서에서 보호자의 레퍼런스를 가져옴
+        const patientDocRefPath = documentData.patientDocRef.path;
+        console.log(patientDocRefPath);
+
+        // patientDocRef를 이용하여 환자 문서에서 보호자의 레퍼런스를 가져옴
+        return admin.firestore().doc(patientDocRefPath).get().then(patientDoc => {
+            const carerRef = patientDoc.data().carerRef.path;
+
+            console.log(carerRef);
+
+            // 보호자 레퍼런스를 이용하여 보호자 문서에서 FCM 토큰을 가져옴
+            return admin.firestore().doc(carerRef).get().then(carerDoc => {
+                const userFCMToken = carerDoc.data().userFCMToken;
+
+                // FCM 메시지 구성
+                const notificationMessage = {
+                    notification: {
+                        title: title, // 알림 제목
+                        body: message, // 알림 본문
+                    },
+                    token: userFCMToken, // 보호자의 FCM 토큰
+                };
+
+                // FCM을 이용하여 알림 메시지 전송
+                return admin.messaging().send(notificationMessage);
+            });
+        }).catch(error => {
+            console.log('Error sending notification:', error);
+            return null;
+        });
+    });
