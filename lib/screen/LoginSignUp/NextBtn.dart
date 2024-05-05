@@ -54,6 +54,7 @@ class NextBtn extends StatelessWidget {
               color: isButtonDisabled
                   ? Colors.black
                   : Colors.white,
+              fontFamily: 'PretendardBold',
             ),
           ),
         )

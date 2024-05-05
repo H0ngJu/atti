@@ -1,5 +1,6 @@
 // The Cloud Functions for Firebase SDK to set up triggers and logging.
 const { onSchedule } = require("firebase-functions/v2/scheduler");
+const functions = require('firebase-functions');
 const admin = require("firebase-admin");
 admin.initializeApp();
 
@@ -10,7 +11,7 @@ admin.initializeApp();
 // 3. 위험단어 분석
 // ====================================================================================
 
-// // getdatatest 성공! get set 성공 ^_^
+ // getdatatest 성공! get set 성공 ^_^
 // exports.getdatatest = onSchedule("* * * * *", async (event) => {
 //   const userSnapshot = await admin
 //     .firestore()
@@ -24,8 +25,8 @@ admin.initializeApp();
 
 exports.weeklyReport = onSchedule(
   {
-    schedule: "* * * * *", // 00시 00분 실행되는 코드
-    // schedule: "0 0 * * 0", // 매주 일요일에서 월요일로 넘어가는 자정에 실행되도록
+    // schedule: "* * * * *", // 00시 00분 실행되는 코드
+    schedule: "0 0 * * 0", // 매주 일요일에서 월요일로 넘어가는 자정에 실행되도록
     region: "asia-northeast3",
     timeZone: "Asia/Seoul",
   },
@@ -83,7 +84,7 @@ exports.weeklyReport = onSchedule(
         .where("createdAt", ">=", admin.firestore.Timestamp.fromDate(monday))
         .where("createdAt", "<=", admin.firestore.Timestamp.fromDate(sunday))
         .get();
-      // 주간 감정 데이터를 가져온다.
+      // 스케쥴 데이터를 가져온다.
       const scheduleSnapshot = await admin
         .firestore()
         .collection("schedule")
@@ -91,7 +92,14 @@ exports.weeklyReport = onSchedule(
         .where("createdAt", ">=", admin.firestore.Timestamp.fromDate(monday))
         .where("createdAt", "<=", admin.firestore.Timestamp.fromDate(sunday))
         .get();
-
+      // 위험단어 데이터를 가져온다.
+      const dangerWordSnapshot = await admin
+        .firestore()
+        .collection("dangerWord")
+        .where("patientDocRef", "==", userId) // 참조
+        .where("createdAt", ">=", admin.firestore.Timestamp.fromDate(monday))
+        .where("createdAt", "<=", admin.firestore.Timestamp.fromDate(sunday))
+        .get();
       let reportData = {};
       reportData.reportPeriod = reportPeriod;
 
@@ -135,10 +143,8 @@ exports.weeklyReport = onSchedule(
         tmpDocSnapshot = await admin.firestore().doc(tmpRef).get();
         if (tmpDocSnapshot.exists) {
           highestViewedMemory = tmpDocSnapshot.data()["imgTitle"];
-          reportData.testData = tmpDocSnapshot.data();
         }
       }
-      reportData.testData = tmpRef;
       reportData.highestViewedMemory = highestViewedMemory;
 
       // registered Memory Count ====================================================================
@@ -162,7 +168,32 @@ exports.weeklyReport = onSchedule(
       reportData.registerdMemoryCount = Object.fromEntries(weekMap);
 
       // unfinishedRoutine ==========================================================================
+      // 월요일과 일요일 사이의 모든 날짜를 생성하는 함수
+      function getDatesBetween(startDate, endDate) {
+        let dates = [];
+        // 시작 날짜로부터 루프 시작
+        let currentDate = new Date(startDate);
+        // endDate를 포함하도록 <= 조건 사용
+        while (currentDate <= endDate) {
+          // 날짜를 YYYY-MM-DD 형식의 문자열로 변환하여 배열에 추가
+          dates.push(currentDate.toISOString().split("T")[0]);
+          // currentDate를 다음 날짜로 업데이트
+          currentDate = new Date(
+            currentDate.setDate(currentDate.getDate() + 1)
+          );
+        }
+        return dates;
+      }
+      let allDatesBetween = getDatesBetween(monday, sunday);
+
       let routineCompletion = {};
+
+      allDatesBetween.forEach((date) => {
+        if (!routineCompletion[date]) {
+          routineCompletion[date] = { total: 0, completed: 0 };
+        }
+      });
+
       let unfinishedRoutines = [];
       if (routineSnapshot && routineSnapshot.forEach) {
         routineSnapshot.forEach((doc) => {
@@ -173,19 +204,20 @@ exports.weeklyReport = onSchedule(
           Object.keys(isFinished).forEach((date) => {
             const dateObj = new Date(date);
             const isFinishedStatus = isFinished[date];
+            const dateString = dateObj.toISOString().split("T")[0];
             // 지정한 기간 내의 날짜인지 확인
             if (dateObj >= monday && dateObj <= sunday) {
               // routineCompletionRate에 해당 날짜가 이미 있으면 값을 업데이트, 없으면 초기화
-              if (!routineCompletion[date]) {
-                routineCompletion[date] = { total: 0, completed: 0 };
+              if (!routineCompletion[dateString]) {
+                routineCompletion[dateString] = { total: 0, completed: 0 };
               }
 
               // total 스케줄 수 증가
-              routineCompletion[date].total += 1;
+              routineCompletion[dateString].total += 1;
 
               // 완료된 경우, completed 스케줄 수 증가
               if (isFinishedStatus) {
-                routineCompletion[date].completed += 1;
+                routineCompletion[dateString].completed += 1;
               }
               // 지난 주 월요일 이후이며 일요일 이전의 날짜이고, 완료되지 않은 경우
               if (!isFinishedStatus) {
@@ -226,8 +258,15 @@ exports.weeklyReport = onSchedule(
       reportData.weeklyEmotion = weeklyEmotion;
 
       // unfinishedSchedule =======================================================================
-      let unfinishedSchedule = [];
       let scheduleCompletion = {};
+
+      allDatesBetween.forEach((date) => {
+        if (!scheduleCompletion[date]) {
+          scheduleCompletion[date] = { total: 0, completed: 0 };
+        }
+      });
+
+      let unfinishedSchedule = [];
       if (scheduleSnapshot && scheduleSnapshot.forEach) {
         scheduleSnapshot.forEach((doc) => {
           const data = doc.data();
@@ -235,8 +274,7 @@ exports.weeklyReport = onSchedule(
 
           // 날짜를 yyyy-mm-dd 형식의 문자열로 변환
           const date = data.createdAt.toDate().toISOString().split("T")[0];
-
-          // 해당 날짜에 대한 정보가 없으면 초기화
+          // 해당 날짜에 대한 데이터가 없으면 초기화
           if (!scheduleCompletion[date]) {
             scheduleCompletion[date] = { total: 0, completed: 0 };
           }
@@ -252,8 +290,31 @@ exports.weeklyReport = onSchedule(
           }
         });
       }
+
       reportData.unfinishedSchedule = unfinishedSchedule;
       reportData.scheduleCompletion = scheduleCompletion;
+
+      // danger Words ==========================================================================
+      let dangerWords = {};
+      if (dangerWordSnapshot && dangerWordSnapshot.forEach) {
+        dangerWordSnapshot.forEach((doc) => {
+          const data = doc.data();
+          const dangerWordsList = data.dangerWordsList;
+          // emotionsList가 배열인지 확인
+          if (Array.isArray(dangerWordsList)) {
+            dangerWordsList.forEach((word) => {
+              if (dangerWords[word]) {
+                // 이미 dangerWords에 해당 감정 단어가 있으면 횟수를 1 증가
+                dangerWords[word] += 1;
+              } else {
+                // 해당 감정 단어가 dangerWords에 없으면 새로 추가하고 횟수를 1로 설정
+                dangerWords[word] = 1;
+              }
+            });
+          }
+        });
+      }
+      reportData.dangerWords = dangerWords;
 
       // 현재 타임스탬프를 보고서 데이터에 추가
       reportData.createdAt = admin.firestore.Timestamp.now();
@@ -263,3 +324,45 @@ exports.weeklyReport = onSchedule(
     }
   }
 );
+
+//======================================================================
+
+exports.sendNotificationOnFinish = functions.firestore
+    .document('notification_finish/{documentId}')
+    .onCreate((snap, context) => {
+        const documentData = snap.data();
+        const title = documentData.title; // 알림 제목
+        const message = documentData.message; // 알림 본문
+        console.log(message);
+
+        // patientDocRef를 이용하여 환자 문서에서 보호자의 레퍼런스를 가져옴
+        const patientDocRefPath = documentData.patientDocRef.path;
+        console.log(patientDocRefPath);
+
+        // patientDocRef를 이용하여 환자 문서에서 보호자의 레퍼런스를 가져옴
+        return admin.firestore().doc(patientDocRefPath).get().then(patientDoc => {
+            const carerRef = patientDoc.data().carerRef.path;
+
+            console.log(carerRef);
+
+            // 보호자 레퍼런스를 이용하여 보호자 문서에서 FCM 토큰을 가져옴
+            return admin.firestore().doc(carerRef).get().then(carerDoc => {
+                const userFCMToken = carerDoc.data().userFCMToken;
+
+                // FCM 메시지 구성
+                const notificationMessage = {
+                    notification: {
+                        title: title, // 알림 제목
+                        body: message, // 알림 본문
+                    },
+                    token: userFCMToken, // 보호자의 FCM 토큰
+                };
+
+                // FCM을 이용하여 알림 메시지 전송
+                return admin.messaging().send(notificationMessage);
+            });
+        }).catch(error => {
+            console.log('Error sending notification:', error);
+            return null;
+        });
+    });

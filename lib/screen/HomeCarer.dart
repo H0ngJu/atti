@@ -1,9 +1,10 @@
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:atti/data/report/reportController.dart';
-import 'package:atti/screen/report/_ReportDetail.dart';
+import 'package:atti/screen/report/ReportDetail.dart';
+//import 'package:atti/screen/report/_ReportDetail.dart';
 import 'package:atti/screen/report/ReportHistory.dart';
-import 'package:atti/screen/report/ReportNew.dart';
+//import 'package:atti/screen/report/ReportNew.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -57,9 +58,9 @@ class _HomeCarerState extends State<HomeCarer> {
 
   Future<void> _fetchData() async {
     List<ScheduleModel>? fetchedSchedules =
-        await ScheduleService().getSchedulesByDate(_selectedDay);
+    await ScheduleService().getSchedulesByDate(_selectedDay);
     List<RoutineModel> fetchedRoutines =
-        await RoutineService().getRoutinesByDay(selectedDayInWeek);
+    await RoutineService().getRoutinesByDay(selectedDayInWeek);
     if (fetchedSchedules != null) {
       int doneSchedulesCount = fetchedSchedules
           .where((schedule) => schedule.isFinished ?? false)
@@ -264,11 +265,11 @@ class HomeTodaySummary extends StatefulWidget {
 
   const HomeTodaySummary(
       {Key? key,
-      required this.scheduleCnt,
-      required this.routineCnt,
-      required this.patientName,
-      required this.doneScheduleCnt,
-      required this.doneRoutineCnt})
+        required this.scheduleCnt,
+        required this.routineCnt,
+        required this.patientName,
+        required this.doneScheduleCnt,
+        required this.doneRoutineCnt})
       : super(key: key);
 
   @override
@@ -314,7 +315,7 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
                         TextSpan(text: '일과 완료\n'),
                         TextSpan(
                             text:
-                                '${widget.doneRoutineCnt}/${widget.routineCnt}',
+                            '${widget.doneRoutineCnt}/${widget.routineCnt}',
                             style: TextStyle(
                               fontSize: 30,
                               //fontWeight: FontWeight.bold,
@@ -348,7 +349,7 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
                         TextSpan(text: '일정 완료\n'),
                         TextSpan(
                             text:
-                                '${widget.doneScheduleCnt}/${widget.scheduleCnt}',
+                            '${widget.doneScheduleCnt}/${widget.scheduleCnt}',
                             style: TextStyle(
                               fontSize: 30,
                               //fontWeight: FontWeight.bold,
@@ -450,84 +451,84 @@ class _HomeReportState extends State<HomeReport> {
                 Row(
                   children: [
                     Expanded(
-                        // 왼쪽 정렬을 위해 Expanded로 감싸줍니다.
+                      // 왼쪽 정렬을 위해 Expanded로 감싸줍니다.
                         child: Container(
-                      margin: EdgeInsets.all(10),
-                      child: Text(
-                        '일과 완료율',
-                        style: TextStyle(
-                            fontFamily: 'PretendardRegular', fontSize: 24),
-                      ),
-                    )),
+                          margin: EdgeInsets.all(10),
+                          child: Text(
+                            '일과 완료율',
+                            style: TextStyle(
+                                fontFamily: 'PretendardRegular', fontSize: 24),
+                          ),
+                        )),
                     Expanded(
-                        // 오른쪽 정렬을 위해 Expanded로 감싸줍니다.
+                      // 오른쪽 정렬을 위해 Expanded로 감싸줍니다.
                         child: Container(
-                      margin: EdgeInsets.all(10),
-                      child: Text(
-                        totalRoutines != 0 ?
-                          '${(completedRoutines / totalRoutines * 100).toStringAsFixed(1)} %':
-                          "지난 주 일과가 없어요",
-                        textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
-                        style: TextStyle(
-                            color: Color(0xffA38130),
-                            fontFamily: 'PretendardRegular',
-                            fontSize: 24),
-                      ),
-                    ))
+                          margin: EdgeInsets.all(10),
+                          child: Text(
+                            totalRoutines != 0 ?
+                            '${(completedRoutines / totalRoutines * 100).toStringAsFixed(1)} %':
+                            "지난 주 일과가 없어요",
+                            textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
+                            style: TextStyle(
+                                color: Color(0xffA38130),
+                                fontFamily: 'PretendardRegular',
+                                fontSize: 24),
+                          ),
+                        ))
                   ],
                 ),
                 Divider(color: Color(0xffDDDDDD)),
                 Row(
                   children: [
                     Expanded(
-                        // 왼쪽 정렬
+                      // 왼쪽 정렬
                         child: Container(
-                      margin: EdgeInsets.all(10),
-                      child: Text('일정 완료율',
-                          style: TextStyle(
-                              fontFamily: 'PretendardRegular', fontSize: 24)),
-                    )),
+                          margin: EdgeInsets.all(10),
+                          child: Text('일정 완료율',
+                              style: TextStyle(
+                                  fontFamily: 'PretendardRegular', fontSize: 24)),
+                        )),
                     Expanded(
-                        // 오른쪽 정렬
+                      // 오른쪽 정렬
                         child: Container(
-                      margin: EdgeInsets.all(10),
-                      child: Text(
-                        totalSchedules != 0 ?
-                          '${(completedSchedules / totalSchedules * 100).toStringAsFixed(1)} %':
-                          "지난 주 일정이 없어요",
-                        textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
-                        style: TextStyle(
-                            color: Color(0xffA38130),
-                            fontFamily: 'PretendardRegular',
-                            fontSize: 24),
-                      ),
-                    ))
+                          margin: EdgeInsets.all(10),
+                          child: Text(
+                            totalSchedules != 0 ?
+                            '${(completedSchedules / totalSchedules * 100).toStringAsFixed(1)} %':
+                            "지난 주 일정이 없어요",
+                            textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
+                            style: TextStyle(
+                                color: Color(0xffA38130),
+                                fontFamily: 'PretendardRegular',
+                                fontSize: 24),
+                          ),
+                        ))
                   ],
                 ),
                 Divider(color: Color(0xffDDDDDD)),
                 Row(
                   children: [
                     Expanded(
-                        // 왼쪽 정렬
+                      // 왼쪽 정렬
                         child: Container(
-                      margin: EdgeInsets.all(10),
-                      child: Text('최다 열람 기억',
-                          style: TextStyle(
-                              fontFamily: 'PretendardRegular', fontSize: 24)),
-                    )),
+                          margin: EdgeInsets.all(10),
+                          child: Text('최다 열람 기억',
+                              style: TextStyle(
+                                  fontFamily: 'PretendardRegular', fontSize: 24)),
+                        )),
                     Expanded(
-                        // 오른쪽 정렬
+                      // 오른쪽 정렬
                         child: Container(
-                      margin: EdgeInsets.all(10),
-                      child: Text(
-                        highestViewedMemory.length > 0 ? "${highestViewedMemory}" : "열람한 기억이 없어요",
-                        textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
-                        style: TextStyle(
-                            color: Color(0xffA38130),
-                            fontFamily: 'PretendardRegular',
-                            fontSize: 24),
-                      ),
-                    ))
+                          margin: EdgeInsets.all(10),
+                          child: Text(
+                            highestViewedMemory.length > 0 ? "${highestViewedMemory}" : "열람한 기억이 없어요",
+                            textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
+                            style: TextStyle(
+                                color: Color(0xffA38130),
+                                fontFamily: 'PretendardRegular',
+                                fontSize: 24),
+                          ),
+                        ))
                   ],
                 )
               ],
@@ -539,7 +540,7 @@ class _HomeReportState extends State<HomeReport> {
           TextButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ReportNew(indx: 0); // ============================================================================= 0 맞는지 체크
+                return ReportDetail(indx: 0); // ============================================================================= 0 맞는지 체크
               }));
             },
             child: Text(
@@ -566,7 +567,7 @@ class _HomeReportState extends State<HomeReport> {
     final firstDayOfMonth = DateTime(date.year, date.month, 1);
     final weekdayOfFirstDay = firstDayOfMonth.weekday;
     final firstSunday =
-        firstDayOfMonth.subtract(Duration(days: weekdayOfFirstDay - 1));
+    firstDayOfMonth.subtract(Duration(days: weekdayOfFirstDay - 1));
     final difference = date.difference(firstSunday).inDays;
     final weekNumber = (difference / 7).ceil();
     return weekNumber;

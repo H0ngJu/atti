@@ -270,4 +270,31 @@ class NotificationService {
   //   }
   // }
 
+// FCM 메시지로부터 로컬 알림 표시
+  Future<void> showFCMNotification(RemoteMessage message) async {
+    final title = message.notification!.title;
+    final body = message.notification!.body;
+
+    // 로컬 알림 설정
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+      'your_channel_id', // 채널 ID
+      'your_channel_name', // 채널 이름
+      channelDescription: 'your_channel_description', // 채널 설명
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+    const NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    // 로컬 알림 표시
+    await flutterLocalNotificationsPlugin.show(
+      4, // 고유 ID
+      title, // 제목
+      body, // 내용
+      platformChannelSpecifics,
+      //payload: 'item x',
+    );
+  }
+
 }

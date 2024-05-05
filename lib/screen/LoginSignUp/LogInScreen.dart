@@ -51,6 +51,7 @@ class _LogInScreenState extends State<LogInScreen> {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w700,
+            fontFamily: 'PretendardBold', // ================================================================================================
           ),
         ),
       ),
@@ -93,6 +94,7 @@ class _LogInScreenState extends State<LogInScreen> {
                             style: TextStyle(
                               color: Color(0xffB3B3B3),
                               fontSize: 20,
+                              fontFamily: 'PretendardRegular',
                             ),
                           )
                           ),
@@ -100,12 +102,14 @@ class _LogInScreenState extends State<LogInScreen> {
                               style: TextStyle(
                                 color: Color(0xffB3B3B3),
                                 fontSize: 20,
+                                fontFamily: 'PretendardRegular',
                               )
                           ),
                           TextButton(onPressed: (){}, child: Text('비밀번호 찾기',
                               style: TextStyle(
                                 color: Color(0xffB3B3B3),
                                 fontSize: 20,
+                                fontFamily: 'PretendardRegular',
                               )
                           )
                           ),
