@@ -7,7 +7,8 @@
 The project proposes a solution to help people with mild dementia with memory decline, which is characterized by "forgetting important memories from the past" and "forgetting to remember things in everyday life". Through Atti, a voicebot that can be found in the app, dementia patients can **<u>recall meaningful memories from the past and build a regular life in the present and future</u>**.
     
 
-Youtube : [[ATTI] - GDSC Solution Challenge 2024](https://www.youtube.com/watch?v=eCIppc-osqE)
+Youtube : [[ATTI] - GDSC Solution Challenge 2024](https://www.youtube.com/watch?v=eCIppc-osqE)</br>
+Youtube : [[ATTI] - GDSC Solution Challenge 2024 | Top 100](https://www.youtube.com/watch?v=0Y95Mzpib4I))
 
 ---
 
@@ -19,12 +20,12 @@ Here are the steps to download the Flutter app from https://github.com/H0ngJu/a
 2. Go to https://github.com/H0ngJu/atti  and download the app.
 3. Open Android Studio and select File -> Open from the menu, then open the downloaded app folder.
 4. Before Run our application, You need to get an API key for openai and an API key for openwheathermap
-    1. Issued your OpenAI API Key
+    1. Issued your Gemini API Key
     2. Issued your OpenWheatherMap API Key
 5. Create an .env file under your project file and write it like this
     
     ```
-    GPT_API_KEY="Your_OPENAI_API_KEY"
+    GEMINI_API_KEY="Your_GEMINI_API_KEY"
     OPEN_WEATHER_MAP_API_KEY="Your_OpenWheatherMap_API_KEY"
     ```
     
@@ -37,6 +38,7 @@ Here are the steps to download the Flutter app from https://github.com/H0ngJu/a
 
 1. [Overview](#Overview)
 2. [Necessity](#Necessity)
+3. [What's Different from Before](#What's-Different-from-Before)
 4. [UN SDGs](#UN_SDGs)
 5. [Skill](#Skill)
 6. [Screens](#Screens)
@@ -108,6 +110,17 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 ---
 
+# What's Different from Before
+
+### GPT to Gemini
+- We changed our AI model from GPT to Gemini. By leveraging Gemini's multi-modal capabilities, we were able to create a voicebot that understands and interacts with the photos users submit.
+
+### Simplifying the UI
+- Before we started the process of developing top100, we deeply analysed user feedback on past versions. One of the most important feedback we received from users was that the interface was too complicated. Based on this feedback, we improved the UI, focusing on simplifying the design to make it easier for users to understand and use our application.
+
+
+---
+
 # UN SDGs 3
 
 <img height="300" alt="image" src="https://cdn.imweb.me/upload/S202108243f92708905182/af6401c8a0536.jpg">
@@ -117,9 +130,9 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 # Skill
 
 
-|   Firebase   |    Flutter    |  Gpt3.5 turbo API  |
+|   Firebase   |    Flutter    |  Gemini 1.5 Pro API  |
 |:------------:|:-------------:|:-------------:|
-|  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Firebase_Logo.svg/1280px-Firebase_Logo.svg.png" alt="Firebase Logo" width="200"> | <img src="https://modulabs.co.kr/wp-content/uploads/2023/06/flutter-logo-sharing.png" alt="Flutter Logo" width="200"> | <img src="https://appmaster.io/api/_files/URQWqPJkzqvi98To3QGKnG/download/" alt="GPT3.5 turbo API" width="200"> |
+|  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Firebase_Logo.svg/1280px-Firebase_Logo.svg.png" alt="Firebase Logo" width="200"> | <img src="https://modulabs.co.kr/wp-content/uploads/2023/06/flutter-logo-sharing.png" alt="Flutter Logo" width="200"> | <img src="https://miro.medium.com/v2/resize:fit:1200/1*gLJsygEtXnh9ROcbYi-34w.jpeg" alt="Gemini 1.5 Pro API" width="200"> |
 
 ---
 
@@ -129,29 +142,73 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 | 1 | 2 | 3 | 4 |
 |---------|---------|---------|---------|
-| ![image](https://github.com/H0ngJu/atti/assets/106425326/468c3264-637b-4034-97e1-61bf3e03acab) | ![image](https://github.com/H0ngJu/atti/assets/106425326/1e5a83f8-9b55-4a83-8c57-20310823dc40) | ![image](https://github.com/H0ngJu/atti/assets/106425326/de71baff-87f1-48ed-8b99-bb5a9be1c2bc) | ![image](https://github.com/H0ngJu/atti/assets/106425326/0e2fc91c-ff90-47d7-bcbf-2622790082ab) |
+| ![KakaoTalk_20240505_235004771](https://github.com/H0ngJu/atti/assets/150149986/35f92048-33ef-4a45-9210-71b8c8a0bae5) | ![KakaoTalk_20240505_235004771_01](https://github.com/H0ngJu/atti/assets/150149986/4454e3d4-4313-41f4-87fc-32101033b6e8) | ![image](https://github.com/H0ngJu/atti/assets/150149986/9b94304e-3dfa-4ae4-a6b7-7824c10e937a) | ![image](https://github.com/H0ngJu/atti/assets/150149986/ee31269b-7d4d-491c-91eb-404636230b07) |
 
-### Memory Note
+## 🌟Memory Note
 
-| 1 | 2 | 3 | 4 | 5 | 6 |
-|---------|---------|---------|---------|---------|---------|
-| ![image](https://github.com/H0ngJu/atti/assets/106425326/52c4b089-03a7-4782-9b6d-19e38e447ef8) | ![image](https://github.com/H0ngJu/atti/assets/106425326/cfee8a67-56e3-494a-911f-cfe3aded0127) | ![image](https://github.com/H0ngJu/atti/assets/106425326/f7a87ba5-1992-4c5d-959a-b1ffbcd251ec) | ![image](https://github.com/H0ngJu/atti/assets/106425326/7e1f8997-3a14-4d4f-94c8-521a6c570933) | ![image](https://github.com/H0ngJu/atti/assets/106425326/afbe55bd-a1be-44db-beb3-cc1a9f24b3f3) | ![image](https://github.com/H0ngJu/atti/assets/106425326/cab17a41-8ae3-4f9e-b2f3-db4e48c60bea) |
+### Memory Note Main
 
-
-
-### Routine
-
-| 1 | 2 |
-|---------|---------|
-| <img src="https://github.com/H0ngJu/atti/assets/106425326/cae55e78-065f-4fd4-b69f-b697e71de8fd" width="200"> | <img src="https://github.com/H0ngJu/atti/assets/106425326/c0e7e97d-66fc-40ad-a94f-7b1d9098c9e4" width="200"> |
+| 1 | 2 | 3 | 
+|---------|---------|---------|
+| ![KakaoTalk_20240505_235417183](https://github.com/H0ngJu/atti/assets/150149986/6d9fa473-0a1c-4d3c-8afc-30bdf540301c) | ![KakaoTalk_20240505_235417183_01](https://github.com/H0ngJu/atti/assets/150149986/277074f8-160f-4353-82a6-df4e0074cdb5) | ![KakaoTalk_20240505_235417183_02](https://github.com/H0ngJu/atti/assets/150149986/8e4dbb5c-0d49-475c-86a0-f46d60cbc4f7) |
 
 
-### Schedule
 
-| 1 | 2 |
-|---------|---------|
-| <img src="https://github.com/H0ngJu/atti/assets/106425326/10bee284-c706-4c71-bc9d-3c91c95d0bc8" width="200"> | <img src="https://github.com/H0ngJu/atti/assets/106425326/5e8bc055-d244-40c9-bf29-85b09487e88a" width="200"> |
+### Memory Note registration
 
+| 1 | 2 | 3 | 4 |
+|---------|---------|---------|---------|
+| ![KakaoTalk_20240505_235922741](https://github.com/H0ngJu/atti/assets/150149986/b864a77d-f2c7-43af-9fb2-b472796e608f) | ![KakaoTalk_20240505_235922741_03](https://github.com/H0ngJu/atti/assets/150149986/a9729b0b-7f00-452c-82ca-3ab3b573c9d9) | ![KakaoTalk_20240505_235922741_04](https://github.com/H0ngJu/atti/assets/150149986/c490cf7b-69cd-48e1-aa74-a31793ed690f) | ![KakaoTalk_20240505_235922741_05](https://github.com/H0ngJu/atti/assets/150149986/33101351-db0b-4f49-9edc-fa8fac48ba1a) |
+
+| 5 | 6 | 7 | 8 |
+|---------|---------|---------|---------|
+| ![KakaoTalk_20240505_235922741_06](https://github.com/H0ngJu/atti/assets/150149986/33e0e7c3-a094-42c4-b8c6-d6daacb2ed7a) | ![KakaoTalk_20240505_235922741_07](https://github.com/H0ngJu/atti/assets/150149986/edffced2-688a-40d9-8076-289e19c2b336) | ![KakaoTalk_20240505_235922741_08](https://github.com/H0ngJu/atti/assets/150149986/dadb4f14-99f6-4a45-9b97-a0aac1fb312b) | ![KakaoTalk_20240505_235922741_09](https://github.com/H0ngJu/atti/assets/150149986/2ec67e93-9fac-4f46-9bfe-1fd23e7efd86) |
+
+
+
+### Conversation with Atti
+| 1 | 2 | 3 | 4 |
+|---------|---------|---------|---------|
+| ![KakaoTalk_20240506_000423586](https://github.com/H0ngJu/atti/assets/150149986/deccd284-057d-42c4-8e1e-d9eae7e4ea66) | ![KakaoTalk_20240506_000423586_01](https://github.com/H0ngJu/atti/assets/150149986/8501882c-adf5-4455-8191-ad3479cb784b) | ![KakaoTalk_20240506_000423586_02](https://github.com/H0ngJu/atti/assets/150149986/1c37bdcf-bd2c-4887-a2e6-3dad7234c628) | ![KakaoTalk_20240506_000423586_03](https://github.com/H0ngJu/atti/assets/150149986/fd5410d4-ba63-4875-9f75-3a2a0f772f1a) |
+
+| 5 | 6 | 7 | 8 |
+|---------|---------|---------|---------|
+| ![KakaoTalk_20240506_000423586_04](https://github.com/H0ngJu/atti/assets/150149986/1cdccbec-8a53-42e5-8c4a-af9954f32258) | ![KakaoTalk_20240506_000423586_05](https://github.com/H0ngJu/atti/assets/150149986/955def12-a3b8-4a80-8583-a3217b600eee) | ![KakaoTalk_20240506_000423586_06](https://github.com/H0ngJu/atti/assets/150149986/dc7ff95c-633c-4a1b-b4ca-7b9cb5e4bdf8) | ![KakaoTalk_20240506_000423586_07](https://github.com/H0ngJu/atti/assets/150149986/a4b39422-993d-460b-809d-2708032062c0) |
+
+
+
+## 🌟Schedule and Routine
+
+### Schedule and Routine Main
+
+| 1 | 2 | 3 | 4 | 5 |
+|---------|---------|---------|---------|---------|
+| ![KakaoTalk_20240505_234811820](https://github.com/H0ngJu/atti/assets/150149986/22f554ee-05a1-4b95-bab1-1d7644bbb38a) | ![KakaoTalk_20240505_234811820_01](https://github.com/H0ngJu/atti/assets/150149986/11532a86-8f1f-402e-8712-e88b89c8bb9c) | ![KakaoTalk_20240505_234811820_02](https://github.com/H0ngJu/atti/assets/150149986/03848d6a-feeb-4546-998b-a08d1e98f437) | ![KakaoTalk_20240505_235234663](https://github.com/H0ngJu/atti/assets/150149986/f0e90ddc-8867-4cf7-bba2-28e14b957be7) | ![KakaoTalk_20240505_235234663_01](https://github.com/H0ngJu/atti/assets/150149986/ad3f8e64-d59a-4c97-961f-7281bd603369) |
+
+
+
+### Schedule registration
+
+| 1 | 2 | 3 | 4 |
+|---------|---------|---------|---------|
+| ![KakaoTalk_20240505_234639192](https://github.com/H0ngJu/atti/assets/150149986/ab0bbf6b-54e9-42ba-b3a1-e79eadd40225) | ![KakaoTalk_20240505_234639192_01](https://github.com/H0ngJu/atti/assets/150149986/b00a3d05-4475-4f62-8466-d32e0fbcf9f2) | ![KakaoTalk_20240505_234639192_02](https://github.com/H0ngJu/atti/assets/150149986/bf3ea4fe-b941-420f-a946-ad4b90a4c1f9) | ![KakaoTalk_20240505_234639192_03](https://github.com/H0ngJu/atti/assets/150149986/2fc1428b-4328-4c69-8bfb-0f29390bf6a0) |
+
+| 5 | 6 | 7 |
+|---------|---------|---------|
+| ![KakaoTalk_20240505_234639192_04](https://github.com/H0ngJu/atti/assets/150149986/a1e0e6e6-ff76-4df8-aee0-3f4506ff264f) | ![KakaoTalk_20240505_234639192_05](https://github.com/H0ngJu/atti/assets/150149986/85826abd-afb4-47cb-934a-55a0e66d3f46) | ![KakaoTalk_20240505_234639192_06](https://github.com/H0ngJu/atti/assets/150149986/e6fa665f-bace-4002-9896-cb0567d8ef22) |
+
+
+
+### Alert
+
+| 1 | 2 | 3 |
+|---------|---------|---------|
+| ![KakaoTalk_20240505_235254121](https://github.com/H0ngJu/atti/assets/150149986/2f7314a8-abde-414f-8125-5faff82d48f0) | ![KakaoTalk_20240505_235254121_01](https://github.com/H0ngJu/atti/assets/150149986/41ff455d-2e2b-462f-86c6-a44d46e182a9) | ![KakaoTalk_20240505_235254121_02](https://github.com/H0ngJu/atti/assets/150149986/2921c9b5-4302-454f-9ccc-728a99b0b8df) |
+
+
+
+
+## 🌟Report
 
 ### Report
 
@@ -159,11 +216,24 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 |---------|---------|----------|
 | <img src="https://github.com/H0ngJu/atti/assets/106425326/e0c2444a-03dc-4ec9-8def-56bc164fad8c" width="200"> | <img src="https://github.com/H0ngJu/atti/assets/106425326/71a664dd-60cf-4dbb-9e79-60b87c341e95" width="200"> | <img src="https://github.com/H0ngJu/atti/assets/106425326/58cfc924-5135-4f7a-8574-02d09ce6265b" width="200"> |
 
-### Alert
 
-| 1 | 2 |
-|---------|---------|
-| <img src="https://github.com/H0ngJu/atti/assets/106425326/97cceef3-9073-4128-bd1d-53251f965d87" width="200"> | <img src="https://github.com/H0ngJu/atti/assets/106425326/f4948cb1-26af-484e-b9ff-dab81cc10a28" width="200"> |
+
+## 🌟 Signup and Login
+
+### Sign Up
+
+| 1 | 2 | 3 |
+|---------|---------|----------|
+| ![image](https://github.com/H0ngJu/atti/assets/150149986/72dbf55c-dc82-4f29-af0e-4b372066aa69) | ![image](https://github.com/H0ngJu/atti/assets/150149986/8fd14742-5ca6-4633-9fa1-96edb45e197b) | ![image](https://github.com/H0ngJu/atti/assets/150149986/b51a4c1e-6ef9-4086-93dd-cf1640248ad9) |
+
+| 4 | 5 | 6 |
+|----------|----------|----------|
+| ![image](https://github.com/H0ngJu/atti/assets/150149986/a1ccfaf5-5e8a-49ec-bb70-7f65c6e7c760) | ![image](https://github.com/H0ngJu/atti/assets/150149986/3b51a87e-7b91-43b2-9754-1cda853c8268) | ![image](https://github.com/H0ngJu/atti/assets/150149986/6d6b7d3b-65e0-4df3-a15b-84d71c6c4a55) |
+
+
+
+
+
 
 ---
 
@@ -196,4 +266,3 @@ While dementia has been identified as one of the negative aspects of living long
 The 'ATTI' app connects people with dementia to their past, present, and future through positive memory recall, improving their psychological well-being and quality of life. 
 
 We want to realize a future where dementia, which can strike anyone at any time, is not something to be feared, but something to be prepared for.
-
