@@ -30,6 +30,7 @@ class _ReportDetailState extends State<ReportDetail> {
   var mostViews;
   var registerdMemoryCount;
   var dates;
+  var dangerWords;
 
   int totalRoutines = 0;
   int completedRoutines = 0;
@@ -76,6 +77,7 @@ class _ReportDetailState extends State<ReportDetail> {
     setState(() {
       reportPeriod = reportData['reportPeriod'];
       weeklyEmotion = reportData['weeklyEmotion'];
+      dangerWords = reportData['dangerWords'];
       highestViewedMemory = reportData['highestViewedMemory'];
       patientId = reportData['patientId'];
       routineCompletion = reportData['routineCompletion'];
@@ -312,15 +314,17 @@ class _ReportDetailState extends State<ReportDetail> {
           SizedBox(
             height: 10,
           ),
-          isExist
-              ? TagContainer("위험단어") // ======================================================
-              : Text(
-            '대화에서 발견된 위험 단어가 없습니다.',
-            style: TextStyle(
-                fontFamily: 'PretendardRegular',
-                fontSize: 22,
-                color: Color(0xfffA38130)),
-          )
+          if (dangerWords!.length > 0)
+            ...dangerWords!.keys.map((emotion) => TagContainer(emotion)).toList(),
+          // isExist
+          //     ? TagContainer("위험단어") // ======================================================
+          //     : Text(
+          //         '대화에서 발견된 위험 단어가 없습니다.',
+          //         style: TextStyle(
+          //             fontFamily: 'PretendardRegular',
+          //             fontSize: 22,
+          //             color: Color(0xfffA38130)),
+          //       )
         ],
       ),
     );
