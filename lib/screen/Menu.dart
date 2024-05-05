@@ -149,7 +149,7 @@ class _MenuState extends State<Menu> {
           Container(
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(15),
                 border: Border.all(color: Color(0xff868686))),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -162,8 +162,8 @@ class _MenuState extends State<Menu> {
                     Text('${authController.userEmail}', style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'PretendardRegular')),
                   ],
                 ),
-                TextButton(
-                    onPressed: () async {
+                GestureDetector(
+                    onTap: () async {
                       try {
                         await FirebaseAuth.instance.signOut();
                         authController.logout();
@@ -173,11 +173,14 @@ class _MenuState extends State<Menu> {
                         print("로그아웃 실패: $error");
                       }
                     },
-                    style: TextButton.styleFrom(backgroundColor: Colors.black, padding: EdgeInsets.all(20)),
-                    child: Text(
+                    //style: TextButton.styleFrom(backgroundColor: Colors.black, padding: EdgeInsets.all(20),),
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(14)),
+                        child : Text(
                       '로그아웃',
                       style: TextStyle(fontFamily : 'PretendardMedium', fontSize: 20,color: Colors.white),
-                    ))
+                    )))
               ],
             ),
           )
