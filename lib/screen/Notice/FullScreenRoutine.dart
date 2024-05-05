@@ -159,6 +159,11 @@ class _FullScreenRoutineState extends State<FullScreenRoutine> {
                       '${authController.userName}님이 \'${routine?.name ?? ''}\' 일과를 완료하셨어요!',
                       DateTime.now(),
                       false);
+                  await addFinishNotification(
+                      '하루 일과 알림',
+                      '${authController.userName}님이 \'${routine?.name ?? ''}\' 일과를 완료하셨어요!',
+                      DateTime.now(),
+                      false);
 
                    Navigator.push(
                      context,

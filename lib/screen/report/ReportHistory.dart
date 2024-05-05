@@ -1,5 +1,6 @@
-import 'package:atti/data/report/reportController.dart';
-import 'package:atti/screen/report/ReportDetail.dart';
+import 'package:atti/data/auth_controller.dart';
+import 'package:atti/screen/report/_ReportDetail.dart';
+import 'package:atti/screen/report/ReportNew.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -7,134 +8,96 @@ import 'package:get/get_core/src/get_main.dart';
 class ReportHistory extends StatefulWidget {
   const ReportHistory({Key? key}) : super(key: key);
 
-
   @override
   State<ReportHistory> createState() => _ReportHistoryState();
 }
 
 class _ReportHistoryState extends State<ReportHistory> {
-  int _addItemCnt = 0;
-  ReportController reportController = ReportController();
-  late Future<List<ReportModel>> reports;
-  var thisMonth = '${DateTime.now().year}-${DateTime.now().month}';
+  final AuthController _authController = Get.find<AuthController>();
+
+  var thisMonth = '${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}';
+  var lastMonth = '';
+  List<List<String>> thisMonthReports = [];
+  List<List<String>> lastMonthReports = [];
+  List<List<String>> previousReports = [];
 
   @override
   void initState() {
     super.initState();
-    reports = reportController.getReport(); // getReport 호출을 initState에서 수행
+    DateTime now = DateTime.now();
+    DateTime lastMonthDate = DateTime(now.year, now.month - 1, 1);
+    lastMonth = '${lastMonthDate.year}-${lastMonthDate.month.toString().padLeft(2, '0')}';
+    _fetchReport();
   }
+
+  Future<void> _fetchReport() async {
+    var fetchedReports = await _authController.carerReports;
+    for (Map<String, dynamic> report in fetchedReports) {
+      List<String> periodList = List<String>.from(report['reportPeriod']);
+      String reportMonth = periodList[0].substring(0, 7);
+      if (reportMonth == thisMonth) {
+        thisMonthReports.add(periodList);
+      } else if (reportMonth == lastMonth) {
+        lastMonthReports.add(periodList);
+      } else {
+        previousReports.add(periodList);
+      }
+    }
+    setState(() {}); // 상태 업데이트
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: AppBar(),
         body: SingleChildScrollView(
-          child: FutureBuilder<List<ReportModel>>(
-              future: reports,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 10.0,
-                    ),
-                  );
-                  // 로딩 중일 때는 로딩 인디케이터 표시
-                } else if (snapshot.hasError) {
-                  print('Error: ${snapshot.error}');
-                  return Text('리포트를 불러오는 데 실패했습니다! 잠시 후 다시 시도해 주세요.',
-                    textAlign: TextAlign.center,
-                  ); // 에러 발생 시 에러 메시지 표시
-                } else {
-                  var reports = snapshot.data!;
-                  // 실제 데이터가 준비되었을 때 렌더링하려는 위젯
-                  return Container(
-                      margin: EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(bottom: 10),
-                                child: Text(
-                                  '이번 달',
-                                  style: TextStyle(
-                                      fontSize: 24, fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              // 아래 container는 reports를 확인하기 위한 코드
-                              Container(
-                                margin: EdgeInsets.only(bottom: 10),
-                                child: Text(
-                                  '${reports[0].patientId}', // 확인완
-                                  style: TextStyle(
-                                      fontSize: 24, fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              // for (var report in reports)
-                              //   var reportEntry = report.registeredMemoryCount.entries
-                              //   if (report.registeredMemoryCount.entries.entry.key.substring(6,7) == thisMonth.substring(5))
-                              //     ReportHistoryContainer(date: date)
-                            ],
-                          ),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  margin: EdgeInsets.only(bottom: 10),
-                                  child: Text('이전 받은 기록 보고',
-                                      style: TextStyle(
-                                          fontSize: 24, fontWeight: FontWeight.bold))),
-                              // ListView(
-                              //   shrinkWrap: true,
-                              //   physics: NeverScrollableScrollPhysics(),
-                              //   children: List.generate(datedummy.length,
-                              //     (index) {
-                              //       if (datedummy[index][0].substring(6,7) != thisMonth.substring(5)) {
-                              //         return ReportHistoryContainer(date: datedummy[index]);
-                              //       } else {
-                              //         return Container(); // 아무 것도 보여주지 않는 빈 컨테이너 반환
-                              //       }}
-                              //   ),
-                            // )
-                              ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _addItemCnt += 2; // 버튼을 누를 때마다 추가 아이템 개수 업데이트
-                                  });
-                                },
-                                child: Text(
-                                  '이전 기록 보고 더보기',
-                                  style: TextStyle(fontSize: 24, color: Colors.white),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color(0xffFFC215),
-                                    padding: EdgeInsets.symmetric(vertical: 10)),
-                              ))
-                        ],
-                      )
-                  );
-                }}),
+          child: Container(
+              margin: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  buildReportSection(true, '이번 달', thisMonthReports),
+                  SizedBox(height: 30),
+                  buildReportSection(false, '저번 달', lastMonthReports),
+                  SizedBox(height: 30),
+                  buildReportSection(false, '이전 기록', previousReports),
+                ],
+              )),
         ));
+  }
+
+  Widget buildReportSection(bool isRecent, String title, List<List<String>> reports) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          alignment: Alignment.topLeft,
+          margin: EdgeInsets.only(bottom: 10),
+          child: Text(title,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        ),
+        if (reports.isEmpty)
+          Text('데이터가 없습니다.', style: TextStyle(
+              fontFamily: 'PretendardRegular', fontSize: 18, color: Colors.grey
+          ),),
+        for (int i = 0; i < reports.length; i++)
+          isRecent ? ReportHistoryContainer(
+            date: reports[i],
+            indx: i,
+          ) : PreReportHistoryContainer(date: reports[i], indx: i),
+      ],
+    );
   }
 }
 
+
 class ReportHistoryContainer extends StatefulWidget {
   final List<String> date;
+  final int indx;
 
-  const ReportHistoryContainer({Key? key, required this.date}) : super(key: key);
+  const ReportHistoryContainer(
+      {Key? key, required this.date, required this.indx})
+      : super(key: key);
 
   @override
   State<ReportHistoryContainer> createState() => _ReportHistoryContainerState();
@@ -150,7 +113,8 @@ class _ReportHistoryContainerState extends State<ReportHistoryContainer> {
     int getWeekOfMonth(DateTime datetime) {
       DateTime firstDayOfMonth = DateTime(datetime.year, datetime.month, 1);
       int firstWeekdayOfMonth = firstDayOfMonth.weekday % 7; // 일요일을 0으로 변환
-      int weekOfMonth = ((datetime.day + firstWeekdayOfMonth - 1) / 7).floor() + 1;
+      int weekOfMonth =
+          ((datetime.day + firstWeekdayOfMonth - 1) / 7).floor() + 1;
       return weekOfMonth;
     }
 
@@ -158,7 +122,7 @@ class _ReportHistoryContainerState extends State<ReportHistoryContainer> {
 
     return GestureDetector(
         onTap: () {
-          Get.to(ReportDetail());
+          Get.to(ReportNew(indx: widget.indx));
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 16),
@@ -173,18 +137,85 @@ class _ReportHistoryContainerState extends State<ReportHistoryContainer> {
             children: [
               Text(
                 '${date[0]} ~ ${date[1]}',
-                style: TextStyle(color: Color(0xffA38130), fontSize: 20),
+                style: TextStyle(
+                    color: Color(0xff737373),
+                    fontFamily: 'PretendardRegular',
+                    fontSize: 20),
               ),
               SizedBox(
                 height: 10,
               ),
               Text(
-                '${date[0].substring(6,7)}월 ${weekOfMonth}주차 기록 보고',
+                '${date[0].substring(6, 7)}월 ${weekOfMonth}주차 기록 보고',
                 style: TextStyle(fontSize: 24),
               )
             ],
           ),
-        )
-    );
+        ));
+  }
+}
+
+class PreReportHistoryContainer extends StatefulWidget {
+  final List<String> date;
+  final int indx;
+
+  const PreReportHistoryContainer(
+      {Key? key, required this.date, required this.indx})
+      : super(key: key);
+
+  @override
+  State<PreReportHistoryContainer> createState() => _PreReportHistoryContainerState();
+}
+
+class _PreReportHistoryContainerState extends State<PreReportHistoryContainer> {
+  @override
+  Widget build(BuildContext context) {
+    List<String> date = widget.date;
+
+    String dateString = widget.date[0].replaceAll('.', '-');
+    DateTime datetime = DateTime.parse(dateString);
+    int getWeekOfMonth(DateTime datetime) {
+      DateTime firstDayOfMonth = DateTime(datetime.year, datetime.month, 1);
+      int firstWeekdayOfMonth = firstDayOfMonth.weekday % 7; // 일요일을 0으로 변환
+      int weekOfMonth =
+          ((datetime.day + firstWeekdayOfMonth - 1) / 7).floor() + 1;
+      return weekOfMonth;
+    }
+
+    int weekOfMonth = getWeekOfMonth(datetime);
+
+    return GestureDetector(
+        onTap: () {
+          Get.to(ReportNew(indx: widget.indx));
+        },
+        child: Container(
+          margin: EdgeInsets.only(bottom: 16),
+          width: MediaQuery.of(context).size.width * 0.9,
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+              //color: Color(0xffFFF5DB),
+            border: Border.all(color: Color(0xff737373), width: 1),
+              borderRadius: BorderRadius.circular(15)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${date[0]} ~ ${date[1]}',
+                style: TextStyle(
+                    color: Color(0xff737373),
+                    fontFamily: 'PretendardRegular',
+                    fontSize: 20),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                '${date[0].substring(6, 7)}월 ${weekOfMonth}주차 기록 보고',
+                style: TextStyle(color: Color(0xff737373), fontFamily: 'PretendardRegular',fontSize: 24),
+              )
+            ],
+          ),
+        ));
   }
 }

@@ -8,6 +8,7 @@ import 'package:atti/screen/memory/gallery/RecollectionDetail.dart';
 import 'package:atti/screen/memory/register/MemoryRegister1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import '../../../data/auth_controller.dart';
@@ -40,6 +41,20 @@ class _MainGalleryState extends State<MainGallery> {
     super.initState();
     fetchData();
     randomData = dummyData[Random().nextInt(dummyData.length)];
+    _speak();
+  }
+
+  FlutterTts flutterTts = FlutterTts();
+
+  Future _speak() async {
+    var result = await flutterTts.speak("사진을 눌러 그 시절에 대해 이야기해요");
+    await flutterTts.setLanguage('ko-KR');
+    await flutterTts.setPitch(1);
+    if (result == 1) {
+      // 성공적으로 재생
+    } else {
+      // 재생 실패
+    }
   }
 
   Future<void> fetchData() async {
@@ -121,112 +136,137 @@ class _MainGalleryState extends State<MainGallery> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
-        children : <Widget>[SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.only(top: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.72,
-                    child: RichText(
-                      text: TextSpan(
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 24,
-                          height: 1.5,
-                        ),
-                        children: [
-                          TextSpan(
-                              text: '${authController.userName.value}님의\n'),
-                          TextSpan(
-                            text:
-                                '\'${tagController.selectedTag.value}\' 기억을 모아봤어요',
-                            style: TextStyle(
-                              fontSize: 26,
-                              fontWeight: FontWeight.bold,
-                            ),
+      body: Stack(children: <Widget>[
+        SingleChildScrollView(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.72,
+                      child: RichText(
+                        text: TextSpan(
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 24,
+                            height: 1.5,
                           ),
-                        ],
+                          children: [
+                            TextSpan(
+                                text: '${authController.userName.value}님의\n'),
+                            TextSpan(
+                              text:
+                                  '\'${tagController.selectedTag.value}\' 기억을 모아봤어요',
+                              style: TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Get.to(GalleryOption());
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      side: BorderSide(color: Colors.black),
-                      shape: CircleBorder(),
-                      minimumSize: Size(48, 48),
+                    TextButton(
+                      onPressed: () {
+                        Get.to(GalleryOption());
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        side: BorderSide(color: Colors.black),
+                        shape: CircleBorder(),
+                        minimumSize: Size(48, 48),
+                      ),
+                      child: Text(
+                        '나열\n변경',
+                        style: TextStyle(fontSize: 12, color: Colors.black),
+                      ),
                     ),
-                    child: Text(
-                      '나열\n변경',
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                    ),
-                  ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
+              Row(
+                // 이미지를 중앙 정렬하기 위한 Row 위젯
+                mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
+                children: [
+                  Image(
+                      image: AssetImage('lib/assets/Atti/Stars.png'),
+                      width: MediaQuery.of(context).size.width * 0.46),
                 ],
               ),
-            ),
-            SizedBox(height: 10),
-            Row(
-              // 이미지를 중앙 정렬하기 위한 Row 위젯
-              mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
-              children: [
-                Image(
-                    image: AssetImage('lib/assets/Atti/Stars.png'),
-                    width: MediaQuery.of(context).size.width * 0.5),
-              ],
-            ),
-            SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
-            Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                  color: Color(0xffFFC215),
-                  borderRadius: BorderRadius.all(Radius.circular(15))),
-              child: Text(
-                  '사진을 눌러\n그 시절에 대해 이야기해요',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white, fontFamily: 'UhBee', fontSize: 25)),
-            ),
-            // GridView를 사용하여 2열로 메모리 정보를 표시합니다.
-            GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 30,
+              SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                    color: Color(0xffFFC215),
+                    borderRadius: BorderRadius.all(Radius.circular(15))),
+                child: Text('사진을 눌러\n그 시절에 대해 이야기해요',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'UhBee',
+                        fontSize: 25)),
               ),
-              itemCount: memoryNotes.length + 1, // 첫 번째 고정 아이템을 위해 +1을 합니다.
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(), // GridView가 스크롤되지 않도록 합니다.
-              itemBuilder: (context, index) {
-                // 첫 번째 아이템 처리
-                if (index == 0) {
-                  return GestureDetector(
-                    onTap: () {
+              // GridView를 사용하여 2열로 메모리 정보를 표시합니다.
+              GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 30,
+                ),
+                itemCount: memoryNotes.length + 1,
+                // 첫 번째 고정 아이템을 위해 +1을 합니다.
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                // GridView가 스크롤되지 않도록 합니다.
+                itemBuilder: (context, index) {
+                  // 첫 번째 아이템 처리
+                  if (index == 0) {
+                    return GestureDetector(
+                      onTap: () {
                         Get.to(RecollectionDetail(data: randomData));
-                    },
-                    child: Container(
+                      },
                       child: Column(
                         children: [
                           Expanded(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(30),
-                              child: Image.network(
-                                '${randomData.img}',
-                                fit: BoxFit.cover,
-                                width: 150,
-                                height: 150,
+                              child: Stack(children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(
+                                  color: Color(0xffFFC215),
+                                  width: 5,
+                                ),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(30),
+                                child: ColorFiltered(
+                                  colorFilter: ColorFilter.mode(
+                                    Colors.grey,
+                                    BlendMode.saturation,
+                                  ),
+                                  child: Image.network(
+                                    '${randomData.img}',
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                            Positioned(
+                              top: 15, // 별 아이콘의 위쪽 여백
+                              left: 15, // 별 아이콘의 왼쪽 여백
+                              child: Icon(
+                                Icons.star_rate_rounded, // 별 모양 아이콘
+                                color: Color(0xffFFC215), // 별 아이콘 색상
+                                size: 37, // 별 아이콘 크기
+                              ),
+                            ),
+                          ])),
                           Container(
                             alignment: Alignment.center,
                             child: Text(
@@ -236,19 +276,22 @@ class _MainGalleryState extends State<MainGallery> {
                           ),
                         ],
                       ),
-                    ),
-                  );
-                } else {
-                  // 그 외의 아이템 처리
-                  MemoryNoteModel memory = memoryNotes[index - 1]; // 인덱스 조정
-                  return GalleryContent(memory);
-                }
-              },
-            ),
+                    );
+                  } else {
+                    // 그 외의 아이템 처리
+                    MemoryNoteModel memory = memoryNotes[index - 1]; // 인덱스 조정
+                    return GalleryContent(memory);
+                  }
+                },
+              ),
 
-          ],
+              SizedBox(
+                height: 60,
+              )
+            ],
+          ),
         ),
-      ),Positioned(
+        Positioned(
           bottom: 0,
           left: 0,
           right: 0,
@@ -264,7 +307,8 @@ class _MainGalleryState extends State<MainGallery> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
-                minimumSize: Size(MediaQuery.of(context).size.width * 0.9, 50), // 버튼의 크기 설정
+                minimumSize: Size(
+                    MediaQuery.of(context).size.width * 0.9, 50), // 버튼의 크기 설정
               ),
               child: Text(
                 '기억 추가하기',
@@ -275,7 +319,8 @@ class _MainGalleryState extends State<MainGallery> {
               ),
             ),
           ),
-        ),]),
+        ),
+      ]),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

@@ -204,7 +204,7 @@ class _TodayNoticeState extends State<TodayNotice> {
         SizedBox(
           height: 10,
         ),
-        ElevatedButton(
+        TextButton(
           onPressed: () {
             setState(() {
               // 한 번에 보여줄 아이템 개수를 업데이트
@@ -215,7 +215,10 @@ class _TodayNoticeState extends State<TodayNotice> {
               }
             });
           },
-          child: Text('더 보기'),
+          style: TextButton.styleFrom(
+            backgroundColor: Color(0xffFFE9B3)
+          ),
+          child: Text('더 보기', style: TextStyle(color: Color(0xffA38130)),),
         ),
       ],
     );
@@ -381,7 +384,7 @@ class _PastNoticeState extends State<PastNotice> {
         SizedBox(
           height: 10,
         ),
-        ElevatedButton(
+        TextButton(
           onPressed: () {
             setState(() {
               // 한 번에 보여줄 아이템 개수를 업데이트
@@ -392,7 +395,10 @@ class _PastNoticeState extends State<PastNotice> {
               }
             });
           },
-          child: Text('더 보기'),
+          style: TextButton.styleFrom(
+              backgroundColor: Color(0xffFFE9B3)
+          ),
+          child: Text('더 보기', style: TextStyle(color: Color(0xffA38130)),),
         ),
       ],
     );

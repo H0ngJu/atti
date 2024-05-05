@@ -1,10 +1,12 @@
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
-import 'package:atti/screen/report/ReportDetail.dart';
+import 'package:atti/data/report/reportController.dart';
+import 'package:atti/screen/report/_ReportDetail.dart';
 import 'package:atti/screen/report/ReportHistory.dart';
 import 'package:atti/screen/report/ReportNew.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -28,7 +30,7 @@ class HomeCarer extends StatefulWidget {
 
 class _HomeCarerState extends State<HomeCarer> {
   // bottom Navi logic
-  int _selectedIndex = 2;
+  int _selectedIndex = 1;
   final _authentication = FirebaseAuth.instance;
   final _db = FirebaseFirestore.instance;
   User? loggedUser;
@@ -44,13 +46,11 @@ class _HomeCarerState extends State<HomeCarer> {
   int? numberOfDoneRoutines; // 선택된 날짜의 완료된 일과 개수
   String selectedDayInWeek = DateFormat('E', 'ko-KR').format(DateTime.now());
 
+
   @override
   void initState() {
     super.initState();
-    // Future.delayed(Duration.zero, () async {
-    //   await _fetchData();
     _fetchData();
-    // });
     getCurrentUser();
     _requestNotificationPermissions();
   }
@@ -98,7 +98,7 @@ class _HomeCarerState extends State<HomeCarer> {
     try {
       final user = _authentication.currentUser;
       print("loggedUser: ${user!.uid}");
-      print("check: ${authController.userName.value}");
+      print("check: ${authController.patientName.value}");
       if (user != null) {
         loggedUser = user as User?;
       }
@@ -121,11 +121,11 @@ class _HomeCarerState extends State<HomeCarer> {
       backgroundColor: Colors.white,
       appBar: AttiAppBar(
         title: Image.asset(
-          'lib/assets/logo2.png',
+          'lib/assets/AttiBlack.png',
           width: 150,
         ),
         showNotificationsIcon: true,
-        showPersonIcon: false,
+        showMenu: true,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -136,13 +136,13 @@ class _HomeCarerState extends State<HomeCarer> {
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(30),
                         bottomRight: Radius.circular(30))),
-                child: HomePatientTop(userName: authController.userName.value)),
+                child: HomePatientTop(patientName: authController.patientName.value)),
             Container(
                 margin: EdgeInsets.all(16),
                 child: HomeTodaySummary(
                   scheduleCnt: numberOfSchedules,
                   routineCnt: numberOfRoutines,
-                  userName: authController.userName.value,
+                  patientName: authController.patientName.value,
                   doneScheduleCnt: numberOfDoneSchedules,
                   doneRoutineCnt: numberOfDoneRoutines,
                 )),
@@ -163,9 +163,9 @@ class _HomeCarerState extends State<HomeCarer> {
 
 // 메인 첫 화면
 class HomePatientTop extends StatefulWidget {
-  final String userName;
+  final String patientName;
 
-  const HomePatientTop({Key? key, required this.userName}) : super(key: key);
+  const HomePatientTop({Key? key, required this.patientName}) : super(key: key);
 
   @override
   State<HomePatientTop> createState() => _HomePatientTopState();
@@ -176,7 +176,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
 
   @override
   Widget build(BuildContext context) {
-    String userName = widget.userName; // userName 받음
+    String patientName = widget.patientName;
     // 시간 가져오기
     DateTime now = DateTime.now();
     String weekday = _getWeekday(now.weekday);
@@ -193,7 +193,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
               style: TextStyle(color: Colors.black, height: 1.2),
               children: [
                 TextSpan(
-                  text: '${widget.userName} 보호자님\n',
+                  text: '${widget.patientName} 보호자님\n',
                   style: TextStyle(fontSize: 24),
                 ),
                 TextSpan(
@@ -260,13 +260,13 @@ class HomeTodaySummary extends StatefulWidget {
   final int? doneScheduleCnt;
   final int? routineCnt;
   final int? doneRoutineCnt;
-  final String userName;
+  final String patientName;
 
   const HomeTodaySummary(
       {Key? key,
       required this.scheduleCnt,
       required this.routineCnt,
-      required this.userName,
+      required this.patientName,
       required this.doneScheduleCnt,
       required this.doneRoutineCnt})
       : super(key: key);
@@ -284,7 +284,7 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
         children: [
           Container(
             child: Text(
-              '${widget.userName}님이 진행하고 있어요!',
+              '${widget.patientName}님이 진행하고 있어요!',
               style: TextStyle(fontSize: 28, fontFamily: 'PretendardMedium'),
             ),
           ),
@@ -360,7 +360,7 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
                 ),
               ),
             ],
-          )
+          ),
         ]);
   }
 }
@@ -371,58 +371,70 @@ class HomeReport extends StatefulWidget {
   @override
   _HomeReportState createState() => _HomeReportState();
 }
-
 class _HomeReportState extends State<HomeReport> {
-  List<ScheduleModel> weeklySchedules = [];
-  List<RoutineModel> weeklyRoutines = [];
-  int totalSchedules = 0;
-  int totalRoutines = 0;
-  int doneSchedules = 0;
-  int doneRoutines = 0;
 
   @override
   void initState() {
     super.initState();
-    _fetchWeeklyData();
+    _fetchReport();
   }
 
-  Future<void> _fetchWeeklyData() async {
+  final AuthController _authController = Get.find<AuthController>();
+  var currentReport;
+  var reportData;
+  var reportPeriod;
+  var scheduleCompletion;
+  var routineCompletion;
+  var highestViewedMemory;
+  int totalSchedules = 0;
+  int totalRoutines = 0;
+  int completedSchedules = 0;
+  int completedRoutines = 0;
+
+  Future<void> _fetchReport() async {
     DateTime now = DateTime.now();
     DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
     DateTime endOfWeek = startOfWeek.add(Duration(days: 6));
 
-    List<ScheduleModel> fetchedSchedules =
-        await ScheduleService().getSchedulesInRange(startOfWeek, endOfWeek);
-    List<RoutineModel> fetchedRoutines =
-        await RoutineService().getRoutinesInRange(startOfWeek, endOfWeek);
+    var fetchedReports = await _authController.carerReports;
 
     setState(() {
-      weeklySchedules = fetchedSchedules;
-      weeklyRoutines = fetchedRoutines;
-      totalSchedules = weeklySchedules.length;
-      totalRoutines = weeklyRoutines.length;
-      doneSchedules = weeklySchedules
-          .where((schedule) => schedule.isFinished ?? false)
-          .length;
-      doneRoutines = weeklyRoutines
-          .where((routine) =>
-              routine.isFinished != null &&
-              routine.isFinished!.values.any((v) => v))
-          .length;
+      currentReport = fetchedReports[0];
+      reportPeriod = currentReport['reportPeriod'];
+      scheduleCompletion = currentReport['scheduleCompletion'];
+      routineCompletion = currentReport['routineCompletion'];
+      highestViewedMemory = currentReport['highestViewedMemory'];
+
+      // routineCompletion 맵을 순회하며 totalRoutines와 completedRoutines 값을 갱신
+      routineCompletion.forEach((date, data) {
+        int total = (data['total'] as num?)?.toInt() ?? 0; // num을 int로 변환, 기본값 0
+        int completed = (data['completed'] as num?)?.toInt() ?? 0; // 위와 동일
+
+        totalRoutines += total;
+        completedRoutines += completed;
+      });
+      scheduleCompletion.forEach((date, data) {
+        int total = (data['total'] as num?)?.toInt() ?? 0; // num을 int로 변환, 기본값 0
+        int completed = (data['completed'] as num?)?.toInt() ?? 0; // 위와 동일
+
+        totalSchedules += total;
+        completedSchedules += completed;
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final weekOfMonth = getWeekOfMonth(now);
+
+
+    final startDay = DateTime.parse(reportPeriod[0]);
+    final weekOfMonth = getWeekOfMonth(startDay);
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '${now.month}월 ${weekOfMonth}주차 기록 보고',
+          Text('${startDay.month}월 ${weekOfMonth}주차 기록 보고',
             style: TextStyle(fontSize: 30, fontFamily: 'PretendardMedium'),
             textAlign: TextAlign.left,
           ),
@@ -452,7 +464,9 @@ class _HomeReportState extends State<HomeReport> {
                         child: Container(
                       margin: EdgeInsets.all(10),
                       child: Text(
-                        '${(doneRoutines / totalRoutines * 100).toStringAsFixed(1)} %',
+                        totalRoutines != 0 ?
+                          '${(completedRoutines / totalRoutines * 100).toStringAsFixed(1)} %':
+                          "지난 주 일과가 없어요",
                         textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
                         style: TextStyle(
                             color: Color(0xffA38130),
@@ -478,7 +492,9 @@ class _HomeReportState extends State<HomeReport> {
                         child: Container(
                       margin: EdgeInsets.all(10),
                       child: Text(
-                        '${(doneSchedules / totalSchedules * 100).toStringAsFixed(1)} %',
+                        totalSchedules != 0 ?
+                          '${(completedSchedules / totalSchedules * 100).toStringAsFixed(1)} %':
+                          "지난 주 일정이 없어요",
                         textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
                         style: TextStyle(
                             color: Color(0xffA38130),
@@ -504,7 +520,7 @@ class _HomeReportState extends State<HomeReport> {
                         child: Container(
                       margin: EdgeInsets.all(10),
                       child: Text(
-                        '뭘까용',
+                        highestViewedMemory.length > 0 ? "${highestViewedMemory}" : "열람한 기억이 없어요",
                         textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
                         style: TextStyle(
                             color: Color(0xffA38130),
@@ -523,11 +539,11 @@ class _HomeReportState extends State<HomeReport> {
           TextButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ReportNew();
+                return ReportNew(indx: 0); // ============================================================================= 0 맞는지 체크
               }));
             },
             child: Text(
-              '${now.month}월 ${weekOfMonth}주차 기록 보고 보기',
+              '${startDay.month}월 ${weekOfMonth}주차 기록 보고 보기',
               style: TextStyle(fontSize: 20, color: Color(0xffA38130)),
             ),
             style: ButtonStyle(

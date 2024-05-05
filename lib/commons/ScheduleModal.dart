@@ -118,6 +118,12 @@ class ScheduleModal extends StatelessWidget {
                         '${authController.userName}님이 \'${name}\' 일정을 완료하셨어요!',
                         DateTime.now(),
                         false);
+                    await addFinishNotification(
+                        '일정 알림',
+                        '${authController.userName}님이 \'${name}\' 일정을 완료하셨어요!',
+                        DateTime.now(),
+                        false);
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => ScheduleFinish1(name: name)),

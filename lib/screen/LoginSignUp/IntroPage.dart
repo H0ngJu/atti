@@ -16,9 +16,9 @@ class _IntroPageState extends State<IntroPage> {
   @override
   void initState() {
     super.initState();
-    final AuthController authController = Get.put(AuthController());
+    AuthController authController = Get.put(AuthController());
+    authController.init();
     Future.delayed(Duration(seconds: 2), () {
-      print("로그인 상태 확인 후 페이지 이동 시도"); // debug
       if (authController.loggedUser != null) {
         // 로그인한 유저가 있는 경우
         Get.off(() => authController.isPatient ? HomePatient() : HomeCarer());
@@ -31,7 +31,6 @@ class _IntroPageState extends State<IntroPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('로그인한 유저 : ${AuthController().loggedUser}'); // debug
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
