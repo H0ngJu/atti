@@ -119,8 +119,8 @@ class _ReportDetailState extends State<ReportDetail> {
       child:
       Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(
-          '${date.substring(8)}',
-          style: TextStyle(fontFamily: 'PretendardRegular', fontSize: 24),
+          '${date.substring(8)}일',
+          style: TextStyle(fontFamily: 'PretendardRegular', fontSize: 20),
         ),
         Text(
           '${completed}/${total}',
@@ -316,15 +316,12 @@ class _ReportDetailState extends State<ReportDetail> {
           ),
           if (dangerWords!.length > 0)
             ...dangerWords!.keys.map((emotion) => TagContainer(emotion)).toList(),
-          // isExist
-          //     ? TagContainer("위험단어") // ======================================================
-          //     : Text(
-          //         '대화에서 발견된 위험 단어가 없습니다.',
-          //         style: TextStyle(
-          //             fontFamily: 'PretendardRegular',
-          //             fontSize: 22,
-          //             color: Color(0xfffA38130)),
-          //       )
+          if (dangerWords!.length == 0)
+            Text("위험 단어가 없어요",
+              style:
+              TextStyle(fontSize: 24, color: Color(0xffA38130)
+              ,fontFamily: 'PretendardRegular'),
+            )
         ],
       ),
     );
