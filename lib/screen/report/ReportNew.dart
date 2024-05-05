@@ -19,8 +19,8 @@ class _ReportNewState extends State<ReportNew> {
   // ==================================================================================================================================
   AuthController _authController = Get.find<AuthController>();
   var reportData = {};
-  List<String>? reportPeriod;
-  Map<String, int>? weeklyEmotion;
+  List<dynamic>? reportPeriod;
+  Map<String, dynamic>? weeklyEmotion;
   String? highestViewedMemory;
   DocumentReference? patientId;
   var routineCompletion;
@@ -53,6 +53,7 @@ class _ReportNewState extends State<ReportNew> {
       unfinishedSchedule = reportData['unfinishedSchedule'];
       mostViews = reportData['mostViews'];
       registerdMemoryCount = reportData['registerdMemoryCount'];
+      print("reportPeriod : ${reportPeriod}\nweeklyEmotion : ${weeklyEmotion}\nhighestViewedMemory : ${highestViewedMemory}\npatientId : ${patientId}\nroutineCompletion : ${routineCompletion}\nunfinishedRoutine : ${unfinishedRoutine}\nscheduleCompletion : ${scheduleCompletion}\nunfinishedSchedule : ${unfinishedSchedule}\nmostViews : ${mostViews}\nregisterdMemoryCount : ${registerdMemoryCount}\n");
     });
   }
   // ==================================================================================================================================
