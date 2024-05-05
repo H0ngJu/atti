@@ -111,6 +111,7 @@ class _RecollectionChatState extends State<RecollectionChat> {
   late String _speaker = "Assistant";
   final FlutterTts flutterTts = FlutterTts();
   String _currentImage = 'lib/assets/Atti/default1.png'; // 기본 이미지 설정
+  bool _isTTSEnabled = true;
 
   @override
   void initState() {
@@ -159,6 +160,7 @@ class _RecollectionChatState extends State<RecollectionChat> {
               ChatBubble(
                 message: _currentMessage,
                 speaker: _speaker,
+                isTTSEnabled: _isTTSEnabled,
                 //onTextChanged: onBubbleTextChanged,
               ),
               GestureDetector(
@@ -182,6 +184,11 @@ class _RecollectionChatState extends State<RecollectionChat> {
                   setState(() {
                     _currentMessage = message;
                     _speaker = role;
+                  });
+                },
+                updateTTSEnabled: (flag) {
+                  setState(() {
+                    _isTTSEnabled = flag;
                   });
                 },
                 updatedImage: (image) {
@@ -215,13 +222,15 @@ class VoiceButton extends StatefulWidget {
   final RecollectionData recollection;
   final String role;
   final Function(String, String) updatedMessage;
+  final Function(bool) updateTTSEnabled;
 
   //final Function(String, String) updatedMessage;
   final Function(String) updatedImage; // 이미지 업데이트 콜백 추가
   const VoiceButton(
       {Key? key,
       required this.updatedMessage,
-      required this.recollection,
+        required this.updateTTSEnabled,
+        required this.recollection,
       required this.updatedImage,
       required this.role})
       : super(key: key);
@@ -282,18 +291,29 @@ class _VoiceButtonState extends State<VoiceButton> {
             _spokenText = result.recognizedWords;
           });
           String message = result.recognizedWords ?? "";
+
           Future.delayed(Duration(seconds: 2), () async {
             if (_spokenText == message) {
               try {
                 _appendMessage("User", message);
                 _onUserMessage(message);
 
-                String response = await _chatbot.getRecollectionResponse(
-                    message,
-                    widget.recollection.description!); // Chatbot으로부터 응답 받기
-                _appendMessage("Assistant", response); // 챗봇 응답을 메시지로 추가
-                //_speakMessage(response);
-                _onApiResponse(response);
+                updateTTSEnabled(false);
+                Stream<String> response = await _chatbot.getRecollectionResponse(message, widget.recollection.description!);
+                String fullResponse = ""; // 전체 응답
+
+                response.listen((chunk) { // 스트림에서 각 청크를 처리
+                  // 청크를 글자 단위로 분해
+                  for (var char in chunk.split('')) {
+                    _appendMessage("Assistant", fullResponse); // 각 글자를 화면에 출력
+                    fullResponse += char; // 전체 응답에 글자 추가
+                  }
+                }, onDone: () { // 스트림이 완료되면 전체 응답을 _currentMessage에 설정
+                  //print('fullResponse : ${fullResponse}');
+                  updateTTSEnabled(true);
+                  _onApiResponse(fullResponse);
+                });
+
               } catch (e) {
                 print("Error: $e");
               } finally {
@@ -320,6 +340,12 @@ class _VoiceButtonState extends State<VoiceButton> {
       _currentMessage = message;
       widget.updatedMessage(_currentMessage, "I");
     }
+  }
+
+  void updateTTSEnabled(bool flag) {
+    setState(() {
+      widget.updateTTSEnabled(flag);
+    });
   }
 
   void _resetStaticTimer() {

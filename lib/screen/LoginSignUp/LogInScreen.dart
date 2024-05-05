@@ -56,7 +56,7 @@ class _LogInScreenState extends State<LogInScreen> {
         ),
       ),
       body: GestureDetector(
-        onTap: (){
+        onTap: () {
           FocusScope.of(context).unfocus();
         },
         child: Stack(

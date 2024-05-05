@@ -69,7 +69,7 @@ class NotificationService {
     return status;
   }
 
-  // (환자, 보호자 공통) 매일 아침 7시에 알림 보내기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+  // (환자, 보호자 공통) 매일 아침 7시에 알림 보내기 ======================================================
   Future<void> showDailyNotification() async {
     tz.initializeTimeZones();
     DateTime now = DateTime.now();
@@ -77,7 +77,7 @@ class NotificationService {
 
     DocumentSnapshot userDocSnapshot = await FirebaseFirestore.instance
         .collection('user')
-        .doc(authController.patientDocRef.id)
+        .doc(authController.patientDocRef!.id)
         .get();
     String userName = userDocSnapshot['userName'];
 
@@ -91,7 +91,7 @@ class NotificationService {
     );
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      createUniqueId(),
+      0, // createUniqueId(),
       '아띠',
       '오늘의 일과와 일정을 확인해보세요!',
       makeDate(7,0,0),
@@ -105,13 +105,13 @@ class NotificationService {
     await addNotification('매일 알림', '오늘 ${userName}님의 일과와 일정을 확인해보세요!', dailyTime, authController.isPatient);
   }
 
-  // (보호자) 매주 월요일 아침에 알림 보내기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+  // (보호자) 매주 월요일 아침에 알림 보내기 ======================================================
   Future<void> showWeeklyCarerNotification() async {
     tz.initializeTimeZones();
 
     DocumentSnapshot userDocSnapshot = await FirebaseFirestore.instance
         .collection('user')
-        .doc(authController.patientDocRef.id)
+        .doc(authController.patientDocRef!.id)
         .get();
     String userName = userDocSnapshot['userName'];
 
@@ -129,7 +129,7 @@ class NotificationService {
     final nextMonday = tz.TZDateTime(now.location, now.year, now.month, now.day + (8 - now.weekday) % 7, 7);
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      createUniqueId(),
+      1, //createUniqueId(),
       '아띠',
       '저번 주 ${userName}님의 보고서가 도착했어요!',
       nextMonday,
@@ -144,8 +144,8 @@ class NotificationService {
   }
 
 
-  // 정해진 날짜, 시간에 예약 알림 보내기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-  Future<void> showDateTimeNotification(String title, String body, DateTime dateTime, String payload) async {
+  // 정해진 날짜, 시간에 예약 알림 보내기 =================================================================
+  Future<void> showDateTimeNotification(int id, String title, String body, DateTime dateTime, String payload) async {
     tz.initializeTimeZones();
     tz.TZDateTime scheduledDate = tz.TZDateTime.from(dateTime, tz.getLocation('Asia/Seoul'));
 
@@ -161,7 +161,7 @@ class NotificationService {
     );
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      createUniqueId(),
+      id,
       title,
       body,
       scheduledDate,
@@ -183,7 +183,7 @@ class NotificationService {
     await addNotification(title, body, dateTime, authController.isPatient); // 알림 보낸 후 파이어베이스에 저장
   }
 
-  // 일정 30분 전 알림 예약
+  // 일정 30분 전 알림 예약 =========================================================================
   Future<void> scheduleNotifications() async {
     List<ScheduleModel>? allSchedule = await ScheduleService().getAllSchedules();
     if (allSchedule != null) {
@@ -194,6 +194,7 @@ class NotificationService {
         if (notificationTime.isAfter(DateTime.now())) {
           //notificationTime = DateTime.now().add(Duration(seconds: 10));
           await showDateTimeNotification(
+              2,
               '일정 알림',
               '곧 \'${schedule.name}\'을(를) 하실 시간이에요!',
               notificationTime,
@@ -204,7 +205,7 @@ class NotificationService {
     }
   }
 
-  // 오늘의 루틴 시각에 알림 예약
+  // 오늘의 루틴 시각에 알림 예약 =============================================================
   Future<void> routineNotifications() async {
     print("ㅡㅡㅡㅡㅡㅡㅡroutineNotificationsㅡㅡㅡㅡㅡㅡㅡ");
     RoutineService routineService = RoutineService();
@@ -227,6 +228,7 @@ class NotificationService {
         if (routineTime.isAfter(now)) {
          //routineTime = now.add(Duration(seconds: 10));
           await showDateTimeNotification(
+              3,
               '하루 일과 알림',
               '\'${routine.name}\' 일과를 완료하셨나요?',
               routineTime,

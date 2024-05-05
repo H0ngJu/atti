@@ -1,6 +1,7 @@
 import 'package:atti/screen/HomePatient.dart';
 import 'package:atti/screen/schedule/register/ScheduleRegister2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../data/notification/notification_controller.dart';
 import '../../data/schedule/schedule_model.dart';
 import 'package:atti/data/schedule/schedule_service.dart';
@@ -158,7 +159,7 @@ class _FullScreenSchedule3State extends State<FullScreenSchedule3> {
                       SizedBox(width: width * 0.03,),
                       Expanded(
                         child: TextButton(onPressed: () {
-                          Get.to(HomePatient());
+                          SystemNavigator.pop();
                         }, child: Padding(
                           padding: EdgeInsets.symmetric(vertical: 5),
                           child: Text('아니요', style: TextStyle(

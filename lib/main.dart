@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/notification/notification.dart';
 import 'package:atti/screen/LogInSignUp/LogInScreen.dart';
@@ -8,7 +10,7 @@ import 'package:atti/screen/LogInSignUp/SignUpScreen2.dart';
 import 'package:atti/screen/LogInSignUp/SignUpScreen3.dart';
 import 'package:atti/screen/LoginSignUp/IntroPage.dart';
 import 'package:atti/screen/Notice/NoticeMain.dart';
-import 'package:atti/screen/report/ReportDetail.dart';
+import 'package:atti/screen/report/_ReportDetail.dart';
 import 'package:atti/screen/report/ReportHistory.dart';
 import 'package:atti/screen/routine/RoutineMain.dart';
 import 'package:atti/screen/routine/register/RoutineRegister1.dart';

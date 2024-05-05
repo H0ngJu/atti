@@ -1,9 +1,13 @@
+import 'package:atti/data/auth_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'ReportHistory.dart';
 
 class ReportNew extends StatefulWidget {
-  const ReportNew({Key? key}) : super(key: key);
+  final int indx;
+
+  const ReportNew({Key? key, required this.indx}) : super(key: key);
 
   @override
   State<ReportNew> createState() => _ReportNewState();
@@ -11,6 +15,48 @@ class ReportNew extends StatefulWidget {
 
 class _ReportNewState extends State<ReportNew> {
   //DateTime _selectedDay = DateTime.now();
+
+  // ==================================================================================================================================
+  AuthController _authController = Get.find<AuthController>();
+  var reportData = {};
+  List<dynamic>? reportPeriod;
+  Map<String, dynamic>? weeklyEmotion;
+  String? highestViewedMemory;
+  DocumentReference? patientId;
+  var routineCompletion;
+  var unfinishedRoutine;
+  var scheduleCompletion;
+  var unfinishedSchedule;
+  var mostViews;
+  var registerdMemoryCount;
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchReport();
+  }
+
+  Future<void> _fetchReport() async {
+    var fetchedReports = await _authController.carerReports;
+    reportData = fetchedReports[widget.indx];
+    print("reportData : ${reportData}");
+    setState(() {
+      reportPeriod = reportData['reportPeriod'];
+      weeklyEmotion = reportData['weeklyEmotion'];
+      highestViewedMemory = reportData['highestViewedMemory'];
+      patientId = reportData['patientId'];
+      routineCompletion = reportData['routineCompletion'];
+      unfinishedRoutine = reportData['unfinishedRoutine'];
+      scheduleCompletion = reportData['scheduleCompletion'];
+      unfinishedSchedule = reportData['unfinishedSchedule'];
+      mostViews = reportData['mostViews'];
+      registerdMemoryCount = reportData['registerdMemoryCount'];
+      print("reportPeriod : ${reportPeriod}\nweeklyEmotion : ${weeklyEmotion}\nhighestViewedMemory : ${highestViewedMemory}\npatientId : ${patientId}\nroutineCompletion : ${routineCompletion}\nunfinishedRoutine : ${unfinishedRoutine}\nscheduleCompletion : ${scheduleCompletion}\nunfinishedSchedule : ${unfinishedSchedule}\nmostViews : ${mostViews}\nregisterdMemoryCount : ${registerdMemoryCount}\n");
+    });
+  }
+  // ==================================================================================================================================
 
   Widget TileContainer() {
     return Container(
@@ -253,6 +299,8 @@ class _ReportNewState extends State<ReportNew> {
     final weekOfMonth = getWeekOfMonth(now);
     DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
     DateTime endOfWeek = startOfWeek.add(Duration(days: 6));
+
+
 
     return Scaffold(
         body: SingleChildScrollView(

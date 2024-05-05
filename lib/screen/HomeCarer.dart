@@ -1,11 +1,12 @@
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:atti/data/report/reportController.dart';
-import 'package:atti/screen/report/ReportDetail.dart';
+import 'package:atti/screen/report/_ReportDetail.dart';
 import 'package:atti/screen/report/ReportHistory.dart';
 import 'package:atti/screen/report/ReportNew.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -124,7 +125,7 @@ class _HomeCarerState extends State<HomeCarer> {
           width: 150,
         ),
         showNotificationsIcon: true,
-        showPersonIcon: false,
+        showMenu: true,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -538,7 +539,7 @@ class _HomeReportState extends State<HomeReport> {
           TextButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ReportNew();
+                return ReportNew(indx: 0); // ============================================================================= 0 맞는지 체크
               }));
             },
             child: Text(

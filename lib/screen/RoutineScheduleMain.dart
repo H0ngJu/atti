@@ -1,5 +1,6 @@
 import 'package:atti/screen/routine/register/RoutineRegister1.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -68,6 +69,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   List<RoutineModel> routinesBySelectedDay = []; // 선택한 요일의 루틴들
   int? numberOfRoutines;
   String selectedDayInWeek = DateFormat('E', 'ko-KR').format(DateTime.now()); // 선택한 날짜의 요일
+  String patientName = '';
 
 
   @override
@@ -77,6 +79,11 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
       await _fetchData();
       _makeTTsMessage();
     });
+    if (authController.isPatient) {
+      patientName = authController.userName.value;
+    } else {
+      patientName = authController.patientName.value;
+    }
   }
 
   Future<void> _fetchData() async {
@@ -157,7 +164,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
         }
 
         if (closestRoutine != null) {
-          String ttsRoutineMessage = '$closestRoutine가 아직 완료되지 않았어요.';
+          String ttsRoutineMessage = '$closestRoutine(이)가 아직 완료되지 않았어요.';
           ttsMessages.add(ttsRoutineMessage);
         }
       }
@@ -232,7 +239,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
               width: width * 0.9,
               alignment: Alignment.centerLeft,
               child: Text(
-                '${authController.userName.value}님의',
+                '${patientName}님의',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 24,

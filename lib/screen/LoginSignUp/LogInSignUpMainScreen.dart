@@ -14,6 +14,12 @@ class LogInSignUpMainScreen extends StatefulWidget {
 class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
   User? loggedUser;
   ColorPallet _colorPallet = ColorPallet();
+
+  @override
+  void initState() {
+    print(loggedUser);
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;

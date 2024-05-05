@@ -79,6 +79,7 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
 
                 if (authController.isPatient) {
                   notificationService.showDateTimeNotification(
+                    2,
                     '일정 알림',
                     '1시간 뒤 \'${updatedSchedule.name}\'을(를) 하실 시간이에요!',
                     updatedSchedule.time!.toDate().subtract(Duration(hours: 1)),
