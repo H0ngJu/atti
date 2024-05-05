@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'ReportHistory.dart';
 
-class ReportNew extends StatefulWidget {
+class ReportDetail extends StatefulWidget {
   final int indx;
 
-  const ReportNew({Key? key, required this.indx}) : super(key: key);
+  const ReportDetail({Key? key, required this.indx}) : super(key: key);
 
   @override
-  State<ReportNew> createState() => _ReportNewState();
+  State<ReportDetail> createState() => _ReportDetailState();
 }
 
-class _ReportNewState extends State<ReportNew> {
+class _ReportDetailState extends State<ReportDetail> {
   //DateTime _selectedDay = DateTime.now();
 
   // ==================================================================================================================================
@@ -30,6 +30,7 @@ class _ReportNewState extends State<ReportNew> {
   var mostViews;
   var registerdMemoryCount;
   var dates;
+  var dangerWords;
 
   int totalRoutines = 0;
   int completedRoutines = 0;
@@ -76,6 +77,7 @@ class _ReportNewState extends State<ReportNew> {
     setState(() {
       reportPeriod = reportData['reportPeriod'];
       weeklyEmotion = reportData['weeklyEmotion'];
+      dangerWords = reportData['dangerWords'];
       highestViewedMemory = reportData['highestViewedMemory'];
       patientId = reportData['patientId'];
       routineCompletion = reportData['routineCompletion'];
@@ -115,10 +117,10 @@ class _ReportNewState extends State<ReportNew> {
           color: Color(0xffFFE29A), borderRadius: BorderRadius.circular(15)),
       padding: EdgeInsets.all(13),
       child:
-          Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(
-          '${date.substring(8)}',
-          style: TextStyle(fontFamily: 'PretendardRegular', fontSize: 24),
+          '${date.substring(8)}일',
+          style: TextStyle(fontFamily: 'PretendardRegular', fontSize: 20),
         ),
         Text(
           '${completed}/${total}',
@@ -165,32 +167,32 @@ class _ReportNewState extends State<ReportNew> {
               )
             ],
           ),
-          // Container(
-          //   // color: Colors.red,
-          //   // 영역 확인용
-          //   height: MediaQuery.of(context).size.height * 0.45,
-          //   child: GridView.count(
-          //     physics: const NeverScrollableScrollPhysics(),
-          //     crossAxisCount: 4,
-          //     childAspectRatio: (itemWidth / itemHeight),
-          //     crossAxisSpacing: 8,
-          //     mainAxisSpacing: 10,
-          //     children: dates.map((dateString) {
-          //       DateTime date = DateTime.parse(dateString);
-          //       Timestamp timestampKey = Timestamp.fromDate(date);
-          //       Map<String, int>? entry = routineCompletion[timestampKey];
-          //       if (entry != null) {
-          //         return TileContainer(
-          //           date: dateString,
-          //           total: entry['total'] ?? 0,
-          //           completed: entry['completed'] ?? 0,
-          //         );
-          //       } else {
-          //         return TileContainer(date: dateString);
-          //       }
-          //     }).toList(),
-          //   ),
-          // ),
+          Container(
+            // color: Colors.red,
+            // 영역 확인용
+            height: MediaQuery.of(context).size.height * 0.45,
+            child: GridView.count(
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 4,
+              childAspectRatio: (itemWidth / itemHeight),
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 10,
+              children: dates.map((dateString) {
+                DateTime date = DateTime.parse(dateString);
+                Timestamp timestampKey = Timestamp.fromDate(date);
+                Map<String, int>? entry = routineCompletion[timestampKey];
+                if (entry != null) {
+                  return TileContainer(
+                    date: dateString,
+                    total: entry['total'] ?? 0,
+                    completed: entry['completed'] ?? 0,
+                  ) as Widget;
+                } else {
+                  return TileContainer(date: dateString) as Widget;
+                }
+              }).toList().cast<Widget>(),
+            ),
+          ),
         ],
       ),
     );
@@ -223,32 +225,32 @@ class _ReportNewState extends State<ReportNew> {
               )
             ],
           ),
-          // Container(
-          //   // color: Colors.red,
-          //   // 영역 확인용
-          //   height: MediaQuery.of(context).size.height * 0.45,
-          //   child: GridView.count(
-          //     physics: const NeverScrollableScrollPhysics(),
-          //     crossAxisCount: 4,
-          //     childAspectRatio: (itemWidth / itemHeight),
-          //     crossAxisSpacing: 8,
-          //     mainAxisSpacing: 10,
-          //     children: dates.map((dateString) {
-          //       DateTime date = DateTime.parse(dateString);
-          //       Timestamp timestampKey = Timestamp.fromDate(date);
-          //       Map<String, int>? entry = scheduleCompletion[timestampKey];
-          //       if (entry != null) {
-          //         return TileContainer(
-          //           date: dateString,
-          //           total: entry['total'] ?? 0,
-          //           completed: entry['completied'] ?? 0,
-          //         );
-          //       } else {
-          //         return TileContainer(date: dateString);
-          //       }
-          //     }).toList(),
-          //   ),
-          // ),
+          Container(
+            // color: Colors.red,
+            // 영역 확인용
+            height: MediaQuery.of(context).size.height * 0.45,
+            child: GridView.count(
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 4,
+              childAspectRatio: (itemWidth / itemHeight),
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 10,
+              children: dates.map((dateString) {
+                DateTime date = DateTime.parse(dateString);
+                Timestamp timestampKey = Timestamp.fromDate(date);
+                Map<String, int>? entry = scheduleCompletion[timestampKey];
+                if (entry != null) {
+                  return TileContainer(
+                    date: dateString,
+                    total: entry['total'] ?? 0,
+                    completed: entry['completied'] ?? 0,
+                  ) as Widget;
+                } else {
+                  return TileContainer(date: dateString) as Widget;
+                }
+              }).toList().cast<Widget>(),
+            ),
+          ),
         ],
       ),
     );
@@ -272,7 +274,11 @@ class _ReportNewState extends State<ReportNew> {
             style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
           ),
           if (weeklyEmotion!.length > 0)
-           ...weeklyEmotion!.keys.map((emotion) => TagContainer(emotion)).toList(),
+            Wrap(
+              spacing: 8.0, // 가로 방향 자식 사이의 간격
+              runSpacing: 4.0, // 세로 방향 자식 사이의 간격
+              children: weeklyEmotion!.keys.map((emotion) => TagContainer(emotion)).toList(),
+            ),
         ],
       ),
     );
@@ -308,15 +314,14 @@ class _ReportNewState extends State<ReportNew> {
           SizedBox(
             height: 10,
           ),
-          isExist
-              ? TagContainer("위험단어") // ======================================================
-              : Text(
-                  '대화에서 발견된 위험 단어가 없습니다.',
-                  style: TextStyle(
-                      fontFamily: 'PretendardRegular',
-                      fontSize: 22,
-                      color: Color(0xfffA38130)),
-                )
+          if (dangerWords!.length > 0)
+            ...dangerWords!.keys.map((emotion) => TagContainer(emotion)).toList(),
+          if (dangerWords!.length == 0)
+            Text("위험 단어가 없어요",
+              style:
+              TextStyle(fontSize: 24, color: Color(0xffA38130)
+              ,fontFamily: 'PretendardRegular'),
+            )
         ],
       ),
     );
@@ -380,70 +385,70 @@ class _ReportNewState extends State<ReportNew> {
 
     return Scaffold(
         body: SingleChildScrollView(
-      child: Container(
-        margin: EdgeInsets.only(left: 16, right: 16, top: 50),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Container(
+            margin: EdgeInsets.only(left: 16, right: 16, top: 50),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '${reportStartDate.month}월 ${weekOfMonth}주차 기록 보고',
-                      style: TextStyle(
-                          fontSize: 28, fontFamily: 'PretendardMedium'),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${reportStartDate.month}월 ${weekOfMonth}주차 기록 보고',
+                          style: TextStyle(
+                              fontSize: 28, fontFamily: 'PretendardMedium'),
+                        ),
+                      ],
                     ),
+                    TextButton(
+                        onPressed: () {
+                          Get.to(ReportHistory());
+                        },
+                        style: TextButton.styleFrom(
+                            backgroundColor: Color(0xffFFC215),
+                            minimumSize: Size(100, 30)),
+                        child: Text(
+                          '지난 기록',
+                          style: TextStyle(fontSize: 20, color: Color(0xffA38130)),
+                        ))
                   ],
                 ),
-                TextButton(
-                    onPressed: () {
-                      Get.to(ReportHistory());
-                    },
-                    style: TextButton.styleFrom(
-                        backgroundColor: Color(0xffFFC215),
-                        minimumSize: Size(100, 30)),
-                    child: Text(
-                      '지난 기록',
-                      style: TextStyle(fontSize: 20, color: Color(0xffA38130)),
-                    ))
+                Text(
+                  '${reportStartDate.year}년 ${reportStartDate.month}월 ${reportStartDate.day}일 - ${reportEndDate.year}년 ${reportEndDate.month}월 ${reportEndDate.day}일',
+                  style: TextStyle(
+                      fontFamily: 'PretendardRegular',
+                      fontSize: 20,
+                      color: Color(0xff737373)),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                RoutineSummary(),
+                Divider(height: 40),
+                ScheduleSummary(),
+                Divider(height: 40),
+                Emotion(),
+                Divider(height: 40),
+                DangerousWord(),
+                Divider(height: 40),
+                MostReadMem(),
+                SizedBox(height: 40,)
               ],
             ),
-            Text(
-              '${reportStartDate.year}년 ${reportStartDate.month}월 ${reportStartDate.day}일 - ${reportEndDate.year}년 ${reportEndDate.month}월 ${reportEndDate.day}일',
-              style: TextStyle(
-                  fontFamily: 'PretendardRegular',
-                  fontSize: 20,
-                  color: Color(0xff737373)),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            RoutineSummary(),
-            Divider(height: 40),
-            ScheduleSummary(),
-            Divider(height: 40),
-            Emotion(),
-            Divider(height: 40),
-            DangerousWord(),
-            Divider(height: 40),
-            MostReadMem(),
-            SizedBox(height: 40,)
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 
   int getWeekOfMonth(DateTime date) {
     final firstDayOfMonth = DateTime(date.year, date.month, 1);
     final weekdayOfFirstDay = firstDayOfMonth.weekday;
     final firstSunday =
-        firstDayOfMonth.subtract(Duration(days: weekdayOfFirstDay - 1));
+    firstDayOfMonth.subtract(Duration(days: weekdayOfFirstDay - 1));
     final difference = date.difference(firstSunday).inDays;
     final weekNumber = (difference / 7).ceil();
     return weekNumber;

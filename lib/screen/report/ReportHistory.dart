@@ -1,6 +1,5 @@
 import 'package:atti/data/auth_controller.dart';
-import 'package:atti/screen/report/_ReportDetail.dart';
-import 'package:atti/screen/report/ReportNew.dart';
+import 'package:atti/screen/report/ReportDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -122,7 +121,7 @@ class _ReportHistoryContainerState extends State<ReportHistoryContainer> {
 
     return GestureDetector(
         onTap: () {
-          Get.to(ReportNew(indx: widget.indx));
+          Get.to(ReportDetail(indx: widget.indx));
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 16),
@@ -186,7 +185,7 @@ class _PreReportHistoryContainerState extends State<PreReportHistoryContainer> {
 
     return GestureDetector(
         onTap: () {
-          Get.to(ReportNew(indx: widget.indx));
+          Get.to(ReportDetail(indx: widget.indx));
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 16),
