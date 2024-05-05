@@ -24,7 +24,7 @@ admin.initializeApp();
 
 exports.weeklyReport = onSchedule(
   {
-    schedule: "* * * * *", // 00시 00분 실행되는 코드
+    schedule: "0 0 * * *", // 00시 00분 실행되는 코드
     // schedule: "0 0 * * 0", // 매주 일요일에서 월요일로 넘어가는 자정에 실행되도록
     region: "asia-northeast3",
     timeZone: "Asia/Seoul",
@@ -83,7 +83,7 @@ exports.weeklyReport = onSchedule(
         .where("createdAt", ">=", admin.firestore.Timestamp.fromDate(monday))
         .where("createdAt", "<=", admin.firestore.Timestamp.fromDate(sunday))
         .get();
-      // 주간 감정 데이터를 가져온다.
+      // 스케쥴 데이터를 가져온다.
       const scheduleSnapshot = await admin
         .firestore()
         .collection("schedule")
@@ -91,7 +91,14 @@ exports.weeklyReport = onSchedule(
         .where("createdAt", ">=", admin.firestore.Timestamp.fromDate(monday))
         .where("createdAt", "<=", admin.firestore.Timestamp.fromDate(sunday))
         .get();
-
+      // 위험단어 데이터를 가져온다.
+      const dangerWordSnapshot = await admin
+        .firestore()
+        .collection("dangerWord")
+        .where("patientDocRef", "==", userId) // 참조
+        .where("createdAt", ">=", admin.firestore.Timestamp.fromDate(monday))
+        .where("createdAt", "<=", admin.firestore.Timestamp.fromDate(sunday))
+        .get();
       let reportData = {};
       reportData.reportPeriod = reportPeriod;
 
@@ -254,6 +261,28 @@ exports.weeklyReport = onSchedule(
       }
       reportData.unfinishedSchedule = unfinishedSchedule;
       reportData.scheduleCompletion = scheduleCompletion;
+
+      // danger Words ==========================================================================
+      let dangerWords = {};
+      if (dangerWordSnapshot && dangerWordSnapshot.forEach) {
+        dangerWordSnapshot.forEach((doc) => {
+          const data = doc.data();
+          const dangerWordsList = data.dangerWordsList;
+          // emotionsList가 배열인지 확인
+          if (Array.isArray(dangerWordsList)) {
+            dangerWordsList.forEach((word) => {
+              if (dangerWords[word]) {
+                // 이미 dangerWords에 해당 감정 단어가 있으면 횟수를 1 증가
+                dangerWords[word] += 1;
+              } else {
+                // 해당 감정 단어가 dangerWords에 없으면 새로 추가하고 횟수를 1로 설정
+                dangerWords[word] = 1;
+              }
+            });
+          }
+        });
+      }
+      reportData.dangerWords = dangerWords;
 
       // 현재 타임스탬프를 보고서 데이터에 추가
       reportData.createdAt = admin.firestore.Timestamp.now();

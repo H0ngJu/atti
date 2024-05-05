@@ -54,6 +54,7 @@ class CustomerTypeBtn extends StatelessWidget {
                   fontSize: 30,
                   color: Colors.black,
                   fontWeight: FontWeight.w700,
+                  fontFamily: 'PretendardBold',
                 ),
               ),
               SizedBox(height: height * 0.01,),
@@ -63,6 +64,7 @@ class CustomerTypeBtn extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
+                  fontFamily: 'PretendardRegular',
                 ),
               ),
             ],

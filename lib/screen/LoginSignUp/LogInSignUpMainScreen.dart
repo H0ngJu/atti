@@ -62,6 +62,7 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                           letterSpacing: 0.05,
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
+                          fontFamily: 'PretendardBold',
                         ),
                       ),
                     ),
@@ -79,6 +80,7 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                           fontSize: 24,
                           letterSpacing: 0.05,
                           fontWeight: FontWeight.normal,
+                          fontFamily: 'PretendardRegular',
                         ),
                       ),
                     ),
@@ -118,7 +120,8 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 24,
-                                      fontWeight: FontWeight.w600
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'PretendardBold',
                                   ),),
                               )),
                         ),
@@ -152,7 +155,8 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                   style: TextStyle(
                                     color: Colors.black,
                                       fontSize: 24,
-                                      fontWeight: FontWeight.w600
+                                      fontWeight: FontWeight.w600,
+                                     fontFamily: 'PretendardBold',
                                   ),
                                 ),
                               )),

@@ -47,6 +47,7 @@ class _EntryFieldState extends State<EntryField> {
             widget.fieldName,
             style: TextStyle(
               fontSize: 24,
+              fontFamily: 'PretendardRegular',
             ),
           ),
           Container(
@@ -75,10 +76,12 @@ class _EntryFieldState extends State<EntryField> {
                 hintStyle: TextStyle(
                   fontSize: 24,
                   color: _colorPallet.textColor,
+                  fontFamily: 'PretendardRegular',
                 ),
               ),
               style: TextStyle(
-                  fontSize: 24
+                  fontSize: 24,
+                  fontFamily: 'PretendardRegular',
               ),
             ),
           ),

@@ -37,11 +37,13 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
       title: '생년월일을 입력해 주세요',
       titleStyle: TextStyle(
         fontSize: 24, fontWeight: FontWeight.normal,
+        fontFamily: 'PretendardRegular',
       ),
       dateOrder: DatePickerDateOrder.ymd,
       pickerTextStyle: const TextStyle(
         color: Colors.black,
         fontSize: 24,
+        fontFamily: 'PretendardRegular',
       ),
       displayCloseIcon: false,
       onSubmit: (value) {
@@ -58,7 +60,9 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
           horizontal: 10,
         ),
         child: Text('선택', style: TextStyle(
-            color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),
+            color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500,
+            fontFamily: 'PretendardRegular',
+        ),
         textAlign: TextAlign.center,),
       ),
       bottomPickerTheme: BottomPickerTheme.plumPlate,
@@ -119,7 +123,8 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                           alignment: Alignment.topLeft,
                           child: Text('생년월일',
                             style: TextStyle(
-                              fontSize: 24
+                              fontSize: 24,
+                              fontFamily: 'PretendardRegular',
                             ),
                           ),
                         ),
@@ -150,7 +155,8 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                   style: TextStyle(
                                     fontSize: 24,
                                     color: formattedDate == "연도 / 월 / 일을 선택해 주세요" ? colorPallet.textColor : Colors.black,
-                                    fontWeight: FontWeight.normal
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'PretendardRegular',
                                   ),
                                 ),
                               ),
@@ -189,7 +195,8 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                             children: [
                               Text('가족 구성원',
                                 style: TextStyle(
-                                    fontSize: 24
+                                    fontSize: 24,
+                                    fontFamily: 'PretendardRegular',
                                 ),
                               ),
                           // TagTest(),
