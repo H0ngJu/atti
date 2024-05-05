@@ -30,6 +30,12 @@ class _ReportNewState extends State<ReportNew> {
   var mostViews;
   var registerdMemoryCount;
   var dates;
+
+  int totalRoutines = 0;
+  int completedRoutines = 0;
+  int totalSchedules = 0;
+  int completedSchedules = 0;
+
   Map<String, dynamic>? highestViewedData;
   @override
   void initState() {
@@ -79,6 +85,22 @@ class _ReportNewState extends State<ReportNew> {
       mostViews = reportData['mostViews'];
       registerdMemoryCount = reportData['registerdMemoryCount'];
       dates = registerdMemoryCount.keys.toList();
+      // routineCompletion 맵을 순회하며 totalRoutines와 completedRoutines 값을 갱신
+      routineCompletion.forEach((date, data) {
+        int total = (data['total'] as num?)?.toInt() ?? 0; // num을 int로 변환, 기본값 0
+        int completed = (data['completed'] as num?)?.toInt() ?? 0; // 위와 동일
+
+        totalRoutines += total;
+        completedRoutines += completed;
+      });
+      scheduleCompletion.forEach((date, data) {
+        int total = (data['total'] as num?)?.toInt() ??
+            0; // num을 int로 변환, 기본값 0
+        int completed = (data['completed'] as num?)?.toInt() ?? 0; // 위와 동일
+
+        totalSchedules += total;
+        completedSchedules += completed;
+      });
       print("reportPeriod : ${reportPeriod}\nweeklyEmotion : ${weeklyEmotion}\nhighestViewedMemory : ${highestViewedMemory}\npatientId : ${patientId}\nroutineCompletion : ${routineCompletion}\nunfinishedRoutine : ${unfinishedRoutine}\nscheduleCompletion : ${scheduleCompletion}\nunfinishedSchedule : ${unfinishedSchedule}\nmostViews : ${mostViews}\nregisterdMemoryCount : ${registerdMemoryCount}\n");
     });
     fetchHighestViewedDocument();
@@ -136,7 +158,9 @@ class _ReportNewState extends State<ReportNew> {
                 style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
               ),
               Text(
-                '70%',
+                totalRoutines != 0 ?
+                '${(completedRoutines / totalRoutines * 100).toStringAsFixed(1)} %':
+                "지난 주 일정이 없어요",
                 style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
               )
             ],
@@ -192,7 +216,9 @@ class _ReportNewState extends State<ReportNew> {
                 style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
               ),
               Text(
-                '70%',
+                totalSchedules != 0 ?
+                '${(completedSchedules / totalSchedules * 100).toStringAsFixed(1)} %':
+                "지난 주 일정이 없어요",
                 style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
               )
             ],
