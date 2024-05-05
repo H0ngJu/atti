@@ -25,7 +25,7 @@ admin.initializeApp();
 
 exports.weeklyReport = onSchedule(
   {
-    schedule: "* * * * *", // 00시 00분 실행되는 코드
+    schedule: "0 0 * * *", // 00시 00분 실행되는 코드
     // schedule: "0 0 * * 0", // 매주 일요일에서 월요일로 넘어가는 자정에 실행되도록
     region: "asia-northeast3",
     timeZone: "Asia/Seoul",

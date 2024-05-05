@@ -63,6 +63,7 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                           style: TextStyle(
                             letterSpacing: 0.01,
                             fontSize: 24,
+                            fontFamily: 'PretendardRegular',
                           ),
                         ),
                       ],
@@ -74,6 +75,7 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                       color: _colorPallet.grayColor,
                       fontSize: 20,
                       letterSpacing: 0.01,
+                      fontFamily: 'PretendardRegular',
                     ),
                   ),
                   SizedBox(height : height*0.03,),

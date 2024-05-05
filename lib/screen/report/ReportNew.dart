@@ -29,13 +29,44 @@ class _ReportNewState extends State<ReportNew> {
   var unfinishedSchedule;
   var mostViews;
   var registerdMemoryCount;
+  var dates;
 
+  int totalRoutines = 0;
+  int completedRoutines = 0;
+  int totalSchedules = 0;
+  int completedSchedules = 0;
 
-
+  Map<String, dynamic>? highestViewedData;
   @override
   void initState() {
     super.initState();
     _fetchReport();
+  }
+  Future<void> fetchHighestViewedDocument() async {
+    // mostViews 맵에서 가장 높은 조회수를 가진 참조 찾기
+    String? highestViewedReference;
+    int highestViews = 0;
+    mostViews.forEach((reference, views) {
+      if (views > highestViews) {
+        highestViews = views;
+        highestViewedReference = reference;
+      }
+    });
+
+    if (highestViewedReference != null) {
+      // Firestore에서 해당 참조를 사용하여 도큐먼트 가져오기
+      try {
+        DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.doc(highestViewedReference!).get();
+        setState(() {
+          highestViewedData = documentSnapshot.data() as Map<String, dynamic>?;
+          highestViewedData!['viewCounts'] = highestViews;
+        });
+        print("highestViewedData : ${highestViewedData}");
+      } catch (e) {
+        print("도큐먼트를 가져오는 데 실패했습니다: $e");
+      }
+      print("가장 높은 조회수를 가진 참조를 찾을 수 없습니다.");
+    }
   }
 
   Future<void> _fetchReport() async {
@@ -53,12 +84,30 @@ class _ReportNewState extends State<ReportNew> {
       unfinishedSchedule = reportData['unfinishedSchedule'];
       mostViews = reportData['mostViews'];
       registerdMemoryCount = reportData['registerdMemoryCount'];
+      dates = registerdMemoryCount.keys.toList();
+      // routineCompletion 맵을 순회하며 totalRoutines와 completedRoutines 값을 갱신
+      routineCompletion.forEach((date, data) {
+        int total = (data['total'] as num?)?.toInt() ?? 0; // num을 int로 변환, 기본값 0
+        int completed = (data['completed'] as num?)?.toInt() ?? 0; // 위와 동일
+
+        totalRoutines += total;
+        completedRoutines += completed;
+      });
+      scheduleCompletion.forEach((date, data) {
+        int total = (data['total'] as num?)?.toInt() ??
+            0; // num을 int로 변환, 기본값 0
+        int completed = (data['completed'] as num?)?.toInt() ?? 0; // 위와 동일
+
+        totalSchedules += total;
+        completedSchedules += completed;
+      });
       print("reportPeriod : ${reportPeriod}\nweeklyEmotion : ${weeklyEmotion}\nhighestViewedMemory : ${highestViewedMemory}\npatientId : ${patientId}\nroutineCompletion : ${routineCompletion}\nunfinishedRoutine : ${unfinishedRoutine}\nscheduleCompletion : ${scheduleCompletion}\nunfinishedSchedule : ${unfinishedSchedule}\nmostViews : ${mostViews}\nregisterdMemoryCount : ${registerdMemoryCount}\n");
     });
+    fetchHighestViewedDocument();
   }
   // ==================================================================================================================================
 
-  Widget TileContainer() {
+  Widget TileContainer({int total = 0, int completed = 0, required String date}) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.2,
       height: MediaQuery.of(context).size.height * 0.17,
@@ -68,11 +117,11 @@ class _ReportNewState extends State<ReportNew> {
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(
-          '7일',
+          '${date.substring(8)}',
           style: TextStyle(fontFamily: 'PretendardRegular', fontSize: 24),
         ),
         Text(
-          '4/5',
+          '${completed}/${total}',
           style: TextStyle(
               fontFamily: 'PretendardRegular',
               fontSize: 24,
@@ -109,26 +158,39 @@ class _ReportNewState extends State<ReportNew> {
                 style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
               ),
               Text(
-                '70%',
+                totalRoutines != 0 ?
+                '${(completedRoutines / totalRoutines * 100).toStringAsFixed(1)} %':
+                "지난 주 일정이 없어요",
                 style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
               )
             ],
           ),
-          Container(
-            // color: Colors.red,
-            // 영역 확인용
-            height: MediaQuery.of(context).size.height * 0.45,
-            child: GridView.count(
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 4,
-              childAspectRatio: (itemWidth / itemHeight),
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 10,
-              children: List.generate(7, (index) {
-                return TileContainer();
-              }),
-            ),
-          ),
+          // Container(
+          //   // color: Colors.red,
+          //   // 영역 확인용
+          //   height: MediaQuery.of(context).size.height * 0.45,
+          //   child: GridView.count(
+          //     physics: const NeverScrollableScrollPhysics(),
+          //     crossAxisCount: 4,
+          //     childAspectRatio: (itemWidth / itemHeight),
+          //     crossAxisSpacing: 8,
+          //     mainAxisSpacing: 10,
+          //     children: dates.map((dateString) {
+          //       DateTime date = DateTime.parse(dateString);
+          //       Timestamp timestampKey = Timestamp.fromDate(date);
+          //       Map<String, int>? entry = routineCompletion[timestampKey];
+          //       if (entry != null) {
+          //         return TileContainer(
+          //           date: dateString,
+          //           total: entry['total'] ?? 0,
+          //           completed: entry['completed'] ?? 0,
+          //         );
+          //       } else {
+          //         return TileContainer(date: dateString);
+          //       }
+          //     }).toList(),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -154,26 +216,39 @@ class _ReportNewState extends State<ReportNew> {
                 style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
               ),
               Text(
-                '70%',
+                totalSchedules != 0 ?
+                '${(completedSchedules / totalSchedules * 100).toStringAsFixed(1)} %':
+                "지난 주 일정이 없어요",
                 style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
               )
             ],
           ),
-          Container(
-            // color: Colors.red,
-            // 영역 확인용
-            height: MediaQuery.of(context).size.height * 0.45,
-            child: GridView.count(
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 4,
-              childAspectRatio: (itemWidth / itemHeight),
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 10,
-              children: List.generate(7, (index) {
-                return TileContainer();
-              }),
-            ),
-          ),
+          // Container(
+          //   // color: Colors.red,
+          //   // 영역 확인용
+          //   height: MediaQuery.of(context).size.height * 0.45,
+          //   child: GridView.count(
+          //     physics: const NeverScrollableScrollPhysics(),
+          //     crossAxisCount: 4,
+          //     childAspectRatio: (itemWidth / itemHeight),
+          //     crossAxisSpacing: 8,
+          //     mainAxisSpacing: 10,
+          //     children: dates.map((dateString) {
+          //       DateTime date = DateTime.parse(dateString);
+          //       Timestamp timestampKey = Timestamp.fromDate(date);
+          //       Map<String, int>? entry = scheduleCompletion[timestampKey];
+          //       if (entry != null) {
+          //         return TileContainer(
+          //           date: dateString,
+          //           total: entry['total'] ?? 0,
+          //           completed: entry['completied'] ?? 0,
+          //         );
+          //       } else {
+          //         return TileContainer(date: dateString);
+          //       }
+          //     }).toList(),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -196,13 +271,14 @@ class _ReportNewState extends State<ReportNew> {
             '회상 대화 주요 감정',
             style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
           ),
-          TagContainer()
+          if (weeklyEmotion!.length > 0)
+           ...weeklyEmotion!.keys.map((emotion) => TagContainer(emotion)).toList(),
         ],
       ),
     );
   }
 
-  Widget TagContainer() {
+  Widget TagContainer(String tag) {
     return Container(
       margin: EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
@@ -211,11 +287,12 @@ class _ReportNewState extends State<ReportNew> {
           border: Border.all(color: Color(0xffDDDDDD), width: 1)),
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
       child: Text(
-        '행복한',
+        '${tag}',
         style: TextStyle(fontSize: 24, color: Color(0xffA38130)),
       ),
     );
   }
+
 
   Widget DangerousWord() {
     bool isExist = false;
@@ -232,7 +309,7 @@ class _ReportNewState extends State<ReportNew> {
             height: 10,
           ),
           isExist
-              ? TagContainer()
+              ? TagContainer("위험단어") // ======================================================
               : Text(
                   '대화에서 발견된 위험 단어가 없습니다.',
                   style: TextStyle(
@@ -253,12 +330,12 @@ class _ReportNewState extends State<ReportNew> {
         children: [
           Text('최다 열람 기억', style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular',)),
           SizedBox(height: 10,),
-          Row(
+          highestViewedData != null ? Row( // 여기서 삼항 연산자를 사용합니다.
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Image.network(
-                  'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202303/21/73fb5504-fa6c-4fa9-b3d4-160b8a455556.jpg',
+                  highestViewedData!['img'],
                   width: MediaQuery.of(context).size.width * 0.45,
                   height: MediaQuery.of(context).size.width * 0.3,
                   fit: BoxFit.cover,
@@ -266,28 +343,29 @@ class _ReportNewState extends State<ReportNew> {
               ),
               Expanded(
                   child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('2020년대',
-                      style: TextStyle(
-                          fontSize: 24,
-                          fontFamily: 'PretendardRegular',
-                          color: Color(0xffA38130))),
-                  Text('벚꽃 축제',
-                      style: TextStyle(
-                          fontSize: 24,
-                          fontFamily: 'PretendardRegular',
-                          color: Color(0xffA38130))),
-                  Text('3회 열람',
-                      style: TextStyle(
-                          fontSize: 24,
-                          fontFamily: 'PretendardRegular',
-                          color: Color(0xffA38130)))
-                ],
-              ))
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('${highestViewedData!['era']}년대',
+                          style: TextStyle(
+                              fontSize: 24,
+                              fontFamily: 'PretendardRegular',
+                              color: Color(0xffA38130))),
+                      Text('${highestViewedData!['imgTitle']}',
+                          style: TextStyle(
+                              fontSize: 24,
+                              fontFamily: 'PretendardRegular',
+                              color: Color(0xffA38130))),
+                      Text('${highestViewedData!['viewCounts']}회 열람',
+                          style: TextStyle(
+                              fontSize: 24,
+                              fontFamily: 'PretendardRegular',
+                              color: Color(0xffA38130)))
+                    ],
+                  )
+              )
             ],
-          )
+          ) : Center(child: Text('데이터를 불러오는 중...')), // highestViewedData가 null인 경우 처리
         ],
       ),
     );
@@ -295,11 +373,9 @@ class _ReportNewState extends State<ReportNew> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    final weekOfMonth = getWeekOfMonth(now);
-    DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    DateTime endOfWeek = startOfWeek.add(Duration(days: 6));
-
+    DateTime reportStartDate = DateTime.parse(reportPeriod![0]);
+    DateTime reportEndDate = DateTime.parse(reportPeriod![1]);
+    final weekOfMonth = getWeekOfMonth(reportStartDate);
 
 
     return Scaffold(
@@ -318,7 +394,7 @@ class _ReportNewState extends State<ReportNew> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${now.month}월 ${weekOfMonth}주차 기록 보고',
+                      '${reportStartDate.month}월 ${weekOfMonth}주차 기록 보고',
                       style: TextStyle(
                           fontSize: 28, fontFamily: 'PretendardMedium'),
                     ),
@@ -338,7 +414,7 @@ class _ReportNewState extends State<ReportNew> {
               ],
             ),
             Text(
-              '${now.year}년 ${now.month}월 ${now.day}일 - ${now.year}년 ${now.month}월 ${now.day}일',
+              '${reportStartDate.year}년 ${reportStartDate.month}월 ${reportStartDate.day}일 - ${reportEndDate.year}년 ${reportEndDate.month}월 ${reportEndDate.day}일',
               style: TextStyle(
                   fontFamily: 'PretendardRegular',
                   fontSize: 20,
@@ -371,5 +447,25 @@ class _ReportNewState extends State<ReportNew> {
     final difference = date.difference(firstSunday).inDays;
     final weekNumber = (difference / 7).ceil();
     return weekNumber;
+  }
+}
+class TagContainer extends StatelessWidget {
+  final String tag;
+  const TagContainer({Key? key, required this.tag}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(25),
+          border: Border.all(color: Color(0xffDDDDDD), width: 1)),
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+      child: Text(
+        tag,
+        style: TextStyle(fontSize: 24, color: Color(0xffA38130)),
+      ),
+    );
   }
 }

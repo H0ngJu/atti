@@ -49,7 +49,9 @@ class _SignUpFamilyTagState extends State<SignUpFamilyTag> {
           length: _values.length,
           delimiters: [',', ' '],
           hasAddButton: false,
-          textStyle: TextStyle(fontSize: 20),
+          textStyle: TextStyle(fontSize: 20,
+            fontFamily: 'PretendardRegular',
+          ),
           inputDecoration: InputDecoration(
               isDense: true,
               border: OutlineInputBorder(
@@ -68,7 +70,9 @@ class _SignUpFamilyTagState extends State<SignUpFamilyTag> {
               filled: true,
               fillColor: _colorPallet.lightYellow,
               hintText: '가족 구성원을 입력해주세요',
-              hintStyle: TextStyle(color: Color(0xffA38130), fontSize: 24, fontWeight: FontWeight.normal)
+              hintStyle: TextStyle(color: Color(0xffA38130), fontSize: 24, fontWeight: FontWeight.normal,
+                fontFamily: 'PretendardRegular',
+              )
           ),
 
           onTagChanged: (newValue) {
@@ -111,7 +115,8 @@ class _Chip extends StatelessWidget {
         ),
         labelPadding: const EdgeInsets.only(left: 5.0, right: 5),
         label: Text(label, style: TextStyle(
-            fontSize: 20, color: Color(0xffA38130), fontWeight: FontWeight.normal
+            fontSize: 20, color: Color(0xffA38130), fontWeight: FontWeight.normal,
+            fontFamily: 'PretendardRegular',
         ),),
         padding: EdgeInsets.all(5),
         deleteIcon: const Icon(

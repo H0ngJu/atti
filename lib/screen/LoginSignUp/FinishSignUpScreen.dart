@@ -26,14 +26,15 @@ class _FinishSignUpScreenState extends State<FinishSignUpScreen> {
             child: Image.asset('lib/assets/images/FinishSignUpImage.png'),
           ),
           Container(
-            margin: EdgeInsets.only(top: height*0.15, left: 20),
+            margin: EdgeInsets.only(top: height*0.1, left: 20),
             child: Text(
               '회원가입이\n완료되었어요!',
               style: TextStyle(
                 letterSpacing: 0.1,
                 fontSize: 40,
                 color: Colors.black,
-                fontWeight: FontWeight.bold
+                fontWeight: FontWeight.bold,
+                fontFamily: 'PretendardBold',
               ),
             ),
           ),
@@ -54,13 +55,14 @@ class _FinishSignUpScreenState extends State<FinishSignUpScreen> {
                 child: Container(
                     // margin: EdgeInsets.symmetric(horizontal: width*0.02),
                     width: width*0.9,
-                    height: height*0.07,
+                    height: height*0.06,
                     alignment: Alignment.center,
                     child: Text('로그인',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
+                          fontFamily: 'PretendardBold',
                         )
                     )
                 )

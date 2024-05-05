@@ -48,6 +48,7 @@ class _LoginEntryFieldState extends State<LoginEntryField> {
             widget.fieldName,
             style: TextStyle(
               fontSize: 24,
+              fontFamily: 'PretendardRegular',
             ),
           ),
           Container(
@@ -76,10 +77,12 @@ class _LoginEntryFieldState extends State<LoginEntryField> {
                 hintStyle: TextStyle(
                   fontSize: 24,
                   color: _colorPallet.textColor,
+                  fontFamily: 'PretendardRegular',
                 ),
               ),
               style: TextStyle(
-                  fontSize: 24
+                  fontSize: 24,
+                  fontFamily: 'PretendardRegular',
               ),
             ),
           ),
