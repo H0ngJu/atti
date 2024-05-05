@@ -95,7 +95,7 @@ exports.weeklyReport = onSchedule(
       const dangerWordSnapshot = await admin
         .firestore()
         .collection("dangerWord")
-        .where("patientId", "==", userId) // 참조
+        .where("patientDocRef", "==", userId) // 참조
         .where("createdAt", ">=", admin.firestore.Timestamp.fromDate(monday))
         .where("createdAt", "<=", admin.firestore.Timestamp.fromDate(sunday))
         .get();
