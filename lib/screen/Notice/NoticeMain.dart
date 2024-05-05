@@ -52,6 +52,7 @@ class _NoticeMainState extends State<NoticeMain> {
               notificationTime.isBefore(now);
         })
             .toList();
+        print("here" + '${todayNotifications}');
 
         DateTime todayStart = DateTime(now.year, now.month, now.day);
         pastNotifications = allNotifications
@@ -110,15 +111,6 @@ class TodayNoticeContainer extends StatelessWidget {
       child: Row(
         //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          /*Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              border: Border.all(color: Color(0xffFFC215), width: 2),
-              color: noti.done ? Color(0xffFFC215) : Color(0xffFFE9B3),
-              shape: BoxShape.circle,
-            ),
-          ),*/
           SizedBox(
             width: 10,
           ),
@@ -298,6 +290,7 @@ class _PastNoticeState extends State<PastNotice> {
   late String selectedCategory; // 선택된 카테고리
   late List<NotificationModel>? filteredData;
   List<String> allCategories = ['전체', '하루일과', '일정'];
+  int _visibleItemCount = 3; // 클래스 변수로 선언
 
   @override
   void initState() {
@@ -307,10 +300,11 @@ class _PastNoticeState extends State<PastNotice> {
   }
 
   List<NotificationModel> _filterDataByCategory(String category) {
+    List<NotificationModel> tempData;
     if (category == '전체') {
-      return widget.notifications;
+      tempData = widget.notifications;
     } else {
-      return widget.notifications.where((notification) {
+      tempData = widget.notifications.where((notification) {
         if (category == '하루일과') {
           return notification.title == '하루 일과 알림';
         } else if (category == '일정') {
@@ -319,11 +313,16 @@ class _PastNoticeState extends State<PastNotice> {
         return false;
       }).toList();
     }
+
+    // 날짜에 따라 최신순으로 정렬
+    tempData.sort((a, b) => b.time!.compareTo(a.time!)); // 가정: NotificationModel에 DateTime date 속성이 있다고 가정
+
+    return tempData;
   }
+
 
   @override
   Widget build(BuildContext context) {
-    int _visibleItemCount = 3;
     List<NotificationModel> filteredData = _filterDataByCategory(selectedCategory);
     return Column(
       children: [
@@ -387,12 +386,12 @@ class _PastNoticeState extends State<PastNotice> {
         TextButton(
           onPressed: () {
             setState(() {
-              // 한 번에 보여줄 아이템 개수를 업데이트
-              if (_visibleItemCount + 3 <= filteredData.length) {
+              if (_visibleItemCount + 3 <= widget.notifications.length) {
                 _visibleItemCount += 3;
               } else {
-                _visibleItemCount = filteredData.length;
+                _visibleItemCount = widget.notifications.length;
               }
+              filteredData = _filterDataByCategory(selectedCategory); // filteredData 업데이트
             });
           },
           style: TextButton.styleFrom(
