@@ -30,8 +30,8 @@ Here are the steps to download the Flutter app from https://github.com/H0ngJu/a
     ```
     
 6. Once Android Studio loads the project, select Run -> Run from the top menu.
-7. Select an emulator or connect a mobile device to run the app.
-<br/>
+7. Select an emulator or connect a mobile device to run the app. <br/>
+
 ---
 
 # Contents
@@ -91,16 +91,16 @@ We spent about two weeks volunteering and conducting user research to understand
         We found that the communication skills of the elderly with mild dementia were good: they were able to understand normal speech at a normal pace, even when the voice was not loud enough.
         
     2. Only one of the interviewees did not own a smartphone, confirming the value of ATTI as an application solution. In addition, Korean 60-somethings will be more proficient with smartphones in the future than today, so it will be more useful.
-    3. The interviewees were animated when they talked about pleasant memories of the past. They said that they often feel lonely because they have no one to talk to, and through the first interview, ATTI, a voice bot that reminisces about the past and evokes pleasant emotions, was born.
+    3. The interviewees were animated when they talked about pleasant memories of the past. They said that they often feel lonely because they have no one to talk to, and through the first interview, ATTI, a voice bot that reminisces about the past and evokes pleasant emotions, was born. <br/>
 
- <br/>
-- Second Interview
+ 
+ - Second Interview
     
     The second interview was conducted to help us refine the features of ATTI, the representative character and memory reminiscence voice bot, focusing on the question of how it could further strengthen the connection between patients and their caregivers.
     
     1. We interviewed staff at dementia care centers and found that they were positive about the idea of a solution that relies on voice rather than text. However, we also received feedback from patient caregivers, many of whom are in their 60s and older, that the UX flow should be simplified rather than complicated.
-    2. Elderly people with dementia responded positively to the memory recall and verbalization services. However, they tended to have some difficulty with the fact that they were using a smartphone app. Therefore, we tried to implement a user-friendly, large, easy-to-identify UI in warm colors and a simplified UX.
- <br/>
+    2. Elderly people with dementia responded positively to the memory recall and verbalization services. However, they tended to have some difficulty with the fact that they were using a smartphone app. Therefore, we tried to implement a user-friendly, large, easy-to-identify UI in warm colors and a simplified UX. <br/>
+    
 - Third Interview
 
 <div style="display: flex; justify-content: center;">
@@ -114,8 +114,8 @@ We spent about two weeks volunteering and conducting user research to understand
    1. To further simplify the UX, we further reduced the flow of the bottom navigation bar. Previously, there were many page flows to select or move, which could be confusing for users. We simplified the page flow as much as possible.
    2. We've changed the way notifications are displayed from push notifications to fill the entire screen. Push notifications were not suitable for people with mild dementia because they quickly disappear from the eye, but by adopting 
 full-screen notifications, we made it easier and more convenient for users to check their schedule and routine.    
-   3. We've added more period-reflective items to the Memory Gallery. Even if there are not many memory photos registered, we added photos that remind users of "those days" (dramas, music, items, etc.) to help them have conversations.
-<br/>
+   3. We've added more period-reflective items to the Memory Gallery. Even if there are not many memory photos registered, we added photos that remind users of "those days" (dramas, music, items, etc.) to help them have conversations. <br/>
+
 - Fourth Interview (User Test)
 
 <div style="display: flex; justify-content: center;">
@@ -202,7 +202,6 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 | 1 | 2 | 3 | 4 | 5 | 6 |
 |---------|---------|---------|---------|---------|---------|
 | ![KakaoTalk_20240505_235922741](https://github.com/H0ngJu/atti/assets/150149986/b864a77d-f2c7-43af-9fb2-b472796e608f) | ![KakaoTalk_20240505_235922741_04](https://github.com/H0ngJu/atti/assets/150149986/c490cf7b-69cd-48e1-aa74-a31793ed690f) | ![KakaoTalk_20240505_235922741_05](https://github.com/H0ngJu/atti/assets/150149986/33101351-db0b-4f49-9edc-fa8fac48ba1a) | ![KakaoTalk_20240505_235922741_07](https://github.com/H0ngJu/atti/assets/150149986/edffced2-688a-40d9-8076-289e19c2b336) | ![KakaoTalk_20240505_235922741_08](https://github.com/H0ngJu/atti/assets/150149986/dadb4f14-99f6-4a45-9b97-a0aac1fb312b) | ![KakaoTalk_20240505_235922741_09](https://github.com/H0ngJu/atti/assets/150149986/2ec67e93-9fac-4f46-9bfe-1fd23e7efd86) |
-
 <br/>
 
 ### Conversation with Atti
@@ -256,9 +255,9 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 - The Caregiver Report allows you to check your patient's schedule and routine completion rate each week.
 - You can also see the main emotions the patient has been feeling while talking to ATTI, and if they've said any risk words like "sick" or "depressed," you can see them here.
-- It also shows which memories the patient has checked the most.
+- It also shows which memories the patient has checked the most. <br/>
 
-<br/>
+
 ## 🌟 Sign Up
 
 | 1 | 2 | 3 | 4 | 5 | 6 |
