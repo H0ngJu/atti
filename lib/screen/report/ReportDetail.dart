@@ -105,11 +105,17 @@ class _ReportDetailState extends State<ReportDetail> {
   }
 
   Widget TileContainer({int total = 0, int completed = 0, required String date}) {
+    double completionPercentage = total != 0 ? (completed / total) * 100 : 0;
+    Color tileColor = _calculateTileColor(completionPercentage);
+
     return Container(
       width: MediaQuery.of(context).size.width * 0.2,
       height: MediaQuery.of(context).size.height * 0.17,
       decoration: BoxDecoration(
-          color: Color(0xffFFE29A), borderRadius: BorderRadius.circular(15)),
+          color: tileColor,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: Color(0xffDDDDDD), width: 1)
+      ),
       padding: EdgeInsets.all(13),
       child:
       Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -126,6 +132,19 @@ class _ReportDetailState extends State<ReportDetail> {
         ),
       ]),
     );
+  }
+
+  // 완료율에 따른 색상을 계산
+  Color _calculateTileColor(double completionPercentage) {
+    if (completionPercentage == 100) {
+      return Color(0xFFFFD356); // 완료율이 100%일 때의 색상
+    } else if (completionPercentage == 0) {
+      return Colors.white; // 완료율이 0%일 때의 색상
+    } else {
+      // 완료율이 0%와 100% 사이에 있는 경우 투명도 조절
+      double opacity = completionPercentage / 100;
+      return Color.fromRGBO(255, 211, 86, opacity);
+    }
   }
 
   Widget RoutineSummary() {
@@ -403,6 +422,7 @@ class _ReportDetailState extends State<ReportDetail> {
                         ))
                   ],
                 ),
+                SizedBox(height: 10,),
                 Text(
                   '${reportStartDate.year}년 ${reportStartDate.month}월 ${reportStartDate.day}일 - ${reportEndDate.year}년 ${reportEndDate.month}월 ${reportEndDate.day}일',
                   style: TextStyle(
