@@ -143,10 +143,20 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 ### GPT to Gemini
 - We changed our AI model from GPT to Gemini. By leveraging Gemini's multi-modal capabilities, we were able to create a voicebot that understands and interacts with the photos users submit.
+- We've also added the ability to analyze the key emotions users felt from their conversations with ATTI and check for danger words, which are sent to the parent's report every week.
 
 ### Simplifying the UI
 - Before we started the process of developing top100, we deeply analysed user feedback on past versions. One of the most important feedback we received from users was that the interface was too complicated. Based on this feedback, we improved the UI, focusing on simplifying the design to make it easier for users to understand and use our application.
+- We merged the Schedule and Day pages into one, and simplified the page flow as much as possible. And we minimized information on the home screen, which is the first thing patients see, to reduce user confusion.
 
+### Change to full-screen notifications
+- Changed traditional push notifications to full-screen notifications. For elderly people with dementia, we created a more prominent notification screen that provides a stronger reminder of schedules and routines.
+
+### Advancing voice prompts 
+- For seniors who may have difficulty using the app, we've enhanced the voice prompts on each page. On the home screen, ATTI will tell you the day's date and weather, and on the schedule/routine page, she'll tell you what routines and schedules are planned for the day.
+
+### Reminiscence conversations about past memory items 
+- For users who don't have a lot of registered memories or want to recall more conversations, we've added photos that remind them of "those days" (dramas, music, objects, etc.) to help spark conversations.
 
 ---
 
