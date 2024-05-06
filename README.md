@@ -142,21 +142,21 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 # What's Different from Before
 
 ### GPT to Gemini
-- We changed our AI model from GPT to Gemini. By leveraging Gemini's multi-modal capabilities, we were able to create a voicebot that understands and interacts with the photos users submit.
-- We've also added the ability to analyze the key emotions users felt from their conversations with ATTI and check for danger words, which are sent to the parent's report every week.
+☑️ We changed our AI model from GPT to Gemini. By leveraging Gemini's multi-modal capabilities, we were able to create a voicebot that understands and interacts with the photos users submit.
+☑️ We've also added the ability to analyze the key emotions users felt from their conversations with ATTI and check for danger words, which are sent to the parent's report every week. 
 
 ### Simplifying the UI
-- Before we started the process of developing top100, we deeply analysed user feedback on past versions. One of the most important feedback we received from users was that the interface was too complicated. Based on this feedback, we improved the UI, focusing on simplifying the design to make it easier for users to understand and use our application.
-- We merged the Schedule and Day pages into one, and simplified the page flow as much as possible. And we minimized information on the home screen, which is the first thing patients see, to reduce user confusion.
+☑️ Before we started the process of developing top100, we deeply analysed user feedback on past versions. One of the most important feedback we received from users was that the interface was too complicated. Based on this feedback, we improved the UI, focusing on simplifying the design to make it easier for users to understand and use our application.
+☑️ We merged the Schedule and Day pages into one, and simplified the page flow as much as possible. And we minimized information on the home screen, which is the first thing patients see, to reduce user confusion.
 
 ### Change to full-screen notifications
-- Changed traditional push notifications to full-screen notifications. For elderly people with dementia, we created a more prominent notification screen that provides a stronger reminder of schedules and routines.
+☑️ Changed traditional push notifications to full-screen notifications. For elderly people with dementia, we created a more prominent notification screen that provides a stronger reminder of schedules and routines.
 
 ### Advancing voice prompts 
-- For seniors who may have difficulty using the app, we've enhanced the voice prompts on each page. On the home screen, ATTI will tell you the day's date and weather, and on the schedule/routine page, she'll tell you what routines and schedules are planned for the day.
+☑️ For seniors who may have difficulty using the app, we've enhanced the voice prompts on each page. On the home screen, ATTI will tell you the day's date and weather, and on the schedule/routine page, she'll tell you what routines and schedules are planned for the day.
 
 ### Reminiscence conversations about past memory items 
-- For users who don't have a lot of registered memories or want to recall more conversations, we've added photos that remind them of "those days" (dramas, music, objects, etc.) to help spark conversations.
+☑️ For users who don't have a lot of registered memories or want to recall more conversations, we've added photos that remind them of "those days" (dramas, music, objects, etc.) to help spark conversations.
 
 ---
 
@@ -166,7 +166,7 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 ---
 
-# Skill
+# Skills
 
 
 |   Firebase   |    Flutter    |  Gemini 1.5 Pro API  |
@@ -183,6 +183,9 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 |---------|---------|---------|
 | ![KakaoTalk_20240506_085820916](https://github.com/H0ngJu/atti/assets/80205505/5fe7aeaa-1d2e-4d28-8d3a-eb64c53b7a0f) | ![image](https://github.com/H0ngJu/atti/assets/150149986/9b94304e-3dfa-4ae4-a6b7-7824c10e937a) | ![image](https://github.com/H0ngJu/atti/assets/150149986/ee31269b-7d4d-491c-91eb-404636230b07) |
 
+- On the patient home screen, you can hear a voice tell you the day's date and weather, and see information about upcoming routines and schedules.
+- On the caregiver home screen, you can see how many of today's routines and schedules the patient has completed, and view weekly reports.
+
 ## 🌟Memory Note
 
 ### Memory Note Main
@@ -191,7 +194,8 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 |---------|---------|---------|
 | ![KakaoTalk_20240505_235417183](https://github.com/H0ngJu/atti/assets/150149986/6d9fa473-0a1c-4d3c-8afc-30bdf540301c) | ![KakaoTalk_20240505_235417183_01](https://github.com/H0ngJu/atti/assets/150149986/277074f8-160f-4353-82a6-df4e0074cdb5) | ![KakaoTalk_20240505_235417183_02](https://github.com/H0ngJu/atti/assets/150149986/8e4dbb5c-0d49-475c-86a0-f46d60cbc4f7) |
 
-
+- On the Memories notes page, you can view the memories you've registered and filter them based on the keywords you've registered. 
+- You can also see a randomized selection of "those days" items that change every time you enter the page. (highlighted by the border and stars on the screen)
 
 ### Memory Note registration
 
@@ -212,7 +216,6 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 | talking(I) | talking(ATTI) | Close 1 | Close 2 |
 |---------|---------|---------|---------|
 | ![KakaoTalk_20240506_000423586_04](https://github.com/H0ngJu/atti/assets/150149986/1cdccbec-8a53-42e5-8c4a-af9954f32258) | ![KakaoTalk_20240506_000423586_05](https://github.com/H0ngJu/atti/assets/150149986/955def12-a3b8-4a80-8583-a3217b600eee) | ![KakaoTalk_20240506_000423586_06](https://github.com/H0ngJu/atti/assets/150149986/dc7ff95c-633c-4a1b-b4ca-7b9cb5e4bdf8) | ![KakaoTalk_20240506_000423586_07](https://github.com/H0ngJu/atti/assets/150149986/a4b39422-993d-460b-809d-2708032062c0) |
-
 
 
 ## 🌟Schedule and Routine
@@ -240,7 +243,10 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 |---------|---------|---------|---------|---------|---------|
 | ![KakaoTalk_20240505_235254121](https://github.com/H0ngJu/atti/assets/150149986/2f7314a8-abde-414f-8125-5faff82d48f0) | ![KakaoTalk_20240505_235254121_01](https://github.com/H0ngJu/atti/assets/150149986/41ff455d-2e2b-462f-86c6-a44d46e182a9) | ![KakaoTalk_20240505_235254121_02](https://github.com/H0ngJu/atti/assets/150149986/2921c9b5-4302-454f-9ccc-728a99b0b8df) | ![KakaoTalk_20240506_085301681](https://github.com/H0ngJu/atti/assets/80205505/0eceb4e0-d9c0-4adc-abbe-c4ed7dd1dc52) | ![KakaoTalk_20240506_085301681_01](https://github.com/H0ngJu/atti/assets/80205505/8c9ba065-5c26-4745-969f-3961b6131743) | ![KakaoTalk_20240506_085301681_06](https://github.com/H0ngJu/atti/assets/80205505/705bf11a-1f74-4386-88af-a2882f18d399) |
 
-
+- The notification page that changed to full-screen notifications.
+- For routine notification, you'll receive a notification at the time you registered the routine.
+- And for schedule notifications, you'll receive a reminder notification one hour before the scheduled time and a confirmation notification at the scheduled time.
+- One hour after the scheduled time, you will receive a notification asking if you want to register the schedule as a memory. From this page, you can go directly to register as a memory to record today.
 
 
 ## 🌟Report
@@ -251,11 +257,12 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 |---------|---------|----------|----------|
 | ![KakaoTalk_20240506_085301681_02](https://github.com/H0ngJu/atti/assets/80205505/a3bcc66a-5bc8-4424-b461-47980c8423e0) | ![KakaoTalk_20240506_085301681_03](https://github.com/H0ngJu/atti/assets/80205505/ef7d0c13-42d3-42c1-99a0-89f2ec33bd62) | ![KakaoTalk_20240506_085301681_04](https://github.com/H0ngJu/atti/assets/80205505/6468371c-778b-4a02-ae3f-9530e00b32a6) | ![KakaoTalk_20240506_085301681_05](https://github.com/H0ngJu/atti/assets/80205505/acf41738-a74f-4ce1-ab78-e01c2ea005eb) |
 
+- The Caregiver Report allows you to check your patient's schedule and routine completion rate each week.
+- You can also see the main emotions the patient has been feeling while talking to ATTI, and if they've said any risk words like "sick" or "depressed," you can see them here.
+- It also shows which memories the patient has checked the most.
 
 
-## 🌟 Signup and Login
-
-### Sign Up
+## 🌟 Sign Up
 
 | 1 | 2 | 3 | 4 | 5 | 6 |
 |---------|---------|----------|----------|----------|----------|
