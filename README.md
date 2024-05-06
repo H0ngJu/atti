@@ -169,9 +169,9 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 ### Home
 
-| Patient | Patient | Patient | Care Giver |
-|---------|---------|---------|---------|
-| ![KakaoTalk_20240505_235004771](https://github.com/H0ngJu/atti/assets/150149986/35f92048-33ef-4a45-9210-71b8c8a0bae5) | ![KakaoTalk_20240505_235004771_01](https://github.com/H0ngJu/atti/assets/150149986/4454e3d4-4313-41f4-87fc-32101033b6e8) | ![image](https://github.com/H0ngJu/atti/assets/150149986/9b94304e-3dfa-4ae4-a6b7-7824c10e937a) | ![image](https://github.com/H0ngJu/atti/assets/150149986/ee31269b-7d4d-491c-91eb-404636230b07) |
+| Patient | Menu(Common) | Care Giver |
+|---------|---------|---------|
+| ![KakaoTalk_20240506_085820916](https://github.com/H0ngJu/atti/assets/80205505/5fe7aeaa-1d2e-4d28-8d3a-eb64c53b7a0f) | ![image](https://github.com/H0ngJu/atti/assets/150149986/9b94304e-3dfa-4ae4-a6b7-7824c10e937a) | ![image](https://github.com/H0ngJu/atti/assets/150149986/ee31269b-7d4d-491c-91eb-404636230b07) |
 
 ## 🌟Memory Note
 
@@ -199,7 +199,7 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 |---------|---------|---------|---------|
 | ![KakaoTalk_20240506_000423586](https://github.com/H0ngJu/atti/assets/150149986/deccd284-057d-42c4-8e1e-d9eae7e4ea66) | ![KakaoTalk_20240506_000423586_01](https://github.com/H0ngJu/atti/assets/150149986/8501882c-adf5-4455-8191-ad3479cb784b) | ![KakaoTalk_20240506_000423586_02](https://github.com/H0ngJu/atti/assets/150149986/1c37bdcf-bd2c-4887-a2e6-3dad7234c628) | ![KakaoTalk_20240506_000423586_03](https://github.com/H0ngJu/atti/assets/150149986/fd5410d4-ba63-4875-9f75-3a2a0f772f1a) |
 
-| Conversation(I) | Conversation(ATTI) | Close 1 | Close 2 |
+| talking(I) | talking(ATTI) | Close 1 | Close 2 |
 |---------|---------|---------|---------|
 | ![KakaoTalk_20240506_000423586_04](https://github.com/H0ngJu/atti/assets/150149986/1cdccbec-8a53-42e5-8c4a-af9954f32258) | ![KakaoTalk_20240506_000423586_05](https://github.com/H0ngJu/atti/assets/150149986/955def12-a3b8-4a80-8583-a3217b600eee) | ![KakaoTalk_20240506_000423586_06](https://github.com/H0ngJu/atti/assets/150149986/dc7ff95c-633c-4a1b-b4ca-7b9cb5e4bdf8) | ![KakaoTalk_20240506_000423586_07](https://github.com/H0ngJu/atti/assets/150149986/a4b39422-993d-460b-809d-2708032062c0) |
 
@@ -224,11 +224,11 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 
 
-### Alert
+### Notification
 
-| 1 | 2 | 3 |
-|---------|---------|---------|
-| ![KakaoTalk_20240505_235254121](https://github.com/H0ngJu/atti/assets/150149986/2f7314a8-abde-414f-8125-5faff82d48f0) | ![KakaoTalk_20240505_235254121_01](https://github.com/H0ngJu/atti/assets/150149986/41ff455d-2e2b-462f-86c6-a44d46e182a9) | ![KakaoTalk_20240505_235254121_02](https://github.com/H0ngJu/atti/assets/150149986/2921c9b5-4302-454f-9ccc-728a99b0b8df) |
+| 1 | 2 | 3 | 4 | 5 | 6 |
+|---------|---------|---------|---------|---------|---------|
+| ![KakaoTalk_20240505_235254121](https://github.com/H0ngJu/atti/assets/150149986/2f7314a8-abde-414f-8125-5faff82d48f0) | ![KakaoTalk_20240505_235254121_01](https://github.com/H0ngJu/atti/assets/150149986/41ff455d-2e2b-462f-86c6-a44d46e182a9) | ![KakaoTalk_20240505_235254121_02](https://github.com/H0ngJu/atti/assets/150149986/2921c9b5-4302-454f-9ccc-728a99b0b8df) | ![KakaoTalk_20240506_085301681](https://github.com/H0ngJu/atti/assets/80205505/0eceb4e0-d9c0-4adc-abbe-c4ed7dd1dc52) | ![KakaoTalk_20240506_085301681_01](https://github.com/H0ngJu/atti/assets/80205505/8c9ba065-5c26-4745-969f-3961b6131743) | ![KakaoTalk_20240506_085301681_06](https://github.com/H0ngJu/atti/assets/80205505/705bf11a-1f74-4386-88af-a2882f18d399) |
 
 
 
@@ -237,9 +237,9 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 ### Report
 
-| 1 | 2 | 3 |
-|---------|---------|----------|
-| <img src="https://github.com/H0ngJu/atti/assets/106425326/e0c2444a-03dc-4ec9-8def-56bc164fad8c" width="200"> | <img src="https://github.com/H0ngJu/atti/assets/106425326/71a664dd-60cf-4dbb-9e79-60b87c341e95" width="200"> | <img src="https://github.com/H0ngJu/atti/assets/106425326/58cfc924-5135-4f7a-8574-02d09ce6265b" width="200"> |
+| 1 | 2 | 3 | 4 |
+|---------|---------|----------|----------|
+| ![KakaoTalk_20240506_085301681_02](https://github.com/H0ngJu/atti/assets/80205505/a3bcc66a-5bc8-4424-b461-47980c8423e0) | ![KakaoTalk_20240506_085301681_03](https://github.com/H0ngJu/atti/assets/80205505/ef7d0c13-42d3-42c1-99a0-89f2ec33bd62) | ![KakaoTalk_20240506_085301681_04](https://github.com/H0ngJu/atti/assets/80205505/6468371c-778b-4a02-ae3f-9530e00b32a6) | ![KakaoTalk_20240506_085301681_05](https://github.com/H0ngJu/atti/assets/80205505/acf41738-a74f-4ce1-ab78-e01c2ea005eb) |
 
 
 
@@ -247,13 +247,9 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 ### Sign Up
 
-| 1 | 2 | 3 |
-|---------|---------|----------|
-| ![image](https://github.com/H0ngJu/atti/assets/150149986/72dbf55c-dc82-4f29-af0e-4b372066aa69) | ![image](https://github.com/H0ngJu/atti/assets/150149986/8fd14742-5ca6-4633-9fa1-96edb45e197b) | ![image](https://github.com/H0ngJu/atti/assets/150149986/b51a4c1e-6ef9-4086-93dd-cf1640248ad9) |
-
-| 4 | 5 | 6 |
-|----------|----------|----------|
-| ![image](https://github.com/H0ngJu/atti/assets/150149986/a1ccfaf5-5e8a-49ec-bb70-7f65c6e7c760) | ![image](https://github.com/H0ngJu/atti/assets/150149986/3b51a87e-7b91-43b2-9754-1cda853c8268) | ![image](https://github.com/H0ngJu/atti/assets/150149986/6d6b7d3b-65e0-4df3-a15b-84d71c6c4a55) |
+| 1 | 2 | 3 | 4 | 5 | 6 |
+|---------|---------|----------|----------|----------|----------|
+| ![image](https://github.com/H0ngJu/atti/assets/150149986/72dbf55c-dc82-4f29-af0e-4b372066aa69) | ![image](https://github.com/H0ngJu/atti/assets/150149986/8fd14742-5ca6-4633-9fa1-96edb45e197b) | ![image](https://github.com/H0ngJu/atti/assets/150149986/b51a4c1e-6ef9-4086-93dd-cf1640248ad9) | ![image](https://github.com/H0ngJu/atti/assets/150149986/a1ccfaf5-5e8a-49ec-bb70-7f65c6e7c760) | ![image](https://github.com/H0ngJu/atti/assets/150149986/3b51a87e-7b91-43b2-9754-1cda853c8268) | ![image](https://github.com/H0ngJu/atti/assets/150149986/6d6b7d3b-65e0-4df3-a15b-84d71c6c4a55) |
 
 
 
