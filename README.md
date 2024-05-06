@@ -177,7 +177,7 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 ### Memory Note Main
 
-| 1 | 2 | 3 | 
+| 1 | 2 | Change the order of photos | 
 |---------|---------|---------|
 | ![KakaoTalk_20240505_235417183](https://github.com/H0ngJu/atti/assets/150149986/6d9fa473-0a1c-4d3c-8afc-30bdf540301c) | ![KakaoTalk_20240505_235417183_01](https://github.com/H0ngJu/atti/assets/150149986/277074f8-160f-4353-82a6-df4e0074cdb5) | ![KakaoTalk_20240505_235417183_02](https://github.com/H0ngJu/atti/assets/150149986/8e4dbb5c-0d49-475c-86a0-f46d60cbc4f7) |
 
@@ -185,22 +185,21 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 ### Memory Note registration
 
-| 1 | 2 | 3 | 4 |
-|---------|---------|---------|---------|
-| ![KakaoTalk_20240505_235922741](https://github.com/H0ngJu/atti/assets/150149986/b864a77d-f2c7-43af-9fb2-b472796e608f) | ![KakaoTalk_20240505_235922741_03](https://github.com/H0ngJu/atti/assets/150149986/a9729b0b-7f00-452c-82ca-3ab3b573c9d9) | ![KakaoTalk_20240505_235922741_04](https://github.com/H0ngJu/atti/assets/150149986/c490cf7b-69cd-48e1-aa74-a31793ed690f) | ![KakaoTalk_20240505_235922741_05](https://github.com/H0ngJu/atti/assets/150149986/33101351-db0b-4f49-9edc-fa8fac48ba1a) |
+| 1 | 2 | 3 | 4 | 5 | 6 |
+|---------|---------|---------|---------|---------|---------|
+| ![KakaoTalk_20240505_235922741](https://github.com/H0ngJu/atti/assets/150149986/b864a77d-f2c7-43af-9fb2-b472796e608f) | ![KakaoTalk_20240505_235922741_04](https://github.com/H0ngJu/atti/assets/150149986/c490cf7b-69cd-48e1-aa74-a31793ed690f) | ![KakaoTalk_20240505_235922741_05](https://github.com/H0ngJu/atti/assets/150149986/33101351-db0b-4f49-9edc-fa8fac48ba1a) | ![KakaoTalk_20240505_235922741_07](https://github.com/H0ngJu/atti/assets/150149986/edffced2-688a-40d9-8076-289e19c2b336) | ![KakaoTalk_20240505_235922741_08](https://github.com/H0ngJu/atti/assets/150149986/dadb4f14-99f6-4a45-9b97-a0aac1fb312b) | ![KakaoTalk_20240505_235922741_09](https://github.com/H0ngJu/atti/assets/150149986/2ec67e93-9fac-4f46-9bfe-1fd23e7efd86) |
 
-| 5 | 6 | 7 | 8 |
-|---------|---------|---------|---------|
-| ![KakaoTalk_20240505_235922741_06](https://github.com/H0ngJu/atti/assets/150149986/33e0e7c3-a094-42c4-b8c6-d6daacb2ed7a) | ![KakaoTalk_20240505_235922741_07](https://github.com/H0ngJu/atti/assets/150149986/edffced2-688a-40d9-8076-289e19c2b336) | ![KakaoTalk_20240505_235922741_08](https://github.com/H0ngJu/atti/assets/150149986/dadb4f14-99f6-4a45-9b97-a0aac1fb312b) | ![KakaoTalk_20240505_235922741_09](https://github.com/H0ngJu/atti/assets/150149986/2ec67e93-9fac-4f46-9bfe-1fd23e7efd86) |
+
+
 
 
 
 ### Conversation with Atti
-| 1 | 2 | 3 | 4 |
+| Memory Detail | Chat history | Conversation | Photo Modal |
 |---------|---------|---------|---------|
 | ![KakaoTalk_20240506_000423586](https://github.com/H0ngJu/atti/assets/150149986/deccd284-057d-42c4-8e1e-d9eae7e4ea66) | ![KakaoTalk_20240506_000423586_01](https://github.com/H0ngJu/atti/assets/150149986/8501882c-adf5-4455-8191-ad3479cb784b) | ![KakaoTalk_20240506_000423586_02](https://github.com/H0ngJu/atti/assets/150149986/1c37bdcf-bd2c-4887-a2e6-3dad7234c628) | ![KakaoTalk_20240506_000423586_03](https://github.com/H0ngJu/atti/assets/150149986/fd5410d4-ba63-4875-9f75-3a2a0f772f1a) |
 
-| 5 | 6 | 7 | 8 |
+| Conversation(I) | Conversation(ATTI) | Close 1 | Close 2 |
 |---------|---------|---------|---------|
 | ![KakaoTalk_20240506_000423586_04](https://github.com/H0ngJu/atti/assets/150149986/1cdccbec-8a53-42e5-8c4a-af9954f32258) | ![KakaoTalk_20240506_000423586_05](https://github.com/H0ngJu/atti/assets/150149986/955def12-a3b8-4a80-8583-a3217b600eee) | ![KakaoTalk_20240506_000423586_06](https://github.com/H0ngJu/atti/assets/150149986/dc7ff95c-633c-4a1b-b4ca-7b9cb5e4bdf8) | ![KakaoTalk_20240506_000423586_07](https://github.com/H0ngJu/atti/assets/150149986/a4b39422-993d-460b-809d-2708032062c0) |
 
@@ -218,13 +217,10 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 ### Schedule registration
 
-| 1 | 2 | 3 | 4 |
-|---------|---------|---------|---------|
-| ![KakaoTalk_20240505_234639192](https://github.com/H0ngJu/atti/assets/150149986/ab0bbf6b-54e9-42ba-b3a1-e79eadd40225) | ![KakaoTalk_20240505_234639192_01](https://github.com/H0ngJu/atti/assets/150149986/b00a3d05-4475-4f62-8466-d32e0fbcf9f2) | ![KakaoTalk_20240505_234639192_02](https://github.com/H0ngJu/atti/assets/150149986/bf3ea4fe-b941-420f-a946-ad4b90a4c1f9) | ![KakaoTalk_20240505_234639192_03](https://github.com/H0ngJu/atti/assets/150149986/2fc1428b-4328-4c69-8bfb-0f29390bf6a0) |
+| 1 | 2 | 3 | 4 | 5 | 6 |
+|---------|---------|---------|---------|---------|---------|
+| ![KakaoTalk_20240505_234639192](https://github.com/H0ngJu/atti/assets/150149986/ab0bbf6b-54e9-42ba-b3a1-e79eadd40225) | ![KakaoTalk_20240505_234639192_02](https://github.com/H0ngJu/atti/assets/150149986/bf3ea4fe-b941-420f-a946-ad4b90a4c1f9) | ![KakaoTalk_20240505_234639192_03](https://github.com/H0ngJu/atti/assets/150149986/2fc1428b-4328-4c69-8bfb-0f29390bf6a0) | ![KakaoTalk_20240505_234639192_04](https://github.com/H0ngJu/atti/assets/150149986/a1e0e6e6-ff76-4df8-aee0-3f4506ff264f) | ![KakaoTalk_20240505_234639192_05](https://github.com/H0ngJu/atti/assets/150149986/85826abd-afb4-47cb-934a-55a0e66d3f46) | ![KakaoTalk_20240505_234639192_06](https://github.com/H0ngJu/atti/assets/150149986/e6fa665f-bace-4002-9896-cb0567d8ef22) |
 
-| 5 | 6 | 7 |
-|---------|---------|---------|
-| ![KakaoTalk_20240505_234639192_04](https://github.com/H0ngJu/atti/assets/150149986/a1e0e6e6-ff76-4df8-aee0-3f4506ff264f) | ![KakaoTalk_20240505_234639192_05](https://github.com/H0ngJu/atti/assets/150149986/85826abd-afb4-47cb-934a-55a0e66d3f46) | ![KakaoTalk_20240505_234639192_06](https://github.com/H0ngJu/atti/assets/150149986/e6fa665f-bace-4002-9896-cb0567d8ef22) |
 
 
 
