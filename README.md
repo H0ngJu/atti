@@ -8,7 +8,7 @@ The project proposes a solution to help people with mild dementia with memory de
     
 
 Youtube : [[ATTI] - GDSC Solution Challenge 2024](https://www.youtube.com/watch?v=eCIppc-osqE)</br>
-Youtube : [[ATTI] - GDSC Solution Challenge 2024 | Top 100](https://www.youtube.com/watch?v=0Y95Mzpib4I))
+Youtube : [[ATTI] - GDSC Solution Challenge 2024 | Top 100](https://www.youtube.com/watch?v=0Y95Mzpib4I)) <br/>
 
 ---
 
@@ -31,7 +31,7 @@ Here are the steps to download the Flutter app from https://github.com/H0ngJu/a
     
 6. Once Android Studio loads the project, select Run -> Run from the top menu.
 7. Select an emulator or connect a mobile device to run the app.
-
+<br/>
 ---
 
 # Contents
@@ -93,14 +93,14 @@ We spent about two weeks volunteering and conducting user research to understand
     2. Only one of the interviewees did not own a smartphone, confirming the value of ATTI as an application solution. In addition, Korean 60-somethings will be more proficient with smartphones in the future than today, so it will be more useful.
     3. The interviewees were animated when they talked about pleasant memories of the past. They said that they often feel lonely because they have no one to talk to, and through the first interview, ATTI, a voice bot that reminisces about the past and evokes pleasant emotions, was born.
 
- 
+ <br/>
 - Second Interview
     
     The second interview was conducted to help us refine the features of ATTI, the representative character and memory reminiscence voice bot, focusing on the question of how it could further strengthen the connection between patients and their caregivers.
     
     1. We interviewed staff at dementia care centers and found that they were positive about the idea of a solution that relies on voice rather than text. However, we also received feedback from patient caregivers, many of whom are in their 60s and older, that the UX flow should be simplified rather than complicated.
     2. Elderly people with dementia responded positively to the memory recall and verbalization services. However, they tended to have some difficulty with the fact that they were using a smartphone app. Therefore, we tried to implement a user-friendly, large, easy-to-identify UI in warm colors and a simplified UX.
- 
+ <br/>
 - Third Interview
 
 <div style="display: flex; justify-content: center;">
@@ -115,7 +115,7 @@ We spent about two weeks volunteering and conducting user research to understand
    2. We've changed the way notifications are displayed from push notifications to fill the entire screen. Push notifications were not suitable for people with mild dementia because they quickly disappear from the eye, but by adopting 
 full-screen notifications, we made it easier and more convenient for users to check their schedule and routine.    
    3. We've added more period-reflective items to the Memory Gallery. Even if there are not many memory photos registered, we added photos that remind users of "those days" (dramas, music, items, etc.) to help them have conversations.
-
+<br/>
 - Fourth Interview (User Test)
 
 <div style="display: flex; justify-content: center;">
@@ -135,18 +135,18 @@ To address the challenges faced by people with dementia, ATTI proposes an app to
 
 ATTI is inspired by the "Memory Note", a dementia prevention information provided by the Seoul Dementia Center. The positive effects of a photo reminiscence program for older adults with dementia are shown in the following study.
 
-- According to 'The Effect of Digital Group Reminiscence Program for the Elderly with Mild Dementia' (2023), a digital reminiscence program for the elderly with mild dementia at a dementia day care center showed that the experimental group showed an increase in CIST (Cognitive Impairment Screening Test) results of 5 points out of 30 compared to the control group. In addition, according to the KGDS (Korean Form of Geriatric Depression Scale), both the experimental and control groups showed depressive symptoms with a pre-score of 8 or more, but the experimental group dropped to 6 points afterwards.
+- According to 'The Effect of Digital Group Reminiscence Program for the Elderly with Mild Dementia' (2023), a digital reminiscence program for the elderly with mild dementia at a dementia day care center showed that the experimental group showed an increase in CIST (Cognitive Impairment Screening Test) results of 5 points out of 30 compared to the control group. In addition, according to the KGDS (Korean Form of Geriatric Depression Scale), both the experimental and control groups showed depressive symptoms with a pre-score of 8 or more, but the experimental group dropped to 6 points afterwards. <br/>
 
 ---
 
 # What's Different from Before
 
 ### GPT to Gemini
-☑️ We changed our AI model from GPT to Gemini. By leveraging Gemini's multi-modal capabilities, we were able to create a voicebot that understands and interacts with the photos users submit.
+☑️ We changed our AI model from GPT to Gemini. By leveraging Gemini's multi-modal capabilities, we were able to create a voicebot that understands and interacts with the photos users submit. <br/>
 ☑️ We've also added the ability to analyze the key emotions users felt from their conversations with ATTI and check for danger words, which are sent to the parent's report every week. 
 
 ### Simplifying the UI
-☑️ Before we started the process of developing top100, we deeply analysed user feedback on past versions. One of the most important feedback we received from users was that the interface was too complicated. Based on this feedback, we improved the UI, focusing on simplifying the design to make it easier for users to understand and use our application.
+☑️ Before we started the process of developing top100, we deeply analysed user feedback on past versions. One of the most important feedback we received from users was that the interface was too complicated. Based on this feedback, we improved the UI, focusing on simplifying the design to make it easier for users to understand and use our application. <br/>
 ☑️ We merged the Schedule and Day pages into one, and simplified the page flow as much as possible. And we minimized information on the home screen, which is the first thing patients see, to reduce user confusion.
 
 ### Change to full-screen notifications
@@ -156,7 +156,7 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 ☑️ For seniors who may have difficulty using the app, we've enhanced the voice prompts on each page. On the home screen, ATTI will tell you the day's date and weather, and on the schedule/routine page, she'll tell you what routines and schedules are planned for the day.
 
 ### Reminiscence conversations about past memory items 
-☑️ For users who don't have a lot of registered memories or want to recall more conversations, we've added photos that remind them of "those days" (dramas, music, objects, etc.) to help spark conversations.
+☑️ For users who don't have a lot of registered memories or want to recall more conversations, we've added photos that remind them of "those days" (dramas, music, objects, etc.) to help spark conversations. <br/>
 
 ---
 
@@ -184,7 +184,7 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 | ![KakaoTalk_20240506_085820916](https://github.com/H0ngJu/atti/assets/80205505/5fe7aeaa-1d2e-4d28-8d3a-eb64c53b7a0f) | ![image](https://github.com/H0ngJu/atti/assets/150149986/9b94304e-3dfa-4ae4-a6b7-7824c10e937a) | ![image](https://github.com/H0ngJu/atti/assets/150149986/ee31269b-7d4d-491c-91eb-404636230b07) |
 
 - On the patient home screen, you can hear a voice tell you the day's date and weather, and see information about upcoming routines and schedules.
-- On the caregiver home screen, you can see how many of today's routines and schedules the patient has completed, and view weekly reports.
+- On the caregiver home screen, you can see how many of today's routines and schedules the patient has completed, and view weekly reports. <br/>
 
 ## 🌟Memory Note
 
@@ -195,18 +195,15 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 | ![KakaoTalk_20240505_235417183](https://github.com/H0ngJu/atti/assets/150149986/6d9fa473-0a1c-4d3c-8afc-30bdf540301c) | ![KakaoTalk_20240505_235417183_01](https://github.com/H0ngJu/atti/assets/150149986/277074f8-160f-4353-82a6-df4e0074cdb5) | ![KakaoTalk_20240505_235417183_02](https://github.com/H0ngJu/atti/assets/150149986/8e4dbb5c-0d49-475c-86a0-f46d60cbc4f7) |
 
 - On the Memories notes page, you can view the memories you've registered and filter them based on the keywords you've registered. 
-- You can also see a randomized selection of "those days" items that change every time you enter the page. (highlighted by the border and stars on the screen)
-
+- You can also see a randomized selection of "those days" items that change every time you enter the page. (highlighted by the border and stars on the screen) <br/>
+ 
 ### Memory Note registration
 
 | 1 | 2 | 3 | 4 | 5 | 6 |
 |---------|---------|---------|---------|---------|---------|
 | ![KakaoTalk_20240505_235922741](https://github.com/H0ngJu/atti/assets/150149986/b864a77d-f2c7-43af-9fb2-b472796e608f) | ![KakaoTalk_20240505_235922741_04](https://github.com/H0ngJu/atti/assets/150149986/c490cf7b-69cd-48e1-aa74-a31793ed690f) | ![KakaoTalk_20240505_235922741_05](https://github.com/H0ngJu/atti/assets/150149986/33101351-db0b-4f49-9edc-fa8fac48ba1a) | ![KakaoTalk_20240505_235922741_07](https://github.com/H0ngJu/atti/assets/150149986/edffced2-688a-40d9-8076-289e19c2b336) | ![KakaoTalk_20240505_235922741_08](https://github.com/H0ngJu/atti/assets/150149986/dadb4f14-99f6-4a45-9b97-a0aac1fb312b) | ![KakaoTalk_20240505_235922741_09](https://github.com/H0ngJu/atti/assets/150149986/2ec67e93-9fac-4f46-9bfe-1fd23e7efd86) |
 
-
-
-
-
+<br/>
 
 ### Conversation with Atti
 | Memory Detail | Chat history | Conversation | Photo Modal |
@@ -216,7 +213,7 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 | talking(I) | talking(ATTI) | Close 1 | Close 2 |
 |---------|---------|---------|---------|
 | ![KakaoTalk_20240506_000423586_04](https://github.com/H0ngJu/atti/assets/150149986/1cdccbec-8a53-42e5-8c4a-af9954f32258) | ![KakaoTalk_20240506_000423586_05](https://github.com/H0ngJu/atti/assets/150149986/955def12-a3b8-4a80-8583-a3217b600eee) | ![KakaoTalk_20240506_000423586_06](https://github.com/H0ngJu/atti/assets/150149986/dc7ff95c-633c-4a1b-b4ca-7b9cb5e4bdf8) | ![KakaoTalk_20240506_000423586_07](https://github.com/H0ngJu/atti/assets/150149986/a4b39422-993d-460b-809d-2708032062c0) |
-
+<br/>
 
 ## 🌟Schedule and Routine
 
@@ -226,7 +223,7 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 |---------|---------|---------|---------|---------|
 | ![KakaoTalk_20240505_234811820](https://github.com/H0ngJu/atti/assets/150149986/22f554ee-05a1-4b95-bab1-1d7644bbb38a) | ![KakaoTalk_20240505_234811820_01](https://github.com/H0ngJu/atti/assets/150149986/11532a86-8f1f-402e-8712-e88b89c8bb9c) | ![KakaoTalk_20240505_234811820_02](https://github.com/H0ngJu/atti/assets/150149986/03848d6a-feeb-4546-998b-a08d1e98f437) | ![KakaoTalk_20240505_235234663](https://github.com/H0ngJu/atti/assets/150149986/f0e90ddc-8867-4cf7-bba2-28e14b957be7) | ![KakaoTalk_20240505_235234663_01](https://github.com/H0ngJu/atti/assets/150149986/ad3f8e64-d59a-4c97-961f-7281bd603369) |
 
-
+<br/>
 
 ### Schedule registration
 
@@ -234,7 +231,7 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 |---------|---------|---------|---------|---------|---------|
 | ![KakaoTalk_20240505_234639192](https://github.com/H0ngJu/atti/assets/150149986/ab0bbf6b-54e9-42ba-b3a1-e79eadd40225) | ![KakaoTalk_20240505_234639192_02](https://github.com/H0ngJu/atti/assets/150149986/bf3ea4fe-b941-420f-a946-ad4b90a4c1f9) | ![KakaoTalk_20240505_234639192_03](https://github.com/H0ngJu/atti/assets/150149986/2fc1428b-4328-4c69-8bfb-0f29390bf6a0) | ![KakaoTalk_20240505_234639192_04](https://github.com/H0ngJu/atti/assets/150149986/a1e0e6e6-ff76-4df8-aee0-3f4506ff264f) | ![KakaoTalk_20240505_234639192_05](https://github.com/H0ngJu/atti/assets/150149986/85826abd-afb4-47cb-934a-55a0e66d3f46) | ![KakaoTalk_20240505_234639192_06](https://github.com/H0ngJu/atti/assets/150149986/e6fa665f-bace-4002-9896-cb0567d8ef22) |
 
-
+<br/>
 
 
 ### Notification
@@ -247,7 +244,7 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 - For routine notification, you'll receive a notification at the time you registered the routine.
 - And for schedule notifications, you'll receive a reminder notification one hour before the scheduled time and a confirmation notification at the scheduled time.
 - One hour after the scheduled time, you will receive a notification asking if you want to register the schedule as a memory. From this page, you can go directly to register as a memory to record today.
-
+<br/>
 
 ## 🌟Report
 
@@ -261,7 +258,7 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 - You can also see the main emotions the patient has been feeling while talking to ATTI, and if they've said any risk words like "sick" or "depressed," you can see them here.
 - It also shows which memories the patient has checked the most.
 
-
+<br/>
 ## 🌟 Sign Up
 
 | 1 | 2 | 3 | 4 | 5 | 6 |
@@ -270,7 +267,7 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 
 
-
+<br/>
 
 
 ---
