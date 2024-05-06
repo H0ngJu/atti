@@ -101,10 +101,6 @@ Future<void> addNotification(String title, String body, DateTime dateTime, bool 
 
 // 환자가 일정 및 일과 완료 시 별도의 컬렉션에 알림 정보 저장
 Future<void> addFinishNotification(String title, String body, DateTime dateTime, bool isPatient) async {
-  QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-      .collection('notification_finish')
-      .get();
-
   NotificationModel notification = NotificationModel(
     patientDocRef: authController.patientDocRef,
     title: title,

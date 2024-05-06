@@ -50,7 +50,6 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
             margin: EdgeInsets.only(bottom: 20),
             child: TextButton(
               onPressed: isButtonEnabled ? () async {
-
                 setState(() {
                   isButtonEnabled = false; // 버튼 비활성화
                 });

@@ -7,9 +7,10 @@ import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../../data/report/emotion_controller.dart';
 
+// ==============================================================================
+// Generative AI used part (Gemini)
 class Chatbot {
   final firestore = FirebaseFirestore.instance;
   EmotionController emotionController = Get.put(EmotionController());
