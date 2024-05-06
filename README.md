@@ -37,7 +37,7 @@ Here are the steps to download the Flutter app from https://github.com/H0ngJu/a
 # Contents
 
 1. [Overview](#Overview)
-2. [Necessity](#Necessity)
+2. [Necessity - Interview & User Test](#Necessity)
 3. [What's Different from Before](#What's-Different-from-Before)
 4. [UN SDGs](#UN_SDGs)
 5. [Skill](#Skill)
@@ -100,6 +100,35 @@ We spent about two weeks volunteering and conducting user research to understand
     
     1. We interviewed staff at dementia care centers and found that they were positive about the idea of a solution that relies on voice rather than text. However, we also received feedback from patient caregivers, many of whom are in their 60s and older, that the UX flow should be simplified rather than complicated.
     2. Elderly people with dementia responded positively to the memory recall and verbalization services. However, they tended to have some difficulty with the fact that they were using a smartphone app. Therefore, we tried to implement a user-friendly, large, easy-to-identify UI in warm colors and a simplified UX.
+ 
+- Third Interview
+
+<div style="display: flex; justify-content: center;">
+    <img height="300" alt="Untitled4" src="https://github.com/H0ngJu/atti/assets/106425326/b4be9d30-30d3-42ac-89d8-fae43de733eb">
+    <img height="300" alt="image" src="https://github.com/H0ngJu/atti/assets/106425326/9b9e5272-f98e-4280-b069-06c32bc3bc70">
+</div>
+    At that time, we received feedback on how far the development had progressed. Key feedback included
+    1. simplicity of the UX, 2. more intuitive notifications (with a bit of force), and 3. what to do when fewer memories are registered in the memory gallery.
+
+   We used this feedback to evolve the project.
+   1. To further simplify the UX, we further reduced the flow of the bottom navigation bar. Previously, there were many page flows to select or move, which could be confusing for users. We simplified the page flow as much as possible.
+   2. We've changed the way notifications are displayed from push notifications to fill the entire screen. Push notifications were not suitable for people with mild dementia because they quickly disappear from the eye, but by adopting 
+full-screen notifications, we made it easier and more convenient for users to check their schedule and routine.    
+   3. We've added more period-reflective items to the Memory Gallery. Even if there are not many memory photos registered, we added photos that remind users of "those days" (dramas, music, items, etc.) to help them have conversations.
+
+- Fourth Interview (User Test)
+
+<div style="display: flex; justify-content: center;">
+    <img height="300" alt="Untitled4" src="https://github.com/H0ngJu/atti/assets/106425326/76d3c8c9-0d2b-44e7-b8d6-db400b26a4b5">
+    <img height="300" alt="image" src="https://github.com/H0ngJu/atti/assets/106425326/247eb2d2-f126-48cf-a6a9-d54ef72500e1">
+</div>
+
+The fourth interview was conducted on May 1 at Pukyong National University.
+
+The results of a 60-minute user study with three elderly people with mild dementia, aged 65 or older, are shown below. After experiencing the main features of the application, the testers were asked to rate their satisfaction on a scale from 1 (very dissatisfied) to 5 (very satisfied). Users responded positively to the application's UI (font size, etc.) with an average score of 4, and to the smoothness of conversations with the A.I. Voicebot (speed of speech, satisfaction with the content of the conversation) with an average score of 4.33. 
+
+Additional feedback included the ease of registering schedules and tasks, the intuitiveness of the full-screen notifications, the net functionality of the memory aid, and the enjoyment of reminiscing about the past when there was no one to talk to after retirement. While using the application, users reported feeling nostalgic and energized as they talked to Artie about elements of their past lives and memories.
+
 
 ## Solution proposal
 To address the challenges faced by people with dementia, ATTI proposes an app to maintain quality of life and promote well-being for people with dementia. 
@@ -140,15 +169,15 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 ### Home
 
-| Patient | Menu(Common) | Care Giver |
-|---------|--------------|------------|
-| ![KakaoTalk_20240506_085820916](https://github.com/H0ngJu/atti/assets/80205505/5fe7aeaa-1d2e-4d28-8d3a-eb64c53b7a0f) | ![image](https://github.com/H0ngJu/atti/assets/150149986/9b94304e-3dfa-4ae4-a6b7-7824c10e937a) | ![image](https://github.com/H0ngJu/atti/assets/150149986/ee31269b-7d4d-491c-91eb-404636230b07) |
+| Patient | Patient | Patient | Care Giver |
+|---------|---------|---------|---------|
+| ![KakaoTalk_20240505_235004771](https://github.com/H0ngJu/atti/assets/150149986/35f92048-33ef-4a45-9210-71b8c8a0bae5) | ![KakaoTalk_20240505_235004771_01](https://github.com/H0ngJu/atti/assets/150149986/4454e3d4-4313-41f4-87fc-32101033b6e8) | ![image](https://github.com/H0ngJu/atti/assets/150149986/9b94304e-3dfa-4ae4-a6b7-7824c10e937a) | ![image](https://github.com/H0ngJu/atti/assets/150149986/ee31269b-7d4d-491c-91eb-404636230b07) |
 
 ## 🌟Memory Note
 
 ### Memory Note Main
 
-| 1 | 2 | Change the order of photos | 
+| 1 | 2 | 3 | 
 |---------|---------|---------|
 | ![KakaoTalk_20240505_235417183](https://github.com/H0ngJu/atti/assets/150149986/6d9fa473-0a1c-4d3c-8afc-30bdf540301c) | ![KakaoTalk_20240505_235417183_01](https://github.com/H0ngJu/atti/assets/150149986/277074f8-160f-4353-82a6-df4e0074cdb5) | ![KakaoTalk_20240505_235417183_02](https://github.com/H0ngJu/atti/assets/150149986/8e4dbb5c-0d49-475c-86a0-f46d60cbc4f7) |
 
@@ -156,13 +185,13 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 ### Memory Note registration
 
-| 1 | 2 | 3 |
-|---------|---------|---------|
-| ![KakaoTalk_20240505_235922741](https://github.com/H0ngJu/atti/assets/150149986/b864a77d-f2c7-43af-9fb2-b472796e608f) | ![KakaoTalk_20240505_235922741_04](https://github.com/H0ngJu/atti/assets/150149986/c490cf7b-69cd-48e1-aa74-a31793ed690f) | ![KakaoTalk_20240505_235922741_05](https://github.com/H0ngJu/atti/assets/150149986/33101351-db0b-4f49-9edc-fa8fac48ba1a) |
+| 1 | 2 | 3 | 4 |
+|---------|---------|---------|---------|
+| ![KakaoTalk_20240505_235922741](https://github.com/H0ngJu/atti/assets/150149986/b864a77d-f2c7-43af-9fb2-b472796e608f) | ![KakaoTalk_20240505_235922741_03](https://github.com/H0ngJu/atti/assets/150149986/a9729b0b-7f00-452c-82ca-3ab3b573c9d9) | ![KakaoTalk_20240505_235922741_04](https://github.com/H0ngJu/atti/assets/150149986/c490cf7b-69cd-48e1-aa74-a31793ed690f) | ![KakaoTalk_20240505_235922741_05](https://github.com/H0ngJu/atti/assets/150149986/33101351-db0b-4f49-9edc-fa8fac48ba1a) |
 
-| 4 | 5 | 6 |
-|---------|---------|---------|
-| ![KakaoTalk_20240505_235922741_07](https://github.com/H0ngJu/atti/assets/150149986/edffced2-688a-40d9-8076-289e19c2b336) | ![KakaoTalk_20240505_235922741_08](https://github.com/H0ngJu/atti/assets/150149986/dadb4f14-99f6-4a45-9b97-a0aac1fb312b) | ![KakaoTalk_20240505_235922741_09](https://github.com/H0ngJu/atti/assets/150149986/2ec67e93-9fac-4f46-9bfe-1fd23e7efd86) |
+| 5 | 6 | 7 | 8 |
+|---------|---------|---------|---------|
+| ![KakaoTalk_20240505_235922741_06](https://github.com/H0ngJu/atti/assets/150149986/33e0e7c3-a094-42c4-b8c6-d6daacb2ed7a) | ![KakaoTalk_20240505_235922741_07](https://github.com/H0ngJu/atti/assets/150149986/edffced2-688a-40d9-8076-289e19c2b336) | ![KakaoTalk_20240505_235922741_08](https://github.com/H0ngJu/atti/assets/150149986/dadb4f14-99f6-4a45-9b97-a0aac1fb312b) | ![KakaoTalk_20240505_235922741_09](https://github.com/H0ngJu/atti/assets/150149986/2ec67e93-9fac-4f46-9bfe-1fd23e7efd86) |
 
 
 
@@ -189,11 +218,11 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 ### Schedule registration
 
-| 1 | 2 | 3 |
-|---------|---------|---------|
-| ![KakaoTalk_20240505_234639192](https://github.com/H0ngJu/atti/assets/150149986/ab0bbf6b-54e9-42ba-b3a1-e79eadd40225) | ![KakaoTalk_20240505_234639192_02](https://github.com/H0ngJu/atti/assets/150149986/bf3ea4fe-b941-420f-a946-ad4b90a4c1f9) | ![KakaoTalk_20240505_234639192_03](https://github.com/H0ngJu/atti/assets/150149986/2fc1428b-4328-4c69-8bfb-0f29390bf6a0) |
+| 1 | 2 | 3 | 4 |
+|---------|---------|---------|---------|
+| ![KakaoTalk_20240505_234639192](https://github.com/H0ngJu/atti/assets/150149986/ab0bbf6b-54e9-42ba-b3a1-e79eadd40225) | ![KakaoTalk_20240505_234639192_01](https://github.com/H0ngJu/atti/assets/150149986/b00a3d05-4475-4f62-8466-d32e0fbcf9f2) | ![KakaoTalk_20240505_234639192_02](https://github.com/H0ngJu/atti/assets/150149986/bf3ea4fe-b941-420f-a946-ad4b90a4c1f9) | ![KakaoTalk_20240505_234639192_03](https://github.com/H0ngJu/atti/assets/150149986/2fc1428b-4328-4c69-8bfb-0f29390bf6a0) |
 
-| 4 | 5 | 6 |
+| 5 | 6 | 7 |
 |---------|---------|---------|
 | ![KakaoTalk_20240505_234639192_04](https://github.com/H0ngJu/atti/assets/150149986/a1e0e6e6-ff76-4df8-aee0-3f4506ff264f) | ![KakaoTalk_20240505_234639192_05](https://github.com/H0ngJu/atti/assets/150149986/85826abd-afb4-47cb-934a-55a0e66d3f46) | ![KakaoTalk_20240505_234639192_06](https://github.com/H0ngJu/atti/assets/150149986/e6fa665f-bace-4002-9896-cb0567d8ef22) |
 
