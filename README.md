@@ -32,6 +32,14 @@ Here are the steps to download the Flutter app from https://github.com/H0ngJu/a
 6. Once Android Studio loads the project, select Run -> Run from the top menu.
 7. Select an emulator or connect a mobile device to run the app. <br/>
 
+### **Test account**
+- Patient Account
+    - ID : patient@naver.com
+    - PW : patient
+
+- Parent Account
+    - ID : carer@naver.com
+    - PW : carer123
 ---
 
 # Contents
