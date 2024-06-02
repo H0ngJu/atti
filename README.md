@@ -37,7 +37,7 @@ Here are the steps to download the Flutter app from https://github.com/H0ngJu/a
     - ID : patient@naver.com
     - PW : patient
 
-- Parent Account
+- Carer Account
     - ID : carer@naver.com
     - PW : carer123
 ---
