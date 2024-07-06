@@ -10,6 +10,7 @@ class ScheduleModel {
   Timestamp? time;
   bool? isFinished;
   DocumentReference? reference; // document 식별자
+  bool? isPatient;
 
   // 생성자
   ScheduleModel({
@@ -20,7 +21,8 @@ class ScheduleModel {
     this.createdAt,
     this.time,
     this.isFinished = false,
-    this.reference
+    this.reference,
+    this.isPatient
   });
 
   // json -> object (Firestore -> Flutter)
@@ -33,6 +35,7 @@ class ScheduleModel {
     time = json['time'];
     isFinished = json['isFinished'];
     reference = json['reference'];
+    isPatient = json['isPatient'];
   }
 
   // Named Constructor with Initializer
@@ -55,6 +58,7 @@ class ScheduleModel {
     map['time'] = time;
     map['isFinished'] = isFinished;
     map['reference'] = reference;
+    map['isPatient'] = isPatient;
     return map;
   }
 }

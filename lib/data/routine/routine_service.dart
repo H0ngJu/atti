@@ -35,6 +35,7 @@ class RoutineService {
       routine.img = imageUrl; // 업로드된 이미지 url로 img필드 업데이트
       routine.createdAt = Timestamp.now();
       routine.patientId = authController.patientDocRef;
+      routine.isPatient = authController.isPatient;
 
       // // 추가 *************************
       routine.isFinished = createTimeMap(routine.repeatDays);
