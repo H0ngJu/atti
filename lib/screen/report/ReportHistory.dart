@@ -34,6 +34,7 @@ class _ReportHistoryState extends State<ReportHistory> {
     for (Map<String, dynamic> report in fetchedReports) {
       List<String> periodList = List<String>.from(report['reportPeriod']);
       String reportMonth = periodList[0].substring(0, 7);
+      print(periodList);
       if (reportMonth == thisMonth) {
         thisMonthReports.add(periodList);
       } else if (reportMonth == lastMonth) {
@@ -80,10 +81,12 @@ class _ReportHistoryState extends State<ReportHistory> {
               fontFamily: 'PretendardRegular', fontSize: 18, color: Colors.grey
           ),),
         for (int i = 0; i < reports.length; i++)
-          isRecent ? ReportHistoryContainer(
+          isRecent
+              ? ReportHistoryContainer(date: reports[i], indx: i)
+              : PreReportHistoryContainer(
             date: reports[i],
-            indx: i,
-          ) : PreReportHistoryContainer(date: reports[i], indx: i),
+            indx: i + (isRecent ? thisMonthReports.length : 0) + (title == '이전 기록' ? lastMonthReports.length : 0),
+          ),
       ],
     );
   }
