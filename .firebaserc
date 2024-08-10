@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "atti-44a56"
-  }
+    "default": "atti-44a56",
+    "atti": "atti-44a56"
+  },
+  "targets": {},
+  "etags": {}
 }

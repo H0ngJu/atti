@@ -11,6 +11,7 @@ class RoutineModel with ChangeNotifier {
   List<String>? repeatDays;
   Map<String, bool>? isFinished;
   DocumentReference? reference; // document 식별자
+  bool? isPatient;
 
   // 생성자
   RoutineModel({
@@ -21,6 +22,7 @@ class RoutineModel with ChangeNotifier {
     this.createdAt,
     this.repeatDays,
     this.reference,
+    this.isPatient
   }) : isFinished = {}; // 기본값으로 빈 map 할당
 
   // json -> object (Firestore -> Flutter)
@@ -32,7 +34,7 @@ class RoutineModel with ChangeNotifier {
     createdAt = json['createdAt'];
     repeatDays = List<String>.from(json['repeatDays']);
     isFinished = Map<String, bool>.from(json['isFinished']);
-
+    isPatient = json['isPatient'];
     // // isFinished 필드가 Null일 경우 빈 리스트로 초기화
     // isFinished = (json['isFinished'] != null) ? Map<DateTime, bool>.from(json['isFinished']) : [];
   }
@@ -53,6 +55,7 @@ class RoutineModel with ChangeNotifier {
     map['time'] = time;
     map['createdAt'] = createdAt;
     map['repeatDays'] = repeatDays;
+    map['isPatient'] = isPatient;
 
     if (isFinished != null) {
       map['isFinished'] = isFinished!.map<String, bool>(
