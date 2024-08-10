@@ -14,9 +14,6 @@ class ReportDetail extends StatefulWidget {
 }
 
 class _ReportDetailState extends State<ReportDetail> {
-  //DateTime _selectedDay = DateTime.now();
-
-  // ==================================================================================================================================
   AuthController _authController = Get.find<AuthController>();
   var reportData = {};
   List<dynamic>? reportPeriod;
@@ -29,7 +26,6 @@ class _ReportDetailState extends State<ReportDetail> {
   var unfinishedSchedule;
   var mostViews;
   var registerdMemoryCount;
-  var dates;
   var dangerWords;
 
   int totalRoutines = 0;
@@ -62,18 +58,16 @@ class _ReportDetailState extends State<ReportDetail> {
           highestViewedData = documentSnapshot.data() as Map<String, dynamic>?;
           highestViewedData!['viewCounts'] = highestViews;
         });
-        print("highestViewedData : ${highestViewedData}");
+        print("highestViewedData : ${highestViewedData!['refernece']}");
       } catch (e) {
         print("도큐먼트를 가져오는 데 실패했습니다: $e");
       }
-      print("가장 높은 조회수를 가진 참조를 찾을 수 없습니다.");
     }
   }
 
   Future<void> _fetchReport() async {
     var fetchedReports = await _authController.carerReports;
     reportData = fetchedReports[widget.indx];
-    print("reportData : ${reportData}");
     setState(() {
       reportPeriod = reportData['reportPeriod'];
       weeklyEmotion = reportData['weeklyEmotion'];
@@ -86,8 +80,6 @@ class _ReportDetailState extends State<ReportDetail> {
       unfinishedSchedule = reportData['unfinishedSchedule'];
       mostViews = reportData['mostViews'];
       registerdMemoryCount = reportData['registerdMemoryCount'];
-      dates = registerdMemoryCount.keys.toList();
-      // routineCompletion 맵을 순회하며 totalRoutines와 completedRoutines 값을 갱신
       routineCompletion.forEach((date, data) {
         int total = (data['total'] as num?)?.toInt() ?? 0; // num을 int로 변환, 기본값 0
         int completed = (data['completed'] as num?)?.toInt() ?? 0; // 위와 동일
@@ -103,23 +95,32 @@ class _ReportDetailState extends State<ReportDetail> {
         totalSchedules += total;
         completedSchedules += completed;
       });
-      print("reportPeriod : ${reportPeriod}\nweeklyEmotion : ${weeklyEmotion}\nhighestViewedMemory : ${highestViewedMemory}\npatientId : ${patientId}\nroutineCompletion : ${routineCompletion}\nunfinishedRoutine : ${unfinishedRoutine}\nscheduleCompletion : ${scheduleCompletion}\nunfinishedSchedule : ${unfinishedSchedule}\nmostViews : ${mostViews}\nregisterdMemoryCount : ${registerdMemoryCount}\n");
     });
+    DateTime date = DateTime.parse("2024-05-03");
+    Timestamp timestampKey = Timestamp.fromDate(date);
+    Map<String, int>? entry = routineCompletion[timestampKey];
+    print(entry);
     fetchHighestViewedDocument();
+    print("${scheduleCompletion}\n${routineCompletion}");
   }
-  // ==================================================================================================================================
 
   Widget TileContainer({int total = 0, int completed = 0, required String date}) {
+    double completionPercentage = total != 0 ? (completed / total) * 100 : 0;
+    Color tileColor = _calculateTileColor(completionPercentage);
+
     return Container(
       width: MediaQuery.of(context).size.width * 0.2,
       height: MediaQuery.of(context).size.height * 0.17,
       decoration: BoxDecoration(
-          color: Color(0xffFFE29A), borderRadius: BorderRadius.circular(15)),
+          color: tileColor,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: Color(0xffDDDDDD), width: 1)
+      ),
       padding: EdgeInsets.all(13),
       child:
       Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(
-          '${date.substring(8)}일',
+          '${date.substring(8, 10)}일',
           style: TextStyle(fontFamily: 'PretendardRegular', fontSize: 20),
         ),
         Text(
@@ -133,13 +134,34 @@ class _ReportDetailState extends State<ReportDetail> {
     );
   }
 
+  // 완료율에 따른 색상을 계산
+  Color _calculateTileColor(double completionPercentage) {
+    if (completionPercentage == 100) {
+      return Color(0xFFFFD356); // 완료율이 100%일 때의 색상
+    } else if (completionPercentage == 0) {
+      return Colors.white; // 완료율이 0%일 때의 색상
+    } else {
+      // 완료율이 0%와 100% 사이에 있는 경우 투명도 조절
+      double opacity = completionPercentage / 100;
+      return Color.fromRGBO(255, 211, 86, opacity);
+    }
+  }
+
   Widget RoutineSummary() {
     var size = MediaQuery.of(context).size;
 
     /*24 is for notification bar on Android*/
     final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
     final double itemWidth = size.width / 2;
-
+    List<MapEntry<String, dynamic>> sortedEntries = routineCompletion.entries.toList()
+      ..sort((MapEntry<String, dynamic> a, MapEntry<String, dynamic> b) => a.key.compareTo(b.key));
+    List<Widget> tiles = sortedEntries.map((entry) {
+      return TileContainer(
+        date: entry.key,
+        total: entry.value['total'],
+        completed: entry.value['completed'],
+      );
+    }).toList();
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -177,20 +199,7 @@ class _ReportDetailState extends State<ReportDetail> {
               childAspectRatio: (itemWidth / itemHeight),
               crossAxisSpacing: 8,
               mainAxisSpacing: 10,
-              children: dates.map((dateString) {
-                DateTime date = DateTime.parse(dateString);
-                Timestamp timestampKey = Timestamp.fromDate(date);
-                Map<String, int>? entry = routineCompletion[timestampKey];
-                if (entry != null) {
-                  return TileContainer(
-                    date: dateString,
-                    total: entry['total'] ?? 0,
-                    completed: entry['completed'] ?? 0,
-                  ) as Widget;
-                } else {
-                  return TileContainer(date: dateString) as Widget;
-                }
-              }).toList().cast<Widget>(),
+              children: tiles,
             ),
           ),
         ],
@@ -204,6 +213,15 @@ class _ReportDetailState extends State<ReportDetail> {
     /*24 is for notification bar on Android*/
     final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
     final double itemWidth = size.width / 2;
+    List<MapEntry<String, dynamic>> sortedEntries = scheduleCompletion.entries.toList()
+      ..sort((MapEntry<String, dynamic> a, MapEntry<String, dynamic> b) => a.key.compareTo(b.key));
+    List<Widget> tiles = sortedEntries.map((entry) {
+      return TileContainer(
+        date: entry.key,
+        total: entry.value['total'],
+        completed: entry.value['completed'],
+      );
+    }).toList();
 
     return Container(
       child: Column(
@@ -235,20 +253,7 @@ class _ReportDetailState extends State<ReportDetail> {
               childAspectRatio: (itemWidth / itemHeight),
               crossAxisSpacing: 8,
               mainAxisSpacing: 10,
-              children: dates.map((dateString) {
-                DateTime date = DateTime.parse(dateString);
-                Timestamp timestampKey = Timestamp.fromDate(date);
-                Map<String, int>? entry = scheduleCompletion[timestampKey];
-                if (entry != null) {
-                  return TileContainer(
-                    date: dateString,
-                    total: entry['total'] ?? 0,
-                    completed: entry['completied'] ?? 0,
-                  ) as Widget;
-                } else {
-                  return TileContainer(date: dateString) as Widget;
-                }
-              }).toList().cast<Widget>(),
+              children: tiles,
             ),
           ),
         ],
@@ -370,7 +375,7 @@ class _ReportDetailState extends State<ReportDetail> {
                   )
               )
             ],
-          ) : Center(child: Text('데이터를 불러오는 중...')), // highestViewedData가 null인 경우 처리
+          ) : Center(child: Text('데이터를 불러오는 중...')),
         ],
       ),
     );
@@ -381,7 +386,6 @@ class _ReportDetailState extends State<ReportDetail> {
     DateTime reportStartDate = DateTime.parse(reportPeriod![0]);
     DateTime reportEndDate = DateTime.parse(reportPeriod![1]);
     final weekOfMonth = getWeekOfMonth(reportStartDate);
-
 
     return Scaffold(
         body: SingleChildScrollView(
@@ -418,6 +422,7 @@ class _ReportDetailState extends State<ReportDetail> {
                         ))
                   ],
                 ),
+                SizedBox(height: 10,),
                 Text(
                   '${reportStartDate.year}년 ${reportStartDate.month}월 ${reportStartDate.day}일 - ${reportEndDate.year}년 ${reportEndDate.month}월 ${reportEndDate.day}일',
                   style: TextStyle(

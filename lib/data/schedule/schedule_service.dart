@@ -12,6 +12,7 @@ class ScheduleService {
   Future<ScheduleModel> addSchedule(ScheduleModel schedule) async {
     try {
       schedule.patientId = authController.patientDocRef;
+      schedule.isPatient = authController.isPatient;
       schedule.createdAt = Timestamp.now();
       DocumentReference docRef = await firestore.collection('schedule').add(schedule.toJson());
       schedule.reference = docRef;

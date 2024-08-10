@@ -99,12 +99,38 @@ Future<void> addNotification(String title, String body, DateTime dateTime, bool 
   }
 }
 
-// 환자가 일정 및 일과 완료 시 별도의 컬렉션에 알림 정보 저장
-Future<void> addFinishNotification(String title, String body, DateTime dateTime, bool isPatient) async {
+// 알림 데이터 저장하기
+Future<void> addNotificationToPatient(String title, String body, DateTime dateTime, bool isPatient) async {
   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-      .collection('notification_finish')
+      .collection('notification_register')
+      .where('message', isEqualTo: body)
       .get();
 
+  if (querySnapshot.docs.isEmpty) {
+    NotificationModel notification = NotificationModel(
+      patientDocRef: authController.patientDocRef,
+      title: title,
+      message: body,
+      time: Timestamp.fromDate(dateTime),
+      isPatient: isPatient,
+    );
+
+    try {
+      DocumentReference docRef = await FirebaseFirestore.instance
+          .collection('notification_register')
+          .add(notification.toJson());
+      print('Notification saved to Firestore successfully!');
+
+      notification.reference = docRef;
+      await docRef.update({'reference': docRef});
+    } catch (e) {
+      print('Error saving notification to Firestore: $e');
+    }
+  }
+}
+
+// 환자가 일정 및 일과 완료 시 별도의 컬렉션에 알림 정보 저장
+Future<void> addFinishNotification(String title, String body, DateTime dateTime, bool isPatient) async {
   NotificationModel notification = NotificationModel(
     patientDocRef: authController.patientDocRef,
     title: title,
