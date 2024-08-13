@@ -53,7 +53,6 @@ class _HomePatientState extends State<HomePatient> {
     'lib/assets/Atti/Coffee.png',
     'lib/assets/Atti/EatingStar.png',
     'lib/assets/Atti/Napping.png',
-    'lib/assets/Atti/Normal.png',
     'lib/assets/Atti/ReadingBook.png',
     'lib/assets/Atti/Soccer.png',
     'lib/assets/Atti/Stars.png',

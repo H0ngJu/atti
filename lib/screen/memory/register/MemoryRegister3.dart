@@ -193,7 +193,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
             ),
             shape: MaterialStateProperty.all<OutlinedBorder>(
               RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25), // 버튼 모서리 둥글기 설정
+                borderRadius: BorderRadius.circular(15), // 버튼 모서리 둥글기 설정
               ),
             ),
           ),

@@ -21,6 +21,7 @@ import '../data/routine/routine_model.dart';
 import '../data/routine/routine_service.dart';
 import '../data/schedule/schedule_model.dart';
 import '../data/schedule/schedule_service.dart';
+import 'dart:math';
 
 class HomeCarer extends StatefulWidget {
   const HomeCarer({Key? key}) : super(key: key);
@@ -175,6 +176,25 @@ class HomePatientTop extends StatefulWidget {
 class _HomePatientTopState extends State<HomePatientTop> {
   AuthController authController = Get.put(AuthController());
 
+  final List<String> defaultImg = [
+    'lib/assets/Atti/Coffee.png',
+    'lib/assets/Atti/EatingStar.png',
+    'lib/assets/Atti/Napping.png',
+    'lib/assets/Atti/ReadingBook.png',
+    'lib/assets/Atti/Soccer.png',
+    'lib/assets/Atti/Stars.png',
+    'lib/assets/Atti/Walking.png',
+  ];
+  late String selectedImage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    // 이미지 리스트에서 랜덤으로 선택
+    selectedImage = defaultImg[Random().nextInt(defaultImg.length)];
+  }
+
+
   @override
   Widget build(BuildContext context) {
     String patientName = widget.patientName;
@@ -210,8 +230,8 @@ class _HomePatientTopState extends State<HomePatientTop> {
             mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
             children: [
               Image(
-                  image: AssetImage('lib/assets/Atti/standingAtti.png'),
-                  width: MediaQuery.of(context).size.width * 0.8),
+                  image: AssetImage(selectedImage),
+                  width: MediaQuery.of(context).size.width * 0.55),
             ],
           ),
           SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
