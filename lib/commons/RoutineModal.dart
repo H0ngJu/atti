@@ -115,7 +115,7 @@ class RoutineModal extends StatelessWidget {
 
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => RoutineFinish(name: '\'${name}\'\n일과를 완료했어요!')),
+                      MaterialPageRoute(builder: (context) => RoutineFinish(name: '${name}')),
                     );
                   },
                   child: Text('완료했어요', style: TextStyle(color: Colors.white, fontSize: 20),),

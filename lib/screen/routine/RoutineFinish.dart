@@ -26,8 +26,15 @@ class RoutineFinish extends StatelessWidget {
               Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 margin: EdgeInsets.only(left: 15),
-                child: Text('${name}', style: TextStyle(
-                    fontSize: 36, fontWeight: FontWeight.w600, color: Colors.white
+                child: Text('\'${name}\'', style: TextStyle(
+                    fontSize: 35, fontWeight: FontWeight.w600, color: Colors.white
+                ),),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                margin: EdgeInsets.only(left: 15),
+                child: Text('일과를 완료했어요!', style: TextStyle(
+                    fontSize: 40, fontWeight: FontWeight.w600, color: Colors.white
                 ),),
               ),
               SizedBox(height: 20,),
