@@ -50,7 +50,6 @@ class _HomePatientState extends State<HomePatient> {
   FlutterTts flutterTts = FlutterTts();
   String weatherStatus = '';
   final List<String> defaultImg = [
-    'lib/assets/Atti/standingAtti.png',
     'lib/assets/Atti/Coffee.png',
     'lib/assets/Atti/EatingStar.png',
     'lib/assets/Atti/Napping.png',
