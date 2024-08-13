@@ -180,7 +180,7 @@ class _MemoryWordsState extends State<MemoryWords> {
     return Container(
       margin: EdgeInsets.only(top: 10, right: 10), // 각 태그 사이의 간격을 조절합니다.
       decoration: BoxDecoration(
-          color: Color(0xffFFF5DB), borderRadius: BorderRadius.circular(25)),
+          color: Color(0xffFFF5DB), borderRadius: BorderRadius.circular(15)),
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
       child: Text(
         tag,

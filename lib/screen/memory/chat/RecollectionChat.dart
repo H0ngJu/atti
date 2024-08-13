@@ -150,7 +150,7 @@ class _RecollectionChatState extends State<RecollectionChat> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('\'${widget.recollection.title}\'기억 회상 대화'),
+        title: Text('\'${widget.recollection.title}\' 기억 회상 대화'),
       ),
       body: Stack(children: [
         Container(
@@ -513,7 +513,7 @@ class _VoiceButtonState extends State<VoiceButton> {
               onPressed: _isListening ? _stopListening : _toggleListening,
               style: ElevatedButton.styleFrom(
                   backgroundColor:
-                      _isListening ? Color(0xff231FAD) : Color(0xffFFC215),
+                      _isListening ? Color(0xffA38130) : Color(0xffFFC215),
                   shape: CircleBorder()),
               child: Icon(
                 _isListening ? Icons.stop : Icons.mic,

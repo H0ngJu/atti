@@ -78,7 +78,7 @@ class _GalleryOptionState extends State<GalleryOption> {
         Container(
           margin: EdgeInsets.only(top: 10),
           decoration: BoxDecoration(
-              color: Color(0xffFFF5DB), borderRadius: BorderRadius.circular(25)),
+              color: Color(0xffFFF5DB), borderRadius: BorderRadius.circular(15)),
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
           child: Text(
             '${tagController.selectedTag.value}',
@@ -243,7 +243,7 @@ class _GalleryOptionState extends State<GalleryOption> {
                 ),
                 shape: MaterialStateProperty.all<OutlinedBorder>(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25), // 버튼 모서리 둥글기 설정
+                    borderRadius: BorderRadius.circular(15), // 버튼 모서리 둥글기 설정
                   ),
                 ),
               ),
@@ -260,7 +260,7 @@ class _GalleryOptionState extends State<GalleryOption> {
             },
             child: Icon(
               showAllTags ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-              color: Colors.blue,
+              color: Color(0xffFFC215),
               size: 30,
             ),
             style: ButtonStyle(

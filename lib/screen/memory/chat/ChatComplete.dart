@@ -123,10 +123,11 @@ class _ChatCompleteState extends State<ChatComplete> {
                         Expanded(child: GalleryContent(randomMemoryNotes[1])),
                       ],
                     ),
+                    SizedBox(height: 10,),
                     GalleryContent(randomMemoryNotes[2]),
                   ],
                 ),
-              SizedBox(height: 80),
+              SizedBox(height: 70),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: 60,
