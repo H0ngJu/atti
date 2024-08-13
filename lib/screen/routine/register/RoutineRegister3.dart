@@ -32,6 +32,7 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(child: Column(children: [

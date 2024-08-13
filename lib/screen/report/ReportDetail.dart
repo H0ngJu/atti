@@ -388,6 +388,7 @@ class _ReportDetailState extends State<ReportDetail> {
     final weekOfMonth = getWeekOfMonth(reportStartDate);
 
     return Scaffold(
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.only(left: 16, right: 16, top: 50),

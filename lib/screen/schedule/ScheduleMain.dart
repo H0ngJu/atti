@@ -59,6 +59,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [

@@ -46,6 +46,7 @@ class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
             child: Container(
       margin: EdgeInsets.only(

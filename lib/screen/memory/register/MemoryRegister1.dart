@@ -37,13 +37,14 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
     var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+        backgroundColor: Colors.white,
         body: Column(
       children: [
         Expanded(
           child: Column(
             children: [
               DetailPageTitle(
-                title: '기억하기',
+                title: '기억 남기기',
                 description: '기억할 사진을 선택해주세요',
                 totalStep: 4,
                 currentStep: 1,
@@ -75,9 +76,12 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                             child: Column(
                               children: [
                                 SizedBox(height: height * 0.06,),
-                                Text('카메라', style: TextStyle(fontSize: 28, ),),
+                                Text('카메라', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),),
                                 SizedBox(height: height * 0.02,),
-                                Text('지금 사진을\n찍을까요?', style: TextStyle(fontSize: 20),),
+                                Text('지금 사진을\n찍을까요?',
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center,
+                                ),
                                 SizedBox(height: height * 0.07,),
                               ],
                             )
@@ -98,9 +102,12 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                             child: Column(
                               children: [
                                 SizedBox(height: height * 0.06,),
-                                Text('갤러리', style: TextStyle(fontSize: 28, ),),
+                                Text('갤러리', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),),
                                 SizedBox(height: height * 0.02,),
-                                Text('찍어둔 사진이\n있나요?', style: TextStyle(fontSize: 20),),
+                                Text('찍어둔 사진이\n있나요?',
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center,
+                                ),
                                 SizedBox(height: height * 0.07,),
                               ],
                             )

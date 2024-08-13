@@ -49,7 +49,10 @@ class _ReportHistoryState extends State<ReportHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+        ),
         body: SingleChildScrollView(
           child: Container(
               margin: EdgeInsets.all(16),

@@ -43,6 +43,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();

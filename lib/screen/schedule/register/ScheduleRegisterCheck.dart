@@ -27,6 +27,7 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
     String formattedTime = dateTime != null ? DateFormat('a h시 mm분', 'ko_KR').format(dateTime) : '';
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(children: [
         Expanded(
           child: SingleChildScrollView(

@@ -77,7 +77,9 @@ class _NoticeMainState extends State<NoticeMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: SimpleAppBar(
+
         title: '알림',
       ),
       body: SingleChildScrollView(

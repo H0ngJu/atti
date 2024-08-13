@@ -19,6 +19,7 @@ class _RoutineRegister1State extends State<RoutineRegister1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();

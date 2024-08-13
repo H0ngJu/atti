@@ -123,6 +123,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(

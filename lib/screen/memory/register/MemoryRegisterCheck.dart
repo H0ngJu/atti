@@ -21,6 +21,7 @@ class _MemoryRegisterCheckState extends State<MemoryRegisterCheck> {
     final List<String> keywords = memoryNoteController.memoryNote.value.keyword ?? [];
 
     return Scaffold(
+        backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(child: SingleChildScrollView(

@@ -74,6 +74,7 @@ class _RoutineRegister2State extends State<RoutineRegister2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(child: SingleChildScrollView(
