@@ -44,6 +44,7 @@ class ChatHistory extends StatelessWidget {
         if (snapshot.hasData) {
           List<Message> messages = snapshot.data!;
           return Scaffold(
+            backgroundColor: Colors.white,
             appBar: SimpleAppBar(
               title: '아띠와 회상 대화 기록',
             ),

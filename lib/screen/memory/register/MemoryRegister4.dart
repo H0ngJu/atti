@@ -42,11 +42,20 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
               child: Column(
                 children: [
                   DetailPageTitle(
-                    title: '기억하기',
-                    description: '\'${memoryNoteController.memoryNote.value.imgTitle}\' 사진에 대한 정보를 알려주세요!',
+                    title: '기억 남기기',
+                    description: '\'${memoryNoteController.memoryNote.value.imgTitle}\' 사진에 대한\n정보를 알려주세요!',
                     totalStep: 4, currentStep: 4,
                   ),
                   SizedBox(height: 20,),
+                  Container(
+                    margin: EdgeInsets.only(left: 15),
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    alignment: Alignment.centerLeft,
+                    child: Text('기억 단어를 입력해주세요', textAlign: TextAlign.left, style: TextStyle(
+                      fontSize: 24,
+                    ),),
+                  ),
+                  SizedBox(height: 10,),
                   AddKeywordTag(),
 
                   SizedBox(height: 50,),
@@ -60,7 +69,7 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
               alignment: Alignment.centerLeft,
               child: Text('기억 단어란?', textAlign: TextAlign.left,
                 style: TextStyle(
-                    fontSize: 20, color: Color(0xff616161), fontWeight: FontWeight.w600
+                    fontSize: 20, color: Color(0xff616161), fontWeight: FontWeight.w600,
                 ),),
             ),
             Container(
@@ -121,7 +130,7 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
               contentPadding: EdgeInsets.only(top: 15, bottom: 10, left: 15),
               filled: true,
               fillColor: Color(0xffFFF5DB),
-              hintText: '기억 단어를 입력해주세요',
+              hintText: '사진과 관련된 단어를 입력해주세요',
               hintStyle: TextStyle(color: Color(0xffA38130), fontSize: 24, fontWeight: FontWeight.normal)
           ),
 
@@ -157,6 +166,7 @@ class _Chip extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(top: 5,),
       child: Chip(
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
           side: BorderSide(color: Color(0xffA38130), width: 1),
           borderRadius: BorderRadius.circular(20)

@@ -31,7 +31,7 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    DetailPageTitle(title: '기억하기', description: '사진 제목을 입력해주세요', totalStep: 4, currentStep: 2,),
+                    DetailPageTitle(title: '기억 남기기', description: '사진 제목을 입력해주세요', totalStep: 4, currentStep: 2,),
                     SizedBox(height: 30,),
                     Container(
                       constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.4),
@@ -50,7 +50,7 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
                         cursorColor: Colors.black,
                         style: TextStyle(fontSize: 24),
                         decoration: InputDecoration(
-                          hintText: '사진 제목을 뭐라고 할까요?',
+                          hintText: '사진 제목으로 무엇이 좋을까요?',
                           hintStyle: TextStyle(fontSize: 24, color: Color(0xffA38130)),
                           filled: true, // 배경을 채움
                           fillColor: Color(0xffFFF5DB),

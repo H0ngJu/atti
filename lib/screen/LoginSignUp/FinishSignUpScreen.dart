@@ -19,6 +19,7 @@ class _FinishSignUpScreenState extends State<FinishSignUpScreen> {
     final ColorPallet colorPallet = Get.put(ColorPallet());
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           Container(

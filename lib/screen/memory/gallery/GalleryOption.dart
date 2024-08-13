@@ -71,7 +71,7 @@ class _GalleryOptionState extends State<GalleryOption> {
       children: [
         Container(
           child: Text(
-            '현재 단어',
+            '현재 기억 단어',
             style: TextStyle(fontSize: 24),
           ),
         ),
@@ -94,7 +94,7 @@ class _GalleryOptionState extends State<GalleryOption> {
       children: [
         Container(
           child: Text(
-            '변경할 단어',
+            '변경할 기억 단어',
             style: TextStyle(fontSize: 24),
           ),
         ),
@@ -105,14 +105,17 @@ class _GalleryOptionState extends State<GalleryOption> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('기억 순서 변경'),
+        backgroundColor: Colors.white,
+        title: Text('사진 나열 변경'),
         leading: TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
           child: Icon(
             Icons.arrow_back_ios_rounded,
+            color: Color(0xffB8B8B8),
           ),
         ),
       ),
@@ -134,12 +137,12 @@ class _GalleryOptionState extends State<GalleryOption> {
                     TextSpan(
                         text: '어떤 기억 단어로\n',
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         )),
                     TextSpan(
                       text: '사진을 다시 나열할까요?',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     TextSpan(

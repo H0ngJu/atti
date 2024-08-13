@@ -16,8 +16,10 @@ class BeforeSave extends StatelessWidget {
     ChatController chatController = ChatController();
 
     return Scaffold(
+      backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('${memory.imgTitle}기억 회상 대화'),
+          title: Text('\'${memory.imgTitle}\' 기억 회상 대화'),
+          backgroundColor: Colors.white,
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -55,7 +57,7 @@ class BeforeSave extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ChatComplete()),
+                                builder: (context) => ChatComplete(memory: memory)),
                           );
                         } else {
                           print('Error: memory.reference?.path is null');

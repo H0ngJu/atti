@@ -38,7 +38,9 @@ class MemoryDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
+          backgroundColor: Colors.white,
           title: Text('기억 한 조각'),
           actions: <Widget>[
             Container(

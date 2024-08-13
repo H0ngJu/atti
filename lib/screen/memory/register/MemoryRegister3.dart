@@ -55,8 +55,8 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DetailPageTitle(
-                    title: '기억하기',
-                    description: '\'${memoryNoteController.memoryNote.value.imgTitle}\' 사진에 대한 정보를 알려주세요!',
+                    title: '기억 남기기',
+                    description: '\'${memoryNoteController.memoryNote.value.imgTitle}\' 사진에 대한\n정보를 알려주세요!',
                     totalStep: 4, currentStep: 3,
                   ),
                   SizedBox(height: 30,),

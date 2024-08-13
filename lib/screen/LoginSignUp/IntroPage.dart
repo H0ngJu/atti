@@ -34,6 +34,7 @@ class _IntroPageState extends State<IntroPage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Container(
         width: width,
         child: Align(

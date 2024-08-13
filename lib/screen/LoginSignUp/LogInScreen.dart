@@ -32,7 +32,9 @@ class _LogInScreenState extends State<LogInScreen> {
     bool loginSuccess;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: IconButton(
             padding: EdgeInsets.all(5),
             onPressed: (){

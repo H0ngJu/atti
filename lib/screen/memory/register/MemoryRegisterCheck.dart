@@ -28,7 +28,7 @@ class _MemoryRegisterCheckState extends State<MemoryRegisterCheck> {
             child: Column(
               children: [
                 DetailPageTitle(
-                  title: '기억하기',
+                  title: '기억 남기기',
                   description: '다음과 같이 등록할까요?',
                   totalStep: 0, currentStep: 0,
                 ),
@@ -58,9 +58,13 @@ class _MemoryRegisterCheckState extends State<MemoryRegisterCheck> {
                   constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.35),
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: memoryNoteController.memoryNote.value.img != null
-                      ? Image.file(File(memoryNoteController.memoryNote.value.img!))
+                      ? ClipRRect(
+                        borderRadius: BorderRadius.circular(30), // 모서리를 30만큼 둥글게 설정
+                        child: Image.file(File(memoryNoteController.memoryNote.value.img!)),
+                  )
                       : SizedBox(), // 널일 경우 대체할 위젯 설정
                 ),
+
                 SizedBox(height: 30,),
                 Container(
                   margin: EdgeInsets.only(left: 15),

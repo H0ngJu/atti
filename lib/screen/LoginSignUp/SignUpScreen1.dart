@@ -38,6 +38,7 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Stack(
           children: [

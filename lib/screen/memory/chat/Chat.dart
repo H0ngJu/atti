@@ -141,7 +141,9 @@ class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text('\'${widget.memory.imgTitle}\'기억 회상 대화'),
       ),
       body: Stack(children: [

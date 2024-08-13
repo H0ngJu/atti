@@ -87,6 +87,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
       isNameValid && isPhoneValid && isPatientEmailValid; // 보호자라면
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();

@@ -26,6 +26,7 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: Colors.white,
         body: Container(
             width: width,
             height: height,

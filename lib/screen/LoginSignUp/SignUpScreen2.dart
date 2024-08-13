@@ -29,6 +29,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
     bool isValid = isIdValid && isPwCheckValid;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: (){
           FocusScope.of(context).unfocus();
