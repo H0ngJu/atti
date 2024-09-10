@@ -188,7 +188,7 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 ### Home
 
 | Patient | Menu(Common) | Care Giver |
-|---------|---------|---------|
+|:-------:|:-------:|:-------:|
 | ![환자 홈](https://github.com/user-attachments/assets/3fb90c7f-131f-444e-b783-cdb62b4452ed) | ![image](https://github.com/H0ngJu/atti/assets/150149986/9b94304e-3dfa-4ae4-a6b7-7824c10e937a) | ![보호자 홈](https://github.com/user-attachments/assets/dbce934e-b7f1-4e4d-bd75-b2beccaf38b8)
  |
 
