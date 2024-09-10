@@ -187,9 +187,15 @@ ATTI is inspired by the "Memory Note", a dementia prevention information provide
 
 ### Home
 
-| Patient | Menu(Common) | Care Giver |
-|---------|---------|---------|
-| ![KakaoTalk_20240506_085820916](https://github.com/H0ngJu/atti/assets/80205505/5fe7aeaa-1d2e-4d28-8d3a-eb64c53b7a0f) | ![image](https://github.com/H0ngJu/atti/assets/150149986/9b94304e-3dfa-4ae4-a6b7-7824c10e937a) | ![image](https://github.com/H0ngJu/atti/assets/150149986/ee31269b-7d4d-491c-91eb-404636230b07) |
+<div align="center">
+
+| Patient | Care Giver |
+|:-------:|:-------:|
+| <img src="https://github.com/user-attachments/assets/3fb90c7f-131f-444e-b783-cdb62b4452ed" height="500"> | <img src="https://github.com/user-attachments/assets/dbce934e-b7f1-4e4d-bd75-b2beccaf38b8" height="500"> |
+
+</div>
+
+
 
 - On the patient home screen, you can hear a voice tell you the day's date and weather, and see information about upcoming routines and schedules.
 - On the caregiver home screen, you can see how many of today's routines and schedules the patient has completed, and view weekly reports. <br/>
