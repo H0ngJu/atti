@@ -1,5 +1,4 @@
 // 새로운 일정/일과 페이지
-
 import 'package:atti/tmp/screen/routine/register/RoutineRegister1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -262,15 +261,10 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                       style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
                     ),
                   ),
-                  TextButton(onPressed: () async {
-                    await _selectDate(context);
-                    await _fetchData();
-                  },
-                      child: Text('날짜변경', style: TextStyle(fontSize: 18, color: Colors.black),),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Color(0xffECECEC)),
-                      ),
-                  ),
+
+                  // 여기 편집 버튼 넣기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+
                 ],
               ),
             ),
@@ -284,6 +278,8 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
               ],
             ),
             SizedBox(height: height * 0.03),
+
+            // 아띠 말풍선
             Container(
               width: width * 0.9,
               alignment: Alignment.center,
@@ -295,8 +291,10 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                   selectedMessage ?? '',
                   textAlign: TextAlign.center,
                   style: TextStyle(
+
                       color: Colors.white, fontFamily: 'UhBee', fontSize: 25)),
             ),
+
             SizedBox(height: height * 0.03,),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.9,
@@ -311,13 +309,23 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                       textAlign: TextAlign.left,
                       style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
                     ),
+
                   ),
-                  TextButton(onPressed: () {
-                    Get.to(RoutineRegister1());
+                  // TextButton(onPressed: () {
+                  //   Get.to(RoutineRegister1());
+                  // },
+                  //   child: Text('일과등록', style: TextStyle(fontSize: 18, color: Color(0xffA38130)),),
+                  //   style: ButtonStyle(
+                  //     backgroundColor: MaterialStateProperty.all(Color(0xffFFE9B3)),
+                  //   ),
+                  // ),
+                  TextButton(onPressed: () async {
+                    await _selectDate(context);
+                    await _fetchData();
                   },
-                    child: Text('일과등록', style: TextStyle(fontSize: 18, color: Color(0xffA38130)),),
+                    child: Text('날짜변경', style: TextStyle(fontSize: 18, color: Colors.black),),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Color(0xffFFE9B3)),
+                      backgroundColor: MaterialStateProperty.all(Color(0xffECECEC)),
                     ),
                   ),
                 ],

@@ -72,7 +72,7 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                   Text(
                     '서비스 이용이 구분되니 신중히 선택해주세요.',
                     style: TextStyle(
-                      color: _colorPallet.grayColor,
+                      color: _colorPallet.lightGray,
                       fontSize: 20,
                       letterSpacing: 0.01,
                       fontFamily: 'PretendardRegular',
