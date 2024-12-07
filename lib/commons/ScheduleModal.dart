@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../data/notification/notification_controller.dart';
 import '../data/schedule/schedule_service.dart';
-import '../screen/schedule/finish/ScheduleFinish1.dart';
-import '../screen/schedule/finish/ScheduleFinish2.dart';
+import '../tmp/screen/schedule/finish/ScheduleFinish1.dart';
+import '../tmp/screen/schedule/finish/ScheduleFinish2.dart';
 
 class ScheduleModal extends StatelessWidget {
   const ScheduleModal({super.key, required this.time, required this.location, required this.name, required this.memo, required this.docRef});

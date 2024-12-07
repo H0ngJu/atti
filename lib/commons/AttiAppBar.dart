@@ -1,10 +1,10 @@
-import 'package:atti/screen/Notice/NoticeMain.dart';
+import 'package:atti/tmp/screen/Notice/NoticeMain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-import '../screen/Menu.dart';
+import '../tmp/screen/Menu.dart';
 
 class AttiAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? title;
