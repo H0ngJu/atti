@@ -23,6 +23,7 @@ import 'dart:math';
 import '../../../commons/RoutineBox2.dart';
 import '../../../data/schedule/schedule_service.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:atti/commons/colorPallet.dart';
 
 // 이미지 파일 이름 목록
 List<String> imageNames = [
@@ -42,6 +43,8 @@ class RoutineScheduleMain extends StatefulWidget {
 }
 
 class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
+  final ColorPallet colorPallet = Get.put(ColorPallet());
+
   int _selectedIndex = 2;
   void _onItemTapped(int index) {
     setState(() {
@@ -285,14 +288,15 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
               alignment: Alignment.center,
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                  color: Color(0xffFFC215),
+                  color: colorPallet.lightYellow,
                   borderRadius: BorderRadius.all(Radius.circular(15))),
               child: Text(
                   selectedMessage ?? '',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-
-                      color: Colors.white, fontFamily: 'UhBee', fontSize: 25)),
+                      color: colorPallet.black,
+                      fontFamily: 'UhBee',
+                      fontSize: 25)),
             ),
 
             SizedBox(height: height * 0.03,),
@@ -323,9 +327,16 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     await _selectDate(context);
                     await _fetchData();
                   },
-                    child: Text('날짜변경', style: TextStyle(fontSize: 18, color: Colors.black),),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Color(0xffECECEC)),
+                    child: Text(
+                      '날짜변경',
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                      ),
+                    ),
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 12), // 패딩 조정
+                      backgroundColor: Colors.black,
                     ),
                   ),
                 ],
