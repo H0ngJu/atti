@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../data/routine/routine_service.dart';
-import '../screen/routine/RoutineFinish.dart';
-import '../screen/schedule/finish/ScheduleFinish1.dart';
+import '../tmp/screen/routine/RoutineFinish.dart';
+import '../tmp/screen/schedule/finish/ScheduleFinish1.dart';
 
 class RoutineModal extends StatelessWidget {
   final Function onCompleted; // 콜백 함수 추가

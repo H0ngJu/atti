@@ -1,16 +1,16 @@
-import 'package:atti/screen/HomeCarer.dart';
-import 'package:atti/screen/HomePatient.dart';
-import 'package:atti/screen/memory/gallery/MainGallery.dart';
+import 'package:atti/tmp/screen/HomeCarer.dart';
+import 'package:atti/tmp/screen/HomePatient.dart';
+import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../data/auth_controller.dart';
-import '../screen/RoutineScheduleMain.dart';
-import '../screen/memory/register/MemoryRegister1.dart';
-import '../screen/routine/RoutineMain.dart';
-import '../screen/schedule/ScheduleMain.dart';
+import '../tmp/screen/RoutineScheduleMain.dart';
+import '../tmp/screen/memory/register/MemoryRegister1.dart';
+import '../tmp/screen/routine/RoutineMain.dart';
+import '../tmp/screen/schedule/ScheduleMain.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final AuthController authController = Get.put(AuthController());
