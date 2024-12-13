@@ -34,10 +34,12 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
   void _openDatePicker(BuildContext context) {
     BottomPicker.date(
       minDateTime: DateTime(1900),
-      title: '생년월일을 입력해 주세요',
-      titleStyle: TextStyle(
-        fontSize: 24, fontWeight: FontWeight.normal,
-        fontFamily: 'PretendardRegular',
+      pickerTitle: Text(
+        '생년월일을 입력해 주세요',
+        style: TextStyle(
+          fontSize: 24, fontWeight: FontWeight.normal,
+          fontFamily: 'PretendardRegular',
+        ),
       ),
       dateOrder: DatePickerDateOrder.ymd,
       pickerTextStyle: const TextStyle(

@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../data/auth_controller.dart';
-import '../tmp/screen/RoutineScheduleMain.dart';
+import '../patient/screen/routine_schedule/RoutineScheduleMain.dart';
 import '../tmp/screen/memory/register/MemoryRegister1.dart';
 import '../tmp/screen/routine/RoutineMain.dart';
 import '../tmp/screen/schedule/ScheduleMain.dart';
