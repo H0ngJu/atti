@@ -122,7 +122,7 @@ packages:
     source: hosted
     version: "3.12.5"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       sha256: ee67cb0715911d28db6bf4af1026078bd6f0128b07a5f66fb2ed94ec6783c09a
@@ -466,6 +466,7 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_local_notifications
+
       sha256: "674173fd3c9eda9d4c8528da2ce0ea69f161577495a9cc835a2a4ecd7eadeb35"
       url: "https://pub.dev"
     source: hosted

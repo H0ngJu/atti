@@ -48,9 +48,9 @@ dependencies:
   flutter_chat_ui: ^1.6.10
   day_picker: ^2.2.0
   timelines: ^0.1.0
-  flutter_local_notifications: ^17.0.0
+  flutter_local_notifications: ^17.2.2
   step_progress_indicator: ^1.0.2
-  intl: ^0.19.0
+  intl: 0.19.0
   firebase_storage: ^11.6.4
   cloud_firestore: ^4.15.5
   firebase_auth: ^4.17.3
@@ -72,6 +72,7 @@ dependencies:
   flutter_tts: ^3.8.5
   google_generative_ai: ^0.3.1
   firebase_messaging: ^14.7.19
+  collection: ^1.17.1
 
 
 
