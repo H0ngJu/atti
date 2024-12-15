@@ -5,17 +5,26 @@
 //                   name: scheduleController.name.value,
 //                   location: scheduleController.location.value,
 //                 ),
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../patient/screen/routine_schedule/ScheduleFinishModal.dart';
+
 class ScheduleBox extends StatefulWidget {
   const ScheduleBox(
-      {super.key, this.time, this.name, this.location, this.isFinished});
+      {super.key,
+        this.time,
+        this.name,
+        this.location,
+        this.isFinished,
+        this.docRef});
 
   final String? time;
   final String? name;
-  final String?location;
+  final String? location;
   final bool? isFinished;
+  final DocumentReference? docRef;
 
   @override
   State<ScheduleBox> createState() => _ScheduleBoxState();
@@ -40,6 +49,16 @@ class _ScheduleBoxState extends State<ScheduleBox> {
                 setState(() {
                   isChecked = !isChecked; // 클릭 시 체크 상태를 토글
                 });
+                showDialog(
+                    context: context,
+                    builder: (_) {
+                      return ScheduleFinishModal(
+                        time: widget.time ?? '',
+                        location: widget.location ?? '',
+                        name: widget.name!,
+                        docRef: widget.docRef!,
+                      );
+                    });
               },
               child: CustomPaint(
                 painter: DottedCirclePainter(),

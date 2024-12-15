@@ -1,5 +1,7 @@
+import 'package:atti/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
 import '../data/notification/notification_controller.dart';
 import '../data/schedule/schedule_service.dart';
 import '../tmp/screen/schedule/finish/ScheduleFinish1.dart';
@@ -52,7 +54,7 @@ class ScheduleModal extends StatelessWidget {
                 )
               ],
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 5, width: width * 0.8,),
             Container(
                 child: Text(
               name,
