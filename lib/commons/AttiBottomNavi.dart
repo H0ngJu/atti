@@ -1,3 +1,4 @@
+import 'package:atti/patient/screen/memory/MemoryMain.dart';
 import 'package:atti/tmp/screen/HomeCarer.dart';
 import 'package:atti/tmp/screen/HomePatient.dart';
 import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
@@ -29,20 +30,20 @@ class CustomBottomNavigationBar extends StatelessWidget {
       type: BottomNavigationBarType.fixed,
       items: [
         _buildBottomNavigationBarItem(
-          tappedIcon: 'lib/assets/icons/memory_black.svg',
+          tappedIcon: 'lib/assets/icons/memory_orange.svg',
           untappedIcon: 'lib/assets/icons/memory_white.svg',
           label: '내 기억',
           isSelected: currentIndex == 0,
 
         ),
         _buildBottomNavigationBarItem(
-          tappedIcon: 'lib/assets/icons/home_black.svg',
+          tappedIcon: 'lib/assets/icons/home_orange.svg',
           untappedIcon: 'lib/assets/icons/home_white.svg',
           label: '홈',
           isSelected: currentIndex == 1,
         ),
         _buildBottomNavigationBarItem(
-          tappedIcon: 'lib/assets/icons/RShome_black.svg',
+          tappedIcon: 'lib/assets/icons/RShome_orange.svg',
           untappedIcon: 'lib/assets/icons/RShome_white.svg',
           label: '일과/일정',
           isSelected: currentIndex == 2,
@@ -75,7 +76,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   // 추가한 부분
   void _onItemTapped(int index) {
     if (index == 0) {
-      Get.to(MainGallery());
+      Get.to(MainMemory());
     } else if (index == 1 && authController.isPatient ) {
       Get.to(HomePatient());
     } else if(index == 1 && !authController.isPatient){
