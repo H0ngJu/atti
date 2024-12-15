@@ -1,29 +1,7 @@
 // 새로운 일정/일과 페이지
-import 'package:atti/tmp/screen/routine/register/RoutineRegister1.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:atti/commons/AttiBottomNavi.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:atti/index.dart';
 import 'package:intl/intl.dart';
-import 'package:timelines/timelines.dart';
-import '../../../commons/BottomNextButton.dart';
-import '../../../commons/RoutineBox.dart';
-import '../../../commons/RoutineModal.dart';
-import '../../../data/auth_controller.dart';
-import '../../../data/routine/routine_controller.dart';
-import '../../../data/routine/routine_model.dart';
-import '../../../data/routine/routine_service.dart';
-import 'package:atti/tmp/screen/schedule/register/ScheduleRegister1.dart';
-import '../../../commons/ScheduleBox.dart';
-import '../../../commons/ScheduleModal.dart';
-import '../../../data/schedule/schedule_model.dart';
-import 'package:atti/tmp/screen/schedule/register/ScheduleRegister1.dart';
-import 'dart:math';
-import '../../../commons/RoutineBox2.dart';
-import '../../../data/schedule/schedule_service.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:atti/commons/colorPallet.dart';
 
 // 이미지 파일 이름 목록
 List<String> imageNames = [
@@ -46,6 +24,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   final ColorPallet colorPallet = Get.put(ColorPallet());
 
   int _selectedIndex = 2;
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -72,9 +51,9 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
 
   List<RoutineModel> routinesBySelectedDay = []; // 선택한 요일의 루틴들
   int? numberOfRoutines;
-  String selectedDayInWeek = DateFormat('E', 'ko-KR').format(DateTime.now()); // 선택한 날짜의 요일
+  String selectedDayInWeek =
+      DateFormat('E', 'ko-KR').format(DateTime.now()); // 선택한 날짜의 요일
   String patientName = '';
-
 
   @override
   void initState() {
@@ -91,9 +70,10 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   }
 
   Future<void> _fetchData() async {
-    List<ScheduleModel>? fetchedSchedules = await ScheduleService().getSchedulesByDate(_selectedDay);
+    List<ScheduleModel>? fetchedSchedules =
+        await ScheduleService().getSchedulesByDate(_selectedDay);
     List<RoutineModel> fetchedRoutines =
-    await RoutineService().getRoutinesByDay(selectedDayInWeek);
+        await RoutineService().getRoutinesByDay(selectedDayInWeek);
 
     // tts를 위한 오늘의 일정, 일과
     todayRoutines = await RoutineService().getRoutinesByDay(todayInWeek);
@@ -125,17 +105,23 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   }
 
   Future<void> _makeTTsMessage() async {
-    List<String> ttsMessages = ['오늘은 어떤 일정이 있으신가요?', '일정과 일과를 할 시간이 되면 아띠가 알려드릴게요!'];
+    List<String> ttsMessages = [
+      '오늘은 어떤 일정이 있으신가요?',
+      '일정과 일과를 할 시간이 되면 아띠가 알려드릴게요!'
+    ];
 
     // 오늘 날짜
     DateTime today = DateTime.now();
 
     // 오늘의 일정 메시지 생성
-    if (_selectedDay.year == today.year && _selectedDay.month == today.month && _selectedDay.day == today.day) {
+    if (_selectedDay.year == today.year &&
+        _selectedDay.month == today.month &&
+        _selectedDay.day == today.day) {
       if (todaySchedules.isNotEmpty) {
         String ttsScheduleMessage = '오늘은 ';
         for (int i = 0; i < todaySchedules.length; i++) {
-          ttsScheduleMessage += DateFormat('a h시 m분', 'ko_KR').format(todaySchedules[i].time!.toDate()) +
+          ttsScheduleMessage += DateFormat('a h시 m분', 'ko_KR')
+                  .format(todaySchedules[i].time!.toDate()) +
               '에 ' +
               todaySchedules[i].name! +
               (i == todaySchedules.length - 1 ? ' 일정이 있어요!' : ', ');
@@ -160,7 +146,8 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
         for (int i = 0; i < todayRoutines.length; i++) {
           int routineHour = todayRoutines[i].time![0];
           int routineMinute = todayRoutines[i].time![1];
-          DateTime routineTime = DateTime(today.year, today.month, today.day, routineHour, routineMinute);
+          DateTime routineTime = DateTime(
+              today.year, today.month, today.day, routineHour, routineMinute);
           if (routineTime.isAfter(currentTime)) {
             closestRoutine = todayRoutines[i].name;
             break;
@@ -208,13 +195,10 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                 textButtonTheme: TextButtonThemeData(
                     style: TextButton.styleFrom(
                         foregroundColor: Colors.black // button text color
-                    )
-                )
-            ),
+                        ))),
             child: child!,
           );
-        }
-    );
+        });
     if (datePicked != null) {
       setState(() {
         _selectedDay = datePicked;
@@ -238,7 +222,9 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: height * 0.06,),
+            SizedBox(
+              height: height * 0.06,
+            ),
             Container(
               width: width * 0.9,
               alignment: Alignment.centerLeft,
@@ -261,13 +247,12 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     child: Text(
                       '일과 및 일정',
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
                     ),
                   ),
 
                   // 여기 편집 버튼 넣기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-
-
                 ],
               ),
             ),
@@ -276,66 +261,80 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image(
-                  image: AssetImage('lib/assets/Atti/$randomImageName'),
-                  width: width * 0.6)
+                    image: AssetImage('lib/assets/Atti/$randomImageName'),
+                    width: width * 0.6)
               ],
             ),
             SizedBox(height: height * 0.03),
 
             // 아띠 말풍선
-            Container(
+            SizedBox(
               width: width * 0.9,
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                  color: colorPallet.lightYellow,
-                  borderRadius: BorderRadius.all(Radius.circular(15))),
-              child: Text(
-                  selectedMessage ?? '',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: colorPallet.black,
-                      fontFamily: 'UhBee',
-                      fontSize: 25)),
+              child: AttiSpeechBubble(
+                  comment: selectedMessage, color: colorPallet.lightYellow),
             ),
+            // Container(
+            //   width: width * 0.9,
+            //   alignment: Alignment.center,
+            //   padding: EdgeInsets.all(20),
+            //   decoration: BoxDecoration(
+            //       color: colorPallet.lightYellow,
+            //       borderRadius: BorderRadius.all(Radius.circular(15))),
+            //   child: Text(
+            //       selectedMessage ?? '',
+            //       textAlign: TextAlign.center,
+            //       style: TextStyle(
+            //           color: colorPallet.black,
+            //           fontFamily: 'UhBee',
+            //           fontSize: 25)
+            //   ),
+            // ),
 
-            SizedBox(height: height * 0.03,),
+            SizedBox(
+              height: height * 0.03,
+            ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.9,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     //width: MediaQuery.of(context).size.width * 0.9,
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      '${DateFormat('M월 d일 EEEE', 'ko_KR').format(_selectedDay)} 일과',
+                      '${DateFormat('yyyy년 M월 d일', 'ko_KR').format(_selectedDay)}\n예정된 일정',
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                     ),
-
                   ),
+                  //일정/일과 등록용
                   // TextButton(onPressed: () {
-                  //   Get.to(RoutineRegister1());
+                  //   Get.to(ScheduleRegister1());
                   // },
                   //   child: Text('일과등록', style: TextStyle(fontSize: 18, color: Color(0xffA38130)),),
                   //   style: ButtonStyle(
                   //     backgroundColor: MaterialStateProperty.all(Color(0xffFFE9B3)),
                   //   ),
                   // ),
-                  TextButton(onPressed: () async {
-                    await _selectDate(context);
-                    await _fetchData();
-                  },
+
+                  TextButton(
+                    onPressed: () async {
+                      await _selectDate(context);
+                      await _fetchData();
+                    },
                     child: Text(
                       '날짜변경',
                       style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
+                        fontSize: 18,
+                        color: Colors.white,
                       ),
                     ),
                     style: TextButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 12), // 패딩 조정
+                      padding: EdgeInsets.only(
+                          bottom: 6, left: 15, right: 15, top: 4),
+                      minimumSize: Size(0, 0), // 최소 크기 제거
                       backgroundColor: Colors.black,
                     ),
                   ),
@@ -344,96 +343,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
             ),
             //SizedBox(height: height * 0.05,),
 
-            // 여기에 seletexDay에 해당하는 루틴들을 추가
-            routinesBySelectedDay.length > 0
-            ? ListView.builder(
-              primary: false,
-              shrinkWrap: true,
-              itemCount: routinesBySelectedDay.length,
-              itemBuilder: (context, index) {
-                bool isFinished =
-                    routinesBySelectedDay[index].isFinished != null &&
-                        routinesBySelectedDay[index]
-                            .isFinished!
-                            .containsKey(removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')) &&
-                        routinesBySelectedDay[index]
-                            .isFinished![removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')]!;
-
-                return GestureDetector(
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) {
-                          return RoutineModal(
-                            img: routinesBySelectedDay[index].img!,
-                            name: routinesBySelectedDay[index].name!,
-                            days: routinesBySelectedDay[index].repeatDays!,
-                            docRef: routinesBySelectedDay[index].reference!,
-                            time: routinesBySelectedDay[index].time!,
-                            date: _selectedDay,
-                            onCompleted: _fetchData,
-                          );
-                        });
-                  },
-                  child: RoutineBox2(
-                    time: routinesBySelectedDay[index].time!,
-                    img: routinesBySelectedDay[index].img!,
-                    name: routinesBySelectedDay[index].name!,
-                    isFinished: isFinished
-                  ),
-                );
-              },
-            )
-            : Container(
-              margin: EdgeInsets.only(top: 15, bottom: 15),
-              width: MediaQuery.of(context).size.width * 0.9,
-              padding: EdgeInsets.all(20),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  border: Border.all(
-                      style: BorderStyle.solid, color: Color(0xffDDDDDD))),
-              child: Text(
-                '예정된 일과가 없어요',
-                style: TextStyle(fontSize: 24),
-              ),
-            ),
-            SizedBox(height: height * 0.01,),
-            SizedBox(
-              width: width * 0.9,
-              child: Divider(
-                color: Color(0xffE1E1E1),
-                thickness: 1,
-              ),
-            ),
-            SizedBox(height: height * 0.02,),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    //width: MediaQuery.of(context).size.width * 0.9,
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '${DateFormat('M월 d일 EEEE', 'ko_KR').format(_selectedDay)} 일정',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  TextButton(onPressed: () {
-                    Get.to(ScheduleRegister1());
-                  },
-                    child: Text('일정등록', style: TextStyle(fontSize: 18, color: Color(0xffA38130)),),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Color(0xffFFE9B3)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            //SizedBox(height: height * 0.03,),
+            // 일정 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
             schedulesBySelectedDay.length > 0
                 ? ListView.builder(
                     primary: false,
@@ -446,42 +356,130 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                               context: context,
                               builder: (_) {
                                 return ScheduleModal(
-                                  time: DateFormat('a h시 mm분', 'ko_KR')
-                                      .format(schedulesBySelectedDay[index].time!.toDate()),
-                                  location: schedulesBySelectedDay[index].location!,
+                                  time: DateFormat('a hh:mm', 'ko_KR').format(
+                                      schedulesBySelectedDay[index]
+                                          .time!
+                                          .toDate()),
+                                  location:
+                                      schedulesBySelectedDay[index].location!,
                                   name: schedulesBySelectedDay[index].name!,
                                   memo: schedulesBySelectedDay[index].memo,
-                                  docRef: schedulesBySelectedDay[index].reference!,
+                                  docRef:
+                                      schedulesBySelectedDay[index].reference!,
                                 );
                               });
                         },
                         child: ScheduleBox(
-                          time: DateFormat('a hh:mm', 'ko_KR')
-                              .format(schedulesBySelectedDay[index].time!.toDate()),
+                          time: DateFormat('a hh:mm', 'ko_KR').format(
+                              schedulesBySelectedDay[index].time!.toDate()),
                           location: schedulesBySelectedDay[index].location,
                           name: schedulesBySelectedDay[index].name,
                           isFinished: schedulesBySelectedDay[index].isFinished,
                         ),
                       );
-                  },
-            )
+                    },
+                  )
                 : Container(
-              margin: EdgeInsets.only(top: 15),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  padding: EdgeInsets.all(20),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      border: Border.all(
-                          style: BorderStyle.solid, color: Color(0xffDDDDDD))),
-                  child: Text(
-                    '등록된 일정이 없어요',
-                    style: TextStyle(fontSize: 24),
+                    margin: EdgeInsets.only(top: 15),
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    padding: EdgeInsets.all(20),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        border: Border.all(
+                            style: BorderStyle.solid,
+                            color: Color(0xffDDDDDD))),
+                    child: Text(
+                      '등록된 일정이 없어요',
+                      style: TextStyle(fontSize: 24),
+                    ),
                   ),
-                ),
-                SizedBox(height: height * 0.03,),
 
+            // 일과 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+            Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '하루 일과',
+                textAlign: TextAlign.left,
+                style:
+                TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+              ),
+            ),
+            // 여기에 seletexDay에 해당하는 루틴들을 추가
+            routinesBySelectedDay.length > 0
+                ? ListView.builder(
+                    primary: false,
+                    shrinkWrap: true,
+                    itemCount: routinesBySelectedDay.length,
+                    itemBuilder: (context, index) {
+                      bool isFinished =
+                          routinesBySelectedDay[index].isFinished != null &&
+                              routinesBySelectedDay[index]
+                                  .isFinished!
+                                  .containsKey(removeZ(
+                                      _selectedDay.toString().substring(0, 10) +
+                                          ' 00:00:00.000')) &&
+                              routinesBySelectedDay[index].isFinished![removeZ(
+                                  _selectedDay.toString().substring(0, 10) +
+                                      ' 00:00:00.000')]!;
+
+                      return GestureDetector(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) {
+                                return RoutineModal(
+                                  img: routinesBySelectedDay[index].img!,
+                                  name: routinesBySelectedDay[index].name!,
+                                  days:
+                                      routinesBySelectedDay[index].repeatDays!,
+                                  docRef:
+                                      routinesBySelectedDay[index].reference!,
+                                  time: routinesBySelectedDay[index].time!,
+                                  date: _selectedDay,
+                                  onCompleted: _fetchData,
+                                );
+                              });
+                        },
+                        child: RoutineBox2(
+                            time: routinesBySelectedDay[index].time!,
+                            img: routinesBySelectedDay[index].img!,
+                            name: routinesBySelectedDay[index].name!,
+                            isFinished: isFinished),
+                      );
+                    },
+                  )
+                : Container(
+                    margin: EdgeInsets.only(top: 15, bottom: 15),
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    padding: EdgeInsets.all(20),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        border: Border.all(
+                            style: BorderStyle.solid,
+                            color: Color(0xffDDDDDD))),
+                    child: Text(
+                      '예정된 일과가 없어요',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ),
+            SizedBox(
+              height: height * 0.01,
+            ),
+            SizedBox(
+              width: width * 0.9,
+              child: Divider(
+                color: Color(0xffE1E1E1),
+                thickness: 1,
+              ),
+            ),
+            SizedBox(
+              height: height * 0.02,
+            ),
           ],
         ),
       ),
