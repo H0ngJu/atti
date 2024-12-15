@@ -5,116 +5,134 @@
 //                   name: scheduleController.name.value,
 //                   location: scheduleController.location.value,
 //                 ),
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../patient/screen/routine_schedule/ScheduleFinishModal.dart';
+
 class ScheduleBox extends StatefulWidget {
-  const ScheduleBox({super.key, this.time, this.name, this.location, this.isFinished});
-  final time;
-  final name;
-  final location;
-  final isFinished;
+  const ScheduleBox(
+      {super.key,
+        this.time,
+        this.name,
+        this.location,
+        this.isFinished,
+        this.docRef});
+
+  final String? time;
+  final String? name;
+  final String? location;
+  final bool? isFinished;
+  final DocumentReference? docRef;
 
   @override
   State<ScheduleBox> createState() => _ScheduleBoxState();
 }
 
 class _ScheduleBoxState extends State<ScheduleBox> {
+  bool isChecked = false;
+
   @override
   Widget build(BuildContext context) {
-
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Container(
-      padding: EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Color(0xff737373), width: 1,),
-                ),
-                child: Text(widget.time, style: TextStyle(
-                  fontSize: 22,
-                  color: widget.isFinished ? Color(0xff868686) : Colors.black,
-                ),
+        padding: EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+
+            // 완료용 토글 버튼
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  isChecked = !isChecked; // 클릭 시 체크 상태를 토글
+                });
+                showDialog(
+                    context: context,
+                    builder: (_) {
+                      return ScheduleFinishModal(
+                        time: widget.time ?? '',
+                        location: widget.location ?? '',
+                        name: widget.name!,
+                        docRef: widget.docRef!,
+                      );
+                    });
+              },
+              child: CustomPaint(
+                painter: DottedCirclePainter(),
+                child: Container(
+                  width: 45,
+                  height: 45,
+                  alignment: Alignment.center,
+                  child: isChecked
+                      ? const Icon(
+                    Icons.check,
+                    color: Colors.black,
+                    size: 30,
+                  )
+                      : null,
                 ),
               ),
-              SizedBox(width: 10,),
-              Expanded(
-                child: Container(
-                  color: Color(0xffE1E1E1),
-                  height: 1,
-                ),
-              )
-            ],
-          ),
-          SizedBox(height: 10,),
-          Container(
-            padding: EdgeInsets.only(top: 10, bottom: 10, left: 15),
-            width: MediaQuery.of(context).size.width * 0.9,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: Color(0xffDDDDDD), width: 1,),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (widget.name != null) Text(widget.name!, style: TextStyle(
-                      fontSize: 30,
-                      color: widget.isFinished ? Color(0xff868686) : Colors.black,
-                    ),),
-                    SizedBox(height: 5,),
-                    Row(
-                      children: [
-                        Text('장소', style: TextStyle(
-                          fontSize: 20,
-                          color: widget.isFinished ? Color(0xff868686) : Colors.black,
-                        ),),
-                        SizedBox(width: 10),
-                        if (widget.location != null) Text(widget.location!, style: TextStyle(
-                          fontSize: 20,
-                          color: widget.isFinished ? Color(0xff868686) : Colors.black,
-                        ),),
-                      ],
-                    ),
-                  ],
-                ),
-                widget.isFinished ?
-                Container(
-                  margin: EdgeInsets.only(right: 15),
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color(0xffF5F5F5),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '완료',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                )
-                    : SizedBox()
+            SizedBox(width: width * 0.07,),
 
-
-              ],
+            // 일과 시간
+            Text(
+              widget.time ?? '-',
+              style: TextStyle(
+                fontSize: 28,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+            SizedBox(width: width * 0.1,),
+
+            // 일과 제목
+            Text(
+              widget.name ?? '',
+              style: TextStyle(
+                fontSize: 28,
+              ),
+            )
+          ],
+        ));
+  }
+}
+
+// 점선 외곽선 Painter
+class DottedCirclePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.black
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+
+    double radius = size.width / 2;
+    double dashWidth = 4; // 점선의 길이
+    double dashSpace = 2; // 점선 사이의 간격
+
+    var circumference = 2 * 3.14159265359 * radius; // 원의 둘레
+    int dashCount = (circumference / (dashWidth + dashSpace)).floor();
+
+    double anglePerDash = (3.14159265359 * 2) / dashCount;
+
+    for (int i = 0; i < dashCount; i++) {
+      double startAngle = i * anglePerDash;
+      double endAngle = startAngle + dashWidth / radius;
+
+      canvas.drawArc(
+        Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: radius),
+        startAngle,
+        endAngle - startAngle,
+        false,
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }
