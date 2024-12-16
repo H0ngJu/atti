@@ -1,14 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import '../data/routine/routine_controller.dart';
+import '../patient/screen/routine_schedule/RoutineFinishModal.dart';
 
 class RoutineBox2 extends StatefulWidget {
-  const RoutineBox2({super.key, required this.time, required this.name, required this.img, required this.isFinished});
+  final Function onCompleted; // 콜백 함수 추가
+
+  const RoutineBox2({
+    super.key,
+    required this.time,
+    required this.img,
+    required this.name,
+    required this.docRef,
+    required this.date,
+    required this.isFinished,
+    required this.onCompleted,
+  });
+
   final time;
   final name;
   final img;
   final isFinished;
+  final date;
+  final DocumentReference docRef;
 
   @override
   State<RoutineBox2> createState() => _RoutineBox2State();
@@ -46,18 +62,19 @@ class _RoutineBox2State extends State<RoutineBox2> {
           // 완료용 토글 버튼
           GestureDetector(
             onTap: () {
-              // if (!widget.isFinished) { // 완료여부 false일때만 동작
-              //   showDialog(
-              //       context: context,
-              //       builder: (_) {
-              //         return RotineFinishModal(
-              //           time: widget.time ?? '',
-              //           location: widget.location ?? '',
-              //           name: widget.name!,
-              //           docRef: widget.docRef!,
-              //         );
-              //       });
-              // }
+              if (!widget.isFinished) { // 완료여부 false일때만 동작
+                showDialog(
+                    context: context,
+                    builder: (_) {
+                      return RoutineFinishModal(
+                        time: widget.time ?? '',
+                        name: widget.name!,
+                        docRef: widget.docRef!,
+                        date: widget.date,
+                        onCompleted: widget.onCompleted,
+                      );
+                    });
+              }
             },
             child: CustomPaint(
               painter: RoutineDottedCirclePainter(),

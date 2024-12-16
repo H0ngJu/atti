@@ -420,6 +420,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     ),
                   ),
             SizedBox(height: 10,),
+
             // 일과 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
             Container(
               width: MediaQuery.of(context).size.width * 0.9,
@@ -468,10 +469,15 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                               });
                         },
                         child: RoutineBox2(
-                            time: routinesBySelectedDay[index].time!,
                             img: routinesBySelectedDay[index].img!,
                             name: routinesBySelectedDay[index].name!,
-                            isFinished: isFinished),
+                            docRef: routinesBySelectedDay[index].reference!,
+                            time: routinesBySelectedDay[index].time!,
+                            date: _selectedDay,
+                            onCompleted: _fetchData,
+                            isFinished: isFinished
+
+                        ),
                       );
                     },
                   )

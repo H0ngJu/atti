@@ -5,23 +5,20 @@ import 'package:atti/index.dart';
 import 'RoutineShceduleFinish.dart';
 
 final ColorPallet colorPallet = Get.put(ColorPallet());
-class ScheduleFinishModal extends StatelessWidget {
+
+class RoutineFinishModal extends StatelessWidget {
   final Function onCompleted; // 콜백 함수 추가
 
-  const ScheduleFinishModal({
+  const RoutineFinishModal({
     super.key,
-    required this.days,
     required this.time,
-    required this.img,
     required this.name,
     required this.docRef,
     required this.date,
     required this.onCompleted,
   });
 
-  final List<String> days;
   final List<int> time;
-  final String img;
   final String name;
   final DocumentReference docRef;
   final date;
@@ -70,7 +67,7 @@ class ScheduleFinishModal extends StatelessWidget {
             SizedBox(height: height * 0.3,),
 
 
-            // 일정 완료 버튼
+            // 일과 완료 버튼
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -98,7 +95,11 @@ class ScheduleFinishModal extends StatelessWidget {
 
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RoutineFinish(name: '\'${name}\'\n일과를 완료했어요!')),
+                        MaterialPageRoute(builder: (context) =>
+                            RoutineScheduleFinish(
+                              name: name,
+                              category: 'routine',
+                            )),
                       );
                     },
                     child: Text(
@@ -124,10 +125,7 @@ class ScheduleFinishModal extends StatelessWidget {
                   width: width * 0.35,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ScheduleFinish1(name: name)),
-                      );
+                      Navigator.pop(context);
                     },
                     child: Text(
                       '아니요',

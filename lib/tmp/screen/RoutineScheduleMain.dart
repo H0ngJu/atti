@@ -354,12 +354,12 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                           );
                         });
                   },
-                  child: RoutineBox2(
-                    time: routinesBySelectedDay[index].time!,
-                    img: routinesBySelectedDay[index].img!,
-                    name: routinesBySelectedDay[index].name!,
-                    isFinished: isFinished
-                  ),
+                  // child: RoutineBox2(
+                  //   time: routinesBySelectedDay[index].time!,
+                  //   img: routinesBySelectedDay[index].img!,
+                  //   name: routinesBySelectedDay[index].name!,
+                  //   isFinished: isFinished
+                  // ),
                 );
               },
             )
