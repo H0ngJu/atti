@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../data/routine/routine_service.dart';
+import '../patient/screen/routine_schedule/RoutineShceduleFinish.dart';
 import '../tmp/screen/routine/RoutineFinish.dart';
 import '../tmp/screen/schedule/finish/ScheduleFinish1.dart';
 
@@ -115,7 +116,12 @@ class RoutineModal extends StatelessWidget {
 
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => RoutineFinish(name: '\'${name}\'\n일과를 완료했어요!')),
+                      MaterialPageRoute(builder: (context) =>
+                          RoutineScheduleFinish(
+                            name: name,
+                            category: 'routine',
+                          )
+                      ),
                     );
                   },
                   child: Text('완료했어요', style: TextStyle(color: Colors.white, fontSize: 20),),

@@ -61,8 +61,8 @@ class _ScheduleBoxState extends State<ScheduleBox> {
               child: CustomPaint(
                 painter: DottedCirclePainter(),
                 child: Container(
-                  width: 45,
-                  height: 45,
+                  width: width * 0.12,
+                  height: width * 0.12,
                   alignment: Alignment.center,
                   child: widget.isFinished
                   ? const Icon(
@@ -76,7 +76,7 @@ class _ScheduleBoxState extends State<ScheduleBox> {
             ),
             SizedBox(width: width * 0.06,),
 
-            // 일과 시간
+            // 일정 시간
             Text(
               widget.time ?? '-',
               style: TextStyle(
@@ -85,7 +85,7 @@ class _ScheduleBoxState extends State<ScheduleBox> {
             ),
             SizedBox(width: width * 0.08,),
 
-            // 일과 제목
+            // 일정 제목
             Expanded( // Row 내부에서 텍스트를 유연하게 줄이기 위해 Expanded 사용
               child: Text(
                 widget.name ?? '',

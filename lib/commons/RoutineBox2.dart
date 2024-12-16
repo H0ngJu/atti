@@ -39,11 +39,47 @@ class _RoutineBox2State extends State<RoutineBox2> {
       width: MediaQuery.of(context).size.width * 0.9,
       color: Colors.white,
       alignment: Alignment.center,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
+          // 완료용 토글 버튼
+          GestureDetector(
+            onTap: () {
+              // if (!widget.isFinished) { // 완료여부 false일때만 동작
+              //   showDialog(
+              //       context: context,
+              //       builder: (_) {
+              //         return RotineFinishModal(
+              //           time: widget.time ?? '',
+              //           location: widget.location ?? '',
+              //           name: widget.name!,
+              //           docRef: widget.docRef!,
+              //         );
+              //       });
+              // }
+            },
+            child: CustomPaint(
+              painter: RoutineDottedCirclePainter(),
+              child: Container(
+                width: width * 0.12,
+                height: width * 0.12,
+                alignment: Alignment.center,
+                child: widget.isFinished
+                    ? const Icon(
+                  Icons.check,
+                  color: Colors.black,
+                  size: 30,
+                )
+                    : null,
+              ),
+            ),
+          ),
+
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // 일과 시간
               Container(
                 padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
                 decoration: BoxDecoration(
@@ -51,96 +87,89 @@ class _RoutineBox2State extends State<RoutineBox2> {
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: Color(0xff737373), width: 1,),
                 ),
-                child: Text(formattedTime, style: TextStyle(
-                    fontSize: 22,
-                    color: widget.isFinished ? Color(0xff868686) : Colors.black,
+                child: Text(
+                  formattedTime,
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.black,
                 ),),
               ),
-              SizedBox(width: 10,),
-              Expanded(
-                child: Container(
-                  color: Color(0xffE1E1E1),
-                  height: 1,
-                ),
-              )
-            ],
-          ),
-          SizedBox(height: 10,),
-          Container(
-            width: width * 0.8,
-              child: Text(widget.name, style: TextStyle(
-                  fontSize: 30,
-                  color: widget.isFinished ? Color(0xff868686) : Colors.black,
+              SizedBox(height: 5,),
+
+              // 일과 제목
+              Container(
+                width: width * 0.73,
+                  child: Text(
+                    widget.name,
+                    style: TextStyle(
+                      fontSize: 28,
+                      color: Colors.black,
+                  ),
+                )
               ),
-            )
-          ),
-          SizedBox(height: 5,),
-          Container(
-            alignment: Alignment.center,
-            width: MediaQuery.of(context).size.width * 0.8,
-            height: MediaQuery.of(context).size.height * 0.25,
-            child: Container(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: widget.isFinished
-                    ? ColorFiltered(
-                      colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(widget.img),
-                            fit: BoxFit.cover,
-                          )
-                        ),
-                        child: Container(
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.all(50),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xffF5F5F5),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '완료',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                      // Image.network(
-                      //   widget.img,
-                      //   width: double.infinity,
-                      //   height: double.infinity,
-                      //   fit: BoxFit.cover,
-                      //   alignment: Alignment.center,
-                      // ),
-                    )
-                    : Image.network(
+              SizedBox(height: 5,),
+
+              // 일과 사진
+              Container(
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width * 0.73,
+                height: MediaQuery.of(context).size.height * 0.25,
+                child: Container(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.network(
                       widget.img,
                       width: double.infinity,
                       height: double.infinity,
                       fit: BoxFit.cover,
                       alignment: Alignment.center,
                     ),
-                //     : (widget.img != null && File(widget.img!).existsSync())
-                //     ? Image.file(
-                //   File(routineController.routine.value.img!),
-                //   width: double.infinity,
-                //   height: double.infinity,
-                //   fit: BoxFit.cover,
-                //   alignment: Alignment.center,
-                // )
-                //     : Container(),
-              ),
-            ),
+                  ),
+                ),
 
+              ),
+            ],
           ),
         ],
       ),
     );
+  }
+}
+
+// 점선 외곽선 Painter
+class RoutineDottedCirclePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.black
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+
+    double radius = size.width / 2;
+    double dashWidth = 4; // 점선의 길이
+    double dashSpace = 2; // 점선 사이의 간격
+
+    var circumference = 2 * 3.14159265359 * radius; // 원의 둘레
+    int dashCount = (circumference / (dashWidth + dashSpace)).floor();
+
+    double anglePerDash = (3.14159265359 * 2) / dashCount;
+
+    for (int i = 0; i < dashCount; i++) {
+      double startAngle = i * anglePerDash;
+      double endAngle = startAngle + dashWidth / radius;
+
+      canvas.drawArc(
+        Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: radius),
+        startAngle,
+        endAngle - startAngle,
+        false,
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }
