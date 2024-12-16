@@ -254,6 +254,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
                       time: DateFormat('a hh:mm', 'ko_KR').format(schedulesBySelectedDay[index].time!.toDate()),
                       location: schedulesBySelectedDay[index].location,
                       name: schedulesBySelectedDay[index].name,
+                      isFinished: schedulesBySelectedDay[index].isFinished!,
                     ),
                   ],
                 ),

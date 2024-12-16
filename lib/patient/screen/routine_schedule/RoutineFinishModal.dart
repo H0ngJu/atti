@@ -3,21 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:atti/index.dart';
 
 import 'RoutineShceduleFinish.dart';
-import 'ScheduleToMemoryModal.dart';
 
 final ColorPallet colorPallet = Get.put(ColorPallet());
 class ScheduleFinishModal extends StatelessWidget {
-  const ScheduleFinishModal(
-      {super.key,
-        required this.time,
-        required this.location,
-        required this.name,
-        required this.docRef});
+  final Function onCompleted; // 콜백 함수 추가
 
-  final String time;
-  final String location;
+  const ScheduleFinishModal({
+    super.key,
+    required this.days,
+    required this.time,
+    required this.img,
+    required this.name,
+    required this.docRef,
+    required this.date,
+    required this.onCompleted,
+  });
+
+  final List<String> days;
+  final List<int> time;
+  final String img;
   final String name;
   final DocumentReference docRef;
+  final date;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +61,7 @@ class ScheduleFinishModal extends StatelessWidget {
             SizedBox(height: height * 0.02, width: width * 0.8,),
             Container(
                 child: Text(
-                  '\'${name}\'\n일정을 완료하셨나요?',
+                  '\'${name}\'\n일과를 완료하셨나요?',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 30,
@@ -69,41 +76,30 @@ class ScheduleFinishModal extends StatelessWidget {
               children: [
                 Container( // 네 버튼
                   //margin: EdgeInsets.only(bottom: 20),
-                  width: width * 0.37,
+                  width: width * 0.35,
                   child: TextButton(
                     onPressed: () async {
-                      await ScheduleService().completeSchedule(docRef);
+                      await RoutineService().completeRoutine(docRef, date);
                       await addNotification(
-                          '일정 알림',
-                          '${authController.userName}님이 \'${name}\' 일정을 완료하셨어요!',
+                          '하루 일과 알림',
+                          '${authController.userName}님이 \'${name}\' 일과를 완료하셨어요!',
                           DateTime.now(),
-                          false);
+                          false
+                      );
+
                       await addFinishNotification(
-                          '일정 알림',
-                          '${authController.userName}님이 \'${name}\' 일정을 완료하셨어요!',
+                          '하루 일과 알림',
+                          '${authController.userName}님이 \'${name}\' 일과를 완료하셨어요!',
                           DateTime.now(),
-                          false);
+                          false
+                      );
 
-                      Navigator.pop(context); // 모달창 닫기
-                      showDialog(
-                          context: context,
-                          builder: (_) {
-                            return ScheduleToMemoryModal(
-                              time: time ?? '',
-                              location:location ?? '',
-                              name: name,
-                              docRef: docRef,
-                            );
-                          });
+                      onCompleted(); // 콜백함수 추가
 
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) =>
-                      //       RoutineScheduleFinish(
-                      //         name: name,
-                      //         category: 'schedule'
-                      //       )),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RoutineFinish(name: '\'${name}\'\n일과를 완료했어요!')),
+                      );
                     },
                     child: Text(
                       '네',
@@ -125,10 +121,13 @@ class ScheduleFinishModal extends StatelessWidget {
 
                 Container( // 아니요 버튼
                   //margin: EdgeInsets.only(bottom: 20),
-                  width: width * 0.37,
+                  width: width * 0.35,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ScheduleFinish1(name: name)),
+                      );
                     },
                     child: Text(
                       '아니요',

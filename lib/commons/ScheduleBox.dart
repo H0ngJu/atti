@@ -17,13 +17,13 @@ class ScheduleBox extends StatefulWidget {
         this.time,
         this.name,
         this.location,
-        this.isFinished,
+        required this.isFinished,
         this.docRef});
 
   final String? time;
   final String? name;
   final String? location;
-  final bool? isFinished;
+  final bool isFinished;
   final DocumentReference? docRef;
 
   @override
@@ -31,7 +31,6 @@ class ScheduleBox extends StatefulWidget {
 }
 
 class _ScheduleBoxState extends State<ScheduleBox> {
-  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,19 +45,18 @@ class _ScheduleBoxState extends State<ScheduleBox> {
             // 완료용 토글 버튼
             GestureDetector(
               onTap: () {
-                setState(() {
-                  isChecked = !isChecked; // 클릭 시 체크 상태를 토글
-                });
-                showDialog(
-                    context: context,
-                    builder: (_) {
-                      return ScheduleFinishModal(
-                        time: widget.time ?? '',
-                        location: widget.location ?? '',
-                        name: widget.name!,
-                        docRef: widget.docRef!,
-                      );
-                    });
+                if (!widget.isFinished) { // 완료여부 false일때만 동작
+                  showDialog(
+                      context: context,
+                      builder: (_) {
+                        return ScheduleFinishModal(
+                          time: widget.time ?? '',
+                          location: widget.location ?? '',
+                          name: widget.name!,
+                          docRef: widget.docRef!,
+                        );
+                      });
+                }
               },
               child: CustomPaint(
                 painter: DottedCirclePainter(),
@@ -66,17 +64,17 @@ class _ScheduleBoxState extends State<ScheduleBox> {
                   width: 45,
                   height: 45,
                   alignment: Alignment.center,
-                  child: isChecked
-                      ? const Icon(
+                  child: widget.isFinished
+                  ? const Icon(
                     Icons.check,
                     color: Colors.black,
                     size: 30,
                   )
-                      : null,
+                    : null,
                 ),
               ),
             ),
-            SizedBox(width: width * 0.07,),
+            SizedBox(width: width * 0.06,),
 
             // 일과 시간
             Text(
@@ -85,15 +83,20 @@ class _ScheduleBoxState extends State<ScheduleBox> {
                 fontSize: 28,
               ),
             ),
-            SizedBox(width: width * 0.1,),
+            SizedBox(width: width * 0.08,),
 
             // 일과 제목
-            Text(
-              widget.name ?? '',
-              style: TextStyle(
-                fontSize: 28,
+            Expanded( // Row 내부에서 텍스트를 유연하게 줄이기 위해 Expanded 사용
+              child: Text(
+                widget.name ?? '',
+                style: TextStyle(
+                  fontSize: 28,
+                ),
+                overflow: TextOverflow.ellipsis, // overflow 발생 시 ... 표시
+                maxLines: 1, // 한 줄로 제한
+                softWrap: false, // 텍스트 줄바꿈 비활성화
               ),
-            )
+            ),
           ],
         ));
   }

@@ -22,6 +22,7 @@ class RoutineScheduleMain extends StatefulWidget {
 
 class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   final ColorPallet colorPallet = Get.put(ColorPallet());
+  bool isEditMode = false;
 
   int _selectedIndex = 2;
 
@@ -225,34 +226,56 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
             SizedBox(
               height: height * 0.06,
             ),
-            Container(
-              width: width * 0.9,
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '${patientName}님의',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 24,
-                ),
-              ),
-            ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.9,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    //width: MediaQuery.of(context).size.width * 0.9,
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '일과 및 일정',
-                      textAlign: TextAlign.left,
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${patientName}님의',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 24,
+                        ),
+                      ),
+                      Text(
+                        '일과 및 일정',
+                        textAlign: TextAlign.left,
+                        style:
+                        TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                      ),
+                    ],
                   ),
 
                   // 여기 편집 버튼 넣기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isEditMode = !isEditMode; // 상태 토글
+                      });
+                    },
+                    child: Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: isEditMode ? Colors.white : Colors.black,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 1
+                        )
+                      ),
+                      child: Icon(
+                        isEditMode ? Icons.close : Icons.edit,
+                        color: isEditMode ? Colors.black : Colors.white,
+                        size: 22,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -374,7 +397,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                               schedulesBySelectedDay[index].time!.toDate()),
                           location: schedulesBySelectedDay[index].location,
                           name: schedulesBySelectedDay[index].name,
-                          isFinished: schedulesBySelectedDay[index].isFinished,
+                          isFinished: schedulesBySelectedDay[index].isFinished!,
                           docRef: schedulesBySelectedDay[index].reference!,
                         ),
                       );
@@ -396,7 +419,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                       style: TextStyle(fontSize: 24),
                     ),
                   ),
-
+            SizedBox(height: 10,),
             // 일과 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
             Container(
               width: MediaQuery.of(context).size.width * 0.9,

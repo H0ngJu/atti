@@ -439,7 +439,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                               .format(schedulesBySelectedDay[index].time!.toDate()),
                           location: schedulesBySelectedDay[index].location,
                           name: schedulesBySelectedDay[index].name,
-                          isFinished: schedulesBySelectedDay[index].isFinished,
+                          isFinished: schedulesBySelectedDay[index].isFinished!,
                         ),
                       );
                   },

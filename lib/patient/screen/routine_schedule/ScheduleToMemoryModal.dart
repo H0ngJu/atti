@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:atti/index.dart';
 
 import 'RoutineShceduleFinish.dart';
-import 'ScheduleToMemoryModal.dart';
 
 final ColorPallet colorPallet = Get.put(ColorPallet());
-class ScheduleFinishModal extends StatelessWidget {
-  const ScheduleFinishModal(
+
+class ScheduleToMemoryModal extends StatelessWidget {
+  const ScheduleToMemoryModal(
       {super.key,
         required this.time,
         required this.location,
@@ -54,7 +54,7 @@ class ScheduleFinishModal extends StatelessWidget {
             SizedBox(height: height * 0.02, width: width * 0.8,),
             Container(
                 child: Text(
-                  '\'${name}\'\n일정을 완료하셨나요?',
+                  '\'${name}\' 을\n내 기억에 남길까요?',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 30,
@@ -63,7 +63,7 @@ class ScheduleFinishModal extends StatelessWidget {
             SizedBox(height: height * 0.3,),
 
 
-            // 일정 완료 버튼
+            // 네 -> 기억 등록 페이지로 이동
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -71,39 +71,8 @@ class ScheduleFinishModal extends StatelessWidget {
                   //margin: EdgeInsets.only(bottom: 20),
                   width: width * 0.37,
                   child: TextButton(
-                    onPressed: () async {
-                      await ScheduleService().completeSchedule(docRef);
-                      await addNotification(
-                          '일정 알림',
-                          '${authController.userName}님이 \'${name}\' 일정을 완료하셨어요!',
-                          DateTime.now(),
-                          false);
-                      await addFinishNotification(
-                          '일정 알림',
-                          '${authController.userName}님이 \'${name}\' 일정을 완료하셨어요!',
-                          DateTime.now(),
-                          false);
-
-                      Navigator.pop(context); // 모달창 닫기
-                      showDialog(
-                          context: context,
-                          builder: (_) {
-                            return ScheduleToMemoryModal(
-                              time: time ?? '',
-                              location:location ?? '',
-                              name: name,
-                              docRef: docRef,
-                            );
-                          });
-
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) =>
-                      //       RoutineScheduleFinish(
-                      //         name: name,
-                      //         category: 'schedule'
-                      //       )),
-                      // );
+                    onPressed: () {
+                      Get.to(MemoryRegister1());
                     },
                     child: Text(
                       '네',
@@ -113,7 +82,7 @@ class ScheduleFinishModal extends StatelessWidget {
                       ),
                     ),
                     style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all(colorPallet.orange),
+                        backgroundColor: WidgetStateProperty.all(colorPallet.goldYellow),
                         shape: WidgetStateProperty.all(
                             RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30)
@@ -123,12 +92,22 @@ class ScheduleFinishModal extends StatelessWidget {
                   ),
                 ),
 
-                Container( // 아니요 버튼
+                // 아니요 -> 일정 완료 페이지로 이동
+                Container(
                   //margin: EdgeInsets.only(bottom: 20),
                   width: width * 0.37,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      //Navigator.pop(context); // 모달창 닫기
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>
+                            RoutineScheduleFinish(
+                                name: name,
+                                category: 'schedule'
+                            )),
+                      );
                     },
                     child: Text(
                       '아니요',
