@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
+import '../data/notification/notification_controller.dart';
 import '../data/routine/routine_controller.dart';
+import '../data/routine/routine_service.dart';
+import '../patient/screen/routine_schedule/CustomModal.dart';
 import '../patient/screen/routine_schedule/RoutineFinishModal.dart';
 
 class RoutineBox2 extends StatefulWidget {
@@ -64,7 +67,18 @@ class _RoutineBox2State extends State<RoutineBox2> {
           widget.isEditMode
               ? GestureDetector( // 편집모드일 때 -> 삭제 버튼
                   onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) => CustomModal(
+                            title: '\'${widget.name}\'\n일과를 삭제할까요?',
+                            yesButtonColor: colorPallet.orange,
+                            onYesPressed: () {
 
+                            },
+                            onNoPressed: () {
+                              Navigator.pop(context);
+                            })
+                    );
                   },
                   child: Container(
                     margin: EdgeInsets.only(top: 5),
@@ -82,16 +96,26 @@ class _RoutineBox2State extends State<RoutineBox2> {
                     if (!widget.isFinished) {
                       // 완료여부 false일때만 동작
                       showDialog(
-                          context: context,
-                          builder: (_) {
-                            return RoutineFinishModal(
-                              time: widget.time ?? '',
-                              name: widget.name!,
-                              docRef: widget.docRef!,
-                              date: widget.date,
-                              onCompleted: widget.onCompleted,
-                            );
-                          });
+                        context: context,
+                        builder: (_) => CustomModal(
+                          title: "'${widget.name}'\n일과를 완료하셨나요?",
+                          yesButtonColor: colorPallet.orange,
+                          onYesPressed: () async {
+                            await RoutineService().completeRoutine(widget.docRef, widget.date);
+                            await addNotification(
+                                '하루 일과 알림',
+                                '${authController.userName}님이 \'${widget.name}\' 일과를 완료하셨어요!',
+                                DateTime.now(),
+                                false);
+                            widget.onCompleted(); // 콜백 함수 호출
+                            Navigator.pop(context);
+                          },
+                          onNoPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      );
+
                     }
                   },
                   child: CustomPaint(

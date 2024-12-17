@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 
+import '../patient/screen/routine_schedule/CustomModal.dart';
+import '../patient/screen/routine_schedule/RoutineShceduleFinish.dart';
 import '../patient/screen/routine_schedule/ScheduleFinishModal.dart';
 import 'colorPallet.dart';
 
@@ -53,7 +55,18 @@ class _ScheduleBoxState extends State<ScheduleBox> {
             widget.isEditMode
             ? GestureDetector(
               onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (_) => CustomModal(
+                        title: '\'${widget.name}\'\n일정을 삭제할까요?',
+                        yesButtonColor: colorPallet.orange,
+                        onYesPressed: () {
 
+                        },
+                        onNoPressed: () {
+                          Navigator.pop(context);
+                        })
+                );
               },
               child: Container(
                 width: 28,
@@ -77,11 +90,46 @@ class _ScheduleBoxState extends State<ScheduleBox> {
                   showDialog(
                       context: context,
                       builder: (_) {
-                        return ScheduleFinishModal(
-                          time: widget.time ?? '',
-                          location: widget.location ?? '',
-                          name: widget.name!,
-                          docRef: widget.docRef!,
+                        return CustomModal(
+                          title: '\'${widget.name}\'\n일정을 완료하셨나요?',
+                          yesButtonColor: colorPallet.orange,
+                          onYesPressed: () async {
+                            await ScheduleService().completeSchedule(widget.docRef!);
+
+                            await addNotification(
+                                '일정 알림',
+                                '${authController.userName}님이 \'${widget.name}\' 일정을 완료하셨어요!',
+                                DateTime.now(),
+                                false);
+
+                            Navigator.pop(context);
+
+                            showDialog(
+                              context: context,
+                              builder: (_) => CustomModal(
+                                title: "'${widget.name}'을\n내 기억에 남길까요?",
+                                yesButtonColor: colorPallet.goldYellow,
+                                onYesPressed: () {
+                                  Get.to(MemoryRegister1());
+                                },
+                                onNoPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RoutineScheduleFinish(
+                                        name: widget.name,
+                                        category: 'schedule',
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+
+                          },
+                          onNoPressed: () {
+                            Navigator.pop(context);
+                          },
                         );
                       });
                 }
