@@ -50,7 +50,28 @@ class _ScheduleBoxState extends State<ScheduleBox> {
           children: [
 
             // 완료용 토글 버튼
-            GestureDetector(
+            widget.isEditMode
+            ? GestureDetector(
+              onTap: () {
+
+              },
+              child: Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: colorPallet.orange,
+                  shape: BoxShape.circle
+                ),
+                child: Center(
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 15
+                  ),
+                ),
+              ),
+            )
+            : GestureDetector(
               onTap: () {
                 if (!widget.isFinished) { // 완료여부 false일때만 동작
                   showDialog(
@@ -81,6 +102,7 @@ class _ScheduleBoxState extends State<ScheduleBox> {
                 ),
               ),
             ),
+
             SizedBox(width: width * 0.06,),
 
             // 일정 시간

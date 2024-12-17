@@ -8,16 +8,16 @@ import '../patient/screen/routine_schedule/RoutineFinishModal.dart';
 class RoutineBox2 extends StatefulWidget {
   final Function onCompleted; // 콜백 함수 추가
 
-  const RoutineBox2({
-    super.key,
-    required this.time,
-    required this.img,
-    required this.name,
-    required this.docRef,
-    required this.date,
-    required this.isFinished,
-    required this.onCompleted,
-  });
+  const RoutineBox2(
+      {super.key,
+      required this.time,
+      required this.img,
+      required this.name,
+      required this.docRef,
+      required this.date,
+      required this.isFinished,
+      required this.onCompleted,
+      required this.isEditMode});
 
   final time;
   final name;
@@ -25,6 +25,7 @@ class RoutineBox2 extends StatefulWidget {
   final isFinished;
   final date;
   final DocumentReference docRef;
+  final bool isEditMode;
 
   @override
   State<RoutineBox2> createState() => _RoutineBox2State();
@@ -32,7 +33,6 @@ class RoutineBox2 extends StatefulWidget {
 
 class _RoutineBox2State extends State<RoutineBox2> {
   final RoutineController routineController = Get.put(RoutineController());
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,8 @@ class _RoutineBox2State extends State<RoutineBox2> {
       final bool isPM = hour >= 12; // 오후 여부 확인
       int hour12 = hour > 12 ? hour - 12 : hour;
       hour12 = hour12 == 0 ? 12 : hour12;
-      formattedTime = '${isPM ? '오후' : '오전'} ${hour12.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+      formattedTime =
+          '${isPM ? '오후' : '오전'} ${hour12.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
     }
 
     var height = MediaQuery.of(context).size.height;
@@ -60,38 +61,55 @@ class _RoutineBox2State extends State<RoutineBox2> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // 완료용 토글 버튼
-          GestureDetector(
-            onTap: () {
-              if (!widget.isFinished) { // 완료여부 false일때만 동작
-                showDialog(
-                    context: context,
-                    builder: (_) {
-                      return RoutineFinishModal(
-                        time: widget.time ?? '',
-                        name: widget.name!,
-                        docRef: widget.docRef!,
-                        date: widget.date,
-                        onCompleted: widget.onCompleted,
-                      );
-                    });
-              }
-            },
-            child: CustomPaint(
-              painter: RoutineDottedCirclePainter(),
-              child: Container(
-                width: width * 0.12,
-                height: width * 0.12,
-                alignment: Alignment.center,
-                child: widget.isFinished
-                    ? const Icon(
-                  Icons.check,
-                  color: Colors.black,
-                  size: 30,
+          widget.isEditMode
+              ? GestureDetector( // 편집모드일 때 -> 삭제 버튼
+                  onTap: () {
+
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(top: 5),
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: colorPallet.orange, shape: BoxShape.circle),
+                    child: Center(
+                      child: Icon(Icons.close, color: Colors.white, size: 18),
+                    ),
+                  ),
                 )
-                    : null,
-              ),
-            ),
-          ),
+              : GestureDetector( // 편집모드X -> 완료 버튼
+                  onTap: () {
+                    if (!widget.isFinished) {
+                      // 완료여부 false일때만 동작
+                      showDialog(
+                          context: context,
+                          builder: (_) {
+                            return RoutineFinishModal(
+                              time: widget.time ?? '',
+                              name: widget.name!,
+                              docRef: widget.docRef!,
+                              date: widget.date,
+                              onCompleted: widget.onCompleted,
+                            );
+                          });
+                    }
+                  },
+                  child: CustomPaint(
+                    painter: RoutineDottedCirclePainter(),
+                    child: Container(
+                      width: width * 0.12,
+                      height: width * 0.12,
+                      alignment: Alignment.center,
+                      child: widget.isFinished
+                          ? const Icon(
+                              Icons.check,
+                              color: Colors.black,
+                              size: 30,
+                            )
+                          : null,
+                    ),
+                  ),
+                ),
 
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,31 +118,50 @@ class _RoutineBox2State extends State<RoutineBox2> {
               Container(
                 padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Color(0xff737373), width: 1,),
+                  color: widget.isEditMode
+                      ? colorPallet.lightGrey
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+                    color:
+                        widget.isEditMode ? Colors.transparent : Colors.black,
+                    width: 1,
+                  ),
                 ),
                 child: Text(
                   formattedTime,
                   style: TextStyle(
                     fontSize: 24,
                     color: Colors.black,
-                ),),
+                  ),
+                ),
               ),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
 
               // 일과 제목
               Container(
-                width: width * 0.73,
+                  width: width * 0.73,
+                  padding: widget.isEditMode
+                      ? EdgeInsets.fromLTRB(10, 2, 10, 2)
+                      : EdgeInsets.zero,
+                  decoration: BoxDecoration(
+                    color: widget.isEditMode
+                        ? colorPallet.lightGrey
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                   child: Text(
                     widget.name,
                     style: TextStyle(
                       fontSize: 28,
                       color: Colors.black,
-                  ),
-                )
+                    ),
+                  )),
+              SizedBox(
+                height: 5,
               ),
-              SizedBox(height: 5,),
 
               // 일과 사진
               Container(
@@ -143,7 +180,6 @@ class _RoutineBox2State extends State<RoutineBox2> {
                     ),
                   ),
                 ),
-
               ),
             ],
           ),
@@ -176,7 +212,8 @@ class RoutineDottedCirclePainter extends CustomPainter {
       double endAngle = startAngle + dashWidth / radius;
 
       canvas.drawArc(
-        Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: radius),
+        Rect.fromCircle(
+            center: Offset(size.width / 2, size.height / 2), radius: radius),
         startAngle,
         endAngle - startAngle,
         false,

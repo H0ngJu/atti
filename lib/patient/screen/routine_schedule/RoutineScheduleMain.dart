@@ -45,7 +45,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
 
   // 아띠 랜덤 이미지
   Random random = Random();
-  String randomImageName = ''; // 랜덤 이미지 이름을 저장할 변수
+  String randomImageName = 'EatingStar.png'; // 랜덤 이미지 이름을 저장할 변수
 
   // 컨트롤러
   final AuthController authController = Get.put(AuthController());
@@ -565,8 +565,8 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                             time: filteredRoutines[index].time!,
                             date: _selectedDay,
                             onCompleted: _fetchData,
-                            isFinished: isFinished
-
+                            isFinished: isFinished,
+                            isEditMode: isEditMode
                         ),
                       );
                     },
