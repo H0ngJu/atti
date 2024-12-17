@@ -51,7 +51,7 @@ class _RoutineBox2State extends State<RoutineBox2> {
     var width = MediaQuery.of(context).size.width;
 
     return Container(
-      padding: EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
+      padding: EdgeInsets.only(top: 0, bottom: 20, left: 20, right: 20),
       width: MediaQuery.of(context).size.width * 0.9,
       color: Colors.white,
       alignment: Alignment.center,

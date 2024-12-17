@@ -23,9 +23,10 @@ class RoutineScheduleMain extends StatefulWidget {
 class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   final ColorPallet colorPallet = Get.put(ColorPallet());
   bool isEditMode = false;
+  bool isCompletedVisible = false; // 완료된 일과 접기/펼치기 상태 관리
 
+  // 하단바 상태 관리
   int _selectedIndex = 2;
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -41,6 +42,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   String todayInWeek = DateFormat('E', 'ko-KR').format(DateTime.now());
   String ttsMsg = '';
   String selectedMessage = '';
+
 
   final AuthController authController = Get.put(AuthController());
   final RoutineController routineController = Get.put(RoutineController());
@@ -70,6 +72,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     }
   }
 
+  // 데이터 불러오기
   Future<void> _fetchData() async {
     List<ScheduleModel>? fetchedSchedules =
         await ScheduleService().getSchedulesByDate(_selectedDay);
@@ -105,6 +108,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     }
   }
 
+  // 아띠 말풍선 메시지 만들기
   Future<void> _makeTTsMessage() async {
     List<String> ttsMessages = [
       '오늘은 어떤 일정이 있으신가요?',
@@ -178,6 +182,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     }
   }
 
+  // 날짜 선택 달력
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? datePicked = await showDatePicker(
         context: context,
@@ -217,6 +222,20 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     String randomImageName = imageNames[random.nextInt(imageNames.length)];
+
+    // 완료 상태에 따른 일과 필터링
+    List<RoutineModel> filteredRoutines = isCompletedVisible
+        ? routinesBySelectedDay
+        : routinesBySelectedDay
+        .where((routine) =>
+    routine.isFinished == null ||
+        !routine.isFinished!.containsKey(removeZ(
+            _selectedDay.toString().substring(0, 10) +
+                ' 00:00:00.000')) ||
+        routine.isFinished![removeZ(
+            _selectedDay.toString().substring(0, 10) +
+                ' 00:00:00.000')]! == false)
+        .toList();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -432,47 +451,70 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                 TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
               ),
             ),
+            SizedBox(height: 10,),
+
+            // 완료한 일과 접기/펼치기 토글 버튼
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  isCompletedVisible = !isCompletedVisible;
+                });
+              },
+              child: Container(
+                width: width * 0.8,
+                child: Text(
+                  isCompletedVisible ? '완료한 일과 접기' : '완료한 일과 펼치기',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Color(0xff868686),
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+            ),
+
             // 여기에 seletexDay에 해당하는 루틴들을 추가
-            routinesBySelectedDay.length > 0
+            //routinesBySelectedDay.length > 0
+            filteredRoutines.isNotEmpty
                 ? ListView.builder(
                     primary: false,
                     shrinkWrap: true,
-                    itemCount: routinesBySelectedDay.length,
+                    itemCount: filteredRoutines.length,
                     itemBuilder: (context, index) {
                       bool isFinished =
-                          routinesBySelectedDay[index].isFinished != null &&
-                              routinesBySelectedDay[index]
+                          filteredRoutines[index].isFinished != null &&
+                              filteredRoutines[index]
                                   .isFinished!
                                   .containsKey(removeZ(
                                       _selectedDay.toString().substring(0, 10) +
                                           ' 00:00:00.000')) &&
-                              routinesBySelectedDay[index].isFinished![removeZ(
+                              filteredRoutines[index].isFinished![removeZ(
                                   _selectedDay.toString().substring(0, 10) +
                                       ' 00:00:00.000')]!;
 
                       return GestureDetector(
                         onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (_) {
-                                return RoutineModal(
-                                  img: routinesBySelectedDay[index].img!,
-                                  name: routinesBySelectedDay[index].name!,
-                                  days:
-                                      routinesBySelectedDay[index].repeatDays!,
-                                  docRef:
-                                      routinesBySelectedDay[index].reference!,
-                                  time: routinesBySelectedDay[index].time!,
-                                  date: _selectedDay,
-                                  onCompleted: _fetchData,
-                                );
-                              });
+                          // showDialog(
+                          //     context: context,
+                          //     builder: (_) {
+                          //       return RoutineModal(
+                          //         img: routinesBySelectedDay[index].img!,
+                          //         name: routinesBySelectedDay[index].name!,
+                          //         days:
+                          //             routinesBySelectedDay[index].repeatDays!,
+                          //         docRef:
+                          //             routinesBySelectedDay[index].reference!,
+                          //         time: routinesBySelectedDay[index].time!,
+                          //         date: _selectedDay,
+                          //         onCompleted: _fetchData,
+                          //       );
+                          //     });
                         },
                         child: RoutineBox2(
-                            img: routinesBySelectedDay[index].img!,
-                            name: routinesBySelectedDay[index].name!,
-                            docRef: routinesBySelectedDay[index].reference!,
-                            time: routinesBySelectedDay[index].time!,
+                            img: filteredRoutines[index].img!,
+                            name: filteredRoutines[index].name!,
+                            docRef: filteredRoutines[index].reference!,
+                            time: filteredRoutines[index].time!,
                             date: _selectedDay,
                             onCompleted: _fetchData,
                             isFinished: isFinished
@@ -499,16 +541,6 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                   ),
             SizedBox(
               height: height * 0.01,
-            ),
-            SizedBox(
-              width: width * 0.9,
-              child: Divider(
-                color: Color(0xffE1E1E1),
-                thickness: 1,
-              ),
-            ),
-            SizedBox(
-              height: height * 0.02,
             ),
           ],
         ),
