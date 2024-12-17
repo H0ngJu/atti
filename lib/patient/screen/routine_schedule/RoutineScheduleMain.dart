@@ -43,12 +43,16 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   String ttsMsg = '';
   String selectedMessage = '';
 
+  // 아띠 랜덤 이미지
+  Random random = Random();
+  String randomImageName = ''; // 랜덤 이미지 이름을 저장할 변수
 
+  // 컨트롤러
   final AuthController authController = Get.put(AuthController());
   final RoutineController routineController = Get.put(RoutineController());
-  Random random = Random();
   DateTime _selectedDay = DateTime.now(); // 선택한 날짜 !!
 
+  // 일정, 루틴 담는 리스트들
   List<ScheduleModel> schedulesBySelectedDay = []; // 선택된 날짜의 일정들이 반환되는 리스트
   int? numberOfSchedules; // 선택된 날짜의 일정 개수
 
@@ -61,6 +65,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   @override
   void initState() {
     super.initState();
+    randomImageName = imageNames[random.nextInt(imageNames.length)];
     Future.delayed(Duration.zero, () async {
       await _fetchData();
       _makeTTsMessage();
@@ -221,7 +226,6 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    String randomImageName = imageNames[random.nextInt(imageNames.length)];
 
     // 완료 상태에 따른 일과 필터링
     List<RoutineModel> filteredRoutines = isCompletedVisible
@@ -262,7 +266,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                         ),
                       ),
                       Text(
-                        '일과 및 일정',
+                        isEditMode ? '일과 및 일정 편집모드' : '일과 및 일정',
                         textAlign: TextAlign.left,
                         style:
                         TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
@@ -270,7 +274,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     ],
                   ),
 
-                  // 여기 편집 버튼 넣기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+                  // 편집모드 버튼
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -313,7 +317,11 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
             SizedBox(
               width: width * 0.9,
               child: AttiSpeechBubble(
-                  comment: selectedMessage, color: colorPallet.lightYellow),
+                  comment: isEditMode
+                      ? '수정할 내용을 눌러 일과 및 일정을 편집해요'
+                      : selectedMessage,
+                  color: colorPallet.lightYellow
+              ),
             ),
             // Container(
             //   width: width * 0.9,
@@ -351,17 +359,28 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                           TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                     ),
                   ),
-                  //일정/일과 등록용
-                  // TextButton(onPressed: () {
-                  //   Get.to(ScheduleRegister1());
-                  // },
-                  //   child: Text('일과등록', style: TextStyle(fontSize: 18, color: Color(0xffA38130)),),
-                  //   style: ButtonStyle(
-                  //     backgroundColor: MaterialStateProperty.all(Color(0xffFFE9B3)),
-                  //   ),
-                  // ),
 
-                  TextButton(
+                  isEditMode
+                  ? GestureDetector(
+                    onTap: () {
+                      Get.to(ScheduleRegister1());
+                    },
+                      child: Container(
+                        width: width * 0.085,
+                        height: width * 0.085,
+                        margin: EdgeInsets.only(top: 5),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: width * 0.06,
+                        ),
+                      )
+                  )
+                  : TextButton(
                     onPressed: () async {
                       await _selectDate(context);
                       await _fetchData();
@@ -412,12 +431,13 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                               });
                         },
                         child: ScheduleBox(
-                          time: DateFormat('a hh:mm', 'ko_KR').format(
-                              schedulesBySelectedDay[index].time!.toDate()),
+                          time: DateFormat('a hh:mm', 'ko_KR').
+                            format(schedulesBySelectedDay[index].time!.toDate()),
                           location: schedulesBySelectedDay[index].location,
                           name: schedulesBySelectedDay[index].name,
                           isFinished: schedulesBySelectedDay[index].isFinished!,
                           docRef: schedulesBySelectedDay[index].reference!,
+                          isEditMode: isEditMode
                         ),
                       );
                     },
@@ -441,14 +461,42 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
             SizedBox(height: 10,),
 
             // 일과 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width * 0.9,
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '하루 일과',
-                textAlign: TextAlign.left,
-                style:
-                TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '하루 일과',
+                      textAlign: TextAlign.left,
+                      style:
+                      TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  isEditMode
+                      ? GestureDetector(
+                      onTap: () {
+                        Get.to(RoutineRegister1());
+                        },
+                      child: Container(
+                        width: width * 0.085,
+                        height: width * 0.085,
+                        margin: EdgeInsets.only(top: 5),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: width * 0.06,
+                        ),
+                      )
+                    )
+                    : SizedBox(),
+                ],
               ),
             ),
             SizedBox(height: 10,),

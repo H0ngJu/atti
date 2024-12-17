@@ -440,6 +440,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                           location: schedulesBySelectedDay[index].location,
                           name: schedulesBySelectedDay[index].name,
                           isFinished: schedulesBySelectedDay[index].isFinished!,
+                          isEditMode: false,
                         ),
                       );
                   },

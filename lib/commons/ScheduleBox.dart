@@ -5,11 +5,14 @@
 //                   name: scheduleController.name.value,
 //                   location: scheduleController.location.value,
 //                 ),
+import 'package:atti/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 
 import '../patient/screen/routine_schedule/ScheduleFinishModal.dart';
+import 'colorPallet.dart';
 
 class ScheduleBox extends StatefulWidget {
   const ScheduleBox(
@@ -18,19 +21,23 @@ class ScheduleBox extends StatefulWidget {
         this.name,
         this.location,
         required this.isFinished,
-        this.docRef});
+        this.docRef,
+        required this.isEditMode
+      });
 
   final String? time;
   final String? name;
   final String? location;
   final bool isFinished;
   final DocumentReference? docRef;
+  final bool isEditMode;
 
   @override
   State<ScheduleBox> createState() => _ScheduleBoxState();
 }
 
 class _ScheduleBoxState extends State<ScheduleBox> {
+  final ColorPallet colorPallet = Get.put(ColorPallet());
 
   @override
   Widget build(BuildContext context) {
@@ -77,24 +84,44 @@ class _ScheduleBoxState extends State<ScheduleBox> {
             SizedBox(width: width * 0.06,),
 
             // 일정 시간
-            Text(
-              widget.time ?? '-',
-              style: TextStyle(
-                fontSize: 28,
+            Container(
+              decoration: BoxDecoration(
+                color: widget.isEditMode ? colorPallet.lightGrey : Colors.transparent,
+                borderRadius: BorderRadius.circular(15), // 외곽선을 15만큼 둥글게
               ),
-            ),
-            SizedBox(width: width * 0.08,),
-
-            // 일정 제목
-            Expanded( // Row 내부에서 텍스트를 유연하게 줄이기 위해 Expanded 사용
+              padding: widget.isEditMode
+                  ? EdgeInsets.fromLTRB(8, 7, 8, 7)
+                  : EdgeInsets.zero,
               child: Text(
-                widget.name ?? '',
+                widget.time ?? '-',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 28,
                 ),
-                overflow: TextOverflow.ellipsis, // overflow 발생 시 ... 표시
-                maxLines: 1, // 한 줄로 제한
-                softWrap: false, // 텍스트 줄바꿈 비활성화
+              ),
+            ),
+            widget.isEditMode ? SizedBox(width: width * 0.03,) : SizedBox(width: width * 0.08),
+
+            // 일정 제목
+            Expanded( // Row 내부에서 텍스트를 유연하게 줄이기 위해 Expanded 사용
+              child: Container(
+                decoration: BoxDecoration(
+                  color: widget.isEditMode ? colorPallet.lightGrey : Colors.transparent,
+                  borderRadius: BorderRadius.circular(15), // 외곽선을 15만큼 둥글게
+                ),
+                padding: widget.isEditMode
+                    ? EdgeInsets.fromLTRB(8, 7, 8, 7)
+                    : EdgeInsets.zero,
+                child: Text(
+                  widget.name ?? '',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 28,
+                  ),
+                  overflow: TextOverflow.ellipsis, // overflow 발생 시 ... 표시
+                  maxLines: 1, // 한 줄로 제한
+                  softWrap: false, // 텍스트 줄바꿈 비활성화
+                ),
               ),
             ),
           ],
