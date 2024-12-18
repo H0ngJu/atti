@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:atti/commons/colorPallet.dart';
+import 'package:atti/tmp/screen/UserInfoPage.dart';
 import 'package:atti/tmp/screen/Notice/FullScreenRoutine.dart';
 import 'package:atti/tmp/screen/Notice/FullScreenSchedule1.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -500,11 +501,10 @@ class _HomePatientTopState extends State<HomePatientTop> {
               ),
               GestureDetector(
                 onTap: () {
-                  // 다른 페이지로 이동하는 코드
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => YourNextPage()), // YourNextPage를 원하는 페이지로 변경
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserinfoPage()),
+                  );
                 },
                 child: Container(
                   width: 45, // 버튼의 너비

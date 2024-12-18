@@ -11,7 +11,7 @@ class ColorPallet extends GetxController {
   Color lightGray = Color(0xffEDEDED); // select 3
   Color lightYellow = Color(0xffFFEFC6); // blank
   Color black = Color(0xff262626); // option
-  Color gray = Color(0xff262626); // detail text
+  Color gray = Color(0xff868686); // detail text
   Color khaki = Color(0xff745C20); // blank text
 
   Color textColor = Color(0xffA38130);
