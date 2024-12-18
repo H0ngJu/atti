@@ -201,4 +201,16 @@ class RoutineService {
     }
   }
 
+  // 특정 루틴 삭제
+  Future<void> deleteRoutine(DocumentReference docRef) async {
+    try {
+      // Firestore에서 문서를 삭제
+      await docRef.delete();
+      print('Routine deleted successfully!');
+    } catch (e) {
+      print('Error deleting routine: $e');
+    }
+  }
+
+
 }

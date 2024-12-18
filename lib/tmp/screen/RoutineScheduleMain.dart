@@ -354,12 +354,12 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                           );
                         });
                   },
-                  child: RoutineBox2(
-                    time: routinesBySelectedDay[index].time!,
-                    img: routinesBySelectedDay[index].img!,
-                    name: routinesBySelectedDay[index].name!,
-                    isFinished: isFinished
-                  ),
+                  // child: RoutineBox2(
+                  //   time: routinesBySelectedDay[index].time!,
+                  //   img: routinesBySelectedDay[index].img!,
+                  //   name: routinesBySelectedDay[index].name!,
+                  //   isFinished: isFinished
+                  // ),
                 );
               },
             )
@@ -439,7 +439,9 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                               .format(schedulesBySelectedDay[index].time!.toDate()),
                           location: schedulesBySelectedDay[index].location,
                           name: schedulesBySelectedDay[index].name,
-                          isFinished: schedulesBySelectedDay[index].isFinished,
+                          isFinished: schedulesBySelectedDay[index].isFinished!,
+                          isEditMode: false,
+                          onCompleted: _fetchData,
                         ),
                       );
                   },

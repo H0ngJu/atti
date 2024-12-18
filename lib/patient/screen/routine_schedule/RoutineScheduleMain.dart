@@ -3,6 +3,8 @@ import 'package:atti/index.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
+import 'TodayToDo.dart';
+
 // 이미지 파일 이름 목록
 List<String> imageNames = [
   'EatingStar.png',
@@ -22,9 +24,11 @@ class RoutineScheduleMain extends StatefulWidget {
 
 class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   final ColorPallet colorPallet = Get.put(ColorPallet());
+  bool isEditMode = false;
+  bool isCompletedVisible = false; // 완료된 일과 접기/펼치기 상태 관리
 
+  // 하단바 상태 관리
   int _selectedIndex = 2;
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -41,11 +45,16 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   String ttsMsg = '';
   String selectedMessage = '';
 
+  // 아띠 랜덤 이미지
+  Random random = Random();
+  String randomImageName = 'EatingStar.png'; // 랜덤 이미지 이름을 저장할 변수
+
+  // 컨트롤러
   final AuthController authController = Get.put(AuthController());
   final RoutineController routineController = Get.put(RoutineController());
-  Random random = Random();
   DateTime _selectedDay = DateTime.now(); // 선택한 날짜 !!
 
+  // 일정, 루틴 담는 리스트들
   List<ScheduleModel> schedulesBySelectedDay = []; // 선택된 날짜의 일정들이 반환되는 리스트
   int? numberOfSchedules; // 선택된 날짜의 일정 개수
 
@@ -58,6 +67,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   @override
   void initState() {
     super.initState();
+    randomImageName = imageNames[random.nextInt(imageNames.length)];
     Future.delayed(Duration.zero, () async {
       await _fetchData();
       _makeTTsMessage();
@@ -69,12 +79,13 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     }
   }
 
+  // 데이터 불러오기
   Future<void> _fetchData() async {
-    List<ScheduleModel>? fetchedSchedules =
-        await ScheduleService().getSchedulesByDate(_selectedDay);
-    List<RoutineModel> fetchedRoutines =
-        await RoutineService().getRoutinesByDay(selectedDayInWeek);
 
+    List<ScheduleModel>? fetchedSchedules =
+    await ScheduleService().getSchedulesByDate(_selectedDay);
+    List<RoutineModel> fetchedRoutines =
+    await RoutineService().getRoutinesByDay(selectedDayInWeek);
     // tts를 위한 오늘의 일정, 일과
     todayRoutines = await RoutineService().getRoutinesByDay(todayInWeek);
     todaySchedules = await ScheduleService().getSchedulesByDate(today);
@@ -104,6 +115,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     }
   }
 
+  // 아띠 말풍선 메시지 만들기
   Future<void> _makeTTsMessage() async {
     List<String> ttsMessages = [
       '오늘은 어떤 일정이 있으신가요?',
@@ -177,6 +189,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     }
   }
 
+  // 날짜 선택 달력
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? datePicked = await showDatePicker(
         context: context,
@@ -215,7 +228,20 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    String randomImageName = imageNames[random.nextInt(imageNames.length)];
+
+    // 완료 상태에 따른 일과 필터링
+    List<RoutineModel> filteredRoutines = isCompletedVisible
+        ? routinesBySelectedDay
+        : routinesBySelectedDay
+        .where((routine) =>
+    routine.isFinished == null ||
+        !routine.isFinished!.containsKey(removeZ(
+            _selectedDay.toString().substring(0, 10) +
+                ' 00:00:00.000')) ||
+        routine.isFinished![removeZ(
+            _selectedDay.toString().substring(0, 10) +
+                ' 00:00:00.000')]! == false)
+        .toList();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -225,38 +251,66 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
             SizedBox(
               height: height * 0.06,
             ),
-            Container(
-              width: width * 0.9,
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '${patientName}님의',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 24,
-                ),
-              ),
-            ),
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.9,
+              width: width * 0.9,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    //width: MediaQuery.of(context).size.width * 0.9,
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '일과 및 일정',
-                      textAlign: TextAlign.left,
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${patientName}님의',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 24,
+                        ),
+                      ),
+                      Text(
+                        isEditMode ? '일과 및 일정 편집모드' : '일과 및 일정',
+                        textAlign: TextAlign.left,
+                        style:
+                        TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                      ),
+                    ],
                   ),
 
-                  // 여기 편집 버튼 넣기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+                  // 편집모드 버튼
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isEditMode = !isEditMode; // 상태 토글
+                      });
+                    },
+                    child: Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: isEditMode ? Colors.white : Colors.black,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 1
+                        )
+                      ),
+                      child: Icon(
+                        isEditMode ? Icons.close : Icons.edit,
+                        color: isEditMode ? Colors.black : Colors.white,
+                        size: 22,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
             SizedBox(height: height * 0.03),
+            // 임시 이동 버튼
+            TextButton(
+                onPressed: () {
+                  Get.to(TodayToDo());
+                },
+                child: Text('오늘할일 페이지로 이동')),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -271,7 +325,11 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
             SizedBox(
               width: width * 0.9,
               child: AttiSpeechBubble(
-                  comment: selectedMessage, color: colorPallet.lightYellow),
+                  comment: isEditMode
+                      ? '수정할 내용을 눌러 일과 및 일정을 편집해요'
+                      : selectedMessage,
+                  color: colorPallet.lightYellow
+              ),
             ),
             // Container(
             //   width: width * 0.9,
@@ -309,17 +367,28 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                           TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                     ),
                   ),
-                  //일정/일과 등록용
-                  // TextButton(onPressed: () {
-                  //   Get.to(ScheduleRegister1());
-                  // },
-                  //   child: Text('일과등록', style: TextStyle(fontSize: 18, color: Color(0xffA38130)),),
-                  //   style: ButtonStyle(
-                  //     backgroundColor: MaterialStateProperty.all(Color(0xffFFE9B3)),
-                  //   ),
-                  // ),
 
-                  TextButton(
+                  isEditMode
+                  ? GestureDetector(
+                    onTap: () {
+                      Get.to(ScheduleRegister1());
+                    },
+                      child: Container(
+                        width: width * 0.085,
+                        height: width * 0.085,
+                        margin: EdgeInsets.only(top: 5),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: width * 0.06,
+                        ),
+                      )
+                  )
+                  : TextButton(
                     onPressed: () async {
                       await _selectDate(context);
                       await _fetchData();
@@ -370,12 +439,14 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                               });
                         },
                         child: ScheduleBox(
-                          time: DateFormat('a hh:mm', 'ko_KR').format(
-                              schedulesBySelectedDay[index].time!.toDate()),
+                          time: DateFormat('a hh:mm', 'ko_KR').
+                            format(schedulesBySelectedDay[index].time!.toDate()),
                           location: schedulesBySelectedDay[index].location,
                           name: schedulesBySelectedDay[index].name,
-                          isFinished: schedulesBySelectedDay[index].isFinished,
+                          isFinished: schedulesBySelectedDay[index].isFinished!,
                           docRef: schedulesBySelectedDay[index].reference!,
+                          isEditMode: isEditMode,
+                          onCompleted: _fetchData,
                         ),
                       );
                     },
@@ -396,59 +467,111 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                       style: TextStyle(fontSize: 24),
                     ),
                   ),
+            SizedBox(height: 10,),
 
             // 일과 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width * 0.9,
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '하루 일과',
-                textAlign: TextAlign.left,
-                style:
-                TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '하루 일과',
+                      textAlign: TextAlign.left,
+                      style:
+                      TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  isEditMode
+                      ? GestureDetector(
+                      onTap: () {
+                        Get.to(RoutineRegister1());
+                        },
+                      child: Container(
+                        width: width * 0.085,
+                        height: width * 0.085,
+                        margin: EdgeInsets.only(top: 5),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: width * 0.06,
+                        ),
+                      )
+                    )
+                    : SizedBox(),
+                ],
               ),
             ),
+            SizedBox(height: 10,),
+
+            // 완료한 일과 접기/펼치기 토글 버튼
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  isCompletedVisible = !isCompletedVisible;
+                });
+              },
+              child: Container(
+                width: width * 0.8,
+                child: Text(
+                  isCompletedVisible ? '완료한 일과 접기' : '완료한 일과 펼치기',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Color(0xff868686),
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+            ),
+
             // 여기에 seletexDay에 해당하는 루틴들을 추가
-            routinesBySelectedDay.length > 0
+            //routinesBySelectedDay.length > 0
+            filteredRoutines.isNotEmpty
                 ? ListView.builder(
                     primary: false,
                     shrinkWrap: true,
-                    itemCount: routinesBySelectedDay.length,
+                    itemCount: filteredRoutines.length,
                     itemBuilder: (context, index) {
                       bool isFinished =
-                          routinesBySelectedDay[index].isFinished != null &&
-                              routinesBySelectedDay[index]
-                                  .isFinished!
-                                  .containsKey(removeZ(
-                                      _selectedDay.toString().substring(0, 10) +
-                                          ' 00:00:00.000')) &&
-                              routinesBySelectedDay[index].isFinished![removeZ(
-                                  _selectedDay.toString().substring(0, 10) +
-                                      ' 00:00:00.000')]!;
+                          filteredRoutines[index].isFinished != null &&
+                              filteredRoutines[index].isFinished!
+                                  .containsKey(removeZ(_selectedDay.toString().substring(0, 10) + ' 00:00:00.000')) &&
+                              filteredRoutines[index].isFinished![removeZ(_selectedDay.toString().substring(0, 10) + ' 00:00:00.000')]!;
 
                       return GestureDetector(
                         onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (_) {
-                                return RoutineModal(
-                                  img: routinesBySelectedDay[index].img!,
-                                  name: routinesBySelectedDay[index].name!,
-                                  days:
-                                      routinesBySelectedDay[index].repeatDays!,
-                                  docRef:
-                                      routinesBySelectedDay[index].reference!,
-                                  time: routinesBySelectedDay[index].time!,
-                                  date: _selectedDay,
-                                  onCompleted: _fetchData,
-                                );
-                              });
+                          // showDialog(
+                          //     context: context,
+                          //     builder: (_) {
+                          //       return RoutineModal(
+                          //         img: routinesBySelectedDay[index].img!,
+                          //         name: routinesBySelectedDay[index].name!,
+                          //         days:
+                          //             routinesBySelectedDay[index].repeatDays!,
+                          //         docRef:
+                          //             routinesBySelectedDay[index].reference!,
+                          //         time: routinesBySelectedDay[index].time!,
+                          //         date: _selectedDay,
+                          //         onCompleted: _fetchData,
+                          //       );
+                          //     });
                         },
                         child: RoutineBox2(
-                            time: routinesBySelectedDay[index].time!,
-                            img: routinesBySelectedDay[index].img!,
-                            name: routinesBySelectedDay[index].name!,
-                            isFinished: isFinished),
+                            img: filteredRoutines[index].img!,
+                            name: filteredRoutines[index].name!,
+                            docRef: filteredRoutines[index].reference!,
+                            time: filteredRoutines[index].time!,
+                            date: _selectedDay,
+                            onCompleted: _fetchData,
+                            isFinished: isFinished,
+                            isEditMode: isEditMode
+                        ),
                       );
                     },
                   )
@@ -470,16 +593,6 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                   ),
             SizedBox(
               height: height * 0.01,
-            ),
-            SizedBox(
-              width: width * 0.9,
-              child: Divider(
-                color: Color(0xffE1E1E1),
-                thickness: 1,
-              ),
-            ),
-            SizedBox(
-              height: height * 0.02,
             ),
           ],
         ),
