@@ -3,6 +3,8 @@ import 'package:atti/index.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
+import 'TodayToDo.dart';
+
 // 이미지 파일 이름 목록
 List<String> imageNames = [
   'EatingStar.png',
@@ -79,11 +81,11 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
 
   // 데이터 불러오기
   Future<void> _fetchData() async {
-    List<ScheduleModel>? fetchedSchedules =
-        await ScheduleService().getSchedulesByDate(_selectedDay);
-    List<RoutineModel> fetchedRoutines =
-        await RoutineService().getRoutinesByDay(selectedDayInWeek);
 
+    List<ScheduleModel>? fetchedSchedules =
+    await ScheduleService().getSchedulesByDate(_selectedDay);
+    List<RoutineModel> fetchedRoutines =
+    await RoutineService().getRoutinesByDay(selectedDayInWeek);
     // tts를 위한 오늘의 일정, 일과
     todayRoutines = await RoutineService().getRoutinesByDay(todayInWeek);
     todaySchedules = await ScheduleService().getSchedulesByDate(today);
@@ -250,7 +252,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
               height: height * 0.06,
             ),
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.9,
+              width: width * 0.9,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 //crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,6 +305,12 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
               ),
             ),
             SizedBox(height: height * 0.03),
+            // 임시 이동 버튼
+            TextButton(
+                onPressed: () {
+                  Get.to(TodayToDo());
+                },
+                child: Text('오늘할일 페이지로 이동')),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
