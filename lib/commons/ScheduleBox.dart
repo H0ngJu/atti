@@ -13,10 +13,11 @@ import 'package:intl/intl.dart';
 
 import '../patient/screen/routine_schedule/CustomModal.dart';
 import '../patient/screen/routine_schedule/RoutineShceduleFinish.dart';
-import '../patient/screen/routine_schedule/ScheduleFinishModal.dart';
 import 'colorPallet.dart';
 
 class ScheduleBox extends StatefulWidget {
+  final Function onCompleted; // 콜백 함수 추가
+
   const ScheduleBox(
       {super.key,
         this.time,
@@ -24,7 +25,8 @@ class ScheduleBox extends StatefulWidget {
         this.location,
         required this.isFinished,
         this.docRef,
-        required this.isEditMode
+        required this.isEditMode,
+        required this.onCompleted,
       });
 
   final String? time;
@@ -60,8 +62,11 @@ class _ScheduleBoxState extends State<ScheduleBox> {
                     builder: (_) => CustomModal(
                         title: '\'${widget.name}\'\n일정을 삭제할까요?',
                         yesButtonColor: colorPallet.orange,
-                        onYesPressed: () {
+                        onYesPressed: () async {
+                          await ScheduleService().deleteSchedule(widget.docRef!);
+                          widget.onCompleted(); // 콜백 함수 호출
 
+                          Navigator.pop(context); // 모달창 닫기
                         },
                         onNoPressed: () {
                           Navigator.pop(context);

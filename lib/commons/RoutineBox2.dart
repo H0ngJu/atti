@@ -5,8 +5,9 @@ import 'dart:io';
 import '../data/notification/notification_controller.dart';
 import '../data/routine/routine_controller.dart';
 import '../data/routine/routine_service.dart';
+import '../data/schedule/schedule_service.dart';
 import '../patient/screen/routine_schedule/CustomModal.dart';
-import '../patient/screen/routine_schedule/RoutineFinishModal.dart';
+import 'colorPallet.dart';
 
 class RoutineBox2 extends StatefulWidget {
   final Function onCompleted; // 콜백 함수 추가
@@ -36,6 +37,7 @@ class RoutineBox2 extends StatefulWidget {
 
 class _RoutineBox2State extends State<RoutineBox2> {
   final RoutineController routineController = Get.put(RoutineController());
+  final ColorPallet colorPallet = Get.put(ColorPallet());
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +74,11 @@ class _RoutineBox2State extends State<RoutineBox2> {
                         builder: (_) => CustomModal(
                             title: '\'${widget.name}\'\n일과를 삭제할까요?',
                             yesButtonColor: colorPallet.orange,
-                            onYesPressed: () {
+                            onYesPressed: () async {
+                              await RoutineService().deleteRoutine(widget.docRef);
+                              widget.onCompleted(); // 콜백 함수 호출
 
+                              Navigator.pop(context); // 모달창 닫기
                             },
                             onNoPressed: () {
                               Navigator.pop(context);

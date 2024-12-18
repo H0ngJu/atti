@@ -256,6 +256,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
                       name: schedulesBySelectedDay[index].name,
                       isFinished: schedulesBySelectedDay[index].isFinished!,
                       isEditMode: false,
+                      onCompleted: _fetchData,
                     ),
                   ],
                 ),

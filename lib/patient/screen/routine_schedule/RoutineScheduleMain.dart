@@ -437,7 +437,8 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                           name: schedulesBySelectedDay[index].name,
                           isFinished: schedulesBySelectedDay[index].isFinished!,
                           docRef: schedulesBySelectedDay[index].reference!,
-                          isEditMode: isEditMode
+                          isEditMode: isEditMode,
+                          onCompleted: _fetchData,
                         ),
                       );
                     },

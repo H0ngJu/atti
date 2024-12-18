@@ -65,6 +65,7 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
                   location: scheduleController.schedule.value.location,
                   isFinished: false,
                   isEditMode: false,
+                  onCompleted: () {},
                 )
 
 

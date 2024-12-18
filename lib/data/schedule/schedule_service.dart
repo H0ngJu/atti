@@ -100,4 +100,16 @@ class ScheduleService {
     }
   }
 
+  // 일정 삭제하기
+  Future<void> deleteSchedule(DocumentReference docRef) async {
+    try {
+      await docRef.delete();
+      print('Schedule deleted successfully');
+    } catch (e) {
+      print('Error deleting schedule: $e');
+      throw Future.error('Error deleting schedule: $e'); // 예외 다시 throw
+    }
+  }
+
+
 }
