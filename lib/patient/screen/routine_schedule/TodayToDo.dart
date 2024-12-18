@@ -1,6 +1,8 @@
 import 'package:atti/index.dart';
 import 'package:intl/intl.dart';
 
+import 'CustomModal.dart';
+
 class TodayToDo extends StatefulWidget {
   const TodayToDo({super.key});
 
@@ -29,6 +31,8 @@ class _TodayToDoState extends State<TodayToDo> {
   final AuthController authController = Get.put(AuthController());
   final RoutineController routineController = Get.put(RoutineController());
   String patientName = '';
+
+  bool isButtonTapped = false; // '시간이 되면 알려드릴게요' 버튼 관리
 
   // 데이터 불러오기
   Future<void> _fetchData() async {
@@ -72,50 +76,102 @@ class _TodayToDoState extends State<TodayToDo> {
     }
   }
 
+  String removeZ(String dateTimeString) {
+    return dateTimeString.replaceAll('Z', '');
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    // 현재 시간 이후의 가장 가까운 루틴 찾기
     RoutineModel? nextRoutine;
+    RoutineModel? nextRoutine2;
     final now = DateTime.now();
 
-    // 현재 시간과 비교하기 위해 routinesByToday를 DateTime으로 변환하여 정렬
+    // 현재 날짜 문자열 생성
+    final todayKey = removeZ(now.toString().substring(0, 10) + ' 00:00:00.000');
+
+    // 완료 여부와 현재 시간 조건 추가하여 루틴 정렬
     routinesByToday.sort((a, b) {
       final DateTime aTime =
-          DateTime(now.year, now.month, now.day, a.time![0], a.time![1]);
+      DateTime(now.year, now.month, now.day, a.time![0], a.time![1]);
       final DateTime bTime =
-          DateTime(now.year, now.month, now.day, b.time![0], b.time![1]);
+      DateTime(now.year, now.month, now.day, b.time![0], b.time![1]);
 
       return aTime.compareTo(bTime);
     });
 
-    // 현재 시간 이후의 첫 번째 루틴 찾기
-    nextRoutine = routinesByToday.firstWhere(
-      (routine) {
+
+    // 현재 시간 이후의 완료되지 않은 첫 번째, 두 번째 루틴 찾기
+    nextRoutine = routinesByToday.isNotEmpty
+        ? routinesByToday.firstWhere(
+          (routine) {
         final DateTime routineTime = DateTime(
             now.year, now.month, now.day, routine.time![0], routine.time![1]);
-        return routineTime.isAfter(now);
+
+        // 완료 여부 확인
+        final bool isFinished = routine.isFinished != null &&
+            routine.isFinished!.containsKey(todayKey) &&
+            routine.isFinished![todayKey]!;
+
+        return routineTime.isAfter(now) && !isFinished;
       },
-      orElse: () => routinesByToday[0], // 없을 경우 그냥 첫번째 루틴 반환
-    );
+      orElse: () => routinesByToday.first, // 첫 번째 루틴 반환
+    )
+        : null; // 루틴이 없을 경우 null로 설정
+
+    // nextRoutine 다음의 완료되지 않은 루틴 찾기
+    if (nextRoutine != null) {
+      final DateTime nextRoutineTime = DateTime(
+          now.year,
+          now.month,
+          now.day,
+          nextRoutine!.time![0],
+          nextRoutine!.time![1]);
+
+      nextRoutine2 = routinesByToday.firstWhere(
+            (routine) {
+          final DateTime routineTime = DateTime(
+              now.year, now.month, now.day, routine.time![0], routine.time![1]);
+
+          // 완료 여부 확인
+          final bool isFinished = routine.isFinished != null &&
+              routine.isFinished!.containsKey(todayKey) &&
+              routine.isFinished![todayKey]!;
+
+          return routineTime.isAfter(nextRoutineTime) && !isFinished;
+        },
+        orElse: () => routinesByToday.first // 조건을 만족하는 루틴이 없으면 그냥 첫번째
+      );
+    } else {
+      nextRoutine2 = null; // nextRoutine이 없을 경우 null로 설정
+    }
+
 
     // [7, 30] -> 오전 7:30 형식으로 변환
-    String formattedTime = '';
-    if (nextRoutine.time != null && nextRoutine.time!.length == 2) {
-      final int hour = nextRoutine.time![0];
-      final int minute = nextRoutine.time![1];
-      final bool isPM = hour >= 12; // 오후 여부 확인
-      int hour12 = hour > 12 ? hour - 12 : hour;
-      hour12 = hour12 == 0 ? 12 : hour12;
-      formattedTime =
-          '${isPM ? '오후' : '오전'} ${hour12.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+    String formatRoutineTime(List<int>? time) {
+      if (time != null && time.length == 2) {
+        final int hour = time[0];
+        final int minute = time[1];
+        final bool isPM = hour >= 12; // 오후 여부 확인
+        int hour12 = hour > 12 ? hour - 12 : hour;
+        hour12 = hour12 == 0 ? 12 : hour12;
+        return '${isPM ? '오후' : '오전'} ${hour12.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+      } else {
+        return '일과 없음';
+      }
     }
+    String formattedTime1 = nextRoutine != null
+        ? formatRoutineTime(nextRoutine.time)
+        : '일과 없음';
+    String formattedTime2 = nextRoutine2 != null
+        ? formatRoutineTime(nextRoutine2.time)
+        : '일과 없음';
 
     // 최상단 텍스트 생성
     String getTopText() {
-      if (nextRoutine!.time != null && nextRoutine.time!.length == 2) {
+      if (nextRoutine != null && nextRoutine!.time != null && nextRoutine.time!.length == 2) {
         final int routineHour = nextRoutine.time![0];
         final int routineMinute = nextRoutine.time![1];
 
@@ -197,7 +253,7 @@ class _TodayToDoState extends State<TodayToDo> {
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(color: Colors.black, width: 1)),
                 child: Text(
-                  formattedTime,
+                  formattedTime1,
                   style: TextStyle(fontSize: 24),
                 )),
             SizedBox(
@@ -211,13 +267,15 @@ class _TodayToDoState extends State<TodayToDo> {
               height: width * 0.68,
               child: Container(
                 child: ClipOval(
-                  child: Image.network(
-                    nextRoutine.img!,
+                  child: nextRoutine != null && nextRoutine!.img != null
+                      ? Image.network(
+                    nextRoutine!.img!,
                     width: double.infinity,
                     height: double.infinity,
                     fit: BoxFit.cover,
                     alignment: Alignment.center,
-                  ),
+                  )
+                      : Container(),
                 ),
               ),
             ),
@@ -227,7 +285,7 @@ class _TodayToDoState extends State<TodayToDo> {
 
             // 일과 이름
             Text(
-              nextRoutine.name!,
+              nextRoutine?.name ?? '일과 없음',
               style: TextStyle(
                 fontSize: 28,
               ),
@@ -237,18 +295,50 @@ class _TodayToDoState extends State<TodayToDo> {
             ),
 
             // 일과 이름 하단 버튼
-            Container(
-                width: width * 0.8,
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                decoration: BoxDecoration(
-                  color: Color(0xffFFE7A4),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Text(
-                  '시간이 되면 알려드릴게요',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24),
-                )),
+            GestureDetector(
+              onTap: () {
+                if (!isButtonTapped) {
+                  setState(() {
+                    isButtonTapped = true;
+                  });
+                } else { // 완료 모달창 띄우기
+                  showDialog(
+                    context: context,
+                    builder: (_) => CustomModal(
+                      title: "'${nextRoutine!.name}'\n일과를 완료하셨나요?",
+                      yesButtonColor: colorPallet.orange,
+                      onYesPressed: () async {
+                        await RoutineService().completeRoutine(nextRoutine!.reference!, DateTime.now());
+                        await addNotification(
+                            '하루 일과 알림',
+                            '${authController.userName}님이 \'${nextRoutine.name}\' 일과를 완료하셨어요!',
+                            DateTime.now(),
+                            false);
+
+                        _fetchData();
+                        Navigator.pop(context);
+                      },
+                      onNoPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  );
+
+                }
+              },
+              child: Container(
+                  width: width * 0.8,
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  decoration: BoxDecoration(
+                    color: isButtonTapped ? colorPallet.goldYellow : Color(0xffFFE7A4),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Text(
+                    isButtonTapped ? '완료했어요' : '시간이 되면 알려드릴게요',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 24),
+                  )),
+            ),
             SizedBox(
               height: width * 0.06,
             ),
@@ -323,7 +413,7 @@ class _TodayToDoState extends State<TodayToDo> {
                   ),
             SizedBox(height: width * 0.05,),
 
-            // 일과
+            // 다음 일과 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
             Center(
               child: SizedBox(
                 width: width * 0.83,
@@ -333,6 +423,71 @@ class _TodayToDoState extends State<TodayToDo> {
                 ),
               ),
             ),
+            SizedBox(height: 3,),
+
+            // 일과 시간
+            Center(
+              child: SizedBox(
+                width: width * 0.83,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min, // Row의 크기를 최소화
+                  children: [
+                    Container(
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(color: Colors.black, width: 1)),
+                        child: Text(
+                          formattedTime2,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 24),
+                        )),
+                  ],
+                ),
+              ),
+            ),
+
+            // 일과 이름
+            Center(
+              child: SizedBox(
+                width: width * 0.83,
+                child: Text(
+                  nextRoutine2?.name ?? '일과 없음',
+                  style: TextStyle(
+                    fontSize: 28,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: width * 0.04,
+            ),
+
+            // 일과 사진
+            Container(
+              alignment: Alignment.center,
+              width: width * 0.83,
+              height: width * 0.49,
+              child: Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: nextRoutine != null && nextRoutine2!.img != null
+                      ? Image.network(
+                    nextRoutine2!.img!,
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  )
+                      : Container(),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: width * 0.07,
+            ),
+            
 
 
 

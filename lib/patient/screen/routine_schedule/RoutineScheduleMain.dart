@@ -540,14 +540,9 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     itemBuilder: (context, index) {
                       bool isFinished =
                           filteredRoutines[index].isFinished != null &&
-                              filteredRoutines[index]
-                                  .isFinished!
-                                  .containsKey(removeZ(
-                                      _selectedDay.toString().substring(0, 10) +
-                                          ' 00:00:00.000')) &&
-                              filteredRoutines[index].isFinished![removeZ(
-                                  _selectedDay.toString().substring(0, 10) +
-                                      ' 00:00:00.000')]!;
+                              filteredRoutines[index].isFinished!
+                                  .containsKey(removeZ(_selectedDay.toString().substring(0, 10) + ' 00:00:00.000')) &&
+                              filteredRoutines[index].isFinished![removeZ(_selectedDay.toString().substring(0, 10) + ' 00:00:00.000')]!;
 
                       return GestureDetector(
                         onTap: () {
