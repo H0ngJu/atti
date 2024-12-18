@@ -466,7 +466,6 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_local_notifications
-
       sha256: "674173fd3c9eda9d4c8528da2ce0ea69f161577495a9cc835a2a4ecd7eadeb35"
       url: "https://pub.dev"
     source: hosted
