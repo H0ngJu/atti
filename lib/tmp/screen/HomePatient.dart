@@ -22,6 +22,9 @@ import '../../data/schedule/schedule_model.dart';
 import '../../data/schedule/schedule_service.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
+import '../../patient/screen/notice/RoutineNoti.dart';
+import '../../patient/screen/notice/ScheduleNoti1.dart';
+import '../../patient/screen/notice/ScheduleNoti2.dart';
 import 'Notice/FullScreenSchedule2.dart';
 import 'Notice/FullScreenSchedule3.dart';
 
@@ -88,14 +91,14 @@ class _HomePatientState extends State<HomePatient> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    FullScreenSchedule(docRef: docRef)), // ScheduleMain 페이지로 이동
+                    ScheduleNoti1(docRef: docRef)), // ScheduleMain 페이지로 이동
           );
         } else if (payload.startsWith('/schedule2/')) {
           String docRef = payload.substring('/schedule2/'.length);
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => FullScreenSchedule2(docRef: docRef)),
+                builder: (context) => ScheduleNoti2(docRef: docRef)),
           );
         } else if (payload.startsWith('/schedule3/')) {
           String docRef = payload.substring('/schedule3/'.length);
@@ -110,7 +113,7 @@ class _HomePatientState extends State<HomePatient> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    FullScreenRoutine(docRef: docRef)), // RoutineMain 페이지로 이동
+                    RoutineNoti(docRef: docRef)), // RoutineMain 페이지로 이동
           );
         }
       }

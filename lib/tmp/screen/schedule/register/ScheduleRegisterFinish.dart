@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../commons/ScheduleBox.dart';
 import '../../../../data/notification/notification_controller.dart';
-import '../../RoutineScheduleMain.dart';
+import '../../../../patient/screen/routine_schedule/RoutineScheduleMain.dart';
 import '../ScheduleMain.dart';
 import 'package:atti/data/schedule/schedule_controller.dart';
 import '../../../../data/notification/notification.dart';
@@ -78,15 +78,39 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
             child: TextButton(
               onPressed: () async {
                 final updatedSchedule = await scheduleController.addSchedule();
-
+                print(authController.isPatient);
                 if (authController.isPatient) {
+                  print('updatedSchedule: ${updatedSchedule}');
+
+                  // 일정 1시간 전 알림
                   notificationService.showDateTimeNotification(
-                    2,
+                    notificationService.createUniqueId(),
                     '일정 알림',
                     '1시간 뒤 \'${updatedSchedule.name}\'을(를) 하실 시간이에요!',
                     updatedSchedule.time!.toDate().subtract(Duration(hours: 1)),
                     '/schedule1/${updatedSchedule.reference!.id}',
                   );
+
+                  // 일정 본알림
+                  await notificationService.showDateTimeNotification(
+                    notificationService.createUniqueId(),
+                    '일정 알림',
+                    '\'${updatedSchedule.name}\'일정을(를) 진행하고 있나요?',
+                    //updatedSchedule.time!.toDate(),
+                    updatedSchedule.time!.toDate().subtract(Duration(minutes:58)),
+                    '/schedule2/${updatedSchedule.reference!.id}',
+                  );
+
+                  // 일정 1시간 뒤 알림
+                  // await notificationService.showDateTimeNotification(
+                  //   notificationService.createUniqueId(),
+                  //   '일정 알림',
+                  //   '\'${updatedSchedule.name}\'일정의 기억 사진을 남길까요?',
+                  //   updatedSchedule.time!.toDate().add(Duration(hours: 1)),
+                  //   //schedule!.time!.toDate().subtract(Duration(minutes:58)),
+                  //   '/schedule3/${updatedSchedule.reference!.id}',
+                  // );
+
                 }
                 Get.to(RoutineScheduleMain());
               },
