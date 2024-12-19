@@ -14,7 +14,7 @@ import 'package:get/get_core/src/get_main.dart';
 import '../../../../data/auth_controller.dart';
 import '../../../../data/memory/memory_note_model.dart';
 import '../../../../data/memory/memory_note_service.dart';
-import 'RecollectionData.dart';
+import '../../../../data/memory/RecollectionData.dart';
 import 'TagController.dart';
 
 class MainGallery extends StatefulWidget {
