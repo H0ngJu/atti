@@ -1,191 +1,211 @@
-import 'package:atti/tmp/screen/HomeCarer.dart';
-import 'package:atti/tmp/screen/HomePatient.dart';
-import 'package:atti/tmp/screen/LogInSignUp/LogInSignUpMainScreen.dart';
-import 'package:atti/tmp/screen/RoutineScheduleMain.dart';
-import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:atti/tmp/screen/UserInfoEditPage.dart';
 
-import '../../data/auth_controller.dart';
+import '../../index.dart';
 
 class Menu extends StatefulWidget {
-  const Menu({Key? key}) : super(key: key);
+  const Menu({super.key});
 
   @override
   State<Menu> createState() => _MenuState();
 }
 
 class _MenuState extends State<Menu> {
-  final _authentication = FirebaseAuth.instance;
-  User? loggedUser;
-  final AuthController authController = Get.find<AuthController>();
-
-  @override
-  void initState() {
-    super.initState();
-    getCurrentUser();
-  }
-
-  void getCurrentUser() {
-    try {
-      final user = _authentication.currentUser;
-      print("loggedUser: ${user!.uid}");
-      print("check: ${authController.patientName.value}");
-      if (user != null) {
-        loggedUser = user as User?;
-      };
-    } catch (e) {
-      print(e);
-    }
-  }
-
-
-
+  ColorPallet _colorPallet = ColorPallet();
+  AuthController _authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-        body: SingleChildScrollView(
-            child: Container(
-      margin: EdgeInsets.only(
-          top: MediaQuery.sizeOf(context).height * 0.07, left: 15, right: 15),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Image.asset(
-              'lib/assets/AttiBlack.png',
-              width: 150,
-            ),
-            GestureDetector(
-                onTap: () {
-                  Get.back();
-                },
-                child: Icon(
-                  Icons.close,
-                  color: Color(0xffB8B8B8),
-                  size: 40,
-                )),
-          ]),
-          SizedBox(
-            height: 20,
-          ),
-          Text(
-            '주요기능',
-            style: TextStyle(
-                fontFamily: 'PretendardRegular',
-                fontSize: 24,
-                color: Color(0xff868686)),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-              onTap: () {
-                authController.isPatient ? Get.to(HomePatient()) : Get.to(HomeCarer());
-              },
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Color(0xffFFF5DB),
-                    borderRadius: BorderRadius.circular(15)),
-                height: 100,
-                child: Text(
-                  '홈',
-                  style:
-                      TextStyle(fontSize: 40, fontFamily: 'PretendardRegular'),
-                ),
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          GestureDetector(
-              onTap: () {
-                Get.to(MainGallery());
-              },
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Color(0xffFFECBE),
-                    borderRadius: BorderRadius.circular(15)),
-                height: 100,
-                child: Text(
-                  '내 기억',
-                  style:
-                      TextStyle(fontSize: 40, fontFamily: 'PretendardRegular'),
-                ),
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          GestureDetector(
-              onTap: () {
-                Get.to(RoutineScheduleMain());
-              },
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Color(0xffFFE199),
-                    borderRadius: BorderRadius.circular(15)),
-                height: 100,
-                child: Text(
-                  '일과 / 일정',
-                  style:
-                      TextStyle(fontSize: 40, fontFamily: 'PretendardRegular'),
-                ),
-              )),
-          SizedBox(
-            height: 40,
-          ),
-          Text(
-            '계정',
-            style: TextStyle(
-                fontFamily: 'PretendardRegular',
-                fontSize: 24,
-                color: Color(0xff868686)),
-          ),
-          Container(
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(color: Color(0xff868686))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(width*0.05),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 45,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('기억친구 아띠',
+                      style: TextStyle(
+                          fontFamily: 'UhBee', fontSize: 25
+                      )
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context); // 이전 페이지로 돌아가기
+                    },
+                    child: Image.asset(
+                      'lib/assets/images/xButton.png',
+                      height: 25,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '나의 정보',
+                    style: TextStyle(fontSize: 24,
+                    color: _colorPallet.gray),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UserInfoEditPage()),
+                      );
+                    },
+                    child: Container(
+                      width: 60, // 버튼의 너비
+                      height: 27, // 버튼의 높이
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.all(Radius.circular(25))
+                      ),
+                      child: Center(
+                        child: Text(
+                          '수정',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.all(width*0.02),
+                child: Column(
                   children: [
-                    Text('${authController.userName}', style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'PretendardRegular'),),
-                    Text('${authController.userEmail}', style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'PretendardRegular')),
+                    // 사이즈 박스를 두 개 뱌치하기
+                    // 그 안에 줄 세우기
+                    SizedBox(height: 16),
+                    _infoRow('이름', _authController.userName.value, width*0.43),
+                    SizedBox(height: 16),
+                    _infoRow('생년월일', _authController.birthDate, width*0.43),
+                    SizedBox(height: 16),
+                    _infoRow('가족 및\n친한 지인', _authController.familyMember.value.join('\n'), width*0.43),
+                    SizedBox(height: 32),
                   ],
                 ),
-                GestureDetector(
-                    onTap: () async {
-                      try {
-                        await FirebaseAuth.instance.signOut();
-                        authController.logout();
-                        print(authController.userName);
-                        Get.offAll(() => LogInSignUpMainScreen());
-                      } catch (error) {
-                        print("로그아웃 실패: $error");
-                      }
-                    },
-                    //style: TextButton.styleFrom(backgroundColor: Colors.black, padding: EdgeInsets.all(20),),
-                    child: Container(
-                      padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(14)),
-                        child : Text(
-                      '로그아웃',
-                      style: TextStyle(fontFamily : 'PretendardMedium', fontSize: 20,color: Colors.white),
-                    )))
-              ],
-            ),
-          )
-        ],
+        
+              ),
+        
+              Text(
+                '연결된 계정',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 16),
+              // _buildAccountRow('최한별', '박민정', '아이디 isldkd', '보호자'),
+              // _buildAccountRow('김정연', '', '치매파트너', ''),
+              SizedBox(height: 32),
+              Center(
+                child: GestureDetector(
+                  onTap: () {
+                    _authController.logout();
+                  },
+                  child: Container(
+                    width: 111, // 버튼의 너비
+                    height: 60, // 버튼의 높이
+                    decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.all(Radius.circular(20))
+                    ),
+                    child: Center(
+                      child: Text(
+                        '로그아웃',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              Center(
+                child: GestureDetector(
+                  onTap: () {
+                    _authController.logout(); // 임의로 로그아웃되게 만듦
+                  },
+                    child: Center(
+                      child: Text(
+                        '회원탈퇴',
+                        style: TextStyle(
+                          color: _colorPallet.gray,
+                          fontSize: 20,
+                          decoration: TextDecoration.underline
+                    ),
+                  ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-    )));
+    );
   }
+
+  Widget _buildInfoRow(String title, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title, style: TextStyle(fontSize: 18)),
+        Text(value, style: TextStyle(fontSize: 18)),
+      ],
+    );
+  }
+  Widget _infoRow(String title, String value, double boxSize) {
+    return Row(
+      children: [
+        SizedBox(
+          width: boxSize,
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 24
+            ),
+          ),
+        ), // width * 0.43
+        SizedBox(
+          width: boxSize,
+          child: Text(
+            value,
+            style: TextStyle(
+                fontSize: 24
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Widget _AccountRow(String name, String secondaryName, String id, String relationship) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     children: [
+  //       Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Text(name, style: TextStyle(fontSize: 24)),
+  //           if (id.isNotEmpty) Text(id, style: TextStyle(color: Colors.grey)),
+  //         ],
+  //       ),
+  //       if (secondaryName.isNotEmpty) Text(secondaryName, style: TextStyle(fontSize: 18)),
+  //       if (relationship.isNotEmpty) Text(relationship, style: TextStyle(color: Colors.grey)),
+  //     ],
+  //   );
+  // }
 }
