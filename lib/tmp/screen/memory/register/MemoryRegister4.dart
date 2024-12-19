@@ -29,6 +29,11 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
   }
 
   @override
+  void initState() {
+    memoryNoteController.memoryNote.value.keyword = [];
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
@@ -78,6 +83,7 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
               child: TextButton(
                 onPressed: () {
                   memoryNoteController.memoryNote.value.keyword?.addAll(_values);
+                  print(memoryNoteController.memoryNote.value.keyword);
                   Navigator.push(context, MaterialPageRoute(builder: (context) => MemoryRegisterCheck()),);
                 },
                 child: Text('등록', style: TextStyle(color: Colors.white, fontSize: 20),),

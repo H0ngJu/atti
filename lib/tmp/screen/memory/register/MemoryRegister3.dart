@@ -157,10 +157,12 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
               memberIsSelected[index] = !memberIsSelected[index];
               if (memberIsSelected[index]) {
                 selectedMembers.add(familyMembers[index]);
-                memoryNoteController.memoryNote.value.keyword = selectedMembers;
+                memoryNoteController.memoryNote.value.selectedFamilyMember = selectedMembers;
+                print(memoryNoteController.memoryNote.value.selectedFamilyMember);
               } else {
                 selectedMembers.remove(familyMembers[index]);
-                memoryNoteController.memoryNote.value.keyword = selectedMembers;
+                memoryNoteController.memoryNote.value.selectedFamilyMember = selectedMembers;
+                print(selectedMembers);
               }
             });
           },

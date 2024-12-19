@@ -165,14 +165,14 @@ class _MainGalleryState extends State<MainMemory>
     } else if (_selectedCategory == 1) {
       // 인물 기준으로 그룹화
       groupedNotes = {};
-      for (var memory in notes) {
-        memory.selectedFamilyMember?.forEach((member, isSelected) {
-          if (isSelected == true) {
-            // true 값만 필터링
-            groupedNotes.putIfAbsent(member, () => []).add(memory);
-          }
-        });
-      }
+      // for (var memory in notes) {
+      //   memory.selectedFamilyMember?.forEach((member, isSelected) {
+      //     if (isSelected == true) {
+      //       // true 값만 필터링
+      //       groupedNotes.putIfAbsent(member, () => []).add(memory);
+      //     }
+      //   });
+      // }
 
       for (var memory in notes) {
         print("Memory selectedFamilyMember: ${memory.selectedFamilyMember}");
