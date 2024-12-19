@@ -1,4 +1,5 @@
 import 'package:atti/data/memory/RecollectionData.dart';
+import 'package:atti/patient/screen/memory/MemoryAlbum.dart';
 import 'package:atti/tmp/screen/memory/gallery/RecollectionDetail.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/memory/memory_note_model.dart';
 import 'package:atti/data/memory/memory_note_service.dart';
 import 'package:atti/patient/screen/memory/AddButton.dart';
+import 'package:atti/patient/screen/memory/MemoryAlbum.dart';
 import 'package:atti/tmp/screen/memory/gallery/MemoryDetail.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'dart:math';
@@ -444,8 +446,13 @@ class _MainGalleryState extends State<MainMemory>
 
   // 연도 메모리 카드
   Widget _buildMemoryCard(MemoryNoteModel memory, int MemoryCnt) {
+    String groupKey = groupedNotes.entries
+        .firstWhere((entry) => entry.value.contains(memory))
+        .key;
+    List<MemoryNoteModel> group = groupedNotes[groupKey]!; // 앨범 목록 전달
+
     return GestureDetector(
-      onTap: () => Get.to(MemoryDetail(memory: memory)),
+      onTap: () => Get.to(MemoryAlbum(memoryKey: groupKey, group: group,)),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
@@ -511,8 +518,10 @@ class _MainGalleryState extends State<MainMemory>
 
   // 좋아하는 기억 메모리 카드
   Widget _buildFavoriteMemoryCard(MemoryNoteModel memory, int MemoryCnt, String groupKey) {
+    List<MemoryNoteModel> group = groupedNotes[groupKey]!;
+
     return GestureDetector(
-      onTap: () => Get.to(MemoryDetail(memory: memory)),
+      onTap: () => Get.to(MemoryAlbum(memoryKey: groupKey, group: group,)),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
