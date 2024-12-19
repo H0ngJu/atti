@@ -2,6 +2,7 @@ import 'package:atti/data/report/reportController.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class AuthController extends GetxController {
   String? loggedUser = FirebaseAuth.instance.currentUser?.uid;
@@ -11,6 +12,8 @@ class AuthController extends GetxController {
   RxList<String> familyMember = <String>[].obs;
   DocumentReference? patientDocRef;
   RxString patientName = "".obs;
+  Timestamp unformattedBirthDate = Timestamp.now(); // 더미
+  late String birthDate;
   var carerReports; // = ReportController().getReport();
 
   @override
@@ -31,6 +34,8 @@ class AuthController extends GetxController {
         isPatient = userDoc['isPatient'];
         userName.value = userDoc['userName'];
         userEmail.value = userDoc['userEmail'];
+        unformattedBirthDate = userDoc['birthDate'];
+        birthDate = DateFormat('yyyy.MM.dd').format(unformattedBirthDate.toDate());
         // 환자일 경우 : patientDocRef는 본인의 reference, familymember 초기화 필요
         if (isPatient) {
           familyMember.value = List<String>.from(userDoc['familyMember']);
@@ -74,6 +79,7 @@ class AuthController extends GetxController {
       patientDocRef = null;
       patientName.value = "";
       carerReports = null;
+      birthDate = '';
       print("로그아웃 성공!");
       // 상태 업데이트
       update();
