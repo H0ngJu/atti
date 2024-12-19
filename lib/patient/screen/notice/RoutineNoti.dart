@@ -1,22 +1,23 @@
+import 'package:atti/patient/screen/routine_schedule/RoutineScheduleMain.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import '../../../commons/ScheduleModal.dart';
+import '../../../commons/colorPallet.dart';
 import '../../../data/notification/notification_controller.dart';
 import '../../../data/routine/routine_controller.dart';
 import '../../../data/routine/routine_model.dart';
 import '../../../data/routine/routine_service.dart';
+import '../../../data/schedule/schedule_model.dart';
+import 'package:atti/data/schedule/schedule_service.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
+import '../../../data/notification/notification.dart';
+import 'package:atti/data/notification/notification_controller.dart';
 import 'dart:math';
 
-// 이미지 파일 이름 목록
-List<String> imageNames = [
-  'EatingStar.png',
-  'Napping.png',
-  'ReadingBook.png',
-  'Coffee.png',
-  'Soccer.png',
-  'Walking.png',
-];
+import '../routine_schedule/CustomModal.dart';
 
 class RoutineNoti extends StatefulWidget {
   const RoutineNoti({super.key, required this.docRef});
@@ -24,17 +25,17 @@ class RoutineNoti extends StatefulWidget {
   final String docRef;
 
   @override
-  State<RoutineNoti> createState() => _RoutineNotiState();
+  State<RoutineNoti> createState() => _ScheduleNoti1State();
 }
 
-class _RoutineNotiState extends State<RoutineNoti> {
+class _ScheduleNoti1State extends State<RoutineNoti> {
   final RoutineController routineController = Get.put(RoutineController());
   final firestore = FirebaseFirestore.instance;
   final storage = FirebaseStorage.instance;
   RoutineModel? routine;
+  NotificationService notificationService = NotificationService();
 
-  // 랜덤 이미지 파일 이름 선택
-  Random random = Random();
+  final ColorPallet colorPallet = Get.put(ColorPallet());
 
   String formatTime(List<int> time) {
     String period = "오전";
@@ -49,10 +50,26 @@ class _RoutineNotiState extends State<RoutineNoti> {
     return formattedTime;
   }
 
+  // 현재 시간을 '오후 08:30' 형식으로 출력
+  String getCurrentFormattedTime() {
+    DateTime now = DateTime.now();
+    String period = now.hour >= 12 ? "오후" : "오전";
+    int hour = now.hour > 12 ? now.hour - 12 : (now.hour == 0 ? 12 : now.hour);
+    String minute = now.minute.toString().padLeft(2, '0');
+    return "$period ${hour.toString().padLeft(2, '0')}:${minute}";
+  }
+
   Future<void> _fetchData() async {
+    if (widget.docRef.isEmpty) {
+      print("문서 참조가 비어있습니다.");
+      return;
+    }
+
     try {
-      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-          await firestore.collection('routine').doc(widget.docRef).get();
+      DocumentSnapshot<Map<String, dynamic>> docSnapshot = await firestore
+          .collection('routine')
+          .doc(widget.docRef)
+          .get();
 
       if (docSnapshot.exists) {
         routine = RoutineModel.fromSnapShot(docSnapshot);
@@ -68,7 +85,9 @@ class _RoutineNotiState extends State<RoutineNoti> {
   @override
   void initState() {
     super.initState();
-    _fetchData();
+    Future.delayed(Duration.zero, () async {
+      await _fetchData();
+    });
   }
 
   @override
@@ -76,141 +95,171 @@ class _RoutineNotiState extends State<RoutineNoti> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    String randomImageName = imageNames[random.nextInt(imageNames.length)];
-
     return Scaffold(
-        body: Stack(children: [
-          Positioned.fill(
-            child: Image.asset(
-              'lib/assets/images/background_image.png'
-            ),
+      backgroundColor: Color(0xffFFF7E3),
+      body: Stack(children: [
+        Positioned.fill(
+          child: Image.asset(
+            'lib/assets/images/background_image.jpg',
+            fit: BoxFit.cover,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: height * 0.05,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: width * 0.1,
+            ),
+            // 기억친구 아띠 로고
+            Container(
+              alignment: Alignment.center,
+              child: Image.asset(
+                  'lib/assets/logo3.png',
+                  width: width * 0.38,
+                  fit: BoxFit.fitWidth),
+            ),
+            SizedBox(
+              height: width * 0.1,
+            ),
+            // 현재 시간
+            Text(
+              formatTime(routine?.time ?? [0,0]),
+              style: TextStyle(
+                fontSize: 43,
+                //height: 1.0
               ),
-              Container(
-                alignment: Alignment.center,
-                child: Image.asset('lib/assets/logo3.png',
-                    height: height * 0.04, fit: BoxFit.fitWidth),
+            ),
+            Text(
+              DateFormat('MM월 dd일 EEEE', 'ko').format(DateTime.now()),
+              style: TextStyle(
+                  fontSize: 24,
+                  height: 1.0
               ),
-              SizedBox(
-                height: height * 0.02,
-              ),
-              Container(
-                alignment: Alignment.center,
-                child: Image.asset('lib/assets/Atti/$randomImageName',
-                    height: height * 0.26, fit: BoxFit.fitHeight),
-              ),
-              SizedBox(
-                height: height * 0.03,
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                  formatTime(routine?.time ?? [0, 0]),
-                  style: TextStyle(
-                      fontSize: 24,
-                      color: Color(0xffA38130),
-                      fontWeight: FontWeight.w500),
-                ),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Color(0xffFFECB5)),
-                  overlayColor: MaterialStateProperty.all(
-                      Colors.transparent), // 클릭 시 효과나 모션 없애기
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  )),
-                  visualDensity: VisualDensity(vertical: -1),
-                ),
-              ),
-              SizedBox(
-                height: height * 0.02,
-              ),
-              Container(
-                child: Column(
-                  children: [
-                    //SizedBox(height: height * 0.02,),
-                    Text(
-                      '일과를 할 시간이에요',
-                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      '\'${routine?.name ?? ''}\'',
-                      style: TextStyle(
-                          fontSize: 28,
-                          color: Color(0xffA38130),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      height: height * 0.02,
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: width * 0.8,
-                      height: height * 0.23,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Image.network(
-                          routine?.img ?? 'https://ifh.cc/g/cjfDPm.png',
-                          width: double.infinity,
-                          height: double.infinity,
-                          fit: BoxFit.cover,
-                          alignment: Alignment.center,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: height * 0.04,
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        DocumentReference<Object?> documentReference =
-                            firestore.doc('routine/${widget.docRef}');
-                        DateTime now = DateTime.now();
-                        DateTime FormattedTime =
-                            DateTime(now.year, now.month, now.day);
-                        print(FormattedTime);
+            ),
+            SizedBox(height: width * 0.13,),
 
-                        await RoutineService()
-                            .completeRoutine(documentReference, FormattedTime);
+            // 아띠 말고 사진으로
+            Container(
+              alignment: Alignment.center,
+              width: width * 0.68,
+              height: width * 0.68,
+              child: Container(
+                child: ClipOval(
+                  child: routine != null && routine!.img != null
+                      ? Image.network(
+                    routine!.img!,
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  )
+                      : Container(),
+                ),
+              ),
+            ),
+
+            SizedBox(height: width * 0.02,),
+            Container(
+              child: Column(
+                children: [
+                  SizedBox(height: height * 0.02,),
+                  Text(
+                    '지금',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(width: width * 0.06,),
+                  Text(
+                    '\'${routine?.name}\'',
+                    style: TextStyle(
+                        fontSize: 28,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(
+                    height: width * 0.05,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: width * 0.05,),
+            Container(
+              width: width * 0.52,
+              child: TextButton(
+                onPressed: () {
+                  // 일과 완료 모달창
+                  showDialog(
+                    context: context,
+                    builder: (_) => CustomModal(
+                      title: "'${routine!.name}'\n일과를 완료하셨나요?",
+                      yesButtonColor: colorPallet.orange,
+                      onYesPressed: () async {
+                        await RoutineService().completeRoutine(routine!.reference!, DateTime.now());
                         await addNotification(
                             '하루 일과 알림',
-                            '${authController.userName}님이 \'${routine?.name ?? ''}\' 일과를 완료하셨어요!',
+                            '${authController.userName}님이 \'${routine!.name}\' 일과를 완료하셨어요!',
                             DateTime.now(),
                             false);
-                        await addFinishNotification(
-                            '하루 일과 알림',
-                            '${authController.userName}님이 \'${routine?.name ?? ''}\' 일과를 완료하셨어요!',
-                            DateTime.now(),
-                            false);
-
-                        // 완료 로직
+                        // widget.onCompleted(); // 콜백 함수 호출
+                        Navigator.pop(context);
                       },
-                      child: Text(
-                        '완료했어요',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Color(0xffFFC215)),
-                        minimumSize:
-                            MaterialStateProperty.all(Size(width * 0.55, 40)),
-                      ),
+                      onNoPressed: () {
+                        Navigator.pop(context);
+                      },
                     ),
-                    SizedBox(
-                      height: height * 0.02,
-                    )
-                  ],
+                  );
+
+                  //SystemNavigator.pop();
+                },
+                child: Text(
+                  '완료했어요',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                  ),
                 ),
-              )
-            ],
-          ),
-    ]));
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(colorPallet.orange),
+                  minimumSize: WidgetStateProperty.all(Size(width * 0.55, 40)),
+                  padding: WidgetStateProperty.all(
+                    EdgeInsets.symmetric(vertical: 10), // 위아래 패딩 추가
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: width * 0.13,),
+            Center(
+              child: SizedBox(
+                width: width * 0.13,
+                height: width * 0.13,
+                child: TextButton(
+                  onPressed: () {
+                    Get.to(RoutineScheduleMain());
+                  },
+                  child: Icon(
+                      Icons.close,
+                      color: Colors.black
+                  ),
+                  style: ButtonStyle(
+                      shape: WidgetStateProperty.all(
+                          CircleBorder(
+                              side: BorderSide(
+                                  color: Colors.black,
+                                  width: 1
+                              )
+                          )
+                      ),
+                      backgroundColor: WidgetStateProperty.all(
+                        Colors.white.withOpacity(0.5),
+                      )
+                  ),
+                ),
+              ),
+            )
+
+
+          ],
+        ),
+      ]),
+    );
   }
 }
