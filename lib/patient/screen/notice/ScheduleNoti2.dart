@@ -24,16 +24,16 @@ List<String> imageNames = [
   'Walking.png',
 ];
 
-class ScheduleNoti1 extends StatefulWidget {
-  const ScheduleNoti1({super.key, required this.docRef});
+class ScheduleNoti2 extends StatefulWidget {
+  const ScheduleNoti2({super.key, required this.docRef});
 
   final String docRef;
 
   @override
-  State<ScheduleNoti1> createState() => _ScheduleNoti1State();
+  State<ScheduleNoti2> createState() => _ScheduleNoti2State();
 }
 
-class _ScheduleNoti1State extends State<ScheduleNoti1> {
+class _ScheduleNoti2State extends State<ScheduleNoti2> {
   final firestore = FirebaseFirestore.instance;
   final storage = FirebaseStorage.instance;
   ScheduleModel? schedule;
@@ -161,26 +161,15 @@ class _ScheduleNoti1State extends State<ScheduleNoti1> {
                 children: [
                   SizedBox(height: height * 0.02,),
                   Text(
-                    '1시간 뒤',
+                    '지금',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '${getFormattedTime('future')}',
-                        style:
-                        TextStyle(fontSize: 24, color: Colors.black),
-                      ),
-                      SizedBox(width: width * 0.06,),
-                      Text(
-                        '\'${schedule?.name}\'',
-                        style: TextStyle(
-                            fontSize: 28,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ],
+                  Text(
+                    '\'${schedule?.name}\'',
+                    style: TextStyle(
+                        fontSize: 28,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500),
                   ),
                   SizedBox(
                     height: width * 0.05,
@@ -213,42 +202,18 @@ class _ScheduleNoti1State extends State<ScheduleNoti1> {
               ),
             ),
             SizedBox(height: width * 0.05,),
-            Container(
-              width: width * 0.52,
-              child: TextButton(
-                onPressed: () {
-                  // 일정 모달창
-                  showDialog(
-                      context: context,
-                      builder: (_) {
-                        return ScheduleModal(
-                          time: DateFormat('a hh:mm', 'ko_KR').format(
-                              schedule!.time!.toDate()),
-                          location: schedule!.location!,
-                          name: schedule!.name!,
-                          memo: schedule!.memo,
-                          docRef: schedule!.reference!,
-                        );
-                      });
 
-                  //SystemNavigator.pop();
-                },
-                child: Text(
-                  '자세히 알려줘',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                  ),
-                ),
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(colorPallet.goldYellow),
-                  minimumSize: WidgetStateProperty.all(Size(width * 0.55, 40)),
-                  padding: WidgetStateProperty.all(
-                    EdgeInsets.symmetric(vertical: 10), // 위아래 패딩 추가
-                  ),
-                ),
+            // 문구
+            Text(
+              '오늘을 기억하기 위해서\n이곳에서 예쁜 사진을 찍어두면\n좋을 것 같아요',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 24,
+                  height: 1.2
               ),
+
             ),
+
             SizedBox(height: width * 0.13,),
             Center(
               child: SizedBox(

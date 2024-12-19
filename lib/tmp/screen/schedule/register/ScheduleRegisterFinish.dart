@@ -97,19 +97,19 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
                     '일정 알림',
                     '\'${updatedSchedule.name}\'일정을(를) 진행하고 있나요?',
                     //updatedSchedule.time!.toDate(),
-                    updatedSchedule.time!.toDate().subtract(Duration(minutes:30)),
+                    updatedSchedule.time!.toDate().subtract(Duration(minutes:58)),
                     '/schedule2/${updatedSchedule.reference!.id}',
                   );
 
                   // 일정 1시간 뒤 알림
-                  await notificationService.showDateTimeNotification(
-                    notificationService.createUniqueId(),
-                    '일정 알림',
-                    '\'${updatedSchedule.name}\'일정의 기억 사진을 남길까요?',
-                    updatedSchedule.time!.toDate().add(Duration(hours: 1)),
-                    //schedule!.time!.toDate().subtract(Duration(minutes:58)),
-                    '/schedule3/${updatedSchedule.reference!.id}',
-                  );
+                  // await notificationService.showDateTimeNotification(
+                  //   notificationService.createUniqueId(),
+                  //   '일정 알림',
+                  //   '\'${updatedSchedule.name}\'일정의 기억 사진을 남길까요?',
+                  //   updatedSchedule.time!.toDate().add(Duration(hours: 1)),
+                  //   //schedule!.time!.toDate().subtract(Duration(minutes:58)),
+                  //   '/schedule3/${updatedSchedule.reference!.id}',
+                  // );
 
                 }
                 Get.to(RoutineScheduleMain());

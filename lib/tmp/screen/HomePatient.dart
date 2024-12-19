@@ -33,6 +33,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 
 import '../../patient/screen/notice/RoutineNoti.dart';
 import '../../patient/screen/notice/ScheduleNoti1.dart';
+import '../../patient/screen/notice/ScheduleNoti2.dart';
 import 'Notice/FullScreenSchedule2.dart';
 import 'Notice/FullScreenSchedule3.dart';
 
@@ -106,7 +107,7 @@ class _HomePatientState extends State<HomePatient> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => FullScreenSchedule2(docRef: docRef)),
+                builder: (context) => ScheduleNoti2(docRef: docRef)),
           );
         } else if (payload.startsWith('/schedule3/')) {
           String docRef = payload.substring('/schedule3/'.length);
