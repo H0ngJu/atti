@@ -5,33 +5,43 @@
 //                   name: scheduleController.name.value,
 //                   location: scheduleController.location.value,
 //                 ),
+import 'package:atti/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 
-import '../patient/screen/routine_schedule/ScheduleFinishModal.dart';
+import '../patient/screen/routine_schedule/CustomModal.dart';
+import '../patient/screen/routine_schedule/RoutineShceduleFinish.dart';
+import 'colorPallet.dart';
 
 class ScheduleBox extends StatefulWidget {
+  final Function onCompleted; // 콜백 함수 추가
+
   const ScheduleBox(
       {super.key,
         this.time,
         this.name,
         this.location,
-        this.isFinished,
-        this.docRef});
+        required this.isFinished,
+        this.docRef,
+        required this.isEditMode,
+        required this.onCompleted,
+      });
 
   final String? time;
   final String? name;
   final String? location;
-  final bool? isFinished;
+  final bool isFinished;
   final DocumentReference? docRef;
+  final bool isEditMode;
 
   @override
   State<ScheduleBox> createState() => _ScheduleBoxState();
 }
 
 class _ScheduleBoxState extends State<ScheduleBox> {
-  bool isChecked = false;
+  final ColorPallet colorPallet = Get.put(ColorPallet());
 
   @override
   Widget build(BuildContext context) {
@@ -44,56 +54,151 @@ class _ScheduleBoxState extends State<ScheduleBox> {
           children: [
 
             // 완료용 토글 버튼
-            GestureDetector(
+            widget.isEditMode
+            ? GestureDetector(
               onTap: () {
-                setState(() {
-                  isChecked = !isChecked; // 클릭 시 체크 상태를 토글
-                });
                 showDialog(
                     context: context,
-                    builder: (_) {
-                      return ScheduleFinishModal(
-                        time: widget.time ?? '',
-                        location: widget.location ?? '',
-                        name: widget.name!,
-                        docRef: widget.docRef!,
-                      );
-                    });
+                    builder: (_) => CustomModal(
+                        title: '\'${widget.name}\'\n일정을 삭제할까요?',
+                        yesButtonColor: colorPallet.orange,
+                        onYesPressed: () async {
+                          await ScheduleService().deleteSchedule(widget.docRef!);
+                          widget.onCompleted(); // 콜백 함수 호출
+
+                          Navigator.pop(context); // 모달창 닫기
+                        },
+                        onNoPressed: () {
+                          Navigator.pop(context);
+                        })
+                );
+              },
+              child: Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: colorPallet.orange,
+                  shape: BoxShape.circle
+                ),
+                child: Center(
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 15
+                  ),
+                ),
+              ),
+            )
+            : GestureDetector(
+              onTap: () {
+                if (!widget.isFinished) { // 완료여부 false일때만 동작
+                  showDialog(
+                      context: context,
+                      builder: (_) {
+                        return CustomModal(
+                          title: '\'${widget.name}\'\n일정을 완료하셨나요?',
+                          yesButtonColor: colorPallet.orange,
+                          onYesPressed: () async {
+                            await ScheduleService().completeSchedule(widget.docRef!);
+
+                            await addNotification(
+                                '일정 알림',
+                                '${authController.userName}님이 \'${widget.name}\' 일정을 완료하셨어요!',
+                                DateTime.now(),
+                                false);
+
+                            Navigator.pop(context);
+
+                            showDialog(
+                              context: context,
+                              builder: (_) => CustomModal(
+                                title: "'${widget.name}'을\n내 기억에 남길까요?",
+                                yesButtonColor: colorPallet.goldYellow,
+                                onYesPressed: () {
+                                  Get.to(MemoryRegister1());
+                                },
+                                onNoPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RoutineScheduleFinish(
+                                        name: widget.name,
+                                        category: 'schedule',
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+
+                          },
+                          onNoPressed: () {
+                            Navigator.pop(context);
+                          },
+                        );
+                      });
+                }
               },
               child: CustomPaint(
                 painter: DottedCirclePainter(),
                 child: Container(
-                  width: 45,
-                  height: 45,
+                  width: width * 0.12,
+                  height: width * 0.12,
                   alignment: Alignment.center,
-                  child: isChecked
-                      ? const Icon(
+                  child: widget.isFinished
+                  ? const Icon(
                     Icons.check,
                     color: Colors.black,
                     size: 30,
                   )
-                      : null,
+                    : null,
                 ),
               ),
             ),
-            SizedBox(width: width * 0.07,),
 
-            // 일과 시간
-            Text(
-              widget.time ?? '-',
-              style: TextStyle(
-                fontSize: 28,
+            SizedBox(width: width * 0.06,),
+
+            // 일정 시간
+            Container(
+              decoration: BoxDecoration(
+                color: widget.isEditMode ? colorPallet.lightGrey : Colors.transparent,
+                borderRadius: BorderRadius.circular(15), // 외곽선을 15만큼 둥글게
+              ),
+              padding: widget.isEditMode
+                  ? EdgeInsets.fromLTRB(8, 7, 8, 7)
+                  : EdgeInsets.zero,
+              child: Text(
+                widget.time ?? '-',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 28,
+                ),
               ),
             ),
-            SizedBox(width: width * 0.1,),
+            widget.isEditMode ? SizedBox(width: width * 0.03,) : SizedBox(width: width * 0.08),
 
-            // 일과 제목
-            Text(
-              widget.name ?? '',
-              style: TextStyle(
-                fontSize: 28,
+            // 일정 제목
+            Expanded( // Row 내부에서 텍스트를 유연하게 줄이기 위해 Expanded 사용
+              child: Container(
+                decoration: BoxDecoration(
+                  color: widget.isEditMode ? colorPallet.lightGrey : Colors.transparent,
+                  borderRadius: BorderRadius.circular(15), // 외곽선을 15만큼 둥글게
+                ),
+                padding: widget.isEditMode
+                    ? EdgeInsets.fromLTRB(8, 7, 8, 7)
+                    : EdgeInsets.zero,
+                child: Text(
+                  widget.name ?? '',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 28,
+                  ),
+                  overflow: TextOverflow.ellipsis, // overflow 발생 시 ... 표시
+                  maxLines: 1, // 한 줄로 제한
+                  softWrap: false, // 텍스트 줄바꿈 비활성화
+                ),
               ),
-            )
+            ),
           ],
         ));
   }

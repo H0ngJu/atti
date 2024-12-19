@@ -21,7 +21,9 @@ Widget AttiSpeechBubble({
             style: TextStyle(
                 color: Colors.black,
                 fontFamily: 'UhBee',
-                fontSize: 24)
+                fontSize: 24,
+                height: 1.7
+            )
         ),
       ),
       clipper: MyClipper(),
