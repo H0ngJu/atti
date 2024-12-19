@@ -128,7 +128,7 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
+                        backgroundColor: _familyMemberController.text.isNotEmpty ? _colorPallet.goldYellow : Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -136,7 +136,9 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                       ),
                       child: Text(
                         '등록',
-                        style: TextStyle(color: Colors.black, fontSize: 15),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15),
                       ),
                     ),
                   ],
