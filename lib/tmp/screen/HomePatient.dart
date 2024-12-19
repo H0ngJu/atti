@@ -588,9 +588,9 @@ class _HomePatientTopState extends State<HomePatientTop> {
                     Get.to(TodayToDo());
                   },
                   style: TextButton.styleFrom(
-                    backgroundColor: Colors.black, // 배경색
+                    backgroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15), // 모서리 둥글기
+                      borderRadius: BorderRadius.circular(15),
                     ),
                   ),
                   child: Padding(
