@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atti/data/routine/routine_controller.dart';
 import '../../../../commons/RoutineBox2.dart';
-import '../../RoutineScheduleMain.dart';
+import '../../../../patient/screen/routine_schedule/RoutineScheduleMain.dart';
 import '../RoutineMain.dart';
 import 'dart:io';
 

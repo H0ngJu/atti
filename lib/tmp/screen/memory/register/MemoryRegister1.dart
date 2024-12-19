@@ -37,16 +37,34 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
     var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            '기억 남기기',
+            style: TextStyle(
+              fontSize: 24,
+            ),
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
         body: Column(
       children: [
         Expanded(
           child: Column(
             children: [
-              DetailPageTitle(
-                title: '기억하기',
-                description: '기억할 사진을 선택해주세요',
-                totalStep: 4,
-                currentStep: 1,
+              Container(
+                  child: Text(
+                      '사진을 추가할 방식을\n선택해주세요',
+                    style: TextStyle(
+                      fontSize: 30,
+                    ),
+                  ),
+                alignment: Alignment.topLeft,
+                padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.05),
               ),
               SizedBox(
                 height: height * 0.04,
@@ -58,7 +76,7 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                       //height: 280,
                       child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄움
                     )
-                  : Row(
+                  : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
@@ -67,18 +85,19 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                           },
                           child: Container(
                             alignment: Alignment.center,
-                            width: MediaQuery.of(context).size.width * 0.4,
+                            width: MediaQuery.of(context).size.width * 0.9,
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.black, width: 1),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                             child: Column(
                               children: [
-                                SizedBox(height: height * 0.06,),
-                                Text('카메라', style: TextStyle(fontSize: 28, ),),
-                                SizedBox(height: height * 0.02,),
-                                Text('지금 사진을\n찍을까요?', style: TextStyle(fontSize: 20),),
-                                SizedBox(height: height * 0.07,),
+                                Row(
+                                  children: [
+                                    Text('카메라로 사진 찍기', style: TextStyle(fontSize: 24, ),),
+                                    Image.asset('lib/assets/images/register_memory_camera.png'),
+                                  ],
+                                ),
                               ],
                             )
                           ),
@@ -90,25 +109,23 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                         },
                         child: Container(
                             alignment: Alignment.center,
-                            width: MediaQuery.of(context).size.width * 0.4,
+                            width: MediaQuery.of(context).size.width * 0.9,
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black, width: 1),
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Column(
                               children: [
-                                SizedBox(height: height * 0.06,),
-                                Text('갤러리', style: TextStyle(fontSize: 28, ),),
-                                SizedBox(height: height * 0.02,),
-                                Text('찍어둔 사진이\n있나요?', style: TextStyle(fontSize: 20),),
-                                SizedBox(height: height * 0.07,),
+                                Row(
+                                  children: [
+                                    Text('앨범에서 불러오기', style: TextStyle(fontSize: 24, ),),
+                                    Image.asset('lib/assets/images/register_memory_album.png'),
+                                  ],
+                                ),
                               ],
                             )
                         ),
                       ),
-
-
-
                     ],
                   ),
             ],

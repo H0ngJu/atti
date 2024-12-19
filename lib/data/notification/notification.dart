@@ -149,6 +149,8 @@ class NotificationService {
     tz.initializeTimeZones();
     tz.TZDateTime scheduledDate = tz.TZDateTime.from(dateTime, tz.getLocation('Asia/Seoul'));
 
+    print('showDateTimeNotification 함수 내부');
+
     final AndroidNotificationDetails androidNotificationDetails =
     AndroidNotificationDetails(
       'channel id',
@@ -160,25 +162,31 @@ class NotificationService {
       vibrationPattern: Int64List.fromList([0, 1000, 500, 1000]),
     );
 
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduledDate,
-      const NotificationDetails(android: AndroidNotificationDetails(
-        'channel id',
-        'channel name',
-        channelDescription: 'full screen channel description',
-        priority: Priority.high,
-        importance: Importance.high,
-        fullScreenIntent: true,
-      )),
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.absoluteTime,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      payload: payload
-    );
+    try {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        id,
+        title,
+        body,
+        scheduledDate,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            'channel id',
+            'channel name',
+            channelDescription: 'full screen channel description',
+            priority: Priority.high,
+            importance: Importance.high,
+            fullScreenIntent: true,
+          ),
+        ),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        payload: payload,
+      );
+      print('알림 예약 성공');
+    } catch (e) {
+      print('알림 예약 실패: $e');
+    }
 
     await addNotification(title, body, dateTime, authController.isPatient); // 알림 보낸 후 파이어베이스에 저장
   }
@@ -234,6 +242,7 @@ class NotificationService {
               routineTime,
               '/routine/${routine.reference!.id}'
           );
+          print("루틴 알림 예약 완료");
         }
       }
     }
