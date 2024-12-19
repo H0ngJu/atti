@@ -1,5 +1,6 @@
 import 'package:atti/data/memory/RecollectionData.dart';
 import 'package:atti/tmp/screen/memory/gallery/RecollectionDetail.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,8 @@ import 'package:atti/patient/screen/memory/AddButton.dart';
 import 'package:atti/tmp/screen/memory/gallery/MemoryDetail.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'dart:math';
+
+import '../../../data/report/viewsController.dart';
 
 class MainMemory extends StatefulWidget {
   const MainMemory({Key? key}) : super(key: key);
@@ -26,16 +29,15 @@ class _MainGalleryState extends State<MainMemory>
   final FlutterTts flutterTts = FlutterTts();
   late RecollectionData _randomData;
 
-  late TabController _tabController;
   Map<String, List<MemoryNoteModel>> groupedNotes = {};
   bool isLoading = true;
   int _selectedIndex = 0;
+  int _selectedCategory = 0;
+  final List<String> categories = ["연도", "인물", "좋아하는 기억"];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
-    _tabController.addListener(_onTabChanged);
     _randomData = dummyData[Random().nextInt(dummyData.length)];
     fetchData();
     _speak();
@@ -47,64 +49,143 @@ class _MainGalleryState extends State<MainMemory>
     await flutterTts.speak("사진을 눌러 그 기억에 대해 이야기해요");
   }
 
-  void _onTabChanged() {
+  Future<void> fetchData() async {
+    if (_selectedCategory == 2) {
+      fetchFavoriteMemories().then((favoriteMemories) {
+        if (mounted) {
+          setState(() {
+            groupedNotes = favoriteMemories;
+            isLoading = false;
+          });
+        }
+      });
+    } else {
+      List<MemoryNoteModel> fetchedNotes =
+          await memoryNoteService.getMemoryNote();
+      _groupNotes(fetchedNotes);
+    }
+  }
+
+  Future<Map<String, List<MemoryNoteModel>>> fetchFavoriteMemories() async {
+    final Map<String, List<MemoryNoteModel>> groupedMemories = {};
+    final Map<DocumentReference, int> totalViews = {};
+
+    try {
+      final QuerySnapshot<Map<String, dynamic>> viewsSnapshot =
+      await FirebaseFirestore.instance.collection('views').get();
+
+      for (var doc in viewsSnapshot.docs) {
+        final data = doc.data();
+
+        // 총 조회수 구하기
+        // memoryViews의 키를 DocumentReference로 변환하고 조회수 합산
+        if (data['memoryViews'] != null) {
+          (data['memoryViews'] as Map<String, dynamic>).forEach((key, value) {
+            final memoryRef = FirebaseFirestore.instance.doc(key);
+            final views = value as int;
+
+            // 기존 조회수에 누적
+            totalViews[memoryRef] = (totalViews[memoryRef] ?? 0) + views;
+          });
+        }
+      }
+
+      // 총 조회수를 기준으로 그룹화
+      for (var entry in totalViews.entries) {
+        final memoryRef = entry.key;
+        final totalViewCount = entry.value;
+
+        // 데이터가 안모여 있어서 일단 조회수 10회 기준으로 설정
+        if (totalViewCount >= 10) {
+          int rangeStart = (totalViewCount ~/ 10) * 10;
+          int rangeEnd = rangeStart + 9;
+          String groupKey = "$rangeStart번 이상 조회";
+
+          DocumentSnapshot<Map<String, dynamic>> memoryDoc =
+          await memoryRef.get() as DocumentSnapshot<Map<String, dynamic>>;
+
+          if (memoryDoc.exists) {
+            MemoryNoteModel memory = MemoryNoteModel.fromSnapShot(memoryDoc);
+            groupedMemories.putIfAbsent(groupKey, () => []).add(memory);
+          }
+        }
+      }
+
+      // key로 정렬
+      final sortedKeys = groupedMemories.keys.toList()
+        ..sort((a, b) {
+          int rangeStartA = int.parse(a.split('번').first);
+          int rangeStartB = int.parse(b.split('번').first);
+          return rangeStartB.compareTo(rangeStartA);
+        });
+      final sortedGroupedMemories = Map<String, List<MemoryNoteModel>>.fromEntries(
+        sortedKeys.map((key) => MapEntry(key, groupedMemories[key]!)),
+      );
+
+      // 출력 결과 확인
+      print("좋아하는 기억 데이터:");
+      sortedGroupedMemories.forEach((key, value) {
+        print('$key:');
+        value.forEach((memory) {
+          print(memory); // MemoryNoteModel의 toString 메서드 호출
+        });
+      });
+      return sortedGroupedMemories;
+    } catch (e) {
+      print('ERROR');
+      return {};
+    }
+  }
+
+  Future<void> _groupNotes(List<MemoryNoteModel> notes) async {
     setState(() {
       isLoading = true;
     });
-    fetchData();
-  }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      // 해당 인덱스로 페이지 변경
-    });
-  }
+    if (_selectedCategory == 0) {
+      // 연도 기준으로 그룹화
+      groupedNotes = groupBy(
+        notes,
+            (memory) => memory.era?.toString() ?? '기타', // era 데이터가 없는 경우 '기타' 처리
+      );
 
-  Future<void> fetchData() async {
-    List<MemoryNoteModel> fetchedNotes =
-        await memoryNoteService.getMemoryNote();
-    _groupNotes(fetchedNotes);
-  }
+      // 키를 연도로 변환 후 내림차순 정렬
+      groupedNotes = Map.fromEntries(
+        groupedNotes.entries.toList()
+          ..sort((a, b) {
+            // '기타'는 마지막에 배치
+            if (a.key == '기타') return 1;
+            if (b.key == '기타') return -1;
 
-  void _groupNotes(List<MemoryNoteModel> notes) {
-    setState(() {
-      if (_tabController.index == 0) {
-        // 연도 기준으로 그룹화
-        groupedNotes = groupBy(
-          notes,
-          (memory) => memory.era?.toString() ?? '기타', // era 데이터가 없는 경우 '기타' 처리
-        );
-
-        // 키를 연도로 변환 후 내림차순 정렬
-        groupedNotes = Map.fromEntries(
-          groupedNotes.entries.toList()
-            ..sort((a, b) {
-              // '기타'는 마지막에 배치
-              if (a.key == '기타') return 1;
-              if (b.key == '기타') return -1;
-
-              return int.parse(b.key).compareTo(int.parse(a.key));
-            }),
-        );
-      } else if (_tabController.index == 1) {
-        // 인물 기준으로 그룹화
-        groupedNotes = {};
-        for (var memory in notes) {
-          memory.selectedFamilyMember?.forEach((member, isSelected) {
-            if (isSelected) {
-              groupedNotes.putIfAbsent(member, () => []).add(memory);
-            }
-          });
-        }
-
-        groupedNotes.forEach((key, value) {
-          print("$key: ${value.length} items");
+            return int.parse(b.key).compareTo(int.parse(a.key));
+          }),
+      );
+    } else if (_selectedCategory == 1) {
+      // 인물 기준으로 그룹화
+      groupedNotes = {};
+      for (var memory in notes) {
+        memory.selectedFamilyMember?.forEach((member, isSelected) {
+          if (isSelected == true) {
+            // true 값만 필터링
+            groupedNotes.putIfAbsent(member, () => []).add(memory);
+          }
         });
-      } else {
-        // 좋아하는 기억 그룹화
-        groupedNotes = {'좋아하는 기억': notes};
       }
+
+      for (var memory in notes) {
+        print("Memory selectedFamilyMember: ${memory.selectedFamilyMember}");
+      }
+
+      print("인물 카테고리 데이터:");
+      groupedNotes.forEach((key, value) {
+        print("$key: ${value.length} items");
+      });
+    } else {
+      // 좋아하는 기억 그룹화
+      groupedNotes = await fetchFavoriteMemories();
+    }
+
+    setState(() {
       isLoading = false;
     });
   }
@@ -125,6 +206,7 @@ class _MainGalleryState extends State<MainMemory>
                       _buildImageSection(),
                       SizedBox(height: 20),
                       _buildSpeechBubble(),
+                      SizedBox(height: 10),
                       _buildCategoryTabs(),
                       Container(child: _buildGroupedMemoryCards()),
                     ],
@@ -137,7 +219,11 @@ class _MainGalleryState extends State<MainMemory>
             ]),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }
@@ -203,58 +289,96 @@ class _MainGalleryState extends State<MainMemory>
   }
 
   Widget _buildCategoryTabs() {
-    return TabBar(
-      controller: _tabController,
-      labelColor: Colors.black,
-      indicatorColor: Colors.yellow,
-      tabs: const [
-        Tab(text: '연도'),
-        Tab(text: '인물'),
-        Tab(text: '좋아하는 기억'),
-      ],
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start, // 왼쪽 정렬
+      children: categories.map((category) {
+        int index = categories.indexOf(category);
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              _selectedCategory = index;
+              fetchData(); // 선택 변경 시 데이터 다시 로드
+            });
+          },
+          child: Container(
+            margin: EdgeInsets.only(right: 5), // 카테고리 간격
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            child: Text(
+              category,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: _selectedCategory == index ? FontWeight.bold : FontWeight.normal, // 선택된 카테고리는 bold
+                color: _selectedCategory == index ? Colors.black : Colors.grey,
+              ),
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 
   Widget _buildGroupedMemoryCards() {
-    return ListView.builder(
-      itemCount: groupedNotes.length, // 기존 groupedNotes만큼 반복
-      shrinkWrap: true,
-      physics: const BouncingScrollPhysics(),
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          // 첫 번째 Row는 _randomData와 groupedNotes의 첫 번째 아이템을 가로로 배치
-          String firstGroupKey = groupedNotes.keys.first; // 첫 번째 그룹 키 가져오기
-          MemoryNoteModel firstMemory =
-              groupedNotes[firstGroupKey]!.first; // 첫 번째 메모리 아이템
+    if (_selectedCategory == 0) {
+      // 연도를 클릭한 경우
+      return ListView.builder(
+        itemCount: groupedNotes.length,
+        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            // 첫 번째 Row는 _randomData와 groupedNotes의 첫 번째 아이템을 가로로 배치
+            String firstGroupKey = groupedNotes.keys.first; // 첫 번째 그룹 키 가져오기
+            MemoryNoteModel firstMemory =
+                groupedNotes[firstGroupKey]!.first; // 첫 번째 메모리 아이템
 
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: _buildRecollectionCard(_randomData),
+                ),
+                Expanded(
+                  child: _buildMemoryCard(
+                      firstMemory, groupedNotes[firstGroupKey]!.length - 1),
+                ),
+              ],
+            );
+          }
+
+          String groupKey = groupedNotes.keys.elementAt(index);
+          List<MemoryNoteModel>? groupNotes = groupedNotes[groupKey];
+          MemoryNoteModel firstMemory = groupNotes!.first;
+          int groupNotesCnt = groupNotes.length;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: _buildRecollectionCard(_randomData),
-              ),
-              SizedBox(width: 8),
-              Expanded(
-                child: _buildMemoryCard(
-                    firstMemory, groupedNotes[firstGroupKey]!.length - 1),
-              ),
+              _buildMemoryCard(firstMemory, groupNotesCnt - 1),
             ],
           );
-        }
+        },
+      );
+    } else {
+      // 좋아하는 기억 또는 인물을 클릭한 경우
+      return ListView.builder(
+        itemCount: groupedNotes.length,
+        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (context, index) {
+          String groupKey = groupedNotes.keys.elementAt(index);
+          List<MemoryNoteModel>? groupNotes = groupedNotes[groupKey];
+          MemoryNoteModel firstMemory = groupNotes!.first;
+          int groupNotesCnt = groupNotes.length;
 
-        String groupKey = groupedNotes.keys.elementAt(index);
-        List<MemoryNoteModel>? groupNotes = groupedNotes[groupKey];
-        MemoryNoteModel firstMemory = groupNotes!.first;
-        int groupNotesCnt = groupNotes.length;
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildMemoryCard(firstMemory, groupNotesCnt - 1),
-          ],
-        );
-      },
-    );
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildFavoriteMemoryCard(firstMemory, groupNotesCnt - 1, groupKey),
+            ],
+          );
+        },
+      );
+    }
   }
 
   // 그 때 그시절
@@ -318,7 +442,7 @@ class _MainGalleryState extends State<MainMemory>
     );
   }
 
-  // 개별 메모리 카드
+  // 연도 메모리 카드
   Widget _buildMemoryCard(MemoryNoteModel memory, int MemoryCnt) {
     return GestureDetector(
       onTap: () => Get.to(MemoryDetail(memory: memory)),
@@ -351,6 +475,73 @@ class _MainGalleryState extends State<MainMemory>
                       children: [
                         Text(
                           memory.era.toString() + "년대" ?? '',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(color: Colors.black, blurRadius: 5)
+                            ],
+                          ),
+                        ),
+                        Text(
+                          MemoryCnt == 0
+                              ? memory.imgTitle.toString()
+                              : memory.imgTitle.toString() +
+                                      " 외 " +
+                                      MemoryCnt.toString() +
+                                      "개" ??
+                                  '',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(color: Colors.black, blurRadius: 5)
+                            ],
+                          ),
+                        ),
+                      ])),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // 좋아하는 기억 메모리 카드
+  Widget _buildFavoriteMemoryCard(MemoryNoteModel memory, int MemoryCnt, String groupKey) {
+    return GestureDetector(
+      onTap: () => Get.to(MemoryDetail(memory: memory)),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 5)
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Stack(
+            children: [
+              Image.network(
+                memory.img ?? '',
+                width: double.infinity,
+                height: 150,
+                fit: BoxFit.cover,
+              ),
+              Positioned(
+                  top: 10,
+                  left: 10,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${groupKey}",
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16,
