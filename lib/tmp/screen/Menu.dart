@@ -54,7 +54,7 @@ class _MenuState extends State<Menu> {
                   Text(
                     '나의 정보',
                     style: TextStyle(fontSize: 24,
-                    color: _colorPallet.gray),
+                    color: _colorPallet.grey),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -143,7 +143,7 @@ class _MenuState extends State<Menu> {
                       child: Text(
                         '회원탈퇴',
                         style: TextStyle(
-                          color: _colorPallet.gray,
+                          color: _colorPallet.grey,
                           fontSize: 20,
                           decoration: TextDecoration.underline
                     ),
