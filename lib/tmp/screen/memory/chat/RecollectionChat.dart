@@ -9,7 +9,7 @@ import 'package:atti/tmp/screen/memory/chat/BeforeSave.dart';
 import 'package:atti/tmp/screen/memory/chat/ChatBubble.dart';
 import 'package:atti/tmp/screen/memory/chat/ChatHistory.dart';
 import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
-import 'package:atti/tmp/screen/memory/gallery/RecollectionData.dart';
+import 'package:atti/data/memory/RecollectionData.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:permission_handler/permission_handler.dart';

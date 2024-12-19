@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 /// patientId : "patientId"
 /// img : "imgUrl"
 /// imgTitle : "돌잔치"
@@ -21,29 +22,29 @@ class MemoryNoteModel {
   DocumentReference? reference; // document 식별자
 
   // 생성자
-  MemoryNoteModel({
-    this.patientId,
-    this.img,
-    this.imgTitle,
-    this.era,
-    this.chat,
-    this.selectedFamilyMember,
-    this.keyword,
-    this.createdAt,
-    this.reference
-  });
+  MemoryNoteModel(
+      {this.patientId,
+      this.img,
+      this.imgTitle,
+      this.era,
+      this.chat,
+      this.selectedFamilyMember,
+      this.keyword,
+      this.createdAt,
+      this.reference});
 
   // json -> object (Firestore -> Flutter)
   MemoryNoteModel.fromJson(dynamic json, this.reference) {
     patientId = json['patientId'];
     img = json['img'];
     imgTitle = json['imgTitle'];
-    era = json['era'] is int ? json['era'] : int.tryParse(json['era'] ?? ''); // 수정된 부분
+    era = json['era'] is int
+        ? json['era']
+        : int.tryParse(json['era'] ?? ''); // 수정된 부분
     chat = json['chat'];
+    //print("JSON received: $json");
     selectedFamilyMember = json['selectedFamilyMember'];
-    keyword = json['keyword'] != null
-        ? List<String>.from(json['keyword'])
-        : [];
+    keyword = json['keyword'] != null ? List<String>.from(json['keyword']) : [];
     createdAt = json['createdAt'];
     reference = json['reference'];
   }
@@ -72,5 +73,22 @@ class MemoryNoteModel {
     map['createdAt'] = createdAt;
     map['reference'] = reference;
     return map;
+  }
+
+  @override
+  String toString() {
+    return '''
+MemoryNoteModel(
+  patientId: $patientId,
+  img: $img,
+  imgTitle: $imgTitle,
+  era: $era,
+  chat: $chat,
+  selectedFamilyMember: $selectedFamilyMember,
+  keyword: $keyword,
+  createdAt: $createdAt,
+  reference: $reference
+)
+''';
   }
 }

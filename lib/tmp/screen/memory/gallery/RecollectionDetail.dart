@@ -5,7 +5,7 @@ import 'package:atti/commons/SimpleAppBar.dart';
 import 'package:atti/tmp/screen/memory/chat/Chat.dart';
 import 'package:atti/tmp/screen/memory/chat/RecollectionChat.dart';
 import 'package:atti/tmp/screen/memory/gallery/GalleryOption.dart';
-import 'package:atti/tmp/screen/memory/gallery/RecollectionData.dart';
+import 'package:atti/data/memory/RecollectionData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
