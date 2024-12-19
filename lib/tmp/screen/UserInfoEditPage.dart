@@ -42,7 +42,9 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(
           '나의 정보 수정',
           style: TextStyle(

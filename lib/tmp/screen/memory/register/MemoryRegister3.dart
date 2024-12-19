@@ -1,4 +1,6 @@
 // 피그마 '기억하기3 - 연도, 가족 구성원 선택' 화면
+import 'package:atti/commons/colorPallet.dart';
+import 'package:atti/tmp/screen/memory/register/MemoryRegisterAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
@@ -42,7 +44,12 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    ColorPallet _colorPallet = ColorPallet();
+
     return Scaffold(
+      appBar: MemoryRegisterAppBar(context),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -53,31 +60,25 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  DetailPageTitle(
-                    title: '기억하기',
-                    description: '\'${memoryNoteController.memoryNote.value.imgTitle}\' 사진에 대한 정보를 알려주세요!',
-                    totalStep: 4, currentStep: 3,
-                  ),
-                  SizedBox(height: 30,),
+                  SizedBox(height: height * 0.02,),
 
                   Container(
                     margin: EdgeInsets.only(left: 15),
                     width: MediaQuery.of(context).size.width * 0.9,
                     alignment: Alignment.centerLeft,
-                    child: Text('사진의 연도를 선택해주세요', textAlign: TextAlign.left, style: TextStyle(
-                      fontSize: 24,
+                    child: Text('기억 연도를 선택해주세요', textAlign: TextAlign.left, style: TextStyle(
+                      fontSize: 30,
                     ),),
                   ),
                   SizedBox(height: 10,),
                   SelectEraDropDownButton(),
-
                   SizedBox(height: 35,),
                   Container(
                     margin: EdgeInsets.only(left: 15),
                     width: MediaQuery.of(context).size.width * 0.9,
                     alignment: Alignment.centerLeft,
-                    child: Text('사진 속 가족 구성원을 선택해주세요', textAlign: TextAlign.left, style: TextStyle(
-                      fontSize: 24,
+                    child: Text('기억과 함께한 사람을 \n선택 및 입력해주세요', textAlign: TextAlign.left, style: TextStyle(
+                      fontSize: 30,
                     ),),
                   ),
                   SizedBox(height: 10,),
@@ -99,6 +100,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
   }
 
   Widget SelectEraDropDownButton() {
+    ColorPallet _colorPallet = ColorPallet();
     return Container(
       //alignment: Alignment.centerLeft,
       margin: EdgeInsets.only(left: 15),
@@ -109,7 +111,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
         items: _era
             .map((e) => DropdownMenuItem(
           value: e,
-          child: Text(e, style: TextStyle(fontSize: 24, fontWeight: FontWeight.normal, color: Color(0xffA38130)),),
+          child: Text(e, style: TextStyle(fontSize: 24, fontWeight: FontWeight.normal, color: _colorPallet.textColor),),
         ))
             .toList(),
         onChanged: (value) {
@@ -121,24 +123,24 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Color(0xffFFF5DB), width: 2)
+              borderSide: BorderSide(color: _colorPallet.textColor, width: 2)
           ),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Color(0xffA38130), width: 1)
+              borderSide: BorderSide(color: _colorPallet.textColor, width: 1)
           ),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Color(0xffFFF5DB), width: 2)
+              borderSide: BorderSide(color: _colorPallet.textColor, width: 2)
           ),
           filled: true,
-          fillColor: Color(0xffFFF5DB),
-          iconColor: Color(0xffA38130),
+          fillColor: _colorPallet.lightYellow,
+          iconColor: _colorPallet.textColor,
           contentPadding: EdgeInsets.only(top:5, bottom: 5, left: 15),
         ),
-        dropdownColor: Color(0xffFFF5DB),
-        iconDisabledColor: Color(0xffA38130),
-        iconEnabledColor: Color(0xffA38130),
+        dropdownColor:_colorPallet.lightYellow,
+        iconDisabledColor: _colorPallet.textColor,
+        iconEnabledColor: _colorPallet.textColor,
         iconSize: 50,
       ),
     );

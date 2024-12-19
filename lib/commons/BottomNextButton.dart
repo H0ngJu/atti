@@ -29,7 +29,7 @@ class NextButton extends StatelessWidget {
         child: Text(
           content,
           style: TextStyle(fontSize: 20,
-          color: isEnabled ? Colors.white : Colors.black),
+          color: Colors.black),
         ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(
