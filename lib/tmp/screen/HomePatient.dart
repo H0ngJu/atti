@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:atti/commons/colorPallet.dart';
+import 'package:atti/patient/screen/routine_schedule/TodayToDo.dart';
 import 'package:atti/tmp/screen/Menu.dart';
 import 'package:atti/tmp/screen/Notice/FullScreenRoutine.dart';
 import 'package:atti/tmp/screen/Notice/FullScreenSchedule1.dart';
@@ -584,7 +585,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
               children: [
                 TextButton(
                   onPressed: () {
-                    // 첫 번째 버튼 클릭 시 동작
+                    Get.to(TodayToDo());
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.black, // 배경색
@@ -606,7 +607,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
                 SizedBox(height: 16), // 버튼 사이의 간격
                 TextButton(
                   onPressed: () {
-                    // 두 번째 버튼 클릭 시 동작
+
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: _colorPallet.goldYellow, // 배경색
