@@ -30,8 +30,8 @@ class YesNoActionButtons extends StatelessWidget {
               style: TextStyle(color: Colors.black, fontSize: 20),
             ),
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
-              minimumSize: MaterialStateProperty.all(
+              backgroundColor: WidgetStateProperty.all(Color(0xffFF6200)),
+              minimumSize: WidgetStateProperty.all(
                   Size(MediaQuery.of(context).size.width * 0.43, 50)),
             ),
           ),
@@ -43,10 +43,10 @@ class YesNoActionButtons extends StatelessWidget {
               style: TextStyle(color: Colors.black, fontSize: 20),
             ),
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.white),
-              minimumSize: MaterialStateProperty.all(
+              backgroundColor: WidgetStateProperty.all(Colors.white),
+              minimumSize: WidgetStateProperty.all(
                   Size(MediaQuery.of(context).size.width * 0.43, 50)),
-              side: MaterialStateProperty.all(BorderSide(
+              side: WidgetStateProperty.all(BorderSide(
                 color: Colors.black,
                 width: 1,
               )),

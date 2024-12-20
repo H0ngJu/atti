@@ -109,12 +109,15 @@ export 'package:atti/tmp/screen/report/ReportDetail.dart';
 export 'package:atti/tmp/screen/report/ReportHistory.dart';
 
 // routine
-export 'package:atti/tmp/screen/routine/register/RoutineRegister1.dart';
-export 'package:atti/tmp/screen/routine/register/RoutineRegister2.dart';
-export 'package:atti/tmp/screen/routine/register/RoutineRegister3.dart';
-export 'package:atti/tmp/screen/routine/register/RoutineRegisterCheck.dart';
-export 'package:atti/tmp/screen/routine/register/RoutineRegisterFinish.dart';
-export 'package:atti/tmp/screen/routine/RoutineFinish.dart';
+export 'package:atti/patient/screen/routine_schedule/routine_register/RoutineRegister1.dart';
+export 'package:atti/patient/screen/routine_schedule/routine_register/RoutineRegister2.dart';
+export 'package:atti/patient/screen/routine_schedule/routine_register/RoutineRegister3.dart';
+export 'package:atti/patient/screen/routine_schedule/routine_register/RoutineRegisterCheck.dart';
+export 'package:atti/patient/screen/routine_schedule/routine_register/RoutineRegisterFinish.dart';
+export 'package:atti/patient/screen/routine_schedule/RoutineShceduleFinish.dart';
+export 'package:atti/patient/screen/routine_schedule/RoutineScheduleMain.dart';
+export 'package:atti/patient/screen/routine_schedule/TodayToDo.dart';
+
 
 // schedule
 export 'package:atti/tmp/screen/schedule/finish/ScheduleFinish1.dart';
