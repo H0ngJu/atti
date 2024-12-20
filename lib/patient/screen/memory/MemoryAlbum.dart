@@ -112,14 +112,14 @@ class MemoryAlbum extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Text(
+          Expanded(child: Text(
             groupedMemory.imgTitle ?? '',
             style: const TextStyle(
                 color: Colors.black,
-                fontSize: 24,
+                fontSize: 20,
                 fontFamily: 'PretendardRegular'),
             textAlign: TextAlign.center,
-          ),
+          ),),
         ],
       ),
     );
