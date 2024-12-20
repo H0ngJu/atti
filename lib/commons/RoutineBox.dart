@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import '../data/routine/routine_controller.dart';
+import 'colorPallet.dart';
+
 
 class RoutineBox extends StatefulWidget {
   const RoutineBox({super.key, required this.time, required this.name, required this.img, required this.days});
@@ -16,6 +18,7 @@ class RoutineBox extends StatefulWidget {
 
 class _RoutineBoxState extends State<RoutineBox> {
   final RoutineController routineController = Get.put(RoutineController());
+  final ColorPallet colorPallet = Get.put(ColorPallet());
 
   String generateRepeatText(List<String> days) {
     if (days.length == 7) {
@@ -35,6 +38,9 @@ class _RoutineBoxState extends State<RoutineBox> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     // 시간 변환
     String formattedTime = '';
     if (widget.time != null && widget.time.length == 2) {
@@ -47,7 +53,7 @@ class _RoutineBoxState extends State<RoutineBox> {
     }
 
     return Container(
-      padding: EdgeInsets.only(top: 15, bottom: 10, left: 20, right: 20),
+      padding: EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
       width: MediaQuery.of(context).size.width * 0.9,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -57,14 +63,23 @@ class _RoutineBoxState extends State<RoutineBox> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(formattedTime, style: TextStyle(
-              fontSize: 20
+          Text(
+            formattedTime,
+            style: TextStyle(
+              fontSize: 24,
+              height: 1.2
           ),),
-          Text(widget.name, style: TextStyle(fontSize: 30),),
-          SizedBox(height: 5,),
+          Text(
+            widget.name,
+            style: TextStyle(
+                fontSize: 28,
+                height: 1.2
+            ),
+          ),
+          SizedBox(height: 10,),
           Container(
             alignment: Alignment.center,
-            width: MediaQuery.of(context).size.width * 0.8,
+            width: MediaQuery.of(context).size.width * 0.85,
             height: MediaQuery.of(context).size.height * 0.25,
             child: Container(
               child: ClipRRect(
@@ -95,9 +110,13 @@ class _RoutineBoxState extends State<RoutineBox> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(),
-              Text(generateRepeatText(widget.days), style: TextStyle(
-                fontSize: 24, color: Colors.black
-              ),),
+              Text(
+                generateRepeatText(widget.days),
+                style: TextStyle(
+                    fontSize: 22,
+                    color: colorPallet.grey
+                ),
+              ),
             ],
           )
 

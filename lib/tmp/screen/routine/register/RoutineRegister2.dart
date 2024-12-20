@@ -170,7 +170,7 @@ class _RoutineRegister2State extends State<RoutineRegister2> {
               ],
             ),
           )),
-          NextButton(next: RoutineRegister3(), content: '다음', isEnabled: routineController.routine.value.repeatDays != null &&
+          BottomNextButton(next: RoutineRegister3(), content: '다음', isEnabled: routineController.routine.value.repeatDays != null &&
               routineController.routine.value.time != null,)
         ],
       ),
