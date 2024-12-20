@@ -117,10 +117,9 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 8), // 버튼과의 간격
+                    SizedBox(width: 8),
                     ElevatedButton(
                       onPressed: () {
-                        // 버튼 클릭 시 동작을 추가하세요.
                         String memberName = _familyMemberController.text;
                         if (memberName.isNotEmpty) {
                           setState(() {
