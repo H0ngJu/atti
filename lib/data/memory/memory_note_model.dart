@@ -43,8 +43,17 @@ class MemoryNoteModel {
         : int.tryParse(json['era'] ?? ''); // 수정된 부분
     chat = json['chat'];
     //print("JSON received: $json");
-    selectedFamilyMember = json['selectedFamilyMember'];
-    keyword = json['keyword'] != null ? List<String>.from(json['keyword']) : [];
+    // selectedFamilyMember = json['selectedFamilyMember'];
+    // selectedFamilyMember 변환
+    selectedFamilyMember = json['selectedFamilyMember'] != null
+        ? List<String>.from(json['selectedFamilyMember'])
+        : [];
+
+    //keyword = json['keyword'] != null ? List<String>.from(json['keyword']) : [];
+    // keyword 변환
+    keyword = json['keyword'] != null
+        ? List<String>.from(json['keyword'])
+        : [];
     createdAt = json['createdAt'];
     reference = json['reference'];
   }
