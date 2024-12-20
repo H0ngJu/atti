@@ -63,6 +63,7 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
                 // setState(() {
                 //   isButtonEnabled = false; // 버튼 비활성화
                 // });
+                routineController.routine.value.isMedicine = false;
                 String tmpName = routineController.routine.value.name!;
                 String tmpImg = routineController.routine.value.img!;
                 List<int> tmpTime = routineController.routine.value.time!;

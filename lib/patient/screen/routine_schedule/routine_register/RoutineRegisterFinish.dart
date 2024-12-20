@@ -48,16 +48,31 @@ class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.only(left: 15),
-                  child: Text('\'${widget.name}\'\n일과를 등록했어요!',
+                  child: Text(
+                    '\'${widget.name}\'',
                     style: TextStyle(
-                        fontSize: 34, fontWeight: FontWeight.w500, color: Colors.black
+                        fontSize: 30,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                        height: 1.2
+                    ),),
+                ),Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  margin: EdgeInsets.only(left: 15),
+                  child: Text(
+                    '일과를 등록했어요!',
+                    style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        height: 1.2
                     ),),
                 ),
-                SizedBox(height: 30,),
+                SizedBox(height: width * 0.12,),
 
                 Container(
-                  padding: EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
-                  width: MediaQuery.of(context).size.width * 0.9,
+                  //padding: EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
+                  width: MediaQuery.of(context).size.width * 0.73,
                   color: Colors.white,
                   alignment: Alignment.center,
                   child: Column(
@@ -71,21 +86,17 @@ class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(color: Color(0xff737373), width: 1,),
                             ),
-                            child: Text(formattedTime, style: TextStyle(
-                              fontSize: 22,
-                              color: Colors.black
+                            child: Text(
+                              formattedTime,
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  color: Colors.black
                             ),),
                           ),
-                          SizedBox(width: 10,),
-                          Expanded(
-                            child: Container(
-                              color: Color(0xffE1E1E1),
-                              height: 1,
-                            ),
-                          )
+                          SizedBox(),
                         ],
                       ),
-                      SizedBox(height: 10,),
+                      SizedBox(height: 5,),
                       Container(
                           width: width * 0.8,
                           child: Text(widget.name, style: TextStyle(
@@ -94,7 +105,7 @@ class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
                           ),
                           )
                       ),
-                      SizedBox(height: 5,),
+                      SizedBox(height: 10,),
                       Container(
                         alignment: Alignment.center,
                         width: MediaQuery.of(context).size.width * 0.8,
@@ -131,10 +142,12 @@ class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
                   MaterialPageRoute(builder: (context) => RoutineScheduleMain()),
                 );
               },
-              child: Text('하루 일과로 돌아가기', style: TextStyle(color: Colors.white, fontSize: 20),),
+              child: Text(
+                '일과/일정 돌아가기',
+                style: TextStyle(color: Colors.black, fontSize: 24),),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
-                minimumSize: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(Color(0xffFFC215)),
+                minimumSize: WidgetStateProperty.all(
                     Size(MediaQuery.of(context).size.width * 0.9, 50)),
               ),
             ),

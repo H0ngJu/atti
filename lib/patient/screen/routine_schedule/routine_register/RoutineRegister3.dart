@@ -8,6 +8,8 @@ import 'dart:io';
 
 import '../../../../commons/colorPallet.dart';
 import 'RoutineRegisterCheck.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
 class RoutineRegister3 extends StatefulWidget {
   const RoutineRegister3({super.key});
@@ -31,6 +33,22 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
         _image = XFile(pickedFile.path); //가져온 이미지를 _image에 저장
       });
     }
+  }
+
+  //
+  Future<String> getAssetFilePath(String assetPath) async {
+    // 앱의 임시 디렉토리 가져오기
+    final tempDir = await getTemporaryDirectory();
+    final tempPath = '${tempDir.path}/${assetPath.split('/').last}';
+
+    // 애셋 파일 읽기
+    final byteData = await rootBundle.load(assetPath);
+
+    // 임시 디렉토리에 파일 쓰기
+    final file = File(tempPath);
+    await file.writeAsBytes(byteData.buffer.asUint8List());
+
+    return file.path;
   }
 
   @override
@@ -79,10 +97,19 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
                       ),
 
                 GestureDetector(
-                  onTap: () {
-                    // 일과 사진으로 아띠 기본 이미지 넣기
+                  onTap: () async {
+                    // Asset 파일 경로 가져오기
+                    final defaultImagePath = await getAssetFilePath('lib/assets/images/routine_default.png');
 
+                    setState(() {
+                      routineController.routine.update((val) {
+                        val!.img = defaultImagePath; // 변환된 파일 경로 저장
+                      });
 
+                      _image = XFile(defaultImagePath); // XFile 객체 생성
+
+                      Get.to(RoutineRegisterCheck());
+                    });
                   },
                   child: Align(
                     alignment: Alignment.centerRight, // 텍스트를 오른쪽 정렬
