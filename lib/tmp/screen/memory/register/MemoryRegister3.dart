@@ -91,7 +91,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                 ],
               ),
             )),
-            NextButton(next: MemoryRegister4(), content: '다음', isEnabled: true),
+            BottomNextButton(next: MemoryRegister4(), content: '다음', isEnabled: true),
           ],
         ),
       ),

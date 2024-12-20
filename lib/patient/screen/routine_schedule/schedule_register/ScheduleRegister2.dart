@@ -10,6 +10,8 @@ import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/tmp/screen/schedule/register/ScheduleRegister3.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../commons/colorPallet.dart';
+
 class ScheduleRegister2 extends StatefulWidget {
   const ScheduleRegister2({super.key});
 
@@ -19,6 +21,7 @@ class ScheduleRegister2 extends StatefulWidget {
 
 class _ScheduleRegister2State extends State<ScheduleRegister2> {
   final ScheduleController scheduleController = Get.put(ScheduleController());
+  final ColorPallet colorPallet = Get.put(ColorPallet());
 
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();

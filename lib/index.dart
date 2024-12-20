@@ -120,10 +120,10 @@ export 'package:atti/tmp/screen/routine/RoutineFinish.dart';
 export 'package:atti/tmp/screen/schedule/finish/ScheduleFinish1.dart';
 export 'package:atti/tmp/screen/schedule/finish/ScheduleFinish2.dart';
 
-export 'package:atti/tmp/screen/schedule/register/ScheduleRegister1.dart';
-export 'package:atti/tmp/screen/schedule/register/ScheduleRegister2.dart';
-export 'package:atti/tmp/screen/schedule/register/ScheduleRegister3.dart';
-export 'package:atti/tmp/screen/schedule/register/ScheduleRegister4.dart';
-export 'package:atti/tmp/screen/schedule/register/ScheduleRegisterCheck.dart';
-export 'package:atti/tmp/screen/schedule/register/ScheduleRegisterFinish.dart';
+export 'package:atti/patient/screen/routine_schedule/schedule_register/ScheduleRegister1.dart';
+export 'package:atti/patient/screen/routine_schedule/schedule_register/ScheduleRegister2.dart';
+export 'package:atti/patient/screen/routine_schedule/schedule_register/ScheduleRegister3.dart';
+export 'package:atti/patient/screen/routine_schedule/schedule_register/ScheduleRegister4.dart';
+export 'package:atti/patient/screen/routine_schedule/schedule_register/ScheduleRegisterCheck.dart';
+export 'package:atti/patient/screen/routine_schedule/schedule_register/ScheduleRegisterFinish.dart';
 

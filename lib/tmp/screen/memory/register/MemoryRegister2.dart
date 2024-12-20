@@ -67,7 +67,7 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
               ),
             ),
             SizedBox(height: 15,),
-            NextButton(content: '다음', next: MemoryRegister3(),
+            BottomNextButton(content: '다음', next: MemoryRegister3(),
               isEnabled: memoryNoteController.memoryNote.value.imgTitle != null &&
                   memoryNoteController.memoryNote.value.imgTitle!.isNotEmpty,)
           ],
