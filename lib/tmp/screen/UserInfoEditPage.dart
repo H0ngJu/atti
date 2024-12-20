@@ -42,7 +42,9 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(
           '나의 정보 수정',
           style: TextStyle(
@@ -115,10 +117,9 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 8), // 버튼과의 간격
+                    SizedBox(width: 8),
                     ElevatedButton(
                       onPressed: () {
-                        // 버튼 클릭 시 동작을 추가하세요.
                         String memberName = _familyMemberController.text;
                         if (memberName.isNotEmpty) {
                           setState(() {

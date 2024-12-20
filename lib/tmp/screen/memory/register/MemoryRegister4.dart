@@ -1,15 +1,14 @@
 // 피그마 '기억하기4 - 키워드 입력' 화면
+import 'package:atti/commons/BottomNextButton.dart';
+import 'package:atti/commons/colorPallet.dart';
+import 'package:atti/tmp/screen/memory/register/MemoryRegisterAppBar.dart';
+import 'package:atti/tmp/screen/memory/register/MemoryWordsTag.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:atti/commons/DetailPageTitle.dart';
-import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
 import 'package:atti/tmp/screen/memory/register/MemoryRegisterCheck.dart';
-
 import 'package:material_tag_editor/tag_editor.dart';
-import 'package:material_tag_editor/tag_editor_layout_delegate.dart';
-import 'package:material_tag_editor/tag_layout.dart';
-import 'package:material_tag_editor/tag_render_layout_box.dart';
+import 'package:atti/tmp/screen/memory/register/MemoryRegister5.dart';
 
 class MemoryRegister4 extends StatefulWidget {
   const MemoryRegister4({super.key});
@@ -20,6 +19,7 @@ class MemoryRegister4 extends StatefulWidget {
 
 class _MemoryRegister4State extends State<MemoryRegister4> {
   final MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
+  TextEditingController _memoryWordsController = TextEditingController();
   List<String> _values = [];
 
   onDelete(index) {
@@ -35,7 +35,13 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    ColorPallet _colorPallet = ColorPallet();
+
     return Scaffold(
+      appBar: MemoryRegisterAppBar(context),
+      backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -45,14 +51,73 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
             Expanded(child: SingleChildScrollView(
               child: Column(
                 children: [
-                  DetailPageTitle(
-                    title: '기억하기',
-                    description: '\'${memoryNoteController.memoryNote.value.imgTitle}\' 사진에 대한 정보를 알려주세요!',
-                    totalStep: 4, currentStep: 4,
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: width*0.05),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '\'${memoryNoteController.memoryNote.value.imgTitle}\' 사진에 대한\n기억 단어를 알려주세요',
+                      style: TextStyle(
+                        fontSize: 30
+                      ),
+                    ),
                   ),
                   SizedBox(height: 20,),
-                  AddKeywordTag(),
-
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.symmetric(horizontal: width*0.05),
+                    decoration: BoxDecoration(
+                      color: _colorPallet.lightYellow,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            child: TextField(
+                              controller: _memoryWordsController,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: '단어를 입력해주세요',
+                                hintStyle: TextStyle(color: _colorPallet.khaki, fontSize: 20),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            String memberName = _memoryWordsController.text;
+                            if (memberName.isNotEmpty) {
+                              setState(() {
+                                _values.add(memberName);
+                                _memoryWordsController.clear(); // 입력 필드 비우기
+                              });
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _memoryWordsController.text.isNotEmpty ? _colorPallet.goldYellow : Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+                          ),
+                          child: Text(
+                            '등록',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Wrap(
+                    spacing: 8.0,
+                    children: _values.map((member) {
+                      return MemoryWordsTag(name: member);
+                    }).toList(),
+                  ),
                   SizedBox(height: 50,),
 
                 ],
@@ -62,9 +127,10 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
               margin: EdgeInsets.only(left: 15),
               width: MediaQuery.of(context).size.width * 0.9,
               alignment: Alignment.centerLeft,
-              child: Text('기억 단어란?', textAlign: TextAlign.left,
+              child: Text('기억단어란?', textAlign: TextAlign.left,
                 style: TextStyle(
-                    fontSize: 20, color: Color(0xff616161), fontWeight: FontWeight.w600
+                    fontSize: 20, color: Color(0xff616161), fontWeight: FontWeight.w600,
+                    decoration: TextDecoration.underline,
                 ),),
             ),
             Container(
@@ -74,26 +140,26 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
               child: Text('사진과 관련된 단어 중 가족 구성원 외의\n인물, 사물, 사건, 배경 등의 단어를 말합니다.',
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                  fontSize: 20, color: Color(0xff616161),
+                  fontSize: 18, color: Color(0xff616161),
                 ),),
             ),
             SizedBox(height: 20,),
-            Container(
-              margin: EdgeInsets.only(bottom: 20),
-              child: TextButton(
-                onPressed: () {
-                  memoryNoteController.memoryNote.value.keyword?.addAll(_values);
-                  print(memoryNoteController.memoryNote.value.keyword);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MemoryRegisterCheck()),);
-                },
-                child: Text('등록', style: TextStyle(color: Colors.white, fontSize: 20),),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
-                  minimumSize: MaterialStateProperty.all(
-                      Size(MediaQuery.of(context).size.width * 0.9, 50)),
-                ),
-              ),
-            ),
+            NextButton(next: MemoryRegister5(), content: '다음', isEnabled: true),
+            // Container(
+            //   margin: EdgeInsets.only(bottom: 20),
+            //   child: TextButton(
+            //     onPressed: () {
+            //       memoryNoteController.memoryNote.value.keyword?.addAll(_values);
+            //       Navigator.push(context, MaterialPageRoute(builder: (context) => MemoryRegisterCheck()),);
+            //     },
+            //     child: Text('등록', style: TextStyle(color: Colors.white, fontSize: 20),),
+            //     style: ButtonStyle(
+            //       backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
+            //       minimumSize: MaterialStateProperty.all(
+            //           Size(MediaQuery.of(context).size.width * 0.9, 50)),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
