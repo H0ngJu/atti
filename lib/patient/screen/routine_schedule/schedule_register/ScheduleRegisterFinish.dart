@@ -4,14 +4,14 @@ import 'package:get/get.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/data/schedule/schedule_controller.dart';
 import 'package:intl/intl.dart';
-
 import '../../../../commons/ScheduleBox.dart';
 import '../../../../commons/colorPallet.dart';
 import '../../../../data/notification/notification_controller.dart';
 import '../../../../patient/screen/routine_schedule/RoutineScheduleMain.dart';
-
 import 'package:atti/data/schedule/schedule_controller.dart';
 import '../../../../data/notification/notification.dart';
+
+
 class ScheduleRegisterFinish extends StatefulWidget {
   const ScheduleRegisterFinish({super.key});
 
@@ -29,6 +29,7 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     final ScheduleController scheduleController = Get.put(ScheduleController());
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -36,39 +37,84 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
           Expanded(
             child: Column(
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.13),
+                SizedBox(height: width * 0.27),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  margin: EdgeInsets.only(left: 15),
-                  child: Text('\'${scheduleController.schedule.value.name}\'\n일정을 등록했어요!',
+                  //margin: EdgeInsets.only(left: 15),
+                  child: Text('\'${scheduleController.schedule.value.name}\'',
                     style: TextStyle(
-                      fontSize: 34, fontWeight: FontWeight.w600, color: Colors.black
+                        fontSize: 30,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                        height: 1.2
                   ),),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  //margin: EdgeInsets.only(left: 15),
+                  child: Text('일정을 등록했어요!',
+                    style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        height: 1.2
+                    ),),
                 ),
                 SizedBox(height: 30,),
 
-                Container(
-                  width: width * 0.85,
-                  alignment: Alignment.topLeft,
-                  child: Text(scheduleController.schedule.value?.time?.toDate() != null
-                    ? DateFormat('yyyy년 M월 d일', 'ko_KR').format(scheduleController.schedule.value.time!.toDate())
-                    : '',
-                    style: TextStyle(
-                      fontSize: 24, color: Colors.black,
-                    ),
+                SizedBox(
+                  width: width * 0.9,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            //width: width * 0.9,
+                            alignment: Alignment.topLeft,
+                            child: Text(scheduleController.schedule.value?.time?.toDate() != null
+                              ? DateFormat('yyyy년 M월 d일', 'ko_KR').format(scheduleController.schedule.value.time!.toDate())
+                              : '',
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            //width: width * 0.9,
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              scheduleController.schedule.value?.time?.toDate() != null
+                                  ? DateFormat('a hh:mm', 'ko_KR').format(scheduleController.schedule.value.time!.toDate())
+                                  : DateFormat('a hh:mm', 'ko_KR').format(DateTime.now()),
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        //width: width * 0.9,
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          scheduleController.schedule.value.name ?? '오류',
+                          style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+
                 SizedBox(height: 10,),
-                ScheduleBox(
-                  time: scheduleController.schedule.value?.time?.toDate() != null
-                      ? DateFormat('a hh:mm', 'ko_KR').format(scheduleController.schedule.value.time!.toDate())
-                      : DateFormat('a hh:mm', 'ko_KR').format(DateTime.now()),
-                  name: scheduleController.schedule.value.name,
-                  location: scheduleController.schedule.value.location,
-                  isFinished: false,
-                  isEditMode: false,
-                  onCompleted: () {},
-                )
+
+                //scheduleController.schedule.value.name
 
 
               ],
@@ -116,10 +162,10 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
                 }
                 Get.to(RoutineScheduleMain());
               },
-              child: Text('일과/일정으로 돌아가기', style: TextStyle(color: Colors.white, fontSize: 20),),
+              child: Text('일과/일정으로 돌아가기', style: TextStyle(color: Colors.black, fontSize: 20),),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
-                minimumSize: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(Color(0xffFFC215)),
+                minimumSize: WidgetStateProperty.all(
                     Size(MediaQuery.of(context).size.width * 0.9, 50)),
               ),
             ),

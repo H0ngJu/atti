@@ -6,7 +6,7 @@ import 'package:atti/data/schedule/schedule_controller.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 
-import 'package:atti/tmp/screen/schedule/register/ScheduleRegister2.dart';
+import 'package:atti/patient/screen/routine_schedule/schedule_register/ScheduleRegister2.dart';
 
 import '../../../../commons/RegisterTextField.dart';
 import '../../../../commons/colorPallet.dart';

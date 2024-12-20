@@ -42,7 +42,8 @@ class _DetailPageTitleState extends State<DetailPageTitle> {
                 Container(
                   margin: EdgeInsets.only(left: 15),
                   child: Text(widget.title, style: TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.w500
+                      fontSize: 24,
+                      fontWeight: FontWeight.w400
                   ),),
                 ),
                 Container(
@@ -77,13 +78,16 @@ class _DetailPageTitleState extends State<DetailPageTitle> {
           SizedBox(height: width * 0.06,),
 
           // 설명
-          Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            margin: EdgeInsets.only(left: 20),
-            //alignment: Alignment.centerLeft,
-            child: Text(widget.description, style: TextStyle(
-              fontSize: 28, fontWeight: FontWeight.w500
-            ),),
+          Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              alignment: Alignment.centerLeft,
+              child: Text(widget.description, style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w500,
+                  height: 1.2
+              ),),
+            ),
           ),
         ],
       ),

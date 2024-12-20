@@ -1,4 +1,6 @@
 // 피그마 '일정 등록하기 2 - 일정 날짜, 시간' 화면
+import 'package:atti/commons/RegisterTextField.dart';
+import 'package:atti/index.dart';
 import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,6 +34,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
   DateTime? date;
   TimeOfDay? time;
 
+  // 날짜 선택 달력
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? datePicked = await showDatePicker(
       context: context,
@@ -68,6 +71,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
     }
   }
 
+  // 시간 선택 시계
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? timePicked = await showTimePicker(
       context: context,
@@ -120,12 +124,26 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    // location 초기값 설정
+    scheduleController.schedule.value.location = "";
+  }
+
+  @override
   Widget build(BuildContext context) {
     bool isButtonEnabled() {
-      return _dateController.text.isNotEmpty && _timeController.text.isNotEmpty;
+      return _dateController.text.isNotEmpty &&
+          _timeController.text.isNotEmpty &&
+          scheduleController.schedule.value.location!.trim().isNotEmpty;
     }
 
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     return Scaffold(
+
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(
@@ -134,11 +152,13 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
                 children: [
                   DetailPageTitle(
                     title: '일정 등록하기',
-                    description: '일정 시간을 선택해주세요',
-                    totalStep: 4,
+                    description: '일정 시작 날짜와\n시간을 선택해주세요',
+                    totalStep: 3,
                     currentStep: 2,
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: width * 0.03,),
+
+                  // 날짜 선택
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: TextField(
@@ -165,7 +185,9 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 25),
+                  SizedBox(height: 15),
+
+                  // 시간 선택
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: TextField(
@@ -191,12 +213,40 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
                       ),
                     ),
                   ),
+                  SizedBox(height: width * 0.08,),
+
+                  Center(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                      '일정 장소를 입력해주세요'
+                      , style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w500,
+                          height: 1.2
+                      ),),
+                    ),
+                  ),
+                  SizedBox(height: width * 0.03,),
+
+                  RegisterTextField(
+                      hintText: '예정된 장소가 어디인가요?',
+                      onChanged: (value) {
+                        scheduleController.schedule.value.location = value;
+                        //print(scheduleController.name.value);
+                      })
+
+
                 ],
               ),
             ),
           ),
 
-          BottomNextButton(next: ScheduleRegister3(), content: '다음', isEnabled: isButtonEnabled()),
+          BottomNextButton(
+              next: ScheduleRegister4(),
+              content: '다음',
+              isEnabled: isButtonEnabled()),
         ],
       ),
 

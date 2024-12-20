@@ -6,9 +6,11 @@ import 'package:intl/intl.dart';
 import 'package:atti/data/schedule/schedule_controller.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/ScheduleBox.dart';
-import 'package:atti/tmp/screen/schedule/register/ScheduleRegisterFinish.dart';
+import '../../../../commons/YesNoActionButtons.dart';
 import '../../../../commons/colorPallet.dart';
 import '../../../../data/notification/notification.dart';
+import '../../../../patient/screen/routine_schedule/schedule_register/ScheduleRegister1.dart';
+import '../../../../patient/screen/routine_schedule/schedule_register/ScheduleRegisterFinish.dart';
 
 class ScheduleRegisterCheck extends StatefulWidget {
   const ScheduleRegisterCheck({super.key});
@@ -28,7 +30,11 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
     String formattedDate = dateTime != null ? DateFormat('yyyy년 M월 d일', 'ko_KR').format(dateTime) : '';
     String formattedTime = dateTime != null ? DateFormat('a h시 mm분', 'ko_KR').format(dateTime) : '';
 
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(children: [
         Expanded(
           child: SingleChildScrollView(
@@ -53,13 +59,21 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (scheduleController.schedule.value.time != null) Text('${formattedDate} ${formattedTime}', style: TextStyle(
-                          fontSize: 22
-                      ),),
-                      if (scheduleController.schedule.value.name != null) Text(scheduleController.schedule.value.name!, style: TextStyle(
-                        fontSize: 30, fontWeight: FontWeight.w500
-                      ),),
+                      if (scheduleController.schedule.value.time != null)
+                        Text('${formattedDate} ${formattedTime}',
+                          style: TextStyle(
+                              fontSize: 22
+                          ),
+                        ),
+                      if (scheduleController.schedule.value.name != null)
+                        Text(scheduleController.schedule.value.name!,
+                          style: TextStyle(
+                              fontSize:28,
+                              fontWeight: FontWeight.w500
+                          ),
+                        ),
                       SizedBox(height: 15,),
+
                       Row(
                         children: [
                           Text('장소', style: TextStyle(fontSize: 22, color: Color(0xff737373)),),
@@ -83,59 +97,40 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
                 ),
                 SizedBox(height: 20,),
 
-                // Container(
-                //   width: MediaQuery.of(context).size.width * 0.9,
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       Text('일정 메모',
-                //         style: TextStyle(color: Color(0xffA38130), fontSize: 20, fontWeight: FontWeight.normal,)),
-                //       SizedBox(width: 10),
-                //       //Text(scheduleController.memo.value, style: TextStyle(fontSize: 20),),
-                //       SizedBox(
-                //           width: MediaQuery.of(context).size.width * 0.9,
-                //         child: TextButton(
-                //           onPressed: () {},
-                //           style: ButtonStyle(
-                //             backgroundColor: MaterialStateProperty.all(Color(0xffFFF5DB)),
-                //             overlayColor: MaterialStateProperty.all(Colors.transparent), // 클릭 시 효과나 모션 없애기
-                //             shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                //               borderRadius: BorderRadius.circular(15),
-                //             )),
-                //           ),
-                //           child: Align(
-                //             alignment: Alignment.centerLeft,
-                //             child: Text(scheduleController.schedule.value.memo ?? '',
-                //               style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.normal,),
-                //               textAlign: TextAlign.left,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
+
               ],
             ),
           ),
         ),
 
-        Container(
-          margin: EdgeInsets.only(bottom: 20),
-          child: TextButton(
-            onPressed: () async {
-              scheduleController.tmpScheduleName.value = scheduleController.schedule.value.name!;
-
-              Get.to(ScheduleRegisterFinish());
-            },
-            child: Text('등록하기', style: TextStyle(color: Colors.white, fontSize: 20),),
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
-              minimumSize: MaterialStateProperty.all(
-                  Size(MediaQuery.of(context).size.width * 0.9, 50)),
-            ),
-          ),
+        // Container(
+        //   margin: EdgeInsets.only(bottom: 20),
+        //   child: TextButton(
+        //     onPressed: () async {
+        //       scheduleController.tmpScheduleName.value = scheduleController.schedule.value.name!;
+        //
+        //       Get.to(ScheduleRegisterFinish());
+        //     },
+        //     child: Text('등록하기', style: TextStyle(color: Colors.white, fontSize: 20),),
+        //     style: ButtonStyle(
+        //       backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
+        //       minimumSize: MaterialStateProperty.all(
+        //           Size(MediaQuery.of(context).size.width * 0.9, 50)),
+        //     ),
+        //   ),
+        // ),
+        YesNoActionButtons(
+          primaryText: '등록',
+          secondaryText: '수정',
+          onPrimaryPressed: () {
+            scheduleController.tmpScheduleName.value = scheduleController.schedule.value.name!;
+            Get.to(ScheduleRegisterFinish());
+          },
+          onSecondaryPressed: () {
+            Get.to(ScheduleRegister1);
+          },
         ),
+
       ]),
     );
   }
