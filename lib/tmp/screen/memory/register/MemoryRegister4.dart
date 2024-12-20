@@ -29,6 +29,11 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
   }
 
   @override
+  void initState() {
+    memoryNoteController.memoryNote.value.keyword = [];
+  }
+
+  @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;

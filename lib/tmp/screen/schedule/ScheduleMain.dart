@@ -115,7 +115,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
                     ),),
                   ),
                   SizedBox(height: 10,),
-                  NextButton(next: ScheduleRegister1(), content: '일정 등록하기', isEnabled: true),
+                  BottomNextButton(next: ScheduleRegister1(), content: '일정 등록하기', isEnabled: true),
                 ],
               ),
             )

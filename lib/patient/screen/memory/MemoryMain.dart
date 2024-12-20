@@ -166,13 +166,16 @@ class _MainGalleryState extends State<MainMemory>
       // 인물 기준으로 그룹화
       groupedNotes = {};
       for (var memory in notes) {
-        memory.selectedFamilyMember?.forEach((member, isSelected) {
-          if (isSelected == true) {
-            // true 값만 필터링
-            groupedNotes.putIfAbsent(member, () => []).add(memory);
-          }
-        });
+        for (var member in memory.selectedFamilyMember ?? []) {
+          groupedNotes.putIfAbsent(member, () => []).add(memory);
+        }
       }
+
+      // 인물 이름 기준으로 정렬
+      groupedNotes = Map.fromEntries(
+        groupedNotes.entries.toList()
+          ..sort((a, b) => a.key.compareTo(b.key)),
+      );
 
       for (var memory in notes) {
         print("Memory selectedFamilyMember: ${memory.selectedFamilyMember}");

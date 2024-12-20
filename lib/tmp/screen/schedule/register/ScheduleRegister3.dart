@@ -65,7 +65,7 @@ class _ScheduleRegister3State extends State<ScheduleRegister3> {
             ),
           ),
 
-          NextButton(next: ScheduleRegister4(), content: '다음', isEnabled: scheduleController.schedule.value.location != null,),
+          BottomNextButton(next: ScheduleRegister4(), content: '다음', isEnabled: scheduleController.schedule.value.location != null,),
         ]),
       ),
     );

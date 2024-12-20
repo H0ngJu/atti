@@ -61,7 +61,7 @@ class _RoutineRegister1State extends State<RoutineRegister1> {
               ),
             )),
 
-            NextButton(next: RoutineRegister2(), content: '다음', isEnabled: routineController.routine.value.name != null,)
+            BottomNextButton(next: RoutineRegister2(), content: '다음', isEnabled: routineController.routine.value.name != null,)
           ],
         ),
       ),

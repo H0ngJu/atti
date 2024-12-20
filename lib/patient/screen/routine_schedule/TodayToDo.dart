@@ -159,7 +159,7 @@ class _TodayToDoState extends State<TodayToDo> {
         hour12 = hour12 == 0 ? 12 : hour12;
         return '${isPM ? '오후' : '오전'} ${hour12.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
       } else {
-        return '일과 없음';
+        return '로딩중이에요...';
       }
     }
     String formattedTime1 = nextRoutine != null
@@ -285,7 +285,7 @@ class _TodayToDoState extends State<TodayToDo> {
 
             // 일과 이름
             Text(
-              nextRoutine?.name ?? '일과 없음',
+              nextRoutine?.name ?? '로딩중이에요...',
               style: TextStyle(
                 fontSize: 28,
               ),
