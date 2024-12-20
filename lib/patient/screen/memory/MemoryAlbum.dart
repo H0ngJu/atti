@@ -15,6 +15,7 @@ class MemoryAlbum extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: SimpleAppBar(title: "$memoryKey\n기억모음"),
       body: Stack(
         children: [
