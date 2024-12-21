@@ -9,6 +9,11 @@ import '../gallery/MainGallery.dart';
 import '../gallery/MemoryDetail.dart';
 
 class ChatComplete extends StatefulWidget {
+  final MemoryNoteModel memory;
+
+  const ChatComplete({Key? key, required this.memory})
+      : super(key: key);
+
   @override
   _ChatCompleteState createState() => _ChatCompleteState();
 }
@@ -88,9 +93,9 @@ class _ChatCompleteState extends State<ChatComplete> {
             children: [
               Container(
                 child: Text(
-                  '\'돌잔치\' 대화 기록이\n저장되었어요!',
+                  '\'${this.widget.memory.imgTitle}\' 대화 기록이\n저장되었어요!',
                   style: TextStyle(
-                      fontSize: 40,
+                      fontSize: 35,
                       color: Colors.black,
                       fontFamily: 'PretendardMedium'),
                 ),
