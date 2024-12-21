@@ -19,6 +19,7 @@ class _MenuState extends State<Menu> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(width*0.05),

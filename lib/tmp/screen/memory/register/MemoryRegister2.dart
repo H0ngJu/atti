@@ -1,8 +1,9 @@
 // 피그마 '기억하기2 - 사진 제목 입력' 화면
 import 'dart:io';
+import 'package:atti/commons/colorPallet.dart';
+import 'package:atti/tmp/screen/memory/register/MemoryRegisterAppBar.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
 import 'package:atti/tmp/screen/memory/register/MemoryRegister3.dart';
@@ -19,7 +20,12 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    ColorPallet _colorPallet = ColorPallet();
+
     return Scaffold(
+      appBar: MemoryRegisterAppBar(context),
       body: GestureDetector(
         onTap: (){
           FocusScope.of(context).unfocus();
@@ -30,15 +36,26 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    DetailPageTitle(title: '기억하기', description: '사진 제목을 입력해주세요', totalStep: 4, currentStep: 2,),
-                    SizedBox(height: 30,),
+
+                    SizedBox(height: height * 0.02,),
+                    Text('기억 제목을 입력해주세요', style: TextStyle(fontSize: 30),),
+                    SizedBox(height: height * 0.02,),
                     Container(
                       constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.4),
                       width: MediaQuery.of(context).size.width * 0.9,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      clipBehavior: Clip.antiAlias,
                       child: memoryNoteController.memoryNote.value.img != null
-                          ? Image.file(File(memoryNoteController.memoryNote.value.img!))
-                          : SizedBox(), // 널일 경우 대체할 위젯 설정
+                          ? Image.file(
+                        File(memoryNoteController.memoryNote.value.img!),
+                        fit: BoxFit.cover, // 이미지의 크기를 조정
+                        width: MediaQuery.of(context).size.width * 0.9,
+                      )
+                          : SizedBox(),
                     ),
+
                     SizedBox(height: 20,),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.9,
@@ -49,10 +66,10 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
                         cursorColor: Colors.black,
                         style: TextStyle(fontSize: 24),
                         decoration: InputDecoration(
-                          hintText: '사진 제목을 뭐라고 할까요?',
-                          hintStyle: TextStyle(fontSize: 24, color: Color(0xffA38130)),
+                          hintText: '제목으로 무엇이 좋을까요?',
+                          hintStyle: TextStyle(fontSize: 24, color:_colorPallet.textColor),
                           filled: true, // 배경을 채움
-                          fillColor: Color(0xffFFF5DB),
+                          fillColor: _colorPallet.lightYellow,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
                             borderSide: BorderSide.none,

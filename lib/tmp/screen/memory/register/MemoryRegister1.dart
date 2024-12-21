@@ -1,5 +1,7 @@
 // 피그마 '기억하기 - 사진 선택' 화면
 import 'dart:io';
+import 'package:atti/commons/colorPallet.dart';
+import 'package:atti/tmp/screen/memory/register/MemoryRegisterAppBar.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
@@ -35,22 +37,10 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    ColorPallet _colorPallet = ColorPallet();
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            '기억 남기기',
-            style: TextStyle(
-              fontSize: 24,
-            ),
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
+        appBar: MemoryRegisterAppBar(context),
         body: Column(
       children: [
         Expanded(
@@ -58,7 +48,9 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
             children: [
               Container(
                   child: Text(
-                      '사진을 추가할 방식을\n선택해주세요',
+                    _image != null
+                        ? '앨범에서 사진을\n선택했어요':
+                          '사진을 추가할 방식을\n선택해주세요',
                     style: TextStyle(
                       fontSize: 30,
                     ),
@@ -70,12 +62,24 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                 height: height * 0.04,
               ),
               _image != null
-                  ? Container(
-                      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.4),
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      //height: 280,
-                      child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄움
-                    )
+                   ? Container(
+                constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.4),
+                width: MediaQuery.of(context).size.width * 0.9,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20), // 둥근 테두리 설정
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Image.file(
+                  File(_image!.path),
+                  fit: BoxFit.cover,
+                ),
+              )
+              // ? Container(
+                  //     constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.4),
+                  //     width: MediaQuery.of(context).size.width * 0.9,
+                  //     //height: 280,
+                  //     child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄움
+                  //   )
                   : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -87,22 +91,27 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                             alignment: Alignment.center,
                             width: MediaQuery.of(context).size.width * 0.9,
                               decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black, width: 1),
-                                borderRadius: BorderRadius.circular(30),
+                                color: const Color(0xFFFFE0CC),
+                                borderRadius: BorderRadius.circular(20),
                               ),
                             child: Column(
                               children: [
-                                Row(
-                                  children: [
-                                    Text('카메라로 사진 찍기', style: TextStyle(fontSize: 24, ),),
-                                    Image.asset('lib/assets/images/register_memory_camera.png'),
-                                  ],
+                                Padding(
+                                  padding: EdgeInsets.all(width*0.05),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('카메라로 사진 찍기', style: TextStyle(fontSize: 24, ),),
+                                      Image.asset('lib/assets/images/register_memory_camera.png',
+                                        width: width*0.25,),
+                                    ],
+                                  ),
                                 ),
                               ],
                             )
                           ),
                         ),
-                      SizedBox(width: width * 0.03,),
+                      SizedBox(height: height * 0.02,),
                       GestureDetector(
                         onTap: () {
                           getImage(ImageSource.gallery);
@@ -111,16 +120,22 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                             alignment: Alignment.center,
                             width: MediaQuery.of(context).size.width * 0.9,
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black, width: 1),
-                              borderRadius: BorderRadius.circular(30),
+                              color: _colorPallet.lightYellow,
+                              borderRadius: BorderRadius.circular(20),
                             ),
                             child: Column(
                               children: [
-                                Row(
-                                  children: [
-                                    Text('앨범에서 불러오기', style: TextStyle(fontSize: 24, ),),
-                                    Image.asset('lib/assets/images/register_memory_album.png'),
-                                  ],
+                                Padding(
+                                  padding: EdgeInsets.all(width*0.05),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('앨범에서 불러오기', style: TextStyle(fontSize: 24, ),),
+                                      Image.asset('lib/assets/images/register_memory_album.png',
+                                        width: width*0.25,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             )
@@ -143,7 +158,6 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                         memoryNoteController.memoryNote.update((val) {
                           val!.img = _image!.path;
                         });
-
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -152,12 +166,12 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                       },
                       child: Text(
                         '다음',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: TextStyle(color: Colors.black, fontSize: 20),
                       ),
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Color(0xffFFC215)),
-                        minimumSize: MaterialStateProperty.all(
+                        WidgetStateProperty.all(Color(0xffFFC215)),
+                        minimumSize: WidgetStateProperty.all(
                             Size(MediaQuery.of(context).size.width * 0.43, 50)),
                       ),
                     ),
@@ -175,10 +189,10 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                       ),
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.white),
-                        minimumSize: MaterialStateProperty.all(
+                        WidgetStateProperty.all(Colors.white),
+                        minimumSize: WidgetStateProperty.all(
                             Size(MediaQuery.of(context).size.width * 0.43, 50)),
-                        side: MaterialStateProperty.all(BorderSide(
+                        side: WidgetStateProperty.all(BorderSide(
                           color: Colors.black, // 외곽선 색상 설정
                           width: 1, // 외곽선 두께 설정
                         )),

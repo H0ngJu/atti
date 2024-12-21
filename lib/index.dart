@@ -86,7 +86,6 @@ export 'package:atti/tmp/screen/memory/chat/ChatComplete.dart';
 export 'package:atti/tmp/screen/memory/gallery/GalleryOption.dart';
 export 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
 export 'package:atti/tmp/screen/memory/gallery/MemoryDetail.dart';
-//export 'package:atti/tmp/screen/memory/gallery/RecollectionData.dart';
 export 'package:atti/tmp/screen/memory/gallery/RecollectionDetail.dart';
 export 'package:atti/tmp/screen/memory/gallery/TagController.dart';
 
