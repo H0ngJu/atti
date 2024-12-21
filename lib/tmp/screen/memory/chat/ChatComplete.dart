@@ -75,7 +75,7 @@ class _ChatCompleteState extends State<ChatComplete> {
         selectRandomMemoryNotes(memoryNotes, 3); // 기억 랜덤하게 3개 뽑기
 
     return Scaffold(
-      backgroundColor: Color(0xffFFF5DB),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
           margin: EdgeInsets.only(
@@ -88,7 +88,7 @@ class _ChatCompleteState extends State<ChatComplete> {
             children: [
               Container(
                 child: Text(
-                  '\'돌잔치\'회상 대화가 저장되었어요!',
+                  '\'돌잔치\' 대화 기록이\n저장되었어요!',
                   style: TextStyle(
                       fontSize: 40,
                       color: Colors.black,

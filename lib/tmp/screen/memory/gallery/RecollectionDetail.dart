@@ -49,7 +49,10 @@ class RecollectionDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: SimpleAppBar(title: '그때 그 시절'),
+      backgroundColor: Colors.white,
+        appBar: SimpleAppBar(
+            title: '그때 그 시절',
+        ),
         body: Stack(children: <Widget>[
           SingleChildScrollView(
             child: Container(

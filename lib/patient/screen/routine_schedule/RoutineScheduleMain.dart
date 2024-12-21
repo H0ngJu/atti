@@ -304,12 +304,6 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
               ),
             ),
             SizedBox(height: height * 0.03),
-            // 임시 이동 버튼
-            TextButton(
-                onPressed: () {
-                  Get.to(TodayToDo());
-                },
-                child: Text('오늘할일 페이지로 이동')),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

@@ -141,7 +141,8 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('\'${widget.memory.imgTitle}\'기억 회상 대화'),
+        title: Text('\'${widget.memory.imgTitle}\' 기억 회상 대화'),
+        backgroundColor: Colors.white,
       ),
       body: Stack(children: [
         isAttiView

@@ -193,7 +193,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
             ),
           ),
 
-          NextButton(next: ScheduleRegister3(), content: '다음', isEnabled: isButtonEnabled()),
+          BottomNextButton(next: ScheduleRegister3(), content: '다음', isEnabled: isButtonEnabled()),
         ],
       ),
 

@@ -31,20 +31,20 @@ class CustomBottomNavigationBar extends StatelessWidget {
       items: [
         _buildBottomNavigationBarItem(
           tappedIcon: 'lib/assets/icons/memory_orange.svg',
-          untappedIcon: 'lib/assets/icons/memory_white.svg',
+          untappedIcon: 'lib/assets/icons/memory_black.svg',
           label: '내 기억',
           isSelected: currentIndex == 0,
 
         ),
         _buildBottomNavigationBarItem(
           tappedIcon: 'lib/assets/icons/home_orange.svg',
-          untappedIcon: 'lib/assets/icons/home_white.svg',
+          untappedIcon: 'lib/assets/icons/home_black.svg',
           label: '홈',
           isSelected: currentIndex == 1,
         ),
         _buildBottomNavigationBarItem(
           tappedIcon: 'lib/assets/icons/RShome_orange.svg',
-          untappedIcon: 'lib/assets/icons/RShome_white.svg',
+          untappedIcon: 'lib/assets/icons/RShome_black.svg',
           label: '일과/일정',
           isSelected: currentIndex == 2,
         ),

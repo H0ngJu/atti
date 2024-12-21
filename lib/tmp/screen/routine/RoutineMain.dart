@@ -120,7 +120,7 @@ class _RoutineMainState extends State<RoutineMain> {
                   SizedBox(
                     height: 10,
                   ),
-                  NextButton(
+                  BottomNextButton(
                     next: RoutineRegister1(),
                     content: '하루 일과 등록하기',
                     isEnabled: true,

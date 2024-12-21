@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 class Tag extends StatelessWidget {
   final String name;
   final Color backgroundColor;
+  final double fontsize;
 
-  Tag({required this.name, this.backgroundColor = Colors.white});
+
+  Tag({required this.name, this.backgroundColor = Colors.white, this.fontsize = 16});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      height: 30,
-      padding: EdgeInsets.symmetric(horizontal: 5),
+      margin: fontsize != 16 ? EdgeInsets.only(top: 12) : EdgeInsets.symmetric(vertical: 5),
+      height: fontsize+14,
+      padding: fontsize != 16 ? EdgeInsets.symmetric(horizontal: 10) : EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         color: backgroundColor,
         border: Border.all(color: Colors.black),
@@ -22,18 +24,18 @@ class Tag extends StatelessWidget {
         children: [
           Text(
             name,
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(fontSize: fontsize),
           ),
-          SizedBox(width: 3),
+          SizedBox(width: fontsize != 16 ? 10 : 3),
           Container(
-            height: 40,
+            height: fontsize+14,
             child: VerticalDivider(
               width: 1,
               thickness: 1,
               color: Colors.black,
             ),
           ),
-          SizedBox(width: 1),
+          SizedBox(width: fontsize != 16 ? 5 : 1,),
           GestureDetector(
             onTap: () {
             },

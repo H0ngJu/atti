@@ -38,8 +38,9 @@ class MemoryInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
         appBar: AppBar(
+          backgroundColor: Colors.white,
           title: Text('기억 한 조각'),
           actions: <Widget>[
             Container(
@@ -69,9 +70,7 @@ class MemoryInfo extends StatelessWidget {
                     height: 10,
                   ),
                   MemoryDetailTitle(),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  //SizedBox(height: 10,),
                   Divider(),
                   SizedBox(
                     height: 10,
@@ -89,7 +88,7 @@ class MemoryInfo extends StatelessWidget {
                 SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
                     height: 60,
-                    child: ElevatedButton(
+                    child: TextButton(
                         onPressed: () {
                           Get.to(ChatScreen(memory: memory));
                         },

@@ -70,16 +70,18 @@ class MemoryNoteService {
       print('No \$API_KEY environment variable');
       exit(1);
     }
+    print('callGeminiAPI 함수');
+
     // 이미지 처리
     final visionModel = GenerativeModel(
-      model: 'gemini-pro-vision',
+      model: 'gemini-1.5-flash',
       apiKey: apiKey,);
     var startTime = DateTime.now(); //
     final userMemoryImg = Uint8List.fromList(await _downloadImage(memoryNote.img!));
     var endTime = DateTime.now(); //
     print('이미지 다운로드 시간: ${endTime.difference(startTime)}');
 
-    final imgPrompt = TextPart("이미지에 대해 자세히 설명해줘.");
+    final imgPrompt = TextPart("이미지에 대해 자세히 설명해줘. 사진 속에 인물이 있을 경우 인물들의 표정과 감정, 행동 등에 대해 분석해줘. 인물이 없다면 사진의 배경, 장소, 계절, 나오는 물건 등에 대해 분석해줘. 인물이 여러 명 나올경우 인물들 간의 상호작용, 관계 등도 분석해줘.");
     final imageParts = [DataPart('image/jpeg', userMemoryImg)];
     startTime = DateTime.now();
     final imgDescription = await visionModel.generateContent([Content.multi([imgPrompt, ...imageParts])]);
