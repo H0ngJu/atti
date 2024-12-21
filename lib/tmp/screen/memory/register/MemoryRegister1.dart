@@ -170,8 +170,8 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                       ),
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Color(0xffFFC215)),
-                        minimumSize: MaterialStateProperty.all(
+                        WidgetStateProperty.all(Color(0xffFFC215)),
+                        minimumSize: WidgetStateProperty.all(
                             Size(MediaQuery.of(context).size.width * 0.43, 50)),
                       ),
                     ),
@@ -189,10 +189,10 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                       ),
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.white),
-                        minimumSize: MaterialStateProperty.all(
+                        WidgetStateProperty.all(Colors.white),
+                        minimumSize: WidgetStateProperty.all(
                             Size(MediaQuery.of(context).size.width * 0.43, 50)),
-                        side: MaterialStateProperty.all(BorderSide(
+                        side: WidgetStateProperty.all(BorderSide(
                           color: Colors.black, // 외곽선 색상 설정
                           width: 1, // 외곽선 두께 설정
                         )),
