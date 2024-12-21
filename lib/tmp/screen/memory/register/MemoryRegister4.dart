@@ -85,10 +85,13 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
                             String memberName = _memoryWordsController.text;
                             if (memberName.isNotEmpty) {
                               setState(() {
-                                _values.add(memberName);
+                                memoryNoteController.memoryNote.value.keyword?.add(memberName);
                                 _memoryWordsController.clear(); // 입력 필드 비우기
                               });
                             }
+                            //memoryNoteController.memoryNote.value.keyword?.addAll(_values);
+                            print(memoryNoteController.memoryNote.value.keyword);
+                            //Navigator.push(context, MaterialPageRoute(builder: (context) => MemoryRegisterCheck()),);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: _memoryWordsController.text.isNotEmpty ? _colorPallet.goldYellow : Colors.white,
@@ -110,7 +113,7 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
                   SizedBox(height: 16),
                   Wrap(
                     spacing: 8.0,
-                    children: _values.map((member) {
+                    children: memoryNoteController.memoryNote.value.keyword!.map((member) {
                       return MemoryWordsTag(name: member);
                     }).toList(),
                   ),
