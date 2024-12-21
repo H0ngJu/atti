@@ -1,3 +1,4 @@
+import 'package:atti/commons/AttiSpeechBubble.dart';
 import 'package:atti/data/memory/RecollectionData.dart';
 import 'package:atti/patient/screen/memory/MemoryAlbum.dart';
 import 'package:atti/tmp/screen/memory/gallery/RecollectionDetail.dart';
@@ -15,6 +16,7 @@ import 'package:atti/tmp/screen/memory/gallery/MemoryDetail.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'dart:math';
 
+import '../../../commons/colorPallet.dart';
 import '../../../data/report/viewsController.dart';
 
 class MainMemory extends StatefulWidget {
@@ -30,6 +32,7 @@ class _MainGalleryState extends State<MainMemory>
   final MemoryNoteService memoryNoteService = MemoryNoteService();
   final FlutterTts flutterTts = FlutterTts();
   late RecollectionData _randomData;
+  final ColorPallet colorPallet = Get.put(ColorPallet());
 
   Map<String, List<MemoryNoteModel>> groupedNotes = {};
   bool isLoading = true;
@@ -74,7 +77,7 @@ class _MainGalleryState extends State<MainMemory>
 
     try {
       final QuerySnapshot<Map<String, dynamic>> viewsSnapshot =
-      await FirebaseFirestore.instance.collection('views').get();
+          await FirebaseFirestore.instance.collection('views').get();
 
       for (var doc in viewsSnapshot.docs) {
         final data = doc.data();
@@ -104,7 +107,7 @@ class _MainGalleryState extends State<MainMemory>
           String groupKey = "$rangeStart번 이상 조회";
 
           DocumentSnapshot<Map<String, dynamic>> memoryDoc =
-          await memoryRef.get() as DocumentSnapshot<Map<String, dynamic>>;
+              await memoryRef.get() as DocumentSnapshot<Map<String, dynamic>>;
 
           if (memoryDoc.exists) {
             MemoryNoteModel memory = MemoryNoteModel.fromSnapShot(memoryDoc);
@@ -120,7 +123,8 @@ class _MainGalleryState extends State<MainMemory>
           int rangeStartB = int.parse(b.split('번').first);
           return rangeStartB.compareTo(rangeStartA);
         });
-      final sortedGroupedMemories = Map<String, List<MemoryNoteModel>>.fromEntries(
+      final sortedGroupedMemories =
+          Map<String, List<MemoryNoteModel>>.fromEntries(
         sortedKeys.map((key) => MapEntry(key, groupedMemories[key]!)),
       );
 
@@ -148,7 +152,7 @@ class _MainGalleryState extends State<MainMemory>
       // 연도 기준으로 그룹화
       groupedNotes = groupBy(
         notes,
-            (memory) => memory.era?.toString() ?? '기타', // era 데이터가 없는 경우 '기타' 처리
+        (memory) => memory.era?.toString() ?? '기타', // era 데이터가 없는 경우 '기타' 처리
       );
 
       // 키를 연도로 변환 후 내림차순 정렬
@@ -173,8 +177,7 @@ class _MainGalleryState extends State<MainMemory>
 
       // 인물 이름 기준으로 정렬
       groupedNotes = Map.fromEntries(
-        groupedNotes.entries.toList()
-          ..sort((a, b) => a.key.compareTo(b.key)),
+        groupedNotes.entries.toList()..sort((a, b) => a.key.compareTo(b.key)),
       );
 
       for (var memory in notes) {
@@ -197,20 +200,29 @@ class _MainGalleryState extends State<MainMemory>
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Stack(children: [
               SingleChildScrollView(
-                  padding: EdgeInsets.all(16),
+                  //padding: EdgeInsets.only(left: 16, right: 16),
                   child: Column(
                     children: [
+                      SizedBox(height: height * 0.06,),
                       _buildHeader(),
                       SizedBox(height: 20),
                       _buildImageSection(),
                       SizedBox(height: 20),
-                      _buildSpeechBubble(),
+                      Container(
+                        width: width * 0.9,
+                        child: AttiSpeechBubble(
+                            comment: '사진을 눌러\n그 기억에 대해 이야기해요',
+                            color: colorPallet.lightYellow),
+                      ),
                       SizedBox(height: 10),
                       _buildCategoryTabs(),
                       Container(child: _buildGroupedMemoryCards()),
@@ -235,36 +247,44 @@ class _MainGalleryState extends State<MainMemory>
 
   Widget _buildHeader() {
     return Padding(
-        padding: const EdgeInsets.only(top: 20, left: 16),
+        padding: const EdgeInsets.only(left: 16),
         child: Container(
             //margin: EdgeInsets.only(top: 20),
             child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.72,
-              child: RichText(
-                text: TextSpan(
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                    height: 1.5,
-                  ),
-                  children: [
-                    TextSpan(text: '${authController.userName.value}님의\n'),
-                    TextSpan(
-                      text: '소중한 기억을 모아봤어요',
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: RichText(
+                    text: TextSpan(
                       style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: 24,
+                        height: 1.5,
                       ),
+                      children: [
+                        TextSpan(
+                          text: '${authController.userName.value}님의\n',
+                          style: TextStyle(
+                              fontSize: 24,
+                              height: 1.2
+                          ),
+                        ),
+                        TextSpan(
+                          text: '소중한 기억을 모아봤어요',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ],
-        )));
+              ],
+            )
+        )
+    );
   }
 
   Widget _buildImageSection() {
@@ -274,94 +294,102 @@ class _MainGalleryState extends State<MainMemory>
       children: [
         Image(
             image: AssetImage('lib/assets/Atti/Stars.png'),
-            width: MediaQuery.of(context).size.width * 0.46),
+            width: MediaQuery.of(context).size.width * 0.57),
       ],
     );
   }
 
-  Widget _buildSpeechBubble() {
-    return Container(
-      alignment: Alignment.center,
-      padding: EdgeInsets.all(20),
-      decoration: BoxDecoration(
-          color: Color(0xffFFEFC6),
-          borderRadius: BorderRadius.all(Radius.circular(15))),
-      child: Text('사진을 눌러\n그 기억에 대해 이야기해요',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: Colors.black, fontFamily: 'UhBee', fontSize: 25)),
-    );
-  }
+  // Widget _buildSpeechBubble() {
+  //   return Container(
+  //     alignment: Alignment.center,
+  //     padding: EdgeInsets.all(20),
+  //     decoration: BoxDecoration(
+  //         color: Color(0xffFFEFC6),
+  //         borderRadius: BorderRadius.all(Radius.circular(15))),
+  //     child: Text('사진을 눌러\n그 기억에 대해 이야기해요',
+  //         textAlign: TextAlign.center,
+  //         style: TextStyle(
+  //             color: Colors.black, fontFamily: 'UhBee', fontSize: 25)),
+  //   );
+  // }
 
   Widget _buildCategoryTabs() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start, // 왼쪽 정렬
-      children: categories.map((category) {
-        int index = categories.indexOf(category);
-        return GestureDetector(
-          onTap: () {
-            setState(() {
-              _selectedCategory = index;
-              fetchData(); // 선택 변경 시 데이터 다시 로드
-            });
-          },
-          child: Container(
-            margin: EdgeInsets.only(right: 5), // 카테고리 간격
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-            child: Text(
-              category,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: _selectedCategory == index ? FontWeight.bold : FontWeight.normal, // 선택된 카테고리는 bold
-                color: _selectedCategory == index ? Colors.black : Colors.grey,
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.9,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start, // 왼쪽 정렬
+        children: categories.map((category) {
+          int index = categories.indexOf(category);
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedCategory = index;
+                fetchData(); // 선택 변경 시 데이터 다시 로드
+              });
+            },
+            child: Container(
+              margin: EdgeInsets.only(right: 20), // 카테고리 간격
+              padding: EdgeInsets.only(top: 10),
+              child: Text(
+                category,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: _selectedCategory == index
+                      ? FontWeight.bold
+                      : FontWeight.normal, // 선택된 카테고리는 bold
+                  color: _selectedCategory == index ? Colors.black : Colors.grey,
+                ),
               ),
             ),
-          ),
-        );
-      }).toList(),
+          );
+        }).toList(),
+      ),
     );
   }
 
   Widget _buildGroupedMemoryCards() {
     if (_selectedCategory == 0) {
       // 연도를 클릭한 경우
-      return ListView.builder(
-        itemCount: groupedNotes.length,
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            // 첫 번째 Row는 _randomData와 groupedNotes의 첫 번째 아이템을 가로로 배치
-            String firstGroupKey = groupedNotes.keys.first; // 첫 번째 그룹 키 가져오기
-            MemoryNoteModel firstMemory =
-                groupedNotes[firstGroupKey]!.first; // 첫 번째 메모리 아이템
+      return Container(
+        width: MediaQuery.of(context).size.width * 0.9,
+        child: ListView.builder(
+          itemCount: groupedNotes.length,
+          shrinkWrap: true,
+          physics: const BouncingScrollPhysics(),
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              // 첫 번째 Row는 _randomData와 groupedNotes의 첫 번째 아이템을 가로로 배치
+              String firstGroupKey = groupedNotes.keys.first; // 첫 번째 그룹 키 가져오기
+              MemoryNoteModel firstMemory =
+                  groupedNotes[firstGroupKey]!.first; // 첫 번째 메모리 아이템
 
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: _buildRecollectionCard(_randomData),
+                  ),
+                  Expanded(
+                    child: _buildMemoryCard(
+                        firstMemory, groupedNotes[firstGroupKey]!.length - 1),
+                  ),
+                ],
+              );
+            }
+
+            String groupKey = groupedNotes.keys.elementAt(index);
+            List<MemoryNoteModel>? groupNotes = groupedNotes[groupKey];
+            MemoryNoteModel firstMemory = groupNotes!.first;
+            int groupNotesCnt = groupNotes.length;
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: _buildRecollectionCard(_randomData),
-                ),
-                Expanded(
-                  child: _buildMemoryCard(
-                      firstMemory, groupedNotes[firstGroupKey]!.length - 1),
-                ),
+                _buildMemoryCard(firstMemory, groupNotesCnt - 1),
               ],
             );
-          }
-
-          String groupKey = groupedNotes.keys.elementAt(index);
-          List<MemoryNoteModel>? groupNotes = groupedNotes[groupKey];
-          MemoryNoteModel firstMemory = groupNotes!.first;
-          int groupNotesCnt = groupNotes.length;
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildMemoryCard(firstMemory, groupNotesCnt - 1),
-            ],
-          );
-        },
+          },
+        ),
       );
     } else {
       // 좋아하는 기억 또는 인물을 클릭한 경우
@@ -378,7 +406,8 @@ class _MainGalleryState extends State<MainMemory>
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildFavoriteMemoryCard(firstMemory, groupNotesCnt - 1, groupKey),
+              _buildFavoriteMemoryCard(
+                  firstMemory, groupNotesCnt - 1, groupKey),
             ],
           );
         },
@@ -391,15 +420,15 @@ class _MainGalleryState extends State<MainMemory>
     return GestureDetector(
       onTap: () => Get.to(RecollectionDetail(data: recollection)),
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        margin: const EdgeInsets.only(right: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 1,
-                blurRadius: 5)
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //       color: Colors.grey.withOpacity(0.2),
+          //       spreadRadius: 1,
+          //       blurRadius: 5)
+          // ],
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
@@ -421,8 +450,9 @@ class _MainGalleryState extends State<MainMemory>
                           "그때 그 시절",
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            height: 1.2,
                             shadows: [
                               Shadow(color: Colors.black, blurRadius: 5)
                             ],
@@ -432,8 +462,9 @@ class _MainGalleryState extends State<MainMemory>
                           recollection.title,
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
+                            height: 1.0,
                             shadows: [
                               Shadow(color: Colors.black, blurRadius: 5)
                             ],
@@ -455,17 +486,20 @@ class _MainGalleryState extends State<MainMemory>
     List<MemoryNoteModel> group = groupedNotes[groupKey]!; // 앨범 목록 전달
 
     return GestureDetector(
-      onTap: () => Get.to(MemoryAlbum(memoryKey: groupKey, group: group,)),
+      onTap: () => Get.to(MemoryAlbum(
+        memoryKey: groupKey,
+        group: group,
+      )),
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        margin: const EdgeInsets.symmetric(vertical: 5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 1,
-                blurRadius: 5)
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //       color: Colors.grey.withOpacity(0.2),
+          //       spreadRadius: 1,
+          //       blurRadius: 5)
+          // ],
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
@@ -487,8 +521,9 @@ class _MainGalleryState extends State<MainMemory>
                           memory.era.toString() + "년대" ?? '',
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            height: 1.2,
                             shadows: [
                               Shadow(color: Colors.black, blurRadius: 5)
                             ],
@@ -504,8 +539,9 @@ class _MainGalleryState extends State<MainMemory>
                                   '',
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
+                            height: 1.0,
                             shadows: [
                               Shadow(color: Colors.black, blurRadius: 5)
                             ],
@@ -520,21 +556,25 @@ class _MainGalleryState extends State<MainMemory>
   }
 
   // 좋아하는 기억 메모리 카드
-  Widget _buildFavoriteMemoryCard(MemoryNoteModel memory, int MemoryCnt, String groupKey) {
+  Widget _buildFavoriteMemoryCard(
+      MemoryNoteModel memory, int MemoryCnt, String groupKey) {
     List<MemoryNoteModel> group = groupedNotes[groupKey]!;
 
     return GestureDetector(
-      onTap: () => Get.to(MemoryAlbum(memoryKey: groupKey, group: group,)),
+      onTap: () => Get.to(MemoryAlbum(
+        memoryKey: groupKey,
+        group: group,
+      )),
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 1,
-                blurRadius: 5)
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //       color: Colors.grey.withOpacity(0.2),
+          //       spreadRadius: 1,
+          //       blurRadius: 5)
+          // ],
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
@@ -556,8 +596,9 @@ class _MainGalleryState extends State<MainMemory>
                           "${groupKey}",
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            height: 1.2,
                             shadows: [
                               Shadow(color: Colors.black, blurRadius: 5)
                             ],
@@ -573,8 +614,9 @@ class _MainGalleryState extends State<MainMemory>
                                   '',
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            height: 1.2,
                             shadows: [
                               Shadow(color: Colors.black, blurRadius: 5)
                             ],
