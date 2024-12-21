@@ -1,5 +1,6 @@
 // 피그마 '기억하기2 - 사진 제목 입력' 화면
 import 'dart:io';
+import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/tmp/screen/memory/register/MemoryRegisterAppBar.dart';
 import 'package:get/get.dart';
@@ -26,20 +27,22 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: MemoryRegisterAppBar(context),
       body: GestureDetector(
         onTap: (){
           FocusScope.of(context).unfocus();
         },
         child: Column(
           children: [
+            DetailPageTitle(
+              title: '기억 남기기',
+              totalStep: 3,
+              currentStep: 1,
+              description: '기억 제목을 입력해주세요',
+            ),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-
-                    SizedBox(height: height * 0.02,),
-                    Text('기억 제목을 입력해주세요', style: TextStyle(fontSize: 30),),
                     SizedBox(height: height * 0.02,),
                     Container(
                       constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.4),
@@ -56,7 +59,6 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
                       )
                           : SizedBox(),
                     ),
-
                     SizedBox(height: 20,),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.9,
@@ -69,7 +71,7 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
                         decoration: InputDecoration(
                           hintText: '제목으로 무엇이 좋을까요?',
                           hintStyle: TextStyle(fontSize: 24, color:_colorPallet.textColor),
-                          filled: true, // 배경을 채움
+                          filled: true,
                           fillColor: _colorPallet.lightYellow,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
