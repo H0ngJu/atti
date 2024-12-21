@@ -24,7 +24,7 @@ class Chatbot {
     }
 
     final model = GenerativeModel(
-      model: 'gemini-1.5-pro-latest',
+      model: 'gemini-1.5-flash',
       apiKey: apiKey,
       generationConfig: GenerationConfig(
         maxOutputTokens: 70,
@@ -79,7 +79,7 @@ class Chatbot {
     }
 
     final model = GenerativeModel(
-      model: 'gemini-1.5-pro-latest',
+      model: 'gemini-1.5-flash',
       apiKey: apiKey,
       generationConfig: GenerationConfig(
         maxOutputTokens: 10,
@@ -113,7 +113,7 @@ class Chatbot {
     }
 
     final model = GenerativeModel(
-      model: 'gemini-1.5-pro-latest',
+      model: 'gemini-1.5-flash',
       apiKey: apiKey,
       generationConfig: GenerationConfig(
         maxOutputTokens: 100,

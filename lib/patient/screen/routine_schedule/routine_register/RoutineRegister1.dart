@@ -1,5 +1,6 @@
 // 루틴 등록하기1 화면
 import 'package:atti/commons/RegisterTextField.dart';
+import 'package:atti/patient/screen/routine_schedule/routine_register/medicine_routine_register/MedicineRoutineRegister1.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atti/data/routine/routine_controller.dart';
@@ -66,18 +67,23 @@ class _RoutineRegister1State extends State<RoutineRegister1> {
                   Row(
                     children: [
                       SizedBox(width: width * 0.05,),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                        decoration: BoxDecoration(
-                          color: Color(0xff64A94C),
-                          borderRadius: BorderRadius.circular(15)
-                        ),
-                        child: Text(
-                          '복약일과 등록하기',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w400
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(MedicineRoutineRegister1());
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                          decoration: BoxDecoration(
+                            color: Color(0xff64A94C),
+                            borderRadius: BorderRadius.circular(15)
+                          ),
+                          child: Text(
+                            '복약일과 등록하기',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w400
+                            ),
                           ),
                         ),
                       ),

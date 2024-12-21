@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atti/data/routine/routine_controller.dart';
-import '../../../../commons/RoutineBox2.dart';
-import '../../../../patient/screen/routine_schedule/RoutineScheduleMain.dart';
+import '../../../../../commons/RoutineBox2.dart';
+import '../../../../../patient/screen/routine_schedule/RoutineScheduleMain.dart';
 import 'dart:io';
 
-class RoutineRegisterFinish extends StatefulWidget {
-  const RoutineRegisterFinish({
+class MedicineRoutineRegisterFinish extends StatefulWidget {
+  const MedicineRoutineRegisterFinish({
     super.key,
     required this.time,
     required this.name,
@@ -17,10 +17,10 @@ class RoutineRegisterFinish extends StatefulWidget {
   final img;
 
   @override
-  State<RoutineRegisterFinish> createState() => _RoutineRegisterFinishState();
+  State<MedicineRoutineRegisterFinish> createState() => _MedicineRoutineRegisterFinishState();
 }
 
-class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
+class _MedicineRoutineRegisterFinishState extends State<MedicineRoutineRegisterFinish> {
   final RoutineController routineController = Get.put(RoutineController());
 
   @override

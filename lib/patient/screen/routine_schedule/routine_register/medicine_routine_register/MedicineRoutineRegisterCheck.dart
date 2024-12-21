@@ -6,20 +6,20 @@ import 'package:intl/intl.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/data/routine/routine_controller.dart';
-import '../../../../commons/RoutineBox.dart';
-import '../../../../commons/colorPallet.dart';
-import '../../../../data/notification/notification_controller.dart';
-import 'RoutineRegister1.dart';
-import 'RoutineRegisterFinish.dart';
+import '../../../../../commons/RoutineBox.dart';
+import '../../../../../commons/colorPallet.dart';
+import '../../../../../data/notification/notification_controller.dart';
+import 'MedicineRoutineRegister1.dart';
+import 'MedicineRoutineRegisterFinish.dart';
 
-class RoutineRegisterCheck extends StatefulWidget {
-  const RoutineRegisterCheck({super.key});
+class MedicineRoutineRegisterCheck extends StatefulWidget {
+  const MedicineRoutineRegisterCheck({super.key});
 
   @override
-  State<RoutineRegisterCheck> createState() => _RoutineRegisterCheckState();
+  State<MedicineRoutineRegisterCheck> createState() => _MedicineRoutineRegisterCheckState();
 }
 
-class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
+class _MedicineRoutineRegisterCheckState extends State<MedicineRoutineRegisterCheck> {
   final RoutineController routineController = Get.put(RoutineController());
   NotificationService notificationService = NotificationService();
   bool isButtonEnabled = true; // 버튼 활성화 여부를 나타내는 변수
@@ -63,7 +63,7 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
                 // setState(() {
                 //   isButtonEnabled = false; // 버튼 비활성화
                 // });
-                routineController.routine.value.isMedicine = false;
+                routineController.routine.value.isMedicine = true;
                 String tmpName = routineController.routine.value.name!;
                 String tmpImg = routineController.routine.value.img!;
                 List<int> tmpTime = routineController.routine.value.time!;
@@ -78,14 +78,14 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
                 // });
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RoutineRegisterFinish(
+                  MaterialPageRoute(builder: (context) => MedicineRoutineRegisterFinish(
                     name: tmpName, time: tmpTime, img: tmpImg,
                   )),
                 );
               },
 
               onSecondaryPressed: () {
-                Get.to(RoutineRegister1);
+                Get.to(MedicineRoutineRegister1);
               }),
 
           // Container(

@@ -6,19 +6,19 @@ import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-import '../../../../commons/colorPallet.dart';
-import 'RoutineRegisterCheck.dart';
+import '../../../../../commons/colorPallet.dart';
+import 'MedicineRoutineRegisterCheck.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
-class RoutineRegister3 extends StatefulWidget {
-  const RoutineRegister3({super.key});
+class MidicineRoutineRegister3 extends StatefulWidget {
+  const MidicineRoutineRegister3({super.key});
 
   @override
-  State<RoutineRegister3> createState() => _RoutineRegister3State();
+  State<MidicineRoutineRegister3> createState() => _MidicineRoutineRegister3State();
 }
 
-class _RoutineRegister3State extends State<RoutineRegister3> {
+class _MidicineRoutineRegister3State extends State<MidicineRoutineRegister3> {
   final RoutineController routineController = Get.put(RoutineController());
   XFile? _image; //이미지를 담을 변수 선언
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
@@ -64,8 +64,8 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
             child: Column(
               children: [
                 DetailPageTitle(
-                  title: '일과 등록하기',
-                  description: '해당 일과와 관련된 사진을 \n선택해주세요',
+                  title: '복약 일과 등록하기',
+                  description: '복약하실 약 또는 관련 사진을\n선택해주세요',
                   totalStep: 3,
                   currentStep: 3,
                 ),
@@ -108,7 +108,7 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
 
                       _image = XFile(defaultImagePath); // XFile 객체 생성
 
-                      Get.to(RoutineRegisterCheck());
+                      Get.to(MedicineRoutineRegisterCheck());
                     });
                   },
                   child: Align(
@@ -152,7 +152,7 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => RoutineRegisterCheck()),
+                          builder: (context) => MedicineRoutineRegisterCheck()),
                     );
                   },
                   onSecondaryPressed: () {
