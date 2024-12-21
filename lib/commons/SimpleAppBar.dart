@@ -14,6 +14,7 @@ class SimpleAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: Colors.white,
       title: Text(title, textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'PretendardMedium', fontSize: 24),),
       centerTitle: true,
       leading: IconButton(

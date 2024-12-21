@@ -14,21 +14,29 @@ class MemoryAlbum extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: SimpleAppBar(title: "$memoryKey\n기억모음"),
+      backgroundColor: Colors.white,
+      appBar: SimpleAppBar(
+          title: "${memoryKey}년대\n기억모음"
+      ),
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: group.length > 5
-                      ? _buildGroupedMemoryCards()
-                      : _buildGridView(context),
-                ),
-              ],
+          Center(
+            child: Container(
+              width: width * 0.9,
+              child: Column(
+                //crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: group.length > 5
+                        ? _buildGroupedMemoryCards()
+                        : _buildGridView(context),
+                  ),
+                ],
+              ),
             ),
           ),
           Positioned(
@@ -72,14 +80,14 @@ class MemoryAlbum extends StatelessWidget {
           children: [
             if (currentGroup.isNotEmpty)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
                 child: _buildBigMemoryCard(context, currentGroup[0]),
               ),
             if (currentGroup.length > 1)
               GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 8.0,
+                  crossAxisSpacing: 12.0,
                   mainAxisSpacing: 8.0,
                   childAspectRatio: 0.8,
                 ),
@@ -106,8 +114,8 @@ class MemoryAlbum extends StatelessWidget {
             borderRadius: BorderRadius.circular(20.0),
             child: Image.network(
               groupedMemory.img ?? '',
-              width: MediaQuery.of(context).size.width * 0.4,
-              height: MediaQuery.of(context).size.width * 0.4,
+              width: MediaQuery.of(context).size.width * 0.45,
+              height: MediaQuery.of(context).size.width * 0.45,
               fit: BoxFit.cover,
             ),
           ),

@@ -4,6 +4,8 @@ import 'package:atti/data/memory/chatController.dart';
 import 'package:atti/tmp/screen/memory/chat/ChatComplete.dart';
 import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
 
+import '../../../../patient/screen/memory/MemoryMain.dart';
+
 class BeforeSave extends StatelessWidget {
   final MemoryNoteModel memory;
   final String chat;
@@ -16,8 +18,10 @@ class BeforeSave extends StatelessWidget {
     ChatController chatController = ChatController();
 
     return Scaffold(
+      backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('${memory.imgTitle}기억 회상 대화'),
+          title: Text('\'${memory.imgTitle}\' 기억 회상 대화'),
+          backgroundColor: Colors.white,
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -84,7 +88,7 @@ class BeforeSave extends StatelessWidget {
                         ),
                         onPressed: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MainGallery()),
+                          MaterialPageRoute(builder: (context) => MainMemory()),
                         ),
                         child: Text(
                           '아니요',
