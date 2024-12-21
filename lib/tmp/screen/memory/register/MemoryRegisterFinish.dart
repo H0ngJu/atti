@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/tmp/screen/HomePatient.dart';
 import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +20,9 @@ class _MemoryRegisterFinishState extends State<MemoryRegisterFinish> {
 
   @override
   Widget build(BuildContext context) {
+    ColorPallet _colorPallet = ColorPallet();
     return Scaffold(
-      backgroundColor: Color(0xffFFEEBC),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(
@@ -28,18 +32,44 @@ class _MemoryRegisterFinishState extends State<MemoryRegisterFinish> {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.only(left: 15),
-                  child: Text('\'${memoryNoteController.tmpImgTitle.value}\'\n기억을 등록했어요!',
+                  child: Text('\'${memoryNoteController.tmpImgTitle.value}\'\n기억을 남겼어요!',
                     style: TextStyle(
-                        fontSize: 40, fontWeight: FontWeight.w600, color: Color(0xffA38130)
+                        fontSize: 40, color: Colors.black,
                     ),),
                 ),
-                //SizedBox(height: 10,),
                 Container(
-                  //margin: EdgeInsets.only(left: 50),
-                  child: Image.asset('lib/assets/images/memory_atti.png',
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.fitWidth,
+                  alignment: Alignment.centerLeft,
+                  constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.3),
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
                   ),
+                  clipBehavior: Clip.antiAlias,
+                  child: memoryNoteController.memoryNote.value.img != null
+                      ? Image.file(
+                    File(memoryNoteController.memoryNote.value.img!),
+                    fit: BoxFit.cover, // 이미지의 크기를 조정
+                    width: MediaQuery.of(context).size.width * 0.7,
+                  )
+                      : SizedBox(), // 널일 경우 대체할 위젯 설정
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 15),
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  alignment: Alignment.center,
+                  child: Text('${memoryNoteController.memoryNote.value.era.toString()}년대',
+                    textAlign: TextAlign.left, style: TextStyle(
+                      fontSize: 24,
+                    ),),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 15),
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  alignment: Alignment.center,
+                  child: Text('\'${memoryNoteController.memoryNote.value.imgTitle.toString()}\'',
+                    textAlign: TextAlign.left, style: TextStyle(
+                      fontSize: 30,
+                    ),),
                 ),
               ],
             ),
@@ -55,8 +85,8 @@ class _MemoryRegisterFinishState extends State<MemoryRegisterFinish> {
               },
               child: Text('내 기억으로 가기', style: TextStyle(color: Colors.black, fontSize: 20),),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.white),
-                minimumSize: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(_colorPallet.goldYellow),
+                minimumSize: WidgetStateProperty.all(
                     Size(MediaQuery.of(context).size.width * 0.9, 50)),
               ),
             ),
