@@ -25,6 +25,7 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
     ColorPallet _colorPallet = ColorPallet();
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: MemoryRegisterAppBar(context),
       body: GestureDetector(
         onTap: (){

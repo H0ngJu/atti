@@ -40,6 +40,7 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
     ColorPallet _colorPallet = ColorPallet();
 
     return Scaffold(
+      backgroundColor: Colors.white,
         appBar: MemoryRegisterAppBar(context),
         body: Column(
       children: [
