@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 
+import '../../../../patient/screen/memory/MemoryMain.dart';
+
 class MemoryRegisterFinish extends StatefulWidget {
   const MemoryRegisterFinish({super.key});
 
@@ -80,7 +82,7 @@ class _MemoryRegisterFinishState extends State<MemoryRegisterFinish> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MainGallery()),
+                  MaterialPageRoute(builder: (context) => MainMemory()),
                 );
               },
               child: Text('내 기억으로 가기', style: TextStyle(color: Colors.black, fontSize: 20),),

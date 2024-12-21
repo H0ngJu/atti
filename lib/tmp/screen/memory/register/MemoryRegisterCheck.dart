@@ -22,6 +22,7 @@ class _MemoryRegisterCheckState extends State<MemoryRegisterCheck> {
   @override
   Widget build(BuildContext context) {
     final List<String> keywords = memoryNoteController.memoryNote.value.keyword ?? [];
+    final List<String> people = memoryNoteController.memoryNote.value.selectedFamilyMember ?? [];
     ColorPallet _colorPallet = ColorPallet();
 
     return Scaffold(
@@ -90,7 +91,7 @@ class _MemoryRegisterCheckState extends State<MemoryRegisterCheck> {
                     width: MediaQuery.of(context).size.width * 0.9,
                     alignment: Alignment.centerLeft,
                     margin: EdgeInsets.only(left: 15),
-                    child: MemoryPeople(keywords: keywords)),
+                    child: MemoryPeople(keywords: people)),
                 SizedBox(height: 30,),
                 Container(
                   margin: EdgeInsets.only(left: 15),
