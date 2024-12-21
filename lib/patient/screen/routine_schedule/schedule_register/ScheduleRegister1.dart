@@ -6,7 +6,10 @@ import 'package:atti/data/schedule/schedule_controller.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 
-import 'package:atti/tmp/screen/schedule/register/ScheduleRegister2.dart';
+import 'package:atti/patient/screen/routine_schedule/schedule_register/ScheduleRegister2.dart';
+
+import '../../../../commons/RegisterTextField.dart';
+import '../../../../commons/colorPallet.dart';
 
 
 class ScheduleRegister1 extends StatefulWidget {
@@ -18,10 +21,12 @@ class ScheduleRegister1 extends StatefulWidget {
 
 class _ScheduleRegister1State extends State<ScheduleRegister1> {
   final ScheduleController scheduleController = Get.put(ScheduleController());
+  final ColorPallet colorPallet = Get.put(ColorPallet());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: (){
           FocusScope.of(context).unfocus();
@@ -34,33 +39,17 @@ class _ScheduleRegister1State extends State<ScheduleRegister1> {
                   DetailPageTitle(
                     title: '일정 등록하기',
                     description: '일정 이름을 입력해주세요',
-                    totalStep: 4,
+                    totalStep: 3,
                     currentStep: 1,
                   ),
-                  SizedBox(height: 20),
-        
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: TextField(
-                      onChanged: (value) {
-                        scheduleController.schedule.value.name = value;
-                        //print(scheduleController.name.value);
-                      },
-                      cursorColor: Colors.black,
-                      style: TextStyle(fontSize: 24),
-                      decoration: InputDecoration(
-                        hintText: '예정된 일정이 무엇인가요?',
-                        hintStyle: TextStyle(fontSize: 24, color: Color(0xffA38130)),
-                        filled: true, // 배경을 채움
-                        fillColor: Color(0xffFFF5DB),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: EdgeInsets.all(15), // 위아래 여백 조절
-                      ),
-                    ),
-                  ),
+                  SizedBox(height: 15),
+
+                  RegisterTextField(
+                    hintText: '어떤 일정인가요?',
+                    onChanged: (value) {
+                      scheduleController.schedule.value.name = value;
+                    },
+                  )
                 ],
               ),
             ),

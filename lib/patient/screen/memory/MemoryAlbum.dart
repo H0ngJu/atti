@@ -1,7 +1,7 @@
 import 'package:atti/commons/SimpleAppBar.dart';
 import 'package:atti/data/memory/memory_note_model.dart';
 import 'package:atti/patient/screen/memory/AddButton.dart';
-import 'package:atti/tmp/screen/memory/gallery/MemoryDetail.dart';
+import 'package:atti/patient/screen/memory/MemoryInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +15,7 @@ class MemoryAlbum extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: SimpleAppBar(title: "$memoryKey\n기억모음"),
       body: Stack(
         children: [
@@ -99,7 +100,7 @@ class MemoryAlbum extends StatelessWidget {
 
   Widget _buildMemoryCard(BuildContext context, MemoryNoteModel groupedMemory) {
     return GestureDetector(
-      onTap: () => Get.to(MemoryDetail(memory: groupedMemory)),
+      onTap: () => Get.to(MemoryInfo(memory: groupedMemory)),
       child: Column(
         children: [
           ClipRRect(
@@ -112,14 +113,14 @@ class MemoryAlbum extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Text(
+          Expanded(child: Text(
             groupedMemory.imgTitle ?? '',
             style: const TextStyle(
                 color: Colors.black,
-                fontSize: 24,
+                fontSize: 20,
                 fontFamily: 'PretendardRegular'),
             textAlign: TextAlign.center,
-          ),
+          ),),
         ],
       ),
     );
@@ -127,7 +128,7 @@ class MemoryAlbum extends StatelessWidget {
 
   Widget _buildBigMemoryCard(BuildContext context, MemoryNoteModel groupedMemory) {
     return GestureDetector(
-      onTap: () => Get.to(MemoryDetail(memory: groupedMemory)),
+      onTap: () => Get.to(MemoryInfo(memory: groupedMemory)),
       child: Column(
         children: [
           ClipRRect(

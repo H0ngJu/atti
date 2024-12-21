@@ -65,7 +65,7 @@ class _ScheduleRegister4State extends State<ScheduleRegister4> {
             ),
           ),
 
-          NextButton(next: ScheduleRegisterCheck(), content: '다음', isEnabled: true,),
+          BottomNextButton(next: ScheduleRegisterCheck(), content: '다음', isEnabled: true,),
         ]),
       ),
     );
