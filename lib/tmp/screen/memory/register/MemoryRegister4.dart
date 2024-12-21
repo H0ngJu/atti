@@ -144,7 +144,7 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
                 ),),
             ),
             SizedBox(height: 20,),
-            NextButton(next: MemoryRegisterCheck(), content: '다음', isEnabled: true),
+            BottomNextButton(next: MemoryRegisterCheck(), content: '다음', isEnabled: true),
             // Container(
             //   margin: EdgeInsets.only(bottom: 20),
             //   child: TextButton(
