@@ -1,4 +1,4 @@
-import 'package:atti/tmp/screen/memory/register/MemoryRegister1.dart';
+import 'package:atti/patient/screen/memory/memory_register/MemoryRegister1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
