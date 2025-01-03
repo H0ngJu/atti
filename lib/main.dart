@@ -116,6 +116,17 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
       initialRoute: initialRoute,
+
+      // 앱 전체 글자 크기 고정하기 !!
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaler: TextScaler.linear(1.0), // 글자 크기를 고정
+          ),
+          child: child!,
+        );
+      },
+
       routes: {
         '/': (context) => IntroPage(),
         '/schedule': (context) => ScheduleMain(),
