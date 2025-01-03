@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/notification/notification.dart';
+import 'package:atti/tmp/screen/HomePatient.dart';
 import 'package:atti/tmp/screen/LogInSignUp/LogInScreen.dart';
 import 'package:atti/tmp/screen/LogInSignUp/LogInSignUpMainScreen.dart';
 

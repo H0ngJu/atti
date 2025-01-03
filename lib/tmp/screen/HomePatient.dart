@@ -390,7 +390,7 @@ class _HomePatientState extends State<HomePatient> {
             child: Column(
               children: [
                 Container(
-                    height: 60,
+                    height: 45,
                     decoration: BoxDecoration(
                       color: Colors.white,
                     )),
