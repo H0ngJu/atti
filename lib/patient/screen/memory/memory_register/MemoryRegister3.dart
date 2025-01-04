@@ -18,12 +18,26 @@ class MemoryRegister3 extends StatefulWidget {
 }
 
 class _MemoryRegister3State extends State<MemoryRegister3> {
-  final MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
+  final MemoryNoteController memoryNoteController =
+      Get.put(MemoryNoteController());
   final AuthController authController = Get.put(AuthController());
   TextEditingController _addedMemberController = TextEditingController();
 
-  final _era = ['1900년대', '1910년대', '1920년대', '1930년대', '1940년대', '1950년대',
-    '1960년대', '1970년대', '1980년대', '1990년대', '2000년대', '2010년대', '2020년대',];
+  final _era = [
+    '1900년대',
+    '1910년대',
+    '1920년대',
+    '1930년대',
+    '1940년대',
+    '1950년대',
+    '1960년대',
+    '1970년대',
+    '1980년대',
+    '1990년대',
+    '2000년대',
+    '2010년대',
+    '2020년대',
+  ];
   String? _selectedEra;
   late List<String> familyMembers;
   late List<bool> memberIsSelected = [];
@@ -64,38 +78,58 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
               title: '기억 남기기',
               totalStep: 3,
               currentStep: 2,
-              description: '기억 연도를 선택해주세요',
             ),
             Expanded(child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: width * 0.04,),
-                  SelectEraDropDownButton(),
-                  SizedBox(height: width * 0.08,),
+
                   Center(
                     child: Container(
                       //margin: EdgeInsets.only(left: 15),
                       width: MediaQuery.of(context).size.width * 0.9,
                       alignment: Alignment.centerLeft,
-                      child: Text('기억과 함께한 사람을 \n선택 및 입력해주세요',
+                      child: Text(
+                        '기억 연도를 선택해주세요',
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.w500,
-                            height: 1.2
-                        ),
+                            height: 1.2),
                       ),
                     ),
                   ),
                   SizedBox(height: width * 0.04,),
+                  
+                  // 연도 선택
+                  SelectEraDropDownButton(),
+                  SizedBox(height: width * 0.08,),
+
+                  Center(
+                    child: Container(
+                      //margin: EdgeInsets.only(left: 15),
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '기억과 함께한 사람을 \n선택 및 입력해주세요',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w500,
+                            height: 1.2),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: width * 0.04,),
+
                   Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       alignment: Alignment.centerLeft,
                       margin: EdgeInsets.only(left: 15),
                       child: SelectFamilyMemberButtons()),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: width*0.05),
+                    margin: EdgeInsets.symmetric(horizontal: width * 0.05),
                     child: Wrap(
                       spacing: 8.0,
                       children: addedMember.map((member) {
@@ -105,9 +139,13 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                           backgroundColor: _colorPallet.goldYellow,
                           onDelete: () {
                             setState(() {
-                              addedMember.remove(member); // addedMember 리스트에서 삭제
-                              selectedMembers.remove(member); // selectedMembers 리스트에서도 삭제
-                              memoryNoteController.memoryNote.value.selectedFamilyMember = selectedMembers; // 상태 업데이트
+                              addedMember
+                                  .remove(member); // addedMember 리스트에서 삭제
+                              selectedMembers
+                                  .remove(member); // selectedMembers 리스트에서도 삭제
+                              memoryNoteController
+                                      .memoryNote.value.selectedFamilyMember =
+                                  selectedMembers; // 상태 업데이트
                             });
                           },
                         );
@@ -116,7 +154,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                   ),
                   Container(
                     padding: EdgeInsets.all(5),
-                    margin: EdgeInsets.all(width*0.05),
+                    margin: EdgeInsets.all(width * 0.05),
                     decoration: BoxDecoration(
                       color: _colorPallet.lightYellow,
                       borderRadius: BorderRadius.circular(15),
@@ -136,8 +174,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                                 hintStyle: TextStyle(
                                     color: Color(0xff745C20),
                                     fontSize: 20,
-                                    fontWeight: FontWeight.w400
-                                ),
+                                    fontWeight: FontWeight.w400),
                               ),
                             ),
                           ),
@@ -155,13 +192,16 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                                   _addedMemberController.clear(); // 입력 필드 비우기
 
                                   selectedMembers.add(memberName);
-                                  memoryNoteController.memoryNote.value.selectedFamilyMember = selectedMembers;
+                                  memoryNoteController.memoryNote.value
+                                      .selectedFamilyMember = selectedMembers;
                                 });
                               }
-
                             },
                             style: TextButton.styleFrom(
-                              backgroundColor: _addedMemberController.text.isNotEmpty ? _colorPallet.goldYellow : Colors.white,
+                              backgroundColor:
+                                  _addedMemberController.text.isNotEmpty
+                                      ? _colorPallet.goldYellow
+                                      : Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
@@ -169,9 +209,8 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                             ),
                             child: Text(
                               '등록',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15),
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 15),
                             ),
                           ),
                         ),
@@ -180,12 +219,14 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                     ),
                   ),
                   SizedBox(height: 16),
-
-                  SizedBox(height: 30,),
+                  SizedBox(
+                    height: 30,
+                  ),
                 ],
               ),
             )),
-            BottomNextButton(next: MemoryRegister4(), content: '다음', isEnabled: true),
+            BottomNextButton(
+                next: MemoryRegister4(), content: '다음', isEnabled: true),
           ],
         ),
       ),
@@ -203,41 +244,42 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
         value: _selectedEra,
         items: _era
             .map((e) => DropdownMenuItem(
-          value: e,
-          child: Text(e,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.normal,
-              color: Colors.black),
-          ),
-        ))
+                  value: e,
+                  child: Text(
+                    e,
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black),
+                  ),
+                ))
             .toList(),
         onChanged: (value) {
           setState(() {
             _selectedEra = value!;
-            memoryNoteController.memoryNote.value.era = eraStringToInt(_selectedEra!);
+            memoryNoteController.memoryNote.value.era =
+                eraStringToInt(_selectedEra!);
           });
         },
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: _colorPallet.lightYellow, width: 2)
-          ),
+              borderSide:
+                  BorderSide(color: _colorPallet.lightYellow, width: 2)),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: _colorPallet.lightYellow, width: 1)
-          ),
+              borderSide:
+                  BorderSide(color: _colorPallet.lightYellow, width: 1)),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: _colorPallet.lightYellow, width: 2)
-          ),
-
+              borderSide:
+                  BorderSide(color: _colorPallet.lightYellow, width: 2)),
           filled: true,
           fillColor: _colorPallet.lightYellow,
           iconColor: _colorPallet.khaki,
-          contentPadding: EdgeInsets.only(top:5, bottom: 5, left: 15),
+          contentPadding: EdgeInsets.only(top: 5, bottom: 5, left: 15),
         ),
-        dropdownColor:_colorPallet.lightYellow,
+        dropdownColor: _colorPallet.lightYellow,
         iconDisabledColor: _colorPallet.khaki,
         iconEnabledColor: _colorPallet.khaki,
         iconSize: 50,
@@ -253,8 +295,10 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
     return Wrap(
       direction: Axis.horizontal,
       alignment: WrapAlignment.start,
-      spacing: 10, // 가로 간격 설정
-      runSpacing: 12, // 세로 간격 설정
+      spacing: 10,
+      // 가로 간격 설정
+      runSpacing: 12,
+      // 세로 간격 설정
       children: List.generate(familyMembers.length, (index) {
         return TextButton(
           onPressed: () {
@@ -262,11 +306,14 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
               memberIsSelected[index] = !memberIsSelected[index];
               if (memberIsSelected[index]) {
                 selectedMembers.add(familyMembers[index]);
-                memoryNoteController.memoryNote.value.selectedFamilyMember = selectedMembers;
-                print(memoryNoteController.memoryNote.value.selectedFamilyMember);
+                memoryNoteController.memoryNote.value.selectedFamilyMember =
+                    selectedMembers;
+                print(
+                    memoryNoteController.memoryNote.value.selectedFamilyMember);
               } else {
                 selectedMembers.remove(familyMembers[index]);
-                memoryNoteController.memoryNote.value.selectedFamilyMember = selectedMembers;
+                memoryNoteController.memoryNote.value.selectedFamilyMember =
+                    selectedMembers;
                 print(selectedMembers);
               }
             });
@@ -277,12 +324,12 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
               TextStyle(fontSize: 24), // 텍스트 크기
             ),
             foregroundColor: WidgetStateProperty.resolveWith<Color>(
-                  (states) {
+              (states) {
                 return Colors.black;
               },
             ),
             backgroundColor: WidgetStateProperty.resolveWith<Color>(
-                  (states) {
+              (states) {
                 if (memberIsSelected[index]) {
                   return _colorPallet.goldYellow; // 선택됐을 때 배경색
                 } else {

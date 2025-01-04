@@ -47,19 +47,37 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
           FocusScope.of(context).unfocus();
         },
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DetailPageTitle(
               title: '기억 남기기',
               totalStep: 3,
               currentStep: 3,
-              description: '\'${memoryNoteController.memoryNote.value.imgTitle}\'에 대한\n기억 단어를 알려주세요',
+              //description: '\'${memoryNoteController.memoryNote.value.imgTitle}\'에 대한\n기억 단어를 알려주세요',
             ),
             Expanded(child: SingleChildScrollView(
               child: Column(
+                //crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 20,),
+                  Center(
+                    child: Container(
+                      //margin: EdgeInsets.only(left: 15),
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '\'${memoryNoteController.memoryNote.value.imgTitle}\'에 대한\n기억 단어를 알려주세요',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w500,
+                            height: 1.2),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: width * 0.04,),
                   Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                     margin: EdgeInsets.symmetric(horizontal: width*0.05),
                     decoration: BoxDecoration(
                       color: _colorPallet.lightYellow,
@@ -67,55 +85,83 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
                     ),
                     child: Row(
                       children: [
+                        SizedBox(width: 8),
                         Expanded(
                           child: Container(
                             child: TextField(
                               controller: _memoryWordsController,
+                              cursorColor: Colors.black,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: '단어를 입력해주세요',
-                                hintStyle: TextStyle(color: _colorPallet.khaki, fontSize: 20),
+                                hintStyle: TextStyle(
+                                    color: Color(0xff745C20),
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w400
+                                ),
                               ),
                             ),
                           ),
                         ),
                         SizedBox(width: 8),
-                        ElevatedButton(
-                          onPressed: () {
-                            String memberName = _memoryWordsController.text;
-                            if (memberName.isNotEmpty) {
-                              setState(() {
-                                memoryNoteController.memoryNote.value.keyword?.add(memberName);
-                                _memoryWordsController.clear(); // 입력 필드 비우기
-                              });
-                            }
-                            //memoryNoteController.memoryNote.value.keyword?.addAll(_values);
-                            print(memoryNoteController.memoryNote.value.keyword);
-                            //Navigator.push(context, MaterialPageRoute(builder: (context) => MemoryRegisterCheck()),);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: _memoryWordsController.text.isNotEmpty ? _colorPallet.goldYellow : Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                        SizedBox(
+                          width: width * 0.16,
+                          height: width * 0.09,
+                          child: TextButton(
+                            onPressed: () {
+                              String memberName = _memoryWordsController.text;
+                              if (memberName.isNotEmpty) {
+                                setState(() {
+                                  memoryNoteController.memoryNote.value.keyword?.add(memberName);
+                                  _memoryWordsController.clear(); // 입력 필드 비우기
+                                });
+                              }
+                              //memoryNoteController.memoryNote.value.keyword?.addAll(_values);
+                              print(memoryNoteController.memoryNote.value.keyword);
+                              //Navigator.push(context, MaterialPageRoute(builder: (context) => MemoryRegisterCheck()),);
+                            },
+                            style: TextButton.styleFrom(
+                              backgroundColor: _memoryWordsController.text.isNotEmpty ?
+                              _colorPallet.goldYellow :
+                              Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
                             ),
-                            padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
-                          ),
-                          child: Text(
-                            '등록',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15),
+                            child: Text(
+                              '등록',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15),
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 16),
-                  Wrap(
-                    spacing: 8.0,
-                    children: memoryNoteController.memoryNote.value.keyword!.map((member) {
-                      return MemoryWordsTag(name: member);
-                    }).toList(),
+
+                  SizedBox(height: width * 0.06),
+                  SizedBox(
+                    width: width * 0.9,
+                    child: Text(
+                      '등록한 단어',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
+                        color: _colorPallet.grey
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(
+                    width: width * 0.9,
+                    child: Wrap(
+                      spacing: 8.0,
+                      children: memoryNoteController.memoryNote.value.keyword!.map((member) {
+                        return MemoryWordsTag(name: member);
+                      }).toList(),
+                    ),
                   ),
                   SizedBox(height: 50,),
 

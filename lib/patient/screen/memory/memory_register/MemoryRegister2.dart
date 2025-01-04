@@ -37,13 +37,29 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
               title: '기억 남기기',
               totalStep: 3,
               currentStep: 1,
-              description: '기억 제목을 입력해주세요',
             ),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
                     SizedBox(height: height * 0.02,),
+                    Center(
+                      child: Container(
+                        //margin: EdgeInsets.only(left: 15),
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '기억 연도를 선택해주세요',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.w500,
+                              height: 1.2),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: width * 0.04,),
+
                     Container(
                       constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.4),
                       width: MediaQuery.of(context).size.width * 0.9,
