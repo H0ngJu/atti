@@ -216,7 +216,10 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            setState(() {
+                              _image = null; // 이미지 초기화
+                              imgType = 0;   // 이미지 타입 초기화
+                            });
                           },
                           child: Text(
                             '다시 선택',
