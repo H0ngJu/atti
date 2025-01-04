@@ -70,9 +70,9 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: width * 0.05,),
+                  SizedBox(height: width * 0.04,),
                   SelectEraDropDownButton(),
-                  SizedBox(height: width * 0.07,),
+                  SizedBox(height: width * 0.08,),
                   Center(
                     child: Container(
                       //margin: EdgeInsets.only(left: 15),
@@ -88,7 +88,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                       ),
                     ),
                   ),
-                  SizedBox(height: width * 0.05,),
+                  SizedBox(height: width * 0.04,),
                   Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       alignment: Alignment.centerLeft,
@@ -102,6 +102,14 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                         return Tag(
                           name: member,
                           fontsize: 24,
+                          backgroundColor: _colorPallet.goldYellow,
+                          onDelete: () {
+                            setState(() {
+                              addedMember.remove(member); // addedMember 리스트에서 삭제
+                              selectedMembers.remove(member); // selectedMembers 리스트에서도 삭제
+                              memoryNoteController.memoryNote.value.selectedFamilyMember = selectedMembers; // 상태 업데이트
+                            });
+                          },
                         );
                       }).toList(),
                     ),
@@ -115,44 +123,59 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                     ),
                     child: Row(
                       children: [
+                        SizedBox(width: 8),
                         Expanded(
                           child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: width*0.05),
+                            //margin: EdgeInsets.symmetric(horizontal: width*0.05),
                             child: TextField(
                               controller: _addedMemberController,
+                              cursorColor: Colors.black,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: '그 외 사람을 입력하세요',
-                                hintStyle: TextStyle(color: _colorPallet.khaki, fontSize: 20),
+                                hintStyle: TextStyle(
+                                    color: Color(0xff745C20),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400
+                                ),
                               ),
                             ),
                           ),
                         ),
                         SizedBox(width: 8),
-                        ElevatedButton(
-                          onPressed: () {
-                            String memberName = _addedMemberController.text;
-                            if (memberName.isNotEmpty) {
-                              setState(() {
-                                addedMember.add(memberName);
-                                _addedMemberController.clear(); // 입력 필드 비우기
-                              });
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: _addedMemberController.text.isNotEmpty ? _colorPallet.goldYellow : Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                        SizedBox(
+                          width: width * 0.16,
+                          height: width * 0.09,
+                          child: TextButton(
+                            onPressed: () {
+                              String memberName = _addedMemberController.text;
+                              if (memberName.isNotEmpty) {
+                                setState(() {
+                                  addedMember.add(memberName);
+                                  _addedMemberController.clear(); // 입력 필드 비우기
+
+                                  selectedMembers.add(memberName);
+                                  memoryNoteController.memoryNote.value.selectedFamilyMember = selectedMembers;
+                                });
+                              }
+
+                            },
+                            style: TextButton.styleFrom(
+                              backgroundColor: _addedMemberController.text.isNotEmpty ? _colorPallet.goldYellow : Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              padding: EdgeInsets.zero,
                             ),
-                            padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
-                          ),
-                          child: Text(
-                            '등록',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15),
+                            child: Text(
+                              '등록',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15),
+                            ),
                           ),
                         ),
+                        SizedBox(width: 5),
                       ],
                     ),
                   ),
@@ -231,7 +254,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
       direction: Axis.horizontal,
       alignment: WrapAlignment.start,
       spacing: 10, // 가로 간격 설정
-      runSpacing: 10, // 세로 간격 설정
+      runSpacing: 12, // 세로 간격 설정
       children: List.generate(familyMembers.length, (index) {
         return TextButton(
           onPressed: () {
@@ -268,11 +291,11 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
               },
             ),
             padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-              EdgeInsets.symmetric(vertical: 10, horizontal: 18.0), // 버튼 내부 패딩 설정
+              EdgeInsets.symmetric(vertical: 5, horizontal: 15), // 버튼 내부 패딩 설정
             ),
             shape: WidgetStateProperty.all<OutlinedBorder>(
               RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25), // 버튼 모서리 둥글기 설정
+                borderRadius: BorderRadius.circular(22), // 버튼 모서리 둥글기 설정
                 side: BorderSide(
                   color: Colors.black, // 테두리 색상
                   width: 1, // 테두리 두께

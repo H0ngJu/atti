@@ -92,7 +92,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                     child: Wrap(
                       spacing: 8.0,
                       children: addedMember.map((member) {
-                        return Tag(name: member, fontsize: 24,);
+                        return Tag(name: member, fontsize: 24, onDelete: (){},);
                       }).toList(),
                     ),
                   ),
