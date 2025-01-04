@@ -70,18 +70,25 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: height * 0.02,),
+                  SizedBox(height: width * 0.05,),
                   SelectEraDropDownButton(),
-                  SizedBox(height: 35,),
-                  Container(
-                    margin: EdgeInsets.only(left: 15),
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    alignment: Alignment.centerLeft,
-                    child: Text('기억과 함께한 사람을 \n선택 및 입력해주세요', textAlign: TextAlign.left, style: TextStyle(
-                      fontSize: 30,
-                    ),),
+                  SizedBox(height: width * 0.07,),
+                  Center(
+                    child: Container(
+                      //margin: EdgeInsets.only(left: 15),
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      alignment: Alignment.centerLeft,
+                      child: Text('기억과 함께한 사람을 \n선택 및 입력해주세요',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w500,
+                            height: 1.2
+                        ),
+                      ),
+                    ),
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(height: width * 0.05,),
                   Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       alignment: Alignment.centerLeft,
@@ -92,7 +99,10 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                     child: Wrap(
                       spacing: 8.0,
                       children: addedMember.map((member) {
-                        return Tag(name: member, fontsize: 24,);
+                        return Tag(
+                          name: member,
+                          fontsize: 24,
+                        );
                       }).toList(),
                     ),
                   ),
@@ -171,7 +181,12 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
         items: _era
             .map((e) => DropdownMenuItem(
           value: e,
-          child: Text(e, style: TextStyle(fontSize: 24, fontWeight: FontWeight.normal, color: _colorPallet.textColor),),
+          child: Text(e,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.normal,
+              color: Colors.black),
+          ),
         ))
             .toList(),
         onChanged: (value) {
@@ -183,24 +198,25 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: _colorPallet.textColor, width: 2)
+              borderSide: BorderSide(color: _colorPallet.lightYellow, width: 2)
           ),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: _colorPallet.textColor, width: 1)
+              borderSide: BorderSide(color: _colorPallet.lightYellow, width: 1)
           ),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: _colorPallet.textColor, width: 2)
+              borderSide: BorderSide(color: _colorPallet.lightYellow, width: 2)
           ),
+
           filled: true,
           fillColor: _colorPallet.lightYellow,
-          iconColor: _colorPallet.textColor,
+          iconColor: _colorPallet.khaki,
           contentPadding: EdgeInsets.only(top:5, bottom: 5, left: 15),
         ),
         dropdownColor:_colorPallet.lightYellow,
-        iconDisabledColor: _colorPallet.textColor,
-        iconEnabledColor: _colorPallet.textColor,
+        iconDisabledColor: _colorPallet.khaki,
+        iconEnabledColor: _colorPallet.khaki,
         iconSize: 50,
       ),
     );

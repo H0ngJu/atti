@@ -19,6 +19,7 @@ class MemoryRegister1 extends StatefulWidget {
 class _MemoryRegister1State extends State<MemoryRegister1> {
   XFile? _image; //이미지를 담을 변수 선언
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
+  int imgType = 0; // 0 : 아직 이미지 선택x, 1 : 갤러리에서 선택, 2 : 카메라로 촬영
 
   //이미지를 가져오는 함수
   Future getImage(ImageSource imageSource) async {
@@ -52,9 +53,12 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                     totalStep: 0,
                     currentStep: 0,
                     description: _image != null
-                        ? '앨범에서 사진을\n선택했어요'
+                        ? (imgType == 1
+                        ? '앨범에서 사진을 선택했어요'
+                        : '카메라로 사진을 찍었어요')
                         : '사진을 추가할 방식을\n선택해주세요',
                   ),
+
                   // Container(
                   //   child: Text(
                   //     _image != null
@@ -99,6 +103,7 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                             GestureDetector(
                               onTap: () {
                                 getImage(ImageSource.camera);
+                                imgType = 2;
                               },
                               child: Container(
                                   alignment: Alignment.center,
@@ -138,6 +143,7 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                             GestureDetector(
                               onTap: () {
                                 getImage(ImageSource.gallery);
+                                imgType = 1;
                               },
                               child: Container(
                                   alignment: Alignment.center,
