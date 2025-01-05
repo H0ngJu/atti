@@ -159,7 +159,15 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
                     child: Wrap(
                       spacing: 8.0,
                       children: memoryNoteController.memoryNote.value.keyword!.map((member) {
-                        return MemoryWordsTag(name: member);
+                        return MemoryWordsTag(
+                          name: member,
+                          onDelete: () {
+                            setState(() {
+                              memoryNoteController.memoryNote.value.keyword!.remove(member);
+
+                            });
+                          },
+                        );
                       }).toList(),
                     ),
                   ),

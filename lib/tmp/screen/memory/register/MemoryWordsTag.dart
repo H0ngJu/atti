@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 
 class MemoryWordsTag extends StatelessWidget {
   final String name;
+  final VoidCallback onDelete;
 
-  MemoryWordsTag({required this.name});
+  MemoryWordsTag({
+    required this.name,
+    required this.onDelete
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +50,7 @@ class MemoryWordsTag extends StatelessWidget {
 
           SizedBox(width: 3),
           GestureDetector(
-            onTap: () {
-
-
-            },
+            onTap: onDelete,
             child: Icon(
               Icons.close,
               size: 27,
