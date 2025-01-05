@@ -318,7 +318,10 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
               }
             });
           },
-          child: Text(familyMembers[index]),
+          child: Container(
+            padding: EdgeInsets.only(bottom: 3),
+              child: Text(familyMembers[index])
+          ),
           style: ButtonStyle(
             textStyle: WidgetStateProperty.all<TextStyle>(
               TextStyle(fontSize: 24), // 텍스트 크기
@@ -338,14 +341,14 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
               },
             ),
             padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-              EdgeInsets.symmetric(vertical: 5, horizontal: 15), // 버튼 내부 패딩 설정
+              EdgeInsets.symmetric(vertical: 3, horizontal: 15), // 버튼 내부 패딩 설정
             ),
             shape: WidgetStateProperty.all<OutlinedBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(22), // 버튼 모서리 둥글기 설정
                 side: BorderSide(
                   color: Colors.black, // 테두리 색상
-                  width: 1, // 테두리 두께
+                  width: 0.7, // 테두리 두께
                 ),
               ),
             ),

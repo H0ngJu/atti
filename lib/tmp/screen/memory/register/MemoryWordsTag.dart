@@ -19,7 +19,10 @@ class MemoryWordsTag extends StatelessWidget {
       padding: EdgeInsets.only(left: 15, right: 5),
       decoration: BoxDecoration(
         color: _colorPallet.lightYellow,
-        border: Border.all(color: _colorPallet.grey),
+        border: Border.all(
+            color: _colorPallet.grey,
+            width: 0.7
+        ),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Row(
@@ -36,7 +39,7 @@ class MemoryWordsTag extends StatelessWidget {
 
           // 구분선
           Container(
-            width: 1, // 구분선의 너비
+            width: 0.5, // 구분선의 너비
             height: 50, // 부모 컨테이너의 높이에 맞춤
             color: _colorPallet.grey, // 구분선 색상
           ),
@@ -44,6 +47,8 @@ class MemoryWordsTag extends StatelessWidget {
           SizedBox(width: 3),
           GestureDetector(
             onTap: () {
+
+
             },
             child: Icon(
               Icons.close,

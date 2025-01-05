@@ -7,7 +7,7 @@ import 'package:atti/tmp/screen/memory/register/MemoryWordsTag.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
-import 'package:atti/tmp/screen/memory/register/MemoryRegisterCheck.dart';
+import 'package:atti/patient/screen/memory/memory_register/MemoryRegisterCheck.dart';
 import 'package:material_tag_editor/tag_editor.dart';
 import 'package:atti/patient/screen/memory/memory_register/MemoryRegister5.dart';
 
@@ -170,22 +170,36 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
             )),
             Container(
               margin: EdgeInsets.only(left: 15),
-              width: MediaQuery.of(context).size.width * 0.9,
-              alignment: Alignment.centerLeft,
-              child: Text('기억단어란?', textAlign: TextAlign.left,
+              //width: MediaQuery.of(context).size.width * 0.9,
+              //alignment: Alignment.centerLeft,
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color(0xff616161), // 밑줄 색상
+                    width: 1, // 밑줄 두께
+                  ),
+                ),
+              ),
+              child: Text(
+                '기억 단어란?',
+                textAlign: TextAlign.left,
                 style: TextStyle(
-                    fontSize: 20, color: Color(0xff616161), fontWeight: FontWeight.w600,
-                    decoration: TextDecoration.underline,
-                ),),
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                  height: 1.0
+                ),
+              ),
             ),
+
             Container(
               margin: EdgeInsets.only(left: 15),
               width: MediaQuery.of(context).size.width * 0.9,
               alignment: Alignment.centerLeft,
-              child: Text('사진과 관련된 단어 중 가족 구성원 외의\n인물, 사물, 사건, 배경 등의 단어를 말합니다.',
+              child: Text('사진과 관련된 단어로\n기억하고 싶은 인물이나 사물, 사건, 배경 등의\n단어를 말합니다.',
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                  fontSize: 18, color: Color(0xff616161),
+                  fontSize: 18, color: Colors.black,
                 ),),
             ),
             SizedBox(height: 20,),

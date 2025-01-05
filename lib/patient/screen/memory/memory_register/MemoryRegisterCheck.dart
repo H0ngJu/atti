@@ -25,43 +25,71 @@ class _MemoryRegisterCheckState extends State<MemoryRegisterCheck> {
     final List<String> people = memoryNoteController.memoryNote.value.selectedFamilyMember ?? [];
     ColorPallet _colorPallet = ColorPallet();
 
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
+
     return Scaffold(
       backgroundColor: Colors.white,
-        appBar: MemoryRegisterAppBar(context),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          DetailPageTitle(
+              title: '기억 남기기',
+              totalStep: 0,
+              currentStep: 0),
+
           Expanded(child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: width * 0.04,),
                 Container(
                   margin: EdgeInsets.only(left: 15),
                   width: MediaQuery.of(context).size.width * 0.9,
                   alignment: Alignment.centerLeft,
-                  child: Text('다음과 같이 등록할까요?', textAlign: TextAlign.left, style: TextStyle(
-                    fontSize: 30,
-                  ),),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 15),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  alignment: Alignment.centerLeft,
-                  child: Text('${memoryNoteController.memoryNote.value.era.toString()}년대',
-                    textAlign: TextAlign.left, style: TextStyle(
-                    fontSize: 24,
-                  ),),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 15),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  alignment: Alignment.centerLeft,
-                  child: Text('\'${memoryNoteController.memoryNote.value.imgTitle.toString()}\'',
-                    textAlign: TextAlign.left, style: TextStyle(
+                  child: Text('다음과 같이 등록할까요?',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
                       fontSize: 30,
-                    ),),
+                      fontWeight: FontWeight.w500
+                    ),
+                  ),
+                ),
+                SizedBox(height: width * 0.025,),
+
+                Container(
+                  margin: EdgeInsets.only(left: 15),
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '${memoryNoteController.memoryNote.value.era.toString()}년대',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
+
+                Container(
+                  margin: EdgeInsets.only(left: 15),
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '\'${memoryNoteController.memoryNote.value.imgTitle.toString()}\'',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 30,
+                      height: 1.0
+                    ),
+                  ),
                 ),
                 SizedBox(height: 10,),
+
+                // 이미지
                 Container(
-                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.only(left: width * 0.05),
+                  //alignment: Alignment.centerLeft,
                   constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.3),
                   width: MediaQuery.of(context).size.width * 0.7,
                   decoration: BoxDecoration(
@@ -76,7 +104,8 @@ class _MemoryRegisterCheckState extends State<MemoryRegisterCheck> {
                   )
                       : SizedBox(), // 널일 경우 대체할 위젯 설정
                 ),
-                SizedBox(height: 30,),
+                SizedBox(height: width * 0.05,),
+
                 Container(
                   margin: EdgeInsets.only(left: 15),
                   width: MediaQuery.of(context).size.width * 0.9,
@@ -86,13 +115,14 @@ class _MemoryRegisterCheckState extends State<MemoryRegisterCheck> {
                       fontSize: 24,
                     ),),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(height: width * 0.01,),
                 Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     alignment: Alignment.centerLeft,
                     margin: EdgeInsets.only(left: 15),
                     child: MemoryPeople(keywords: people)),
-                SizedBox(height: 30,),
+
+                SizedBox(height: width * 0.05,),
                 Container(
                   margin: EdgeInsets.only(left: 15),
                   width: MediaQuery.of(context).size.width * 0.9,
@@ -102,7 +132,7 @@ class _MemoryRegisterCheckState extends State<MemoryRegisterCheck> {
                       fontSize: 24,
                     ),),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(height: width * 0.01,),
                 Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     alignment: Alignment.centerLeft,
@@ -186,17 +216,23 @@ class MemoryPeople extends StatelessWidget {
         return TextButton(
           onPressed: () {
           },
-          child: Text(keywords[index], style: TextStyle(
-              fontSize: 24, color: Colors.black, fontWeight: FontWeight.normal
-          ),),
+          child: Container(
+            padding: EdgeInsets.fromLTRB(13, 5, 13, 7),
+            child: Text(
+              keywords[index],
+              style: TextStyle(
+                fontSize: 24, color: Colors.black, fontWeight: FontWeight.normal
+            ),),
+          ),
           style: ButtonStyle(
+            padding: WidgetStateProperty.all(EdgeInsets.zero),
             backgroundColor: WidgetStateProperty.all(Colors.white),
             overlayColor: WidgetStateProperty.all(Colors.transparent), // 클릭 시 효과나 모션 없애기
             shape: WidgetStateProperty.all(RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
               side: BorderSide(
                 color: Colors.black,
-                width: 1,
+                width: 0.7,
               ),
             )),
           ),
@@ -223,10 +259,17 @@ class MemoryKeyword extends StatelessWidget {
         return TextButton(
           onPressed: () {
           },
-          child: Text(keywords[index], style: TextStyle(
-            fontSize: 24, color: Colors.black, fontWeight: FontWeight.normal
-          ),),
+          child: Container(
+            padding: EdgeInsets.only(left: 20, right: 20, bottom: 8, top: 5),
+            child: Text(
+              keywords[index],
+              style: TextStyle(
+                  fontSize: 24, color: Colors.black, fontWeight: FontWeight.normal
+              ),
+            ),
+          ),
           style: ButtonStyle(
+            padding: WidgetStateProperty.all(EdgeInsets.zero),
             backgroundColor: WidgetStateProperty.all(_colorPallet.lightYellow),
             overlayColor: WidgetStateProperty.all(Colors.transparent), // 클릭 시 효과나 모션 없애기
             shape: WidgetStateProperty.all(RoundedRectangleBorder(
