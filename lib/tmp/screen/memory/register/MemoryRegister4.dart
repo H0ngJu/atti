@@ -82,10 +82,10 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
                         SizedBox(width: 8),
                         ElevatedButton(
                           onPressed: () {
-                            String memberName = _memoryWordsController.text;
-                            if (memberName.isNotEmpty) {
+                            String keword = _memoryWordsController.text;
+                            if (keword.isNotEmpty) {
                               setState(() {
-                                _values.add(memberName);
+                                _values.add(keword);
                                 _memoryWordsController.clear(); // 입력 필드 비우기
                               });
                             }
