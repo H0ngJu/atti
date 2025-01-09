@@ -149,7 +149,10 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
               Wrap(
                 spacing: 8.0,
                 children: familyMembers.map((member) {
-                  return Tag(name: member);
+                  return Tag(
+                    name: member,
+                    onDelete: () {},
+                  );
                 }).toList(),
               ),
             ],

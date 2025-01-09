@@ -272,6 +272,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                         textAlign: TextAlign.left,
                         style:
                         TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                        //textScaler: TextScaler.linear(1.0),
                       ),
                     ],
                   ),
