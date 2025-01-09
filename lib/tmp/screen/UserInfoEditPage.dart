@@ -2,6 +2,7 @@ import 'package:atti/commons/Tag.dart';
 import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/signup_login/SignUpController.dart';
+import 'package:atti/data/userinfo/UserInfoUpdateController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,15 +15,35 @@ class UserInfoEditPage extends StatefulWidget {
 
 class _UserInfoEditPageState extends State<UserInfoEditPage> {
   AuthController _authController = Get.find<AuthController>();
-  SignUpController _signUpController = Get.put(SignUpController());
+  UserInfoUpdateController _userInfoUpdateController = Get.put(UserInfoUpdateController());
 
   ColorPallet _colorPallet = ColorPallet();
 
-  // TextEditingController 추가
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _birthDateController = TextEditingController();
   TextEditingController _familyMemberController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _nameController.text = _authController.userName.value;
+    _birthDateController.text = _authController.birthDate;
+    _userInfoUpdateController.fetchUserInfo();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _birthDateController.dispose();
+    _familyMemberController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     String userName = _authController.userName.value;
     String birthDate = _authController.birthDate;
     List<String> familyMembers = _authController.familyMember.value;
@@ -64,26 +85,28 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('이름', style: TextStyle(fontSize: 18)),
+              Text('이름', style: TextStyle(fontSize: 24)),
               SizedBox(height: 10),
-              Container(
-                child: TextField(
-                  decoration: InputDecoration(
-                    fillColor: _colorPallet.lightYellow,
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    hintText: userName,
+              TextField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  fillColor: _colorPallet.lightYellow,
+                  filled: true,
+                  hintStyle: TextStyle(fontSize: 24),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                    borderSide: BorderSide.none,
                   ),
+                  hintText: userName,
                 ),
               ),
               SizedBox(height: 16),
-              Text('생년월일', style: TextStyle(fontSize: 18)),
+              Text('생년월일', style: TextStyle(fontSize: 24)),
               SizedBox(height: 10),
               TextField(
+                controller: _birthDateController,
                 decoration: InputDecoration(
+                  hintStyle: TextStyle(fontSize: 24),
                   fillColor: _colorPallet.lightYellow,
                   filled: true,
                   border: OutlineInputBorder(
@@ -94,7 +117,7 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                 ),
               ),
               SizedBox(height: 16),
-              Text('가족 및 친한 지인', style: TextStyle(fontSize: 18)),
+              Text('가족 및 친한 지인', style: TextStyle(fontSize: 24)),
               SizedBox(height: 10),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 16),
@@ -105,15 +128,12 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: Container(
-
-                        child: TextField(
-                          controller: _familyMemberController,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: '이름을 입력해주세요',
-                            hintStyle: TextStyle(color: _colorPallet.khaki, fontSize: 20),
-                          ),
+                      child: TextField(
+                        controller: _familyMemberController,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: '이름을 입력해주세요',
+                          hintStyle: TextStyle(color: _colorPallet.khaki, fontSize: 24),
                         ),
                       ),
                     ),
@@ -137,9 +157,7 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                       ),
                       child: Text(
                         '등록',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15),
+                        style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                     ),
                   ],
@@ -154,6 +172,189 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                     onDelete: () {},
                   );
                 }).toList(),
+              ),
+              SizedBox(height: height*0.1),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    width: width*0.4,
+                    child: TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(_colorPallet.goldYellow),
+                        shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30), // 모서리 둥글기
+                        )),
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              backgroundColor: Colors.white,
+                              contentPadding: EdgeInsets.all(20),
+                              content: Container(
+                                height: height*0.5,
+                                width: width*0.8,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                      '회원정보가 수정됩니다.\n정말 수정하시겠습니까?',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 24),
+                                    ),
+                                    SizedBox(height: 20),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          width: width*0.3,
+                                          child: TextButton(
+                                            onPressed: () {
+                                              // Firebase에 내용 업데이트하는 로직
+                                              _userInfoUpdateController.userName.value = _nameController.text;
+                                              // _userInfoUpdateController.userBirthDate = userName; // 다시 보기 ....
+                                              _userInfoUpdateController.userFamily.value = familyMembers;
+
+                                              _userInfoUpdateController.updateUserInfo();
+
+                                              Navigator.of(context).pop();
+                                              // Menu()로 이동
+                                              Navigator.pop(context);
+                                            },
+                                            style: TextButton.styleFrom(
+                                              backgroundColor: _colorPallet.goldYellow,
+                                            ),
+                                            child: Text('네', style: TextStyle(color: Colors.black,
+                                            fontSize: 24),),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: width*0.3,
+                                          child: TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            style: ButtonStyle(
+                                              side: WidgetStateProperty.all(BorderSide(
+                                                color: Colors.black, // 보더 색상
+                                                width: 1.0, // 보더 두께
+                                              )),
+                                              shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(30), // 모서리 둥글기
+                                              )),
+                                            ),
+                                            child: Text('아니요',
+                                              style: TextStyle(color: Colors.black,
+                                              fontSize: 24),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Text('수정',
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: width*0.4,
+                    child: TextButton(
+                      style: ButtonStyle(
+                        side: WidgetStateProperty.all(BorderSide(
+                          color: Colors.black, // 보더 색상
+                          width: 1.0, // 보더 두께
+                        )),
+                        shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30), // 모서리 둥글기
+                        )),
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              backgroundColor: Colors.white,
+                              contentPadding: EdgeInsets.all(20),
+                              content: Container(
+                                height: height*0.5,
+                                width: width*0.8,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                      '수정한 내용이 사라집니다.\n정말 수정을 취소하시겠습니까?',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 24),
+                                    ),
+                                    SizedBox(height: 20),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          width: width*0.3,
+                                          child: TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                              Navigator.pop(context);
+                                            },
+                                            style: TextButton.styleFrom(
+                                              backgroundColor: _colorPallet.goldYellow,
+                                            ),
+                                            child: Text('네', style: TextStyle(color: Colors.black,
+                                                fontSize: 24),),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: width*0.3,
+                                          child: TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            style: ButtonStyle(
+                                              side: WidgetStateProperty.all(BorderSide(
+                                                color: Colors.black, // 보더 색상
+                                                width: 1.0, // 보더 두께
+                                              )),
+                                              shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(30), // 모서리 둥글기
+                                              )),
+                                            ),
+                                            child: Text('아니요',
+                                              style: TextStyle(color: Colors.black,
+                                                  fontSize: 24),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Text('취소',
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

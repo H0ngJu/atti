@@ -99,7 +99,6 @@ class _MenuState extends State<Menu> {
                     SizedBox(height: 32),
                   ],
                 ),
-        
               ),
         
               Text(
@@ -170,6 +169,7 @@ class _MenuState extends State<Menu> {
   }
   Widget _infoRow(String title, String value, double boxSize) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
           width: boxSize,
@@ -192,21 +192,4 @@ class _MenuState extends State<Menu> {
       ],
     );
   }
-
-  // Widget _AccountRow(String name, String secondaryName, String id, String relationship) {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //     children: [
-  //       Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           Text(name, style: TextStyle(fontSize: 24)),
-  //           if (id.isNotEmpty) Text(id, style: TextStyle(color: Colors.grey)),
-  //         ],
-  //       ),
-  //       if (secondaryName.isNotEmpty) Text(secondaryName, style: TextStyle(fontSize: 18)),
-  //       if (relationship.isNotEmpty) Text(relationship, style: TextStyle(color: Colors.grey)),
-  //     ],
-  //   );
-  // }
 }
