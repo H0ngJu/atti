@@ -29,7 +29,7 @@ class RoutineService {
   }
 
   // 루틴 등록
-  Future<void> addRoutine(RoutineModel routine) async {
+  Future<RoutineModel> addRoutine(RoutineModel routine) async {
     try {
       String imageUrl = await uploadImage(routine.img!);
       routine.img = imageUrl; // 업로드된 이미지 url로 img필드 업데이트
@@ -45,8 +45,10 @@ class RoutineService {
           await firestore.collection('routine').add(routine.toJson());
       routine.reference = docRef;
       await docRef.update(routine.toJson());
+      return routine;
     } catch (e) {
       print('Error adding notification : $e!!!!!!!!!!!!!!!!!!');
+      throw Future.error('Error adding routine : $e');
     }
   }
 
