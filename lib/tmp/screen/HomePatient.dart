@@ -147,10 +147,9 @@ class _HomePatientState extends State<HomePatient> {
     bool isGranted = await NotificationService().requestBatteryPermissions();
     notificationService.showDailyNotification();
 
-    if (authController.isPatient) {
-      //notificationService.scheduleNotifications();
-      notificationService.routineNotifications();
-    }
+    // if (authController.isPatient) {
+    //   notificationService.routineNotifications();
+    // }
   }
 
   Future<void> _fetchAndSpeakWeather() async {
