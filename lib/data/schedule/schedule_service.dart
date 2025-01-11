@@ -105,7 +105,8 @@ class ScheduleService {
   Future<void> deleteSchedule(DocumentReference docRef) async {
     try {
       await docRef.delete();
-      await flutterLocalNotificationsPlugin.cancel(docRef.hashCode); // 예약된 알림 삭제
+      print(docRef.id);
+      await flutterLocalNotificationsPlugin.cancel(docRef.id.hashCode); // 예약된 알림 삭제
       print('Schedule deleted successfully');
     } catch (e) {
       print('Error deleting schedule: $e');

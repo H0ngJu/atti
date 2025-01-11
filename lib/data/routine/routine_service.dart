@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'dart:io';
+import '../../main.dart';
 import '../auth_controller.dart';
 import 'dart:core';
 
@@ -208,6 +209,7 @@ class RoutineService {
     try {
       // Firestore에서 문서를 삭제
       await docRef.delete();
+      await flutterLocalNotificationsPlugin.cancel(docRef.id.hashCode);
       print('Routine deleted successfully!');
     } catch (e) {
       print('Error deleting routine: $e');

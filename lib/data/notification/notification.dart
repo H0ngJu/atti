@@ -265,7 +265,7 @@ class NotificationService {
       final scheduledTime = makeWeeklyDate(dayOfWeek, hour, minute, location);
 
       await flutterLocalNotificationsPlugin.zonedSchedule(
-        dayOfWeek, // Unique ID for each notification
+        payload.hashCode, // Unique ID for each notification
         '일과 알림',
         '\'${name}\' 일과를 완료하셨나요?',
         scheduledTime,
@@ -273,7 +273,7 @@ class NotificationService {
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-        payload: payload,
+        payload: '/routine/${payload}',
       );
 
       await addNotification(

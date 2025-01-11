@@ -99,7 +99,7 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
                       repeatDaysToNumList,
                       tmpTime[0],
                       tmpTime[1],
-                      '/routine/${updatedRoutine.reference!.id}'
+                      '${updatedRoutine.reference!.id}'
                   );
                 }
                 // setState(() {
