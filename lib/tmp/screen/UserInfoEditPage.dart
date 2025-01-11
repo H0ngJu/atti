@@ -3,6 +3,7 @@ import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/signup_login/SignUpController.dart';
 import 'package:atti/data/userinfo/UserInfoUpdateController.dart';
+import 'package:atti/tmp/screen/Menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -169,7 +170,11 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                 children: familyMembers.map((member) {
                   return Tag(
                     name: member,
-                    onDelete: () {},
+                    onDelete: () {
+                      setState(() {
+                        familyMembers.remove(member); // 리스트에서 해당 원소 삭제
+                      });
+                    },
                   );
                 }).toList(),
               ),
@@ -219,9 +224,17 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
 
                                               _userInfoUpdateController.updateUserInfo();
 
+                                              _authController.userName.value = _nameController.text;
+                                              // _authController.birthDate.value = _birthDateController;
+                                              _authController.familyMember.value = familyMembers;
+
                                               Navigator.of(context).pop();
                                               // Menu()로 이동
-                                              Navigator.pop(context);
+                                              Navigator.pushAndRemoveUntil(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => Menu()),
+                                                    (Route<dynamic> route) => false,
+                                              );
                                             },
                                             style: TextButton.styleFrom(
                                               backgroundColor: _colorPallet.goldYellow,
