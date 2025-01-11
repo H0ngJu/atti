@@ -132,7 +132,8 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
 
                   // 일정 1시간 전 알림
                   notificationService.showDateTimeNotification(
-                    notificationService.createUniqueId(),
+                    //notificationService.createUniqueId(),
+                    updatedSchedule.reference!.id.hashCode,
                     '일정 알림',
                     '1시간 뒤 \'${updatedSchedule.name}\'을(를) 하실 시간이에요!',
                     updatedSchedule.time!.toDate().subtract(Duration(hours: 1)),
@@ -141,7 +142,8 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
 
                   // 일정 본알림
                   await notificationService.showDateTimeNotification(
-                    notificationService.createUniqueId(),
+                    //notificationService.createUniqueId(),
+                    updatedSchedule.reference!.id.hashCode,
                     '일정 알림',
                     '\'${updatedSchedule.name}\'일정을(를) 진행하고 있나요?',
                     //updatedSchedule.time!.toDate(),

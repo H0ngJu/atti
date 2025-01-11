@@ -517,6 +517,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
     final Random random = Random();
     index = random.nextInt(greetingMsg.length); // 여기에서 `index` 초기화
     //_selectedImage = widget.selectedImage;
+
   }
 
   @override

@@ -17,6 +17,7 @@ import '../../../data/notification/notification.dart';
 import 'package:atti/data/notification/notification_controller.dart';
 import 'dart:math';
 
+import '../../../tmp/screen/routine/RoutineMain.dart';
 import '../routine_schedule/CustomModal.dart';
 
 class RoutineNoti extends StatefulWidget {
@@ -195,6 +196,7 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
                     builder: (_) => CustomModal(
                       title: "'${routine!.name}'\n일과를 완료하셨나요?",
                       yesButtonColor: colorPallet.orange,
+
                       onYesPressed: () async {
                         await RoutineService().completeRoutine(routine!.reference!, DateTime.now());
                         await addNotification(
@@ -203,10 +205,13 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
                             DateTime.now(),
                             false);
                         // widget.onCompleted(); // 콜백 함수 호출
-                        Navigator.pop(context);
+
+                        Get.to(RoutineScheduleMain());
                       },
+
                       onNoPressed: () {
-                        Navigator.pop(context);
+                        //Navigator.pop(context);
+                        Get.to(RoutineScheduleMain());
                       },
                     ),
                   );
