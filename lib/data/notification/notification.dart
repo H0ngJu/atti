@@ -249,7 +249,7 @@ class NotificationService {
   }
 
   // 루틴 등록할 때, 매주 정해진 요일과 시간에 알림 예약 =======================================
-  Future<void> showWeeklyNotification(String name, List<int> daysOfWeek, int hour, int minute, DocumentReference docRef) async {
+  Future<void> showWeeklyNotification(String name, List<int> daysOfWeek, int hour, int minute, String payload) async {
     tz.initializeTimeZones();
     final location = tz.getLocation('Asia/Seoul');
 
@@ -273,7 +273,7 @@ class NotificationService {
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-        payload: '/routine/$docRef',
+        payload: payload,
       );
 
       await addNotification(
@@ -283,6 +283,7 @@ class NotificationService {
         authController.isPatient,
       );
     }
+    print("루틴 알림 예약 성공 !!!!!");
   }
 
   tz.TZDateTime makeWeeklyDate(int dayOfWeek, int hour, int minute, tz.Location location) {

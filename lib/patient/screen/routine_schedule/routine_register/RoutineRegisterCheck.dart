@@ -86,19 +86,20 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
                 String tmpName = routineController.routine.value.name!;
                 String tmpImg = routineController.routine.value.img!;
                 List<int> tmpTime = routineController.routine.value.time!;
+                List<int> repeatDaysToNumList = mapDaysToNumbers(routineController.routine.value.repeatDays!);
 
                 //print(routineController.routine.value.repeatDays);
-                final updatedRoutine = await routineController.addRoutine();
+                final updatedRoutine = await routineController.addRoutine(); // 컨트롤러 초기화 로직 들어있음
 
                 // 루틴 알림 예약 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
                 if (authController.isPatient) {
                   //notificationService.routineNotifications();
-                  notificationService.showWeeklyNotification(
-                      routineController.routine.value.name!,
-                      mapDaysToNumbers(routineController.routine.value.repeatDays!),
-                      routineController.routine.value.time![0],
-                      routineController.routine.value.time![1],
-                      updatedRoutine.reference!
+                  await notificationService.showWeeklyNotification(
+                      tmpName,
+                      repeatDaysToNumList,
+                      tmpTime[0],
+                      tmpTime[1],
+                      '/routine/${updatedRoutine.reference!.id}'
                   );
                 }
                 // setState(() {
