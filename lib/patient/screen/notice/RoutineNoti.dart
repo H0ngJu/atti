@@ -15,7 +15,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import '../../../data/notification/notification.dart';
 import 'package:atti/data/notification/notification_controller.dart';
-import 'dart:math';
 
 import '../../../tmp/screen/routine/RoutineMain.dart';
 import '../routine_schedule/CustomModal.dart';
