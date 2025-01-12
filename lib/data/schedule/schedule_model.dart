@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ScheduleModel {
   // 자료형
   String? name;
-  String? location;
+  String? location = ""; // 기본값 추가
   String? memo;
   DocumentReference? patientId;
   Timestamp? createdAt;
