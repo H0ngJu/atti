@@ -64,39 +64,34 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
 
                 SizedBox(
                   width: width * 0.9,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            //width: width * 0.9,
-                            alignment: Alignment.topLeft,
-                            child: Text(scheduleController.schedule.value?.time?.toDate() != null
-                              ? DateFormat('yyyy년 M월 d일', 'ko_KR').format(scheduleController.schedule.value.time!.toDate())
-                              : '',
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.black,
-                              ),
-                            ),
+                      Container(
+                        //width: width * 0.9,
+                        alignment: Alignment.topLeft,
+                        child: Text(scheduleController.schedule.value?.time?.toDate() != null
+                          ? DateFormat('yyyy년 M월 d일 a hh:mm', 'ko_KR').format(scheduleController.schedule.value.time!.toDate())
+                          : '',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.black,
                           ),
-                          Container(
-                            //width: width * 0.9,
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              scheduleController.schedule.value?.time?.toDate() != null
-                                  ? DateFormat('a hh:mm', 'ko_KR').format(scheduleController.schedule.value.time!.toDate())
-                                  : DateFormat('a hh:mm', 'ko_KR').format(DateTime.now()),
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
+                      // Container(
+                      //   //width: width * 0.9,
+                      //   alignment: Alignment.topLeft,
+                      //   child: Text(
+                      //     scheduleController.schedule.value?.time?.toDate() != null
+                      //         ? DateFormat('a hh:mm', 'ko_KR').format(scheduleController.schedule.value.time!.toDate())
+                      //         : DateFormat('a hh:mm', 'ko_KR').format(DateTime.now()),
+                      //     style: TextStyle(
+                      //       fontSize: 24,
+                      //       color: Colors.black,
+                      //     ),
+                      //   ),
+                      // ),
                       Container(
                         //width: width * 0.9,
                         alignment: Alignment.topLeft,
