@@ -50,7 +50,7 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
 
                 //SizedBox(height: 10,),
                 Container(
-                  padding: EdgeInsets.only(top: 15, bottom: 15, left: 20),
+                  padding: EdgeInsets.only(top: 15, bottom: 15, left: 15),
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
@@ -62,7 +62,7 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
                       if (scheduleController.schedule.value.time != null)
                         Text('${formattedDate} ${formattedTime}',
                           style: TextStyle(
-                              fontSize: 22
+                              fontSize: 21
                           ),
                         ),
                       if (scheduleController.schedule.value.name != null)

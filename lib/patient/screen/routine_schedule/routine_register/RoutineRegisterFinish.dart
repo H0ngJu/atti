@@ -137,6 +137,9 @@ class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
             margin: EdgeInsets.only(bottom: 20),
             child: TextButton(
               onPressed: () {
+
+
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => RoutineScheduleMain()),

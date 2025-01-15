@@ -64,39 +64,34 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
 
                 SizedBox(
                   width: width * 0.9,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            //width: width * 0.9,
-                            alignment: Alignment.topLeft,
-                            child: Text(scheduleController.schedule.value?.time?.toDate() != null
-                              ? DateFormat('yyyy년 M월 d일', 'ko_KR').format(scheduleController.schedule.value.time!.toDate())
-                              : '',
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.black,
-                              ),
-                            ),
+                      Container(
+                        //width: width * 0.9,
+                        alignment: Alignment.topLeft,
+                        child: Text(scheduleController.schedule.value?.time?.toDate() != null
+                          ? DateFormat('yyyy년 M월 d일 a hh:mm', 'ko_KR').format(scheduleController.schedule.value.time!.toDate())
+                          : '',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.black,
                           ),
-                          Container(
-                            //width: width * 0.9,
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              scheduleController.schedule.value?.time?.toDate() != null
-                                  ? DateFormat('a hh:mm', 'ko_KR').format(scheduleController.schedule.value.time!.toDate())
-                                  : DateFormat('a hh:mm', 'ko_KR').format(DateTime.now()),
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
+                      // Container(
+                      //   //width: width * 0.9,
+                      //   alignment: Alignment.topLeft,
+                      //   child: Text(
+                      //     scheduleController.schedule.value?.time?.toDate() != null
+                      //         ? DateFormat('a hh:mm', 'ko_KR').format(scheduleController.schedule.value.time!.toDate())
+                      //         : DateFormat('a hh:mm', 'ko_KR').format(DateTime.now()),
+                      //     style: TextStyle(
+                      //       fontSize: 24,
+                      //       color: Colors.black,
+                      //     ),
+                      //   ),
+                      // ),
                       Container(
                         //width: width * 0.9,
                         alignment: Alignment.topLeft,
@@ -132,7 +127,8 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
 
                   // 일정 1시간 전 알림
                   notificationService.showDateTimeNotification(
-                    notificationService.createUniqueId(),
+                    //notificationService.createUniqueId(),
+                    updatedSchedule.reference!.id.hashCode,
                     '일정 알림',
                     '1시간 뒤 \'${updatedSchedule.name}\'을(를) 하실 시간이에요!',
                     updatedSchedule.time!.toDate().subtract(Duration(hours: 1)),
@@ -141,7 +137,8 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
 
                   // 일정 본알림
                   await notificationService.showDateTimeNotification(
-                    notificationService.createUniqueId(),
+                    //notificationService.createUniqueId(),
+                    updatedSchedule.reference!.id.hashCode,
                     '일정 알림',
                     '\'${updatedSchedule.name}\'일정을(를) 진행하고 있나요?',
                     //updatedSchedule.time!.toDate(),
