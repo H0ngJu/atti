@@ -1,7 +1,11 @@
-import 'package:atti/tmp/screen/HomePatient.dart';
-import 'package:atti/tmp/screen/UserInfoEditPage.dart';
+import 'package:atti/commons/colorPallet.dart';
+import 'package:atti/data/auth_controller.dart';
+import 'package:atti/login_signUp/IntroPage.dart';
+import 'package:atti/patient/screen/home/HomePatient.dart';
+import 'package:atti/patient/screen/home/UserInfoEditPage.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import '../../index.dart';
 
 class Menu extends StatefulWidget {
   const Menu({super.key});
@@ -118,6 +122,11 @@ class _MenuState extends State<Menu> {
                 child: GestureDetector(
                   onTap: () {
                     _authController.logout();
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => IntroPage()),
+                          (Route<dynamic> route) => false, // 모든 이전 페이지를 제거
+                    );
                   },
                   child: Container(
                     width: 111, // 버튼의 너비

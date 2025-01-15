@@ -71,6 +71,7 @@ class AuthController extends GetxController {
 
   void logout() async {
     try {
+      await FirebaseAuth.instance.signOut();
       loggedUser = null;
       isPatient = true;
       userName.value = '';

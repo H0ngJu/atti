@@ -10,7 +10,7 @@ class Tag extends StatelessWidget {
   Tag({
     required this.name,
     this.backgroundColor = Colors.white,
-    this.fontsize = 16,
+    this.fontsize = 24,
     required this.onDelete,
   });
 
@@ -18,7 +18,7 @@ class Tag extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // 태그 컨테이너의 여백 설정
-      margin: fontsize != 16
+      margin: fontsize != 24
           ? EdgeInsets.only(top: 12) // 기본 글자 크기가 아닌 경우 위쪽 여백 12
           : EdgeInsets.symmetric(vertical: 5), // 기본 글자 크기일 경우 위아래 여백 5
       height: fontsize + 20, // 태그 높이: 글자 크기 + 14
@@ -45,7 +45,7 @@ class Tag extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: fontsize != 16 ? 10 : 3, // 텍스트와 구분선 사이 간격
+            width: fontsize != 24 ? 10 : 6, // 텍스트와 구분선 사이 간격
           ),
           // 태그 안의 구분선 (세로선)
           Container(
@@ -57,14 +57,14 @@ class Tag extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: fontsize != 16 ? 5 : 1, // 구분선과 닫기 아이콘 사이 간격
+            width: fontsize != 24 ? 5 : 2, // 구분선과 닫기 아이콘 사이 간격
           ),
           // 닫기 아이콘 (삭제 버튼)
           GestureDetector(
             onTap: onDelete,
             child: Icon(
               Icons.close, // 닫기 아이콘
-              size: fontsize != 16 ? 24 : 18, // 아이콘 크기
+              size: fontsize != 24 ? 30 : 24, // 아이콘 크기
               color: Colors.black, // 아이콘 색상: 검정색
             ),
           ),

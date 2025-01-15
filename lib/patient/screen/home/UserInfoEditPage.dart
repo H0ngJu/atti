@@ -1,9 +1,8 @@
 import 'package:atti/commons/Tag.dart';
 import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/data/auth_controller.dart';
-import 'package:atti/data/signup_login/SignUpController.dart';
 import 'package:atti/data/userinfo/UserInfoUpdateController.dart';
-import 'package:atti/tmp/screen/Menu.dart';
+import 'package:atti/patient/screen/home/Menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
