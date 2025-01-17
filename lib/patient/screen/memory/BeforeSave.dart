@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../data/memory/memory_note_model.dart';
 import 'package:atti/data/memory/chatController.dart';
-import 'package:atti/tmp/screen/memory/chat/ChatComplete.dart';
+import 'package:atti/patient/screen/memory/ChatComplete.dart';
 import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
 
 import '../../../../patient/screen/memory/MainMemory.dart';
@@ -9,8 +9,9 @@ import '../../../../patient/screen/memory/MainMemory.dart';
 class BeforeSave extends StatelessWidget {
   final MemoryNoteModel memory;
   final String chat;
+  final List<MemoryNoteModel> albumList;
 
-  const BeforeSave({Key? key, required this.memory, required this.chat})
+  const BeforeSave({Key? key, required this.memory, required this.chat, required this.albumList})
       : super(key: key);
 
   @override
@@ -59,7 +60,7 @@ class BeforeSave extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ChatComplete(memory: memory,)),
+                                builder: (context) => ChatComplete(memory: memory,albumList: albumList)),
                           );
                         } else {
                           print('Error: memory.reference?.path is null');
