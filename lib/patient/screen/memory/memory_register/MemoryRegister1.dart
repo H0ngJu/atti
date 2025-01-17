@@ -124,7 +124,7 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                                             Text(
                                               '카메라로 사진 찍기',
                                               style: TextStyle(
-                                                fontSize: 24,
+                                                fontSize: 22,
                                               ),
                                             ),
                                             Image.asset(
@@ -164,7 +164,7 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                                             Text(
                                               '앨범에서 불러오기',
                                               style: TextStyle(
-                                                fontSize: 24,
+                                                fontSize: 22,
                                               ),
                                             ),
                                             Image.asset(

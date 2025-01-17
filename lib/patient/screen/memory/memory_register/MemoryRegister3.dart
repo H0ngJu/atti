@@ -238,7 +238,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
     return Container(
       //alignment: Alignment.centerLeft,
       margin: EdgeInsets.only(left: 15),
-      width: MediaQuery.of(context).size.width * 0.5,
+      width: MediaQuery.of(context).size.width * 0.53,
       child: DropdownButtonFormField(
         menuMaxHeight: 250,
         value: _selectedEra,

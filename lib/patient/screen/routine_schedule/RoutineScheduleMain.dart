@@ -1,8 +1,10 @@
 // 새로운 일정/일과 페이지
 import 'package:atti/index.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
+import '../../../main.dart';
 import 'TodayToDo.dart';
 
 // 이미지 파일 이름 목록
@@ -77,6 +79,8 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     } else {
       patientName = authController.patientName.value;
     }
+    // print("스피치 버블 출력 테스트");
+    // print(selectedMessage);
   }
 
   // 데이터 불러오기
@@ -113,6 +117,24 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
         numberOfRoutines = 0;
       });
     }
+
+    // 보유 중인 알림 요청 검색
+    // final List<PendingNotificationRequest> pendingNotificationRequests =
+    // await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+    //
+    // // 반복문으로 각 알림 요청 출력
+    // for (var request in pendingNotificationRequests) {
+    //   print('Notification ID: ${request.id}');
+    //   print('Title: ${request.title}');
+    //   print('Body: ${request.body}');
+    //   print('Payload: ${request.payload}');
+    //   print('-------------------------');
+    // }
+
+    // 활성 알림 검색
+    // final List<ActiveNotification> activeNotifications =
+    // await flutterLocalNotificationsPlugin.getActiveNotifications();
+    // print(activeNotifications);
   }
 
   // 아띠 말풍선 메시지 만들기
@@ -181,12 +203,16 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     if (ttsMessages.isNotEmpty) {
       Random random = Random();
       int index = random.nextInt(ttsMessages.length);
-      selectedMessage = ttsMessages[index];
+      setState(() {
+        selectedMessage = ttsMessages[index];
+      });
 
       await flutterTts.setLanguage('ko-KR');
       await flutterTts.setPitch(1);
       await flutterTts.speak(selectedMessage);
     }
+    // print("_makeTTsMessage 함수 안");
+    // print(selectedMessage);
   }
 
   // 날짜 선택 달력
@@ -415,6 +441,8 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
+                          print('도큐먼트 레퍼런스 해시코드 테스트');
+                          print(schedulesBySelectedDay[index].reference!.id.hashCode);
                           showDialog(
                               context: context,
                               builder: (_) {

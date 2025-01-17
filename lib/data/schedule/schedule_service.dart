@@ -2,6 +2,7 @@ import 'package:atti/data/schedule/schedule_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import '../../main.dart';
 import '../auth_controller.dart';
 
 class ScheduleService {
@@ -104,6 +105,8 @@ class ScheduleService {
   Future<void> deleteSchedule(DocumentReference docRef) async {
     try {
       await docRef.delete();
+      print(docRef.id);
+      await flutterLocalNotificationsPlugin.cancel(docRef.id.hashCode); // 예약된 알림 삭제
       print('Schedule deleted successfully');
     } catch (e) {
       print('Error deleting schedule: $e');

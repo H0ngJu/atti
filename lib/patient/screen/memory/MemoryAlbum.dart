@@ -5,12 +5,21 @@ import 'package:atti/patient/screen/memory/MemoryInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MemoryAlbum extends StatelessWidget {
+import '../../../commons/AttiBottomNavi.dart';
+
+class MemoryAlbum extends StatefulWidget {
   final List<MemoryNoteModel> group;
   final String memoryKey;
 
   const MemoryAlbum({Key? key, required this.memoryKey, required this.group})
       : super(key: key);
+
+  @override
+  _MemoryAlbumState createState() => _MemoryAlbumState();
+}
+
+class _MemoryAlbumState extends State<MemoryAlbum> {
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +29,7 @@ class MemoryAlbum extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: SimpleAppBar(
-          title: "${memoryKey}년대\n기억모음"
+        title: "${widget.memoryKey}년대\n기억모음",
       ),
       body: Stack(
         children: [
@@ -28,10 +37,9 @@ class MemoryAlbum extends StatelessWidget {
             child: Container(
               width: width * 0.9,
               child: Column(
-                //crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: group.length > 5
+                    child: widget.group.length > 5
                         ? _buildGroupedMemoryCards()
                         : _buildGridView(context),
                   ),
@@ -40,10 +48,19 @@ class MemoryAlbum extends StatelessWidget {
             ),
           ),
           Positioned(
-              bottom: MediaQuery.of(context).size.height * 0.2,
-              right: 0,
-              child: AddButton())
+            bottom: height * 0.2,
+            right: 0,
+            child: AddButton(),
+          ),
         ],
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }
@@ -56,9 +73,9 @@ class MemoryAlbum extends StatelessWidget {
         mainAxisSpacing: 8.0,
         childAspectRatio: 0.8,
       ),
-      itemCount: group.length,
+      itemCount: widget.group.length,
       itemBuilder: (context, index) {
-        final groupedMemory = group[index];
+        final groupedMemory = widget.group[index];
         return _buildMemoryCard(context, groupedMemory);
       },
     );
@@ -66,15 +83,15 @@ class MemoryAlbum extends StatelessWidget {
 
   Widget _buildGroupedMemoryCards() {
     return ListView.builder(
-      itemCount: (group.length / 5).ceil(), // 5개씩 묶기
+      itemCount: (widget.group.length / 5).ceil(), // 5개씩 묶기
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
       itemBuilder: (context, blockIndex) {
         final startIndex = blockIndex * 5;
-        final endIndex = (startIndex + 5 <= group.length)
+        final endIndex = (startIndex + 5 <= widget.group.length)
             ? startIndex + 5
-            : group.length; // 남은 4개 아이템
-        final currentGroup = group.sublist(startIndex, endIndex);
+            : widget.group.length; // 남은 4개 아이템
+        final currentGroup = widget.group.sublist(startIndex, endIndex);
 
         return Column(
           children: [
@@ -107,7 +124,7 @@ class MemoryAlbum extends StatelessWidget {
 
   Widget _buildMemoryCard(BuildContext context, MemoryNoteModel groupedMemory) {
     return GestureDetector(
-      onTap: () => Get.to(MemoryInfo(memory: groupedMemory)),
+      onTap: () => Get.to(MemoryInfo(memory: groupedMemory, albumList: widget.group)),
       child: Column(
         children: [
           ClipRRect(
@@ -120,14 +137,17 @@ class MemoryAlbum extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Expanded(child: Text(
-            groupedMemory.imgTitle ?? '',
-            style: const TextStyle(
+          Expanded(
+            child: Text(
+              groupedMemory.imgTitle ?? '',
+              style: const TextStyle(
                 color: Colors.black,
                 fontSize: 20,
-                fontFamily: 'PretendardRegular'),
-            textAlign: TextAlign.center,
-          ),),
+                fontFamily: 'PretendardRegular',
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
         ],
       ),
     );
@@ -135,7 +155,7 @@ class MemoryAlbum extends StatelessWidget {
 
   Widget _buildBigMemoryCard(BuildContext context, MemoryNoteModel groupedMemory) {
     return GestureDetector(
-      onTap: () => Get.to(MemoryInfo(memory: groupedMemory)),
+      onTap: () => Get.to(MemoryInfo(memory: groupedMemory, albumList: widget.group)),
       child: Column(
         children: [
           ClipRRect(
@@ -151,14 +171,14 @@ class MemoryAlbum extends StatelessWidget {
           Text(
             groupedMemory.imgTitle ?? '',
             style: const TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontFamily: 'PretendardRegular'),
+              color: Colors.black,
+              fontSize: 24,
+              fontFamily: 'PretendardRegular',
+            ),
             textAlign: TextAlign.center,
           ),
         ],
       ),
     );
   }
-
 }

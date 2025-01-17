@@ -127,15 +127,19 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
   void initState() {
     super.initState();
     // location 초기값 설정
-    scheduleController.schedule.value.location = "";
+    scheduleController.schedule.value.location = scheduleController.schedule.value.location ?? "";
   }
 
   @override
   Widget build(BuildContext context) {
+
     bool isButtonEnabled() {
+      // print('Date: ${_dateController.text}');
+      // print('Time: ${_timeController.text}');
+      // print('Location: ${scheduleController.schedule.value.location}');
       return _dateController.text.isNotEmpty &&
           _timeController.text.isNotEmpty &&
-          scheduleController.schedule.value.location!.trim().isNotEmpty;
+          (scheduleController.schedule.value.location?.trim().isNotEmpty ?? false);
     }
 
     var height = MediaQuery.of(context).size.height;

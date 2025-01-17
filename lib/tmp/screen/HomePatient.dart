@@ -23,7 +23,7 @@ import '../../data/schedule/schedule_model.dart';
 import '../../data/schedule/schedule_service.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
-import '../../patient/screen/memory/MemoryMain.dart';
+import '../../patient/screen/memory/MainMemory.dart';
 import '../../patient/screen/notice/RoutineNoti.dart';
 import '../../patient/screen/notice/ScheduleNoti1.dart';
 import '../../patient/screen/notice/ScheduleNoti2.dart';
@@ -147,10 +147,9 @@ class _HomePatientState extends State<HomePatient> {
     bool isGranted = await NotificationService().requestBatteryPermissions();
     notificationService.showDailyNotification();
 
-    if (authController.isPatient) {
-      //notificationService.scheduleNotifications();
-      notificationService.routineNotifications();
-    }
+    // if (authController.isPatient) {
+    //   notificationService.routineNotifications();
+    // }
   }
 
   Future<void> _fetchAndSpeakWeather() async {
@@ -518,6 +517,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
     final Random random = Random();
     index = random.nextInt(greetingMsg.length); // 여기에서 `index` 초기화
     //_selectedImage = widget.selectedImage;
+
   }
 
   @override

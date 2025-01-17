@@ -1,6 +1,6 @@
-import 'package:atti/patient/screen/memory/MemoryMain.dart';
+import 'package:atti/patient/screen/memory/MainMemory.dart';
 import 'package:atti/tmp/screen/HomeCarer.dart';
-import 'package:atti/tmp/screen/HomePatient.dart';
+import 'package:atti/patient/screen/HomePatient.dart';
 import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

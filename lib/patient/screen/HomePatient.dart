@@ -2,9 +2,12 @@ import 'dart:math';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/patient/screen/routine_schedule/TodayToDo.dart';
-import 'package:atti/patient/screen/home/Menu.dart';
+import 'package:atti/tmp/screen/Menu.dart';
+import 'package:atti/tmp/screen/Notice/FullScreenRoutine.dart';
+import 'package:atti/tmp/screen/Notice/FullScreenSchedule1.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -12,20 +15,18 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
-import '../../../data/auth_controller.dart';
-import '../../../data/notification/notification.dart';
-import '../../../data/routine/routine_model.dart';
-import '../../../data/routine/routine_service.dart';
-import '../../../data/schedule/schedule_model.dart';
-import '../../../data/schedule/schedule_service.dart';
+import '../../data/auth_controller.dart';
+import '../../data/notification/notification.dart';
+import '../../data/routine/routine_model.dart';
+import '../../data/routine/routine_service.dart';
+import '../../data/schedule/schedule_model.dart';
+import '../../data/schedule/schedule_service.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
-import '../../../patient/screen/memory/MainMemory.dart';
-import '../../../patient/screen/notice/RoutineNoti.dart';
-import '../../../patient/screen/notice/ScheduleNoti1.dart';
-import '../../../patient/screen/notice/ScheduleNoti2.dart';
-// import '../notice/FullScreenSchedule2.dart';
-// import '../notice/FullScreenSchedule3.dart';
+import '../../patient/screen/memory/MainMemory.dart';
+import '../../patient/screen/notice/RoutineNoti.dart';
+import '../../patient/screen/notice/ScheduleNoti1.dart';
+import '../../patient/screen/notice/ScheduleNoti2.dart';
 
 class HomePatient extends StatefulWidget {
   const HomePatient({Key? key}) : super(key: key);
@@ -97,14 +98,13 @@ class _HomePatientState extends State<HomePatient> {
             MaterialPageRoute(
                 builder: (context) => ScheduleNoti2(docRef: docRef)),
           );
-        } else if (payload.startsWith('/schedule3/')) {
-          String docRef = payload.substring('/schedule3/'.length);
-          // ******************************************************************************************************** 물어보기
-          // Navigator.push(
-          //   context,
-            // MaterialPageRoute(
-                // builder: (context) => FullScreenSchedule3(docRef: docRef)),
-          // );
+        // } else if (payload.startsWith('/schedule3/')) {
+        //   String docRef = payload.substring('/schedule3/'.length);
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => FullScreenSchedule3(docRef: docRef)),
+        //   );
         } else if (payload.startsWith('/routine/')) {
           String docRef = payload.substring('/routine/'.length);
           Navigator.push(
@@ -145,10 +145,9 @@ class _HomePatientState extends State<HomePatient> {
     bool isGranted = await NotificationService().requestBatteryPermissions();
     notificationService.showDailyNotification();
 
-    if (authController.isPatient) {
-      //notificationService.scheduleNotifications();
-      notificationService.routineNotifications();
-    }
+    // if (authController.isPatient) {
+    //   notificationService.routineNotifications();
+    // }
   }
 
   Future<void> _fetchAndSpeakWeather() async {
@@ -439,17 +438,15 @@ class _HomePatientState extends State<HomePatient> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2),
-                    child: Text(
-                      '지금 할 일을 알려줘',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w400),
-                    ),
+                  child: Text(
+                    '지금 할 일을 알려줘',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w400),
                   ),
                 ),
+
                 SizedBox(height: width * 0.02),
                 TextButton(
                   onPressed: () {
@@ -461,14 +458,11 @@ class _HomePatientState extends State<HomePatient> {
                       borderRadius: BorderRadius.circular(15), // 모서리 둥글기
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Text(
-                      '기억 대화를 나눌래',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
-                      ),
+                  child: Text(
+                    '기억 대화를 나눌래',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 22,
                     ),
                   ),
                 ),
@@ -516,6 +510,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
     final Random random = Random();
     index = random.nextInt(greetingMsg.length); // 여기에서 `index` 초기화
     //_selectedImage = widget.selectedImage;
+
   }
 
   @override
@@ -590,11 +585,11 @@ class _HomePatientTopState extends State<HomePatientTop> {
             ],
           ),
 
-          SizedBox(height: width * 0.08), //
+          SizedBox(height: width * 0.065), //
           Center(
             child: Text('오늘은요',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'UhBee', fontSize: 28)),
+                style: TextStyle(fontFamily: 'UhBee', fontSize: 25)),
           ),
           SizedBox(height: width * 0.05), //
 
@@ -605,7 +600,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
               widget.selectedImage.isNotEmpty // selectedImage가 비어있지 않다면 이미지를 표시
                   ? Container(
                       //width: MediaQuery.of(context).size.width * 0.55,
-                      height: height * 0.24, // 고정 크기 설정
+                      height: height * 0.25, // 고정 크기 설정
                       child: Image(
                         image: AssetImage(widget.selectedImage),
                         fit: BoxFit.cover, // 이미지를 고정된 크기에 맞게 자르기
@@ -621,18 +616,18 @@ class _HomePatientTopState extends State<HomePatientTop> {
                     ),
             ],
           ),
-          SizedBox(height: width * 0.05),
+          SizedBox(height: width * 0.04),
 
           Container(
             alignment: Alignment.center,
             padding: EdgeInsets.all(10),
             child: Text('${now.year}년\n${now.month}월 ${now.day}일 ${weekday}',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'UhBee', fontSize: 24)),
+                style: TextStyle(fontFamily: 'UhBee', fontSize: 28)),
           ),
-          SizedBox(
-            height: width * 0.03,
-          ),
+          // SizedBox(
+          //   height: width * 0.03,
+          // ),
 
           // 하단 버튼
           // Column(

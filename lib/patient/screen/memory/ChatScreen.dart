@@ -1,19 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:atti/commons/SimpleAppBar.dart';
 import 'package:atti/data/memory/memory_note_model.dart';
 import 'package:atti/data/report/dangerword_controller.dart';
 import 'package:atti/data/report/emotion_controller.dart';
 import 'package:atti/tmp/screen/chatbot/Chatbot.dart';
-import 'package:atti/tmp/screen/memory/chat/BeforeSave.dart';
-import 'package:atti/tmp/screen/memory/chat/ChatBubble.dart';
-import 'package:atti/tmp/screen/memory/chat/ChatHistory.dart';
+import 'package:atti/patient/screen/memory/BeforeSave.dart';
+import 'package:atti/patient/screen/memory/ChatBubble.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
+
+import '../../../commons/SimpleAppBar.dart';
 
 class ChatMessage {
   final String sender; // I or ATTI
@@ -94,8 +94,10 @@ List<String> SurprisedMsg = [
 
 class ChatScreen extends StatefulWidget {
   final MemoryNoteModel memory;
+  final List<MemoryNoteModel> albumList;
 
-  const ChatScreen({Key? key, required this.memory}) : super(key: key);
+  const ChatScreen({Key? key, required this.memory, required this.albumList})
+      : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -110,17 +112,15 @@ class _ChatScreenState extends State<ChatScreen> {
   String converseImage = '';
 
   final FlutterTts flutterTts = FlutterTts();
-  String _currentImage = 'lib/assets/Atti/AttiFullFace.png'; // 기본 이미지 설정
+  String _currentImage = 'lib/assets/Atti/default1.png'; // 기본 이미지 설정
 
   void toggleView() {
     setState(() {
       isAttiView = !isAttiView;
-      currentImage = isAttiView
-          ? 'lib/assets/Atti/AttiFullFace.png'
-          : widget.memory.img!;
-      converseImage = isAttiView
-          ? widget.memory.img!
-          : 'lib/assets/Atti/AttiFullFace.png';
+      currentImage =
+          isAttiView ? 'lib/assets/Atti/default1.png' : widget.memory.img!;
+      converseImage =
+          isAttiView ? widget.memory.img! : 'lib/assets/Atti/AttiFullFace.png';
     });
   }
 
@@ -128,7 +128,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     _speakMessage(_screenMessage);
-    currentImage = 'lib/assets/Atti/AttiFullFace.png';
+    currentImage = 'lib/assets/Atti/default1.png';
     converseImage = widget.memory.img!;
   }
 
@@ -140,27 +140,34 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text('\'${widget.memory.imgTitle}\' 기억 회상 대화'),
-        backgroundColor: Colors.white,
+      appBar: SimpleAppBar(
+        title: '\'${widget.memory.imgTitle}\' 기억 회상 대화',
       ),
       body: Stack(children: [
         isAttiView
             ? Container(
-                margin: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.white,
+                      Color(0xFFFFE082),
+                    ],
+                  ),
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'lib/assets/Atti/default1.png',
+                      _currentImage,
                       fit: BoxFit.cover,
                     ),
                     ChatBubble(
                       message: _screenMessage,
                       speaker: _speaker,
                       isTTSEnabled: _isTTSEnabled,
-                      //onTextChanged: onBubbleTextChanged,
                     ),
                   ],
                 ),
@@ -168,7 +175,7 @@ class _ChatScreenState extends State<ChatScreen> {
             : Positioned.fill(
                 child: Image.network(
                   currentImage,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fitWidth,
                 ),
               ),
         isAttiView
@@ -218,6 +225,7 @@ class _ChatScreenState extends State<ChatScreen> {
               });
             },
             memory: widget.memory,
+            albumList: widget.albumList,
             //updatedMessage: _onUserMessage, // 사용자가 말할 때 호출되는 콜백 함수 전달
           ),
         ),
@@ -234,6 +242,7 @@ class VoiceButton extends StatefulWidget {
   final Function(bool) updateTTSEnabled;
   final bool isAttiView;
   final VoidCallback toggleView; // 이미지 토글 함수
+  final List<MemoryNoteModel> albumList;
 
   //final Function(String, String) updatedMessage;
   final Function(String) updatedImage; // 이미지 업데이트 콜백 추가
@@ -245,6 +254,7 @@ class VoiceButton extends StatefulWidget {
       required this.updateTTSEnabled,
       required this.memory,
       required this.updatedImage,
+      required this.albumList,
       required this.role})
       : super(key: key);
 
@@ -584,7 +594,10 @@ class _VoiceButtonState extends State<VoiceButton> {
                     }
                   }
 
-                  Get.to(BeforeSave(memory: widget.memory, chat: chat));
+                  Get.to(BeforeSave(
+                      memory: widget.memory,
+                      chat: chat,
+                      albumList: widget.albumList));
                 },
                 child: Text(
                   '대화 종료',
