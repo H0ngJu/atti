@@ -1,19 +1,9 @@
-import 'package:atti/data/notification/notification_controller.dart';
-import 'package:atti/data/report/viewsController.dart';
-import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/commons/SimpleAppBar.dart';
 import 'package:atti/patient/screen/memory/ChatScreen.dart';
-import 'package:atti/tmp/screen/memory/chat/Chat.dart';
-import 'package:atti/tmp/screen/memory/chat/ChatHistory.dart';
-import 'package:atti/tmp/screen/memory/gallery/GalleryOption.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../data/memory/memory_note_model.dart';
-import '../../../commons/AttiAppBar.dart';
 import '../../../commons/AttiBottomNavi.dart';
 
 class MemoryInfo extends StatefulWidget {
@@ -93,7 +83,7 @@ class _MemoryInfoState extends State<MemoryInfo> {
                 height: 60,
                 child: TextButton(
                   onPressed: () {
-                    Get.to(ChatScreen(memory: currentMemory));
+                    Get.to(ChatScreen(memory: currentMemory, albumList: widget.albumList,));
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xffFFC215)),
