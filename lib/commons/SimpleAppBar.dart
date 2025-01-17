@@ -18,7 +18,7 @@ class SimpleAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(title, textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'PretendardMedium', fontSize: 24),),
       centerTitle: true,
       leading: IconButton(
-        icon: Icon(Icons.arrow_back),
+        icon: Icon(Icons.arrow_back_ios),
         onPressed: onBackPressed ??
                 () {
               Get.back();
