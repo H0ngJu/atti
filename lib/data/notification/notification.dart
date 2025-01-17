@@ -214,39 +214,39 @@ class NotificationService {
   }
 
   // 오늘의 루틴 시각에 알림 예약 =============================================================
-  Future<void> routineNotifications() async {
-    print("ㅡㅡㅡㅡㅡㅡㅡroutineNotificationsㅡㅡㅡㅡㅡㅡㅡ");
-    RoutineService routineService = RoutineService();
-    String today = DateFormat('E', 'ko-KR').format(DateTime.now());
-    List<RoutineModel> routines = await routineService.getRoutinesByDay(today);
-
-    DateTime now = DateTime.now();
-    // 각 루틴에 대해 알림 예약
-    for (RoutineModel routine in routines) {
-
-      // if (routine.time != null && !routine.isFinished.contains(now.toString())) {
-      if (routine.time != null) {
-        final int hour = routine.time![0];
-        final int minute = routine.time![1];
-
-        //DateTime routineTime = DateTime(now.year, now.month, now.day, hour, minute);
-        DateTime routineTime = makeDate(hour, minute, 0);
-
-        //현재 시간 이후의 알림에 대해서만 예약
-        if (routineTime.isAfter(now)) {
-         //routineTime = now.add(Duration(seconds: 10));
-          await showDateTimeNotification(
-              3,
-              '하루 일과 알림',
-              '\'${routine.name}\' 일과를 완료하셨나요?',
-              routineTime,
-              '/routine/${routine.reference!.id}'
-          );
-          print("루틴 알림 예약 완료");
-        }
-      }
-    }
-  }
+  // Future<void> routineNotifications() async {
+  //   print("ㅡㅡㅡㅡㅡㅡㅡroutineNotificationsㅡㅡㅡㅡㅡㅡㅡ");
+  //   RoutineService routineService = RoutineService();
+  //   String today = DateFormat('E', 'ko-KR').format(DateTime.now());
+  //   List<RoutineModel> routines = await routineService.getRoutinesByDay(today);
+  //
+  //   DateTime now = DateTime.now();
+  //   // 각 루틴에 대해 알림 예약
+  //   for (RoutineModel routine in routines) {
+  //
+  //     // if (routine.time != null && !routine.isFinished.contains(now.toString())) {
+  //     if (routine.time != null) {
+  //       final int hour = routine.time![0];
+  //       final int minute = routine.time![1];
+  //
+  //       //DateTime routineTime = DateTime(now.year, now.month, now.day, hour, minute);
+  //       DateTime routineTime = makeDate(hour, minute, 0);
+  //
+  //       //현재 시간 이후의 알림에 대해서만 예약
+  //       if (routineTime.isAfter(now)) {
+  //        //routineTime = now.add(Duration(seconds: 10));
+  //         await showDateTimeNotification(
+  //             3,
+  //             '하루 일과 알림',
+  //             '\'${routine.name}\' 일과를 완료하셨나요?',
+  //             routineTime,
+  //             '/routine/${routine.reference!.id}'
+  //         );
+  //         print("루틴 알림 예약 완료");
+  //       }
+  //     }
+  //   }
+  // }
 
   // 루틴 등록할 때, 매주 정해진 요일과 시간에 알림 예약 =======================================
   Future<void> showWeeklyNotification(String name, List<int> daysOfWeek, int hour, int minute, String payload) async {

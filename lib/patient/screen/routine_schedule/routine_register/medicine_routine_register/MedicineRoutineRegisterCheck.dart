@@ -25,6 +25,23 @@ class _MedicineRoutineRegisterCheckState extends State<MedicineRoutineRegisterCh
   bool isButtonEnabled = true; // 버튼 활성화 여부를 나타내는 변수
   final ColorPallet colorPallet = Get.put(ColorPallet());
 
+  // ['월', '수', '금'] -> [1, 3, 5]
+  List<int> mapDaysToNumbers(List<String> repeatDays) {
+    // 요일 문자열을 숫자로 매핑하기 위한 Map
+    final dayMapping = {
+      '월': 1,
+      '화': 2,
+      '수': 3,
+      '목': 4,
+      '금': 5,
+      '토': 6,
+      '일': 7,
+    };
+
+    // 문자열 리스트를 숫자 리스트로 변환
+    return repeatDays.map((day) => dayMapping[day]!).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -67,11 +84,20 @@ class _MedicineRoutineRegisterCheckState extends State<MedicineRoutineRegisterCh
                 String tmpName = routineController.routine.value.name!;
                 String tmpImg = routineController.routine.value.img!;
                 List<int> tmpTime = routineController.routine.value.time!;
+                List<int> repeatDaysToNumList = mapDaysToNumbers(routineController.routine.value.repeatDays!);
 
                 //print(routineController.routine.value.repeatDays);
-                await routineController.addRoutine();
+                final updatedRoutine = await routineController.addRoutine(); // 컨트롤러 초기화 로직 들어있음
+
                 if (authController.isPatient) {
-                  notificationService.routineNotifications();
+                  //notificationService.showWeeklyNotification();
+                  await notificationService.showWeeklyNotification(
+                      tmpName,
+                      repeatDaysToNumList,
+                      tmpTime[0],
+                      tmpTime[1],
+                      '${updatedRoutine.reference!.id}'
+                  );
                 }
                 // setState(() {
                 //   isButtonEnabled = true; // 버튼 다시 활성화

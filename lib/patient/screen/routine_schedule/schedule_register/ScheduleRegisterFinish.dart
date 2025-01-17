@@ -126,7 +126,7 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
                   print('updatedSchedule: ${updatedSchedule}');
 
                   // 일정 1시간 전 알림
-                  notificationService.showDateTimeNotification(
+                  await notificationService.showDateTimeNotification(
                     //notificationService.createUniqueId(),
                     updatedSchedule.reference!.id.hashCode,
                     '일정 알림',
