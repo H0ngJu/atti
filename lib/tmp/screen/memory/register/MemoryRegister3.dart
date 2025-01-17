@@ -1,4 +1,5 @@
 // 피그마 '기억하기3 - 연도, 가족 구성원 선택' 화면
+import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/Tag.dart';
 import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/tmp/screen/memory/register/MemoryRegisterAppBar.dart';
@@ -53,28 +54,23 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: MemoryRegisterAppBar(context),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
         },
         child: Column(
           children: [
+            DetailPageTitle(
+              title: '기억 남기기',
+              totalStep: 3,
+              currentStep: 2,
+              description: '기억 연도를 선택해주세요',
+            ),
             Expanded(child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: height * 0.02,),
-
-                  Container(
-                    margin: EdgeInsets.only(left: 15),
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    alignment: Alignment.centerLeft,
-                    child: Text('기억 연도를 선택해주세요', textAlign: TextAlign.left, style: TextStyle(
-                      fontSize: 30,
-                    ),),
-                  ),
-                  SizedBox(height: 10,),
                   SelectEraDropDownButton(),
                   SizedBox(height: 35,),
                   Container(
@@ -96,7 +92,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                     child: Wrap(
                       spacing: 8.0,
                       children: addedMember.map((member) {
-                        return Tag(name: member, fontsize: 24,);
+                        return Tag(name: member, fontsize: 24, onDelete: (){},);
                       }).toList(),
                     ),
                   ),

@@ -248,6 +248,61 @@ class NotificationService {
     }
   }
 
+  // 루틴 등록할 때, 매주 정해진 요일과 시간에 알림 예약 =======================================
+  Future<void> showWeeklyNotification(String name, List<int> daysOfWeek, int hour, int minute, String payload) async {
+    tz.initializeTimeZones();
+    final location = tz.getLocation('Asia/Seoul');
+
+    final AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+      'weekly_channel',
+      'Weekly Notification Channel',
+      channelDescription: 'This channel is used for weekly notifications',
+      importance: Importance.high,
+      color: Color(0xffFFE9B3),
+    );
+
+    for (int dayOfWeek in daysOfWeek) {
+      final scheduledTime = makeWeeklyDate(dayOfWeek, hour, minute, location);
+
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        payload.hashCode, // Unique ID for each notification
+        '일과 알림',
+        '\'${name}\' 일과를 완료하셨나요?',
+        scheduledTime,
+        NotificationDetails(android: androidNotificationDetails),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+        payload: '/routine/${payload}',
+      );
+
+      await addNotification(
+        '일과 알림',
+        '\'${name}\' 일과를 완료하셨나요?',
+        scheduledTime,
+        authController.isPatient,
+      );
+    }
+    print("루틴 알림 예약 성공 !!!!!");
+  }
+
+  tz.TZDateTime makeWeeklyDate(int dayOfWeek, int hour, int minute, tz.Location location) {
+    final now = tz.TZDateTime.now(location);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(location, now.year, now.month, now.day, hour, minute);
+
+    while (scheduledDate.weekday != dayOfWeek) {
+      scheduledDate = scheduledDate.add(Duration(days: 1));
+    }
+
+    // Ensure the scheduled time is in the future
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(Duration(days: 7));
+    }
+
+    return scheduledDate;
+  }
+
+
   makeDate(hour, min, sec){  // tz로 날짜, 시간 변환
     var now = tz.TZDateTime.now(tz.getLocation('Asia/Seoul'));
     var when = tz.TZDateTime(tz.getLocation('Asia/Seoul'), now.year, now.month, now.day, hour, min, sec);

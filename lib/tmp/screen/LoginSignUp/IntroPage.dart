@@ -1,6 +1,6 @@
 import 'package:atti/data/auth_controller.dart';
 import 'package:atti/tmp/screen/HomeCarer.dart';
-import 'package:atti/tmp/screen/HomePatient.dart';
+import 'package:atti/patient/screen/HomePatient.dart';
 import 'package:atti/tmp/screen/LogInSignUp/LogInSignUpMainScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

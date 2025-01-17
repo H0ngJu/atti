@@ -147,10 +147,9 @@ class _HomePatientState extends State<HomePatient> {
     bool isGranted = await NotificationService().requestBatteryPermissions();
     notificationService.showDailyNotification();
 
-    if (authController.isPatient) {
-      //notificationService.scheduleNotifications();
-      notificationService.routineNotifications();
-    }
+    // if (authController.isPatient) {
+    //   notificationService.routineNotifications();
+    // }
   }
 
   Future<void> _fetchAndSpeakWeather() async {
@@ -390,7 +389,7 @@ class _HomePatientState extends State<HomePatient> {
             child: Column(
               children: [
                 Container(
-                    height: 60,
+                    height: 45,
                     decoration: BoxDecoration(
                       color: Colors.white,
                     )),
@@ -442,12 +441,12 @@ class _HomePatientState extends State<HomePatient> {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(2),
                     child: Text(
                       '지금 할 일을 알려줘',
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 24,
+                          fontSize: 22,
                           fontWeight: FontWeight.w400),
                     ),
                   ),
@@ -464,12 +463,12 @@ class _HomePatientState extends State<HomePatient> {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.all(2.0),
                     child: Text(
                       '기억 대화를 나눌래',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 24,
+                        fontSize: 22,
                       ),
                     ),
                   ),
@@ -518,6 +517,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
     final Random random = Random();
     index = random.nextInt(greetingMsg.length); // 여기에서 `index` 초기화
     //_selectedImage = widget.selectedImage;
+
   }
 
   @override
@@ -607,7 +607,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
               widget.selectedImage.isNotEmpty // selectedImage가 비어있지 않다면 이미지를 표시
                   ? Container(
                       //width: MediaQuery.of(context).size.width * 0.55,
-                      height: height * 0.27, // 고정 크기 설정
+                      height: height * 0.24, // 고정 크기 설정
                       child: Image(
                         image: AssetImage(widget.selectedImage),
                         fit: BoxFit.cover, // 이미지를 고정된 크기에 맞게 자르기
@@ -630,7 +630,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
             padding: EdgeInsets.all(10),
             child: Text('${now.year}년\n${now.month}월 ${now.day}일 ${weekday}',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'UhBee', fontSize: 28)),
+                style: TextStyle(fontFamily: 'UhBee', fontSize: 24)),
           ),
           SizedBox(
             height: width * 0.03,

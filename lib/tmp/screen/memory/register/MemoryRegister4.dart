@@ -1,5 +1,6 @@
 // 피그마 '기억하기4 - 키워드 입력' 화면
 import 'package:atti/commons/BottomNextButton.dart';
+import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/tmp/screen/memory/register/MemoryRegisterAppBar.dart';
 import 'package:atti/tmp/screen/memory/register/MemoryWordsTag.dart';
@@ -40,7 +41,6 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
     ColorPallet _colorPallet = ColorPallet();
 
     return Scaffold(
-      appBar: MemoryRegisterAppBar(context),
       backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () {
@@ -48,19 +48,15 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
         },
         child: Column(
           children: [
+            DetailPageTitle(
+              title: '기억 남기기',
+              totalStep: 3,
+              currentStep: 3,
+              description: '\'${memoryNoteController.memoryNote.value.imgTitle}\'에 대한\n기억 단어를 알려주세요',
+            ),
             Expanded(child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: width*0.05),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '\'${memoryNoteController.memoryNote.value.imgTitle}\' 사진에 대한\n기억 단어를 알려주세요',
-                      style: TextStyle(
-                        fontSize: 30
-                      ),
-                    ),
-                  ),
                   SizedBox(height: 20,),
                   Container(
                     padding: EdgeInsets.all(10),
@@ -89,10 +85,13 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
                             String memberName = _memoryWordsController.text;
                             if (memberName.isNotEmpty) {
                               setState(() {
-                                _values.add(memberName);
+                                memoryNoteController.memoryNote.value.keyword?.add(memberName);
                                 _memoryWordsController.clear(); // 입력 필드 비우기
                               });
                             }
+                            //memoryNoteController.memoryNote.value.keyword?.addAll(_values);
+                            print(memoryNoteController.memoryNote.value.keyword);
+                            //Navigator.push(context, MaterialPageRoute(builder: (context) => MemoryRegisterCheck()),);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: _memoryWordsController.text.isNotEmpty ? _colorPallet.goldYellow : Colors.white,
@@ -114,8 +113,11 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
                   SizedBox(height: 16),
                   Wrap(
                     spacing: 8.0,
-                    children: _values.map((member) {
-                      return MemoryWordsTag(name: member);
+                    children: memoryNoteController.memoryNote.value.keyword!.map((member) {
+                      return MemoryWordsTag(
+                        name: member,
+                        onDelete: () {},
+                      );
                     }).toList(),
                   ),
                   SizedBox(height: 50,),

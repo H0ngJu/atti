@@ -15,8 +15,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import '../../../data/notification/notification.dart';
 import 'package:atti/data/notification/notification_controller.dart';
-import 'dart:math';
 
+import '../../../tmp/screen/routine/RoutineMain.dart';
 import '../routine_schedule/CustomModal.dart';
 
 class RoutineNoti extends StatefulWidget {
@@ -74,6 +74,9 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
       if (docSnapshot.exists) {
         routine = RoutineModel.fromSnapShot(docSnapshot);
         setState(() {});
+        print(routine!.name);
+        print(routine!.time);
+
       } else {
         print("해당 문서가 존재하지 않습니다.");
       }
@@ -119,13 +122,13 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
                   fit: BoxFit.fitWidth),
             ),
             SizedBox(
-              height: width * 0.1,
+              height: width * 0.09,
             ),
             // 현재 시간
             Text(
               formatTime(routine?.time ?? [0,0]),
               style: TextStyle(
-                fontSize: 43,
+                fontSize: 40,
                 //height: 1.0
               ),
             ),
@@ -136,13 +139,13 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
                   height: 1.0
               ),
             ),
-            SizedBox(height: width * 0.13,),
+            SizedBox(height: width * 0.06,),
 
             // 아띠 말고 사진으로
             Container(
               alignment: Alignment.center,
-              width: width * 0.68,
-              height: width * 0.68,
+              width: width * 0.65,
+              height: width * 0.65,
               child: Container(
                 child: ClipOval(
                   child: routine != null && routine!.img != null
@@ -158,14 +161,14 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
               ),
             ),
 
-            SizedBox(height: width * 0.02,),
+            SizedBox(height: width * 0.015,),
             Container(
               child: Column(
                 children: [
                   SizedBox(height: height * 0.02,),
                   Text(
                     '지금',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, height: 1.2),
                   ),
                   SizedBox(width: width * 0.06,),
                   Text(
@@ -181,7 +184,7 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
                 ],
               ),
             ),
-            SizedBox(height: width * 0.05,),
+            SizedBox(height: width * 0.04,),
             Container(
               width: width * 0.52,
               child: TextButton(
@@ -192,6 +195,7 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
                     builder: (_) => CustomModal(
                       title: "'${routine!.name}'\n일과를 완료하셨나요?",
                       yesButtonColor: colorPallet.orange,
+
                       onYesPressed: () async {
                         await RoutineService().completeRoutine(routine!.reference!, DateTime.now());
                         await addNotification(
@@ -200,10 +204,13 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
                             DateTime.now(),
                             false);
                         // widget.onCompleted(); // 콜백 함수 호출
-                        Navigator.pop(context);
+
+                        Get.to(RoutineScheduleMain());
                       },
+
                       onNoPressed: () {
-                        Navigator.pop(context);
+                        //Navigator.pop(context);
+                        Get.to(RoutineScheduleMain());
                       },
                     ),
                   );
@@ -221,12 +228,12 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
                   backgroundColor: WidgetStateProperty.all(colorPallet.orange),
                   minimumSize: WidgetStateProperty.all(Size(width * 0.55, 40)),
                   padding: WidgetStateProperty.all(
-                    EdgeInsets.symmetric(vertical: 10), // 위아래 패딩 추가
+                    EdgeInsets.only(top: 7, bottom: 9), // 위아래 패딩 추가
                   ),
                 ),
               ),
             ),
-            SizedBox(height: width * 0.13,),
+            SizedBox(height: width * 0.10,),
             Center(
               child: SizedBox(
                 width: width * 0.13,

@@ -1,28 +1,10 @@
 import 'dart:ffi';
 
-import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/notification/notification.dart';
-import 'package:atti/tmp/screen/LogInSignUp/LogInScreen.dart';
-import 'package:atti/tmp/screen/LogInSignUp/LogInSignUpMainScreen.dart';
+import 'package:atti/login_signUp/IntroPage.dart';
 
-import 'package:atti/tmp/screen/LogInSignUp/SignUpScreen1.dart';
-import 'package:atti/tmp/screen/LogInSignUp/SignUpScreen2.dart';
-import 'package:atti/tmp/screen/LogInSignUp/SignUpScreen3.dart';
-import 'package:atti/tmp/screen/LoginSignUp/IntroPage.dart';
-import 'package:atti/tmp/screen/Notice/NoticeMain.dart';
-import 'package:atti/tmp/screen/report/ReportHistory.dart';
 import 'package:atti/tmp/screen/routine/RoutineMain.dart';
-import 'package:atti/tmp/screen/routine/register/RoutineRegister1.dart';
-import 'package:atti/tmp/screen/memory/chat/Chat.dart';
-import 'package:atti/tmp/screen/memory/gallery/GalleryOption.dart';
-import 'package:atti/tmp/screen/memory/register/MemoryRegister1.dart';
-import 'package:atti/tmp/screen/memory/register/MemoryRegister2.dart';
-import 'package:atti/tmp/screen/LoginSignUp/FinishSignUpScreen.dart';
-import 'package:atti/tmp/screen/LoginSignUp/SignUpFamilyTag.dart';
-import 'package:atti/tmp/screen/chatbot/Chatbot.dart';
-import 'package:atti/tmp/screen/memory/gallery/MemoryDetail.dart';
 import 'package:atti/tmp/screen/schedule/ScheduleMain.dart';
-import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
 
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -115,6 +97,17 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
       initialRoute: initialRoute,
+
+      // 앱 전체 글자 크기 고정하기 !!
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaler: TextScaler.linear(1.0), // 글자 크기를 고정
+          ),
+          child: child!,
+        );
+      },
+
       routes: {
         '/': (context) => IntroPage(),
         '/schedule': (context) => ScheduleMain(),

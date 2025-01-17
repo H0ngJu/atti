@@ -1,3 +1,4 @@
+import 'package:atti/tmp/screen/HomePatient.dart';
 import 'package:atti/tmp/screen/UserInfoEditPage.dart';
 
 import '../../index.dart';
@@ -37,7 +38,11 @@ class _MenuState extends State<Menu> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pop(context); // 이전 페이지로 돌아가기
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePatient()),
+                            (Route<dynamic> route) => false, // 모든 이전 페이지를 제거
+                      );
                     },
                     child: Image.asset(
                       'lib/assets/images/xButton.png',
@@ -99,13 +104,12 @@ class _MenuState extends State<Menu> {
                     SizedBox(height: 32),
                   ],
                 ),
-        
               ),
         
-              Text(
-                '연결된 계정',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
+              // Text(
+              //   '연결된 계정',
+              //   style: TextStyle(fontSize: 24, color: _colorPallet.grey),
+              // ),
               SizedBox(height: 16),
               // _buildAccountRow('최한별', '박민정', '아이디 isldkd', '보호자'),
               // _buildAccountRow('김정연', '', '치매파트너', ''),
@@ -170,6 +174,7 @@ class _MenuState extends State<Menu> {
   }
   Widget _infoRow(String title, String value, double boxSize) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
           width: boxSize,
@@ -192,21 +197,4 @@ class _MenuState extends State<Menu> {
       ],
     );
   }
-
-  // Widget _AccountRow(String name, String secondaryName, String id, String relationship) {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //     children: [
-  //       Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           Text(name, style: TextStyle(fontSize: 24)),
-  //           if (id.isNotEmpty) Text(id, style: TextStyle(color: Colors.grey)),
-  //         ],
-  //       ),
-  //       if (secondaryName.isNotEmpty) Text(secondaryName, style: TextStyle(fontSize: 18)),
-  //       if (relationship.isNotEmpty) Text(relationship, style: TextStyle(color: Colors.grey)),
-  //     ],
-  //   );
-  // }
 }
