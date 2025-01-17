@@ -11,13 +11,9 @@ import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/memory/memory_note_model.dart';
 import 'package:atti/data/memory/memory_note_service.dart';
 import 'package:atti/patient/screen/memory/AddButton.dart';
-import 'package:atti/patient/screen/memory/MemoryAlbum.dart';
-import 'package:atti/tmp/screen/memory/gallery/MemoryDetail.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'dart:math';
-
 import '../../../commons/colorPallet.dart';
-import '../../../data/report/viewsController.dart';
 
 class MainMemory extends StatefulWidget {
   const MainMemory({Key? key}) : super(key: key);
