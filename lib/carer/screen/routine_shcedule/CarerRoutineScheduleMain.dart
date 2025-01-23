@@ -295,76 +295,78 @@ class _CarerRoutineScheduleMainState extends State<CarerRoutineScheduleMain> {
                 ),
               ),
             ),
-            SizedBox(height: height * 0.03),
 
-            // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-            // 날짜
-            Text(
-              DateFormat('yyyy년 M월 d일', 'ko_KR').format(DateTime.now()),
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
-            ),
-            SizedBox(height: width * 0.01,),
+            if (!isEditMode) ...[
+              SizedBox(height: height * 0.03),
+              // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+              // 날짜
+              Text(
+                DateFormat('yyyy년 M월 d일', 'ko_KR').format(DateTime.now()),
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+              ),
+              SizedBox(height: width * 0.01,),
 
-            // 일과 시간
-            Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                decoration: BoxDecoration(
-                    color: colorPallet.lightYellow,
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: Colors.black, width: 1)),
-                child: Text(
-                  nextRoutine != null
-                  ? formatRoutineTime(nextRoutine.time)
-                  : '다음 일과 없음',
-                  style: TextStyle(fontSize: 24),
-                )),
-            SizedBox(height: width * 0.05,),
+              // 일과 시간
+              Container(
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  decoration: BoxDecoration(
+                      color: colorPallet.lightYellow,
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: Colors.black, width: 1)),
+                  child: Text(
+                    nextRoutine != null
+                        ? formatRoutineTime(nextRoutine.time)
+                        : '다음 일과 없음',
+                    style: TextStyle(fontSize: 24),
+                  )),
+              SizedBox(height: width * 0.05,),
 
-            // 일과 사진
-            Container(
-              alignment: Alignment.center,
-              width: width * 0.68,
-              height: width * 0.68,
-              child: Container(
-                child: ClipOval(
-                  child: nextRoutine != null && nextRoutine!.img != null
-                      ? Image.network(
-                    nextRoutine!.img!,
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
-                    alignment: Alignment.center,
-                  )
-                      : Container(),
+              // 일과 사진
+              Container(
+                alignment: Alignment.center,
+                width: width * 0.68,
+                height: width * 0.68,
+                child: Container(
+                  child: ClipOval(
+                    child: nextRoutine != null && nextRoutine!.img != null
+                        ? Image.network(
+                      nextRoutine!.img!,
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
+                      alignment: Alignment.center,
+                    )
+                        : Container(),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: width * 0.03,),
+              SizedBox(height: width * 0.03,),
 
-            // 일과 이름
-            Text(
-              nextRoutine?.name ?? '로딩중이에요...',
-              style: TextStyle(
-                fontSize: 28,
-              ),
-            ),
-            SizedBox(height: width * 0.04,),
-
-            // 일과 이름 하단 버튼
-            Container(
-                width: width * 0.8,
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                decoration: BoxDecoration(
-                  color: Color(0xffFFE7A4),
-                  borderRadius: BorderRadius.circular(30),
+              // 일과 이름
+              Text(
+                nextRoutine?.name ?? '로딩중이에요...',
+                style: TextStyle(
+                  fontSize: 28,
                 ),
-                child: Text(
-                  getBtnText(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24),
-                )),
+              ),
+              SizedBox(height: width * 0.04,),
 
+              // 일과 이름 하단 버튼
+              Container(
+                  width: width * 0.85,
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  decoration: BoxDecoration(
+                    color: Color(0xffFFE7A4),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Text(
+                    getBtnText(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 22),
+                  )),
+              // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+            ],
 
             SizedBox(height: height * 0.03,),
             SizedBox(
@@ -413,14 +415,14 @@ class _CarerRoutineScheduleMainState extends State<CarerRoutineScheduleMain> {
                       '날짜변경',
                       style: TextStyle(
                         fontSize: 18,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.only(
                           bottom: 6, left: 15, right: 15, top: 4),
                       minimumSize: Size(0, 0), // 최소 크기 제거
-                      backgroundColor: Colors.black,
+                      backgroundColor: colorPallet.lightGrey,
                     ),
                   ),
                 ],
