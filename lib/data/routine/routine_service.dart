@@ -38,6 +38,9 @@ class RoutineService {
       routine.patientId = authController.patientDocRef;
       routine.isPatient = authController.isPatient;
 
+      print("addRoutine 함수 안!!!!");
+      print(authController.patientDocRef);
+
       // // 추가 *************************
       routine.isFinished = createTimeMap(routine.repeatDays);
       // // 추가 *************************

@@ -61,7 +61,7 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
                 //print(routineController.routine.value.repeatDays);
                 await routineController.addRoutine();
                 if (authController.isPatient) {
-                  notificationService.routineNotifications();
+                  //notificationService.routineNotifications();
                 }
 
                 setState(() {

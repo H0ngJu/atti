@@ -46,6 +46,7 @@ class AuthController extends GetxController {
         // 보호자일 경우 : patientDocRef는 db.doc(user/ + patientDocId)
         else {
           patientDocRef = await FirebaseFirestore.instance.doc('user/'+userDoc['patientDocId']);
+
           print("patientDocRef : ${patientDocRef}");
           print("patientDocId : ${userDoc['patientDocId']}");
           // 문서에서 데이터를 비동기적으로 가져옴

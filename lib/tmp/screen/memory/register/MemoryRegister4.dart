@@ -79,7 +79,7 @@ class _MemoryRegister4State extends State<MemoryRegister4> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 8),
+                    SizedBox(width: 8),
                         ElevatedButton(
                           onPressed: () {
                             String memberName = _memoryWordsController.text;

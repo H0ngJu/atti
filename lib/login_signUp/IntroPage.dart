@@ -4,6 +4,7 @@ import 'package:atti/tmp/screen/HomeCarer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../carer/screen/routine_shcedule/CarerRoutineScheduleMain.dart';
 import '../patient/screen/home/HomePatient.dart';
 
 class IntroPage extends StatefulWidget {
@@ -22,7 +23,7 @@ class _IntroPageState extends State<IntroPage> {
     Future.delayed(Duration(seconds: 2), () {
       if (authController.loggedUser != null) {
         // 로그인한 유저가 있는 경우
-        Get.off(() => authController.isPatient ? HomePatient() : HomeCarer());
+        Get.off(() => authController.isPatient ? HomePatient() : CarerRoutineScheduleMain());
       } else {
         // 로그인한 유저가 없는 경우
         Get.off(() => LogInSignUpMainScreen());

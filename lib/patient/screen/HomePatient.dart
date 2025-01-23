@@ -23,7 +23,7 @@ import '../../data/schedule/schedule_model.dart';
 import '../../data/schedule/schedule_service.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
-import '../../patient/screen/memory/MainMemory.dart';
+import 'memory/gallery/MainMemory.dart';
 import '../../patient/screen/notice/RoutineNoti.dart';
 import '../../patient/screen/notice/ScheduleNoti1.dart';
 import '../../patient/screen/notice/ScheduleNoti2.dart';

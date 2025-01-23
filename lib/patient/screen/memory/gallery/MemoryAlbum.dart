@@ -1,11 +1,11 @@
 import 'package:atti/commons/SimpleAppBar.dart';
 import 'package:atti/data/memory/memory_note_model.dart';
-import 'package:atti/patient/screen/memory/AddButton.dart';
-import 'package:atti/patient/screen/memory/MemoryInfo.dart';
+import 'package:atti/patient/screen/memory/gallery/AddButton.dart';
+import 'package:atti/patient/screen/memory/gallery/MemoryInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../commons/AttiBottomNavi.dart';
+import '../../../../commons/AttiBottomNavi.dart';
 
 class MemoryAlbum extends StatefulWidget {
   final List<MemoryNoteModel> group;

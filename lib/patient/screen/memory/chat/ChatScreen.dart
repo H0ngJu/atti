@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:atti/data/memory/memory_note_model.dart';
 import 'package:atti/data/report/dangerword_controller.dart';
 import 'package:atti/data/report/emotion_controller.dart';
 import 'package:atti/tmp/screen/chatbot/Chatbot.dart';
-import 'package:atti/patient/screen/memory/BeforeSave.dart';
-import 'package:atti/patient/screen/memory/ChatBubble.dart';
+import 'package:atti/patient/screen/memory/chat/BeforeSave.dart';
+import 'package:atti/patient/screen/memory/chat/ChatBubble.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -13,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
 
-import '../../../commons/SimpleAppBar.dart';
+import '../../../../commons/SimpleAppBar.dart';
 
 class ChatMessage {
   final String sender; // I or ATTI
@@ -104,7 +105,15 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  String _screenMessage = '대화를 시작하려면 마이크 버튼을 누르세요'; // ChatBubble에 출력되는 메시지
+  final List<String> _initialPrompts = [
+    "이 사진에 대해서 이야기를 시작해볼까요?",
+    "이 사진은 어떤 사진인지 설명해주세요.",
+    "이 사진에는 어떤 추억이 있나요?",
+    "우와, 이 사진은 어떤 사진인가요?"
+  ];
+  late String _screenMessage;
+
+  //String _screenMessage = '대화를 시작하려면 마이크 버튼을 누르세요'; // ChatBubble에 출력되는 메시지
   late String _speaker = "Assistant";
   bool _isTTSEnabled = true;
   bool isAttiView = true;
@@ -118,15 +127,17 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       isAttiView = !isAttiView;
       currentImage =
-          isAttiView ? 'lib/assets/Atti/default1.png' : widget.memory.img!;
+      isAttiView ? 'lib/assets/Atti/default1.png' : widget.memory.img!;
       converseImage =
-          isAttiView ? widget.memory.img! : 'lib/assets/Atti/AttiFullFace.png';
+      isAttiView ? widget.memory.img! : 'lib/assets/Atti/AttiFullFace.png';
     });
   }
 
   @override
   void initState() {
     super.initState();
+    final randomIndex = Random().nextInt(_initialPrompts.length);
+    _screenMessage = _initialPrompts[randomIndex];
     _speakMessage(_screenMessage);
     currentImage = 'lib/assets/Atti/default1.png';
     converseImage = widget.memory.img!;
@@ -146,63 +157,81 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Stack(children: [
         isAttiView
             ? Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.white,
-                      Color(0xFFFFE082),
-                    ],
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      _currentImage,
-                      fit: BoxFit.cover,
-                    ),
-                    ChatBubble(
-                      message: _screenMessage,
-                      speaker: _speaker,
-                      isTTSEnabled: _isTTSEnabled,
-                    ),
-                  ],
-                ),
-              )
-            : Positioned.fill(
-                child: Image.network(
-                  currentImage,
-                  fit: BoxFit.fitWidth,
-                ),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.white,
+                Color(0xFFFFE082),
+              ],
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                _currentImage,
+                fit: BoxFit.cover,
               ),
+              ChatBubble(
+                message: _screenMessage,
+                speaker: _speaker,
+                isTTSEnabled: _isTTSEnabled,
+              ),
+            ],
+          ),
+        )
+            : Positioned.fill(
+          child: Image.network(
+            currentImage,
+            fit: BoxFit.fitWidth,
+          ),
+        ),
         isAttiView
             ? Positioned(
-                top: 10,
-                right: MediaQuery.of(context).size.width * 0.05,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.2,
-                  child: Image.network(
-                    converseImage,
-                    fit: BoxFit.cover,
-                  ),
-                ))
+            top: 10,
+            right: MediaQuery
+                .of(context)
+                .size
+                .width * 0.05,
+            child: Container(
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.2,
+              child: Image.network(
+                converseImage,
+                fit: BoxFit.cover,
+              ),
+            ))
             : Positioned(
-                top: 10,
-                right: MediaQuery.of(context).size.width * 0.05,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.2,
-                  child: Image.asset(
-                    converseImage,
-                    fit: BoxFit.cover,
-                  ),
-                )),
+            top: 10,
+            right: MediaQuery
+                .of(context)
+                .size
+                .width * 0.05,
+            child: Container(
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.2,
+              child: Image.asset(
+                converseImage,
+                fit: BoxFit.cover,
+              ),
+            )),
         Positioned(
           bottom: 30,
-          left: MediaQuery.of(context).size.width * 0.05,
-          right: MediaQuery.of(context).size.width * 0.05,
+          left: MediaQuery
+              .of(context)
+              .size
+              .width * 0.05,
+          right: MediaQuery
+              .of(context)
+              .size
+              .width * 0.05,
           child: VoiceButton(
             isAttiView: isAttiView,
             toggleView: toggleView,
@@ -224,6 +253,13 @@ class _ChatScreenState extends State<ChatScreen> {
                 _currentImage = image;
               });
             },
+            /*
+            updatedConverseImage:
+                (image) {
+              setState(() {
+                converseImage = image;
+              });
+            };*/
             memory: widget.memory,
             albumList: widget.albumList,
             //updatedMessage: _onUserMessage, // 사용자가 말할 때 호출되는 콜백 함수 전달
@@ -246,16 +282,18 @@ class VoiceButton extends StatefulWidget {
 
   //final Function(String, String) updatedMessage;
   final Function(String) updatedImage; // 이미지 업데이트 콜백 추가
-  const VoiceButton(
-      {Key? key,
-      required this.isAttiView,
-      required this.toggleView,
-      required this.updateScreenMessage,
-      required this.updateTTSEnabled,
-      required this.memory,
-      required this.updatedImage,
-      required this.albumList,
-      required this.role})
+  //final Function(String) updatedConverseImage;
+
+  const VoiceButton({Key? key,
+    required this.isAttiView,
+    required this.toggleView,
+    required this.updateScreenMessage,
+    required this.updateTTSEnabled,
+    required this.memory,
+    required this.updatedImage,
+    //required this.updatedConverseImage,
+    required this.albumList,
+    required this.role})
       : super(key: key);
 
   @override
@@ -274,7 +312,7 @@ class _VoiceButtonState extends State<VoiceButton> {
   late List<String> onlyUserMessages = []; // 사용자 응답만 저장
   final EmotionController emotionController = Get.put(EmotionController());
   final DangerWordController dangerWordController =
-      Get.put(DangerWordController());
+  Get.put(DangerWordController());
 
   @override
   void initState() {
@@ -495,24 +533,31 @@ class _VoiceButtonState extends State<VoiceButton> {
       switch (index) {
         case 0: // AngryMsg
           widget.updatedImage('lib/assets/Atti/worried.png');
+          //widget.updatedConverseImage('lib/assets/Atti/AttiWorriedFullFace.png');
           break;
         case 1: // CalmMsg
           widget.updatedImage('lib/assets/Atti/default2.png');
+          ///widget.updatedConverseImage('lib/assets/Atti/AttiFullFace.png');
           break;
         case 2: // FunnyMsg
           widget.updatedImage('lib/assets/Atti/excited.png');
+          //widget.updatedConverseImage('lib/assets/Atti/AttiExcitedFullFace.png');
           break;
         case 3: // HmmMsg
           widget.updatedImage('lib/assets/Atti/happy.png');
+          //widget.updatedConverseImage('lib/assets/Atti/AttiHappyFullFace.png');
           break;
         case 4: // SadMsg
           widget.updatedImage('lib/assets/Atti/sad.png');
+          //widget.updatedConverseImage('lib/assets/Atti/AttiSadFullFace.png');
           break;
         case 5: // SurprisedMsg
           widget.updatedImage('lib/assets/Atti/astonished.png');
+          //widget.updatedConverseImage('lib/assets/Atti/AttiAstonishedFullFace.png');
           break;
         default:
           widget.updatedImage('lib/assets/Atti/default1.png'); // 기본 이미지
+          //widget.updatedConverseImage('lib/assets/Atti/AttiFullFace.png');
           break;
       }
     });
@@ -562,12 +607,15 @@ class _VoiceButtonState extends State<VoiceButton> {
                 )),
           ),
           Container(
-            height: MediaQuery.of(context).size.width * 0.2,
+            height: MediaQuery
+                .of(context)
+                .size
+                .width * 0.2,
             child: ElevatedButton(
               onPressed: _isListening ? _stopListening : _toggleListening,
               style: ElevatedButton.styleFrom(
                   backgroundColor:
-                      _isListening ? Color(0xffFF6200) : Colors.black,
+                  _isListening ? Color(0xffFF6200) : Colors.black,
                   shape: CircleBorder()),
               child: Icon(
                 _isListening ? Icons.stop : Icons.mic,
@@ -587,7 +635,7 @@ class _VoiceButtonState extends State<VoiceButton> {
                         .join(' ')); // onlyUserMessages가 비어 있지 않은 경우에만 호출
 
                     List<String> detectedDangerWords =
-                        getDangerWords(onlyUserMessages);
+                    getDangerWords(onlyUserMessages);
                     if (detectedDangerWords.isNotEmpty) {
                       // 위험 단어가 발견된 경우
                       dangerWordController.addDangerWord(detectedDangerWords);

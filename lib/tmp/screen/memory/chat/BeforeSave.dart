@@ -4,7 +4,7 @@ import 'package:atti/data/memory/chatController.dart';
 import 'package:atti/tmp/screen/memory/chat/ChatComplete.dart';
 import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
 
-import '../../../../patient/screen/memory/MainMemory.dart';
+import '../../../../patient/screen/memory/gallery/MainMemory.dart';
 
 class BeforeSave extends StatelessWidget {
   final MemoryNoteModel memory;
