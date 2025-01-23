@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../carer/screen/routine_shcedule/CarerRoutineScheduleMain.dart';
 import '../data/auth_controller.dart';
 import '../patient/screen/routine_schedule/RoutineScheduleMain.dart';
 import '../tmp/screen/memory/register/MemoryRegister1.dart';
@@ -81,8 +82,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
       Get.to(HomePatient());
     } else if(index == 1 && !authController.isPatient){
       Get.to(HomeCarer());
-    }else if (index == 2) {
+    } else if (index == 2 && authController.isPatient) {
       Get.to(RoutineScheduleMain());
+    } else if (index == 2 && !authController.isPatient) {
+      Get.to(CarerRoutineScheduleMain());
     } else {
       onTap(index);
     }

@@ -55,7 +55,7 @@ export 'package:atti/data/auth_controller.dart';
 export 'package:atti/tmp/screen/HomeCarer.dart';
 // export 'package:atti/tmp/screen/HomePatient.dart';
 export 'package:atti/tmp/screen/Menu.dart';
-// 'package:atti/tmp/screen/RoutineScheduleMain.dart';
+// 'package:atti/tmp/screen/CarerRoutineScheduleMain.dart';
 
 // chatbot
 export 'package:atti/tmp/screen/chatbot/Chatbot.dart';
