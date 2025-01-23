@@ -24,7 +24,7 @@ class RoutineModel with ChangeNotifier {
     this.repeatDays,
     this.reference,
     this.isPatient,
-    this.isMedicine
+    this.isMedicine,
   }) : isFinished = {}; // 기본값으로 빈 map 할당
 
   // json -> object (Firestore -> Flutter)

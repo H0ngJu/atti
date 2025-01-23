@@ -197,7 +197,7 @@ class _MedicineRoutineRegister2State extends State<MedicineRoutineRegister2> {
                 },
               ),
               padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                EdgeInsets.fromLTRB(0, 5, 0, 5), // 버튼 내부 패딩 설정
+                EdgeInsets.fromLTRB(0, 2, 0, 5), // 버튼 내부 패딩 설정
               ),
               shape: WidgetStateProperty.all<OutlinedBorder>(
                 RoundedRectangleBorder(

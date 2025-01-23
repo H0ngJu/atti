@@ -7,6 +7,7 @@ import 'package:atti/data/routine/routine_controller.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import '../../../../commons/colorPallet.dart';
+import '../../../../data/auth_controller.dart';
 import 'RoutineRegister2.dart';
 
 class RoutineRegister1 extends StatefulWidget {
@@ -19,6 +20,14 @@ class RoutineRegister1 extends StatefulWidget {
 class _RoutineRegister1State extends State<RoutineRegister1> {
   final RoutineController routineController = Get.put(RoutineController());
   final ColorPallet colorPallet = Get.put(ColorPallet());
+  final AuthController authController = Get.put(AuthController());
+
+  @override
+  void initState() {
+    print("환자 도큐먼트 레퍼런스 여기여기!!!!!!!!!!!!");
+    print(authController.patientDocRef);
+    print(authController.tmpValue);
+  }
 
   @override
   Widget build(BuildContext context) {
