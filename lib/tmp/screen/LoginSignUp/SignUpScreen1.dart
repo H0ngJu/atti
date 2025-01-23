@@ -2,7 +2,6 @@ import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/data/signup_login/SignUpController.dart';
 import 'package:atti/tmp/screen/LogInSignUp/SignUpScreen2.dart';
-import 'package:atti/tmp/screen/LoginSignUp/CustomerTypeBtn.dart';
 import 'package:atti/tmp/screen/LoginSignUp/NextBtn.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,6 +37,7 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Stack(
           children: [
@@ -59,11 +59,12 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                     child: Column(
                       children: [
                         Text(
-                          '회원 선택',
+                          '서비스를 이용할\n회원을 선택해주세요.',
                           style: TextStyle(
                             letterSpacing: 0.01,
                             fontSize: 24,
                             fontFamily: 'PretendardRegular',
+                            fontWeight: FontWeight.bold
                           ),
                         ),
                       ],
@@ -72,7 +73,7 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                   Text(
                     '서비스 이용이 구분되니 신중히 선택해주세요.',
                     style: TextStyle(
-                      color: _colorPallet.lightGrey,
+                      color: _colorPallet.grey,
                       fontSize: 20,
                       letterSpacing: 0.01,
                       fontFamily: 'PretendardRegular',
@@ -83,27 +84,108 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                   Container(
                     child: Row(
                       children: [
-                        CustomerTypeBtn(
+                        TextButton(
                             onPressed: () {
-                              topBtnPressed();
-                              signUpController.isPatient.value = true;
+                                topBtnPressed();
+                                signUpController.isPatient.value = true;
                               },
-                            isPressed: isPressed,
-                            buttonId: 1,
-                            mainText: '피보호자',
-                            detailText: '치매 증상을\n지니셨나요?'),
-                        SizedBox(
-                          width: width*0.05,
+                            style: TextButton.styleFrom(
+                              backgroundColor: _colorPallet.lightYellow,
+                              padding: EdgeInsets.zero,
+                              side: BorderSide(
+                                  width: 1,
+                                  color: isPressed == 1 ? _colorPallet.orange : _colorPallet.lightYellow // isPressed 값에 따라 테두리 색상 결정
+                              ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(30),
+                              ),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: Container(
+                            width: width * 0.4,
+                            height: height * 0.3,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "피보호자",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: 'PretendardBold',
+                                    ),
+                                  ),
+                                  SizedBox(height: height * 0.01,),
+                                  Text(
+                                    "치매 환자\n본인입니다.",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontFamily: 'PretendardRegular',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                        CustomerTypeBtn(
+                        TextButton(
                             onPressed: (){
                               botBtnPressed();
                               signUpController.isPatient.value = false;
-                              },
-                            isPressed: isPressed,
-                            buttonId: 2,
-                            mainText: "보호자",
-                            detailText: "치매 환자의\n보호자이신가요?"),
+                            },
+                          style: TextButton.styleFrom(
+                            backgroundColor: Color(0xFFFFE0CC),
+                            padding: EdgeInsets.zero,
+                            side: BorderSide(
+                                width: 1,
+                                color: isPressed == 2 ? _colorPallet.orange : Color(0xFFFFE0CC),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(30),
+                              ),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: Container(
+                            width: width * 0.4,
+                            height: height * 0.3,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "보호자",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: 'PretendardBold',
+                                    ),
+                                  ),
+                                  SizedBox(height: height * 0.01,),
+                                  Text(
+                                    "치매 환자의\n보호자입니다.",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontFamily: 'PretendardRegular',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),

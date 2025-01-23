@@ -2,6 +2,8 @@ import 'dart:ffi';
 
 import 'package:atti/data/notification/notification.dart';
 import 'package:atti/login_signUp/IntroPage.dart';
+import 'package:atti/login_signUp/LogInSignUpMainScreen.dart';
+import 'package:atti/tmp/screen/HomeCarer.dart';
 
 import 'package:atti/tmp/screen/routine/RoutineMain.dart';
 import 'package:atti/tmp/screen/schedule/ScheduleMain.dart';
@@ -109,7 +111,7 @@ class MyApp extends StatelessWidget {
       },
 
       routes: {
-        '/': (context) => IntroPage(),
+        '/': (context) => LogInSignUpMainScreen(),
         '/schedule': (context) => ScheduleMain(),
         '/routine': (context) => RoutineMain(),
       },
