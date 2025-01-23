@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 class AuthController extends GetxController {
   String? loggedUser = FirebaseAuth.instance.currentUser?.uid;
-  bool isPatient = true;
+  bool isPatient = false;
   var userName = ''.obs;
   var userEmail = ''.obs;
   RxList<String> familyMember = <String>[].obs;
@@ -15,8 +15,6 @@ class AuthController extends GetxController {
   Timestamp unformattedBirthDate = Timestamp.now(); // 더미
   late String birthDate;
   var carerReports; // = ReportController().getReport();
-
-  DocumentReference? tmpValue;
 
   @override
   void onInit() {
@@ -36,10 +34,12 @@ class AuthController extends GetxController {
         isPatient = userDoc['isPatient'];
         userName.value = userDoc['userName'];
         userEmail.value = userDoc['userEmail'];
-        unformattedBirthDate = userDoc['birthDate'];
-        birthDate = DateFormat('yyyy.MM.dd').format(unformattedBirthDate.toDate());
+        if (isPatient == true) {
+          unformattedBirthDate = userDoc['birthDate'];
+          birthDate = DateFormat('yyyy.MM.dd').format(unformattedBirthDate.toDate());
+        }
         // 환자일 경우 : patientDocRef는 본인의 reference, familymember 초기화 필요
-        if (isPatient) {
+        if (isPatient == true) {
           familyMember.value = List<String>.from(userDoc['familyMember']);
           patientDocRef = userDoc.reference;
         }
@@ -47,8 +47,8 @@ class AuthController extends GetxController {
         else {
           patientDocRef = await FirebaseFirestore.instance.doc('user/'+userDoc['patientDocId']);
 
-          tmpValue = userDoc.reference;
-
+          print("patientDocRef : ${patientDocRef}");
+          print("patientDocId : ${userDoc['patientDocId']}");
           // 문서에서 데이터를 비동기적으로 가져옴
           await patientDocRef!.get().then((DocumentSnapshot documentSnapshot) {
             if (documentSnapshot.exists) {
@@ -62,7 +62,7 @@ class AuthController extends GetxController {
             print("Error getting document: $error");
           });
           // 보호자일 경우에만 carerReports 호출
-          carerReports = ReportController().getReport();
+          carerReports = await ReportController().getReport();
           print("carerReports 성공! : ${carerReports[0]}");
         }
       } else {

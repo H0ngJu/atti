@@ -152,6 +152,11 @@ class _MenuState extends State<Menu> {
                 child: GestureDetector(
                   onTap: () {
                     _authController.logout(); // 임의로 로그아웃되게 만듦
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => IntroPage()),
+                          (Route<dynamic> route) => false, // 모든 이전 페이지를 제거
+                    );
                   },
                     child: Center(
                       child: Text(

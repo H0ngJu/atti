@@ -99,7 +99,7 @@ class _HomeCarerState extends State<HomeCarer> {
     try {
       final user = _authentication.currentUser;
       print("loggedUser: ${user!.uid}");
-      print("check: ${authController.patientName.value}");
+      print("check: ${authController.userName.value}");
       if (user != null) {
         loggedUser = user as User?;
       }
