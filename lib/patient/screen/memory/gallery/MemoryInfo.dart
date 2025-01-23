@@ -1,10 +1,10 @@
 import 'package:atti/commons/SimpleAppBar.dart';
-import 'package:atti/patient/screen/memory/ChatScreen.dart';
+import 'package:atti/patient/screen/memory/chat/ChatScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../data/memory/memory_note_model.dart';
-import '../../../commons/AttiBottomNavi.dart';
+import '../../../../../data/memory/memory_note_model.dart';
+import '../../../../commons/AttiBottomNavi.dart';
 
 class MemoryInfo extends StatefulWidget {
   final MemoryNoteModel memory;

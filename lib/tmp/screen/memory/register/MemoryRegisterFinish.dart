@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 
-import '../../../../patient/screen/memory/MainMemory.dart';
+import '../../../../patient/screen/memory/gallery/MainMemory.dart';
 
 class MemoryRegisterFinish extends StatefulWidget {
   const MemoryRegisterFinish({super.key});
