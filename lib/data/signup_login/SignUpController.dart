@@ -20,6 +20,7 @@ class SignUpController extends GetxController {
   var userName = "".obs;
   var userPhoneNumber = "".obs;
   String? userFCMToken = "";
+  var userSex = "".obs;
 
   // 보호자 전용 데이터
   late DocumentReference patientDocId;
