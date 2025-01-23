@@ -1,4 +1,4 @@
-import 'package:atti/patient/screen/memory/MemoryInfo.dart';
+import 'package:atti/patient/screen/memory/gallery/MemoryInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:math' as math;
@@ -6,7 +6,7 @@ import '../../../../data/auth_controller.dart';
 import '../../../../data/memory/memory_note_controller.dart';
 import '../../../../data/memory/memory_note_model.dart';
 import '../../../../data/memory/memory_note_service.dart';
-import 'package:atti/patient/screen/memory/MainMemory.dart';
+import 'package:atti/patient/screen/memory/gallery/MainMemory.dart';
 
 class ChatComplete extends StatefulWidget {
   final MemoryNoteModel memory;

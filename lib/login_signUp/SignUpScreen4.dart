@@ -1,27 +1,29 @@
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/data/signup_login/SignUpController.dart';
+import 'package:atti/login_signUp/SignUpScreen4.dart';
 import 'package:atti/index.dart';
-import 'package:atti/login_signUp/SignUpScreen3.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:atti/commons/colorPallet.dart';
 
-class SignUpScreen2 extends StatefulWidget {
-  SignUpScreen2({super.key});
+class SignUpScreen4 extends StatefulWidget {
+  SignUpScreen4({super.key});
 
   @override
-  State<SignUpScreen2> createState() => _SignUpScreen2State();
+  State<SignUpScreen4> createState() => _SignUpScreen4State();
 }
 
-class _SignUpScreen2State extends State<SignUpScreen2> {
+class _SignUpScreen4State extends State<SignUpScreen4> {
   final SignUpController _signUpController = Get.put(SignUpController());
+  // final SignUpController _signUpController = Get.find<SignUpController>();
   final ColorPallet colorPallet = Get.put(ColorPallet());
   final _formKey = GlobalKey<FormState>();
 
   User? loggedUser;
   DateTime userBirthDate = DateTime.now();
+  String formattedDate = "연도 / 월 / 일을 선택해 주세요";
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +59,11 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '이름을 입력해 주세요.',
+                        '휴대폰 번호를 입력해 주세요.',
                         style: TextStyle(
-                            letterSpacing: 0.01,
-                            fontSize: 24,
-                            fontFamily: 'PretendardRegular',
+                          letterSpacing: 0.01,
+                          fontSize: 24,
+                          fontFamily: 'PretendardRegular',
                         ),
                       ),
                       Container(
@@ -99,7 +101,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                       ),
                       NextBtn(
                         isButtonDisabled: !isValid,
-                        nextPage: SignUpScreen3(),
+                        nextPage: SignUpScreen4(),
                         buttonName: "확인",
                       )
                     ],

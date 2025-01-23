@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../../data/memory/memory_note_model.dart';
+import '../../../../../data/memory/memory_note_model.dart';
 import 'package:atti/data/memory/chatController.dart';
-import 'package:atti/patient/screen/memory/ChatComplete.dart';
+import 'package:atti/patient/screen/memory/chat/ChatComplete.dart';
 import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
 
-import '../../../../patient/screen/memory/MainMemory.dart';
+import '../gallery/MainMemory.dart';
 
 class BeforeSave extends StatelessWidget {
   final MemoryNoteModel memory;

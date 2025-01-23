@@ -62,7 +62,6 @@ export 'package:atti/tmp/screen/chatbot/Chatbot.dart';
 export 'package:atti/tmp/screen/chatbot/RecollectionChatbot.dart';
 
 // LoginSignUp
-export 'package:atti/tmp/screen/LoginSignUp/CustomerTypeBtn.dart';
 export 'package:atti/tmp/screen/LoginSignUp/EntryField.dart';
 export 'package:atti/tmp/screen/LoginSignUp/FinishSignUpScreen.dart';
 export 'package:atti/tmp/screen/LoginSignUp/IntroPage.dart';
@@ -71,9 +70,6 @@ export 'package:atti/tmp/screen/LoginSignUp/LogInScreen.dart';
 export 'package:atti/tmp/screen/LoginSignUp/LogInSignUpMainScreen.dart';
 export 'package:atti/tmp/screen/LoginSignUp/NextBtn.dart';
 export 'package:atti/tmp/screen/LoginSignUp/SignUpFamilyTag.dart';
-export 'package:atti/tmp/screen/LoginSignUp/SignUpScreen1.dart';
-export 'package:atti/tmp/screen/LoginSignUp/SignUpScreen2.dart';
-export 'package:atti/tmp/screen/LoginSignUp/SignUpScreen3.dart';
 
 // memory
 export 'package:atti/tmp/screen/memory/chat/BeforeSave.dart';

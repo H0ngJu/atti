@@ -1,4 +1,4 @@
-import 'package:atti/patient/screen/memory/MainMemory.dart';
+import 'package:atti/patient/screen/memory/gallery/MainMemory.dart';
 import 'package:atti/tmp/screen/HomeCarer.dart';
 import 'package:atti/patient/screen/HomePatient.dart';
 import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
