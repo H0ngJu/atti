@@ -42,6 +42,12 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
   }
 
   @override
+  void initState() {
+    print("환자 도큐먼트 레퍼런스 여기여기!!!!!!!!!!!!");
+    print(authController.patientDocRef);
+  }
+
+  @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;

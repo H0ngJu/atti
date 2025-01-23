@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:atti/data/notification/notification.dart';
 import 'package:atti/login_signUp/IntroPage.dart';
+import 'package:atti/patient/screen/HomePatient.dart';
 
 import 'package:atti/tmp/screen/routine/RoutineMain.dart';
 import 'package:atti/tmp/screen/schedule/ScheduleMain.dart';
@@ -15,6 +16,7 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'firebase_options.dart';
+import 'login_signUp/LogInScreen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
