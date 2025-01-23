@@ -259,6 +259,7 @@ class NotificationService {
       channelDescription: 'This channel is used for weekly notifications',
       importance: Importance.high,
       color: Color(0xffFFE9B3),
+      fullScreenIntent: true,
     );
 
     for (int dayOfWeek in daysOfWeek) {
