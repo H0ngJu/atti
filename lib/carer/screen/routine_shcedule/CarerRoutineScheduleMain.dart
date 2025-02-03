@@ -252,8 +252,7 @@ class _CarerRoutineScheduleMainState extends State<CarerRoutineScheduleMain> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          //'${patientName}님의',
-                          '임시 텍스트',
+                          '${patientName}님의',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontSize: 24,
@@ -461,8 +460,8 @@ class _CarerRoutineScheduleMainState extends State<CarerRoutineScheduleMain> {
                               });
                         },
                         child: ScheduleBox(
-                          time: DateFormat('a hh:mm', 'ko_KR').
-                            format(schedulesBySelectedDay[index].time!.toDate()),
+                          time: schedulesBySelectedDay[index].time!.toDate(),
+                          //time: DateFormat('a hh:mm', 'ko_KR').format(schedulesBySelectedDay[index].time!.toDate()),
                           location: schedulesBySelectedDay[index].location,
                           name: schedulesBySelectedDay[index].name,
                           isFinished: schedulesBySelectedDay[index].isFinished!,

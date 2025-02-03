@@ -58,9 +58,7 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
                 ),
                 SizedBox(height: 10,),
                 ScheduleBox(
-                  time: scheduleController.schedule.value?.time?.toDate() != null
-                      ? DateFormat('a hh:mm', 'ko_KR').format(scheduleController.schedule.value.time!.toDate())
-                      : DateFormat('a hh:mm', 'ko_KR').format(DateTime.now()),
+                  time: scheduleController.schedule.value.time!.toDate(),
                   name: scheduleController.schedule.value.name,
                   location: scheduleController.schedule.value.location,
                   isFinished: false,

@@ -29,7 +29,7 @@ class ScheduleBox extends StatefulWidget {
         required this.onCompleted,
       });
 
-  final String? time;
+  final DateTime? time;
   final String? name;
   final String? location;
   final bool isFinished;
@@ -168,7 +168,7 @@ class _ScheduleBoxState extends State<ScheduleBox> {
                   ? EdgeInsets.fromLTRB(8, 7, 8, 7)
                   : EdgeInsets.zero,
               child: Text(
-                widget.time ?? '-',
+                DateFormat('a hh:mm', 'ko_KR').format(widget.time!) ?? '-',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 28,
