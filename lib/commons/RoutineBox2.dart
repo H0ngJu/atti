@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
+import '../data/auth_controller.dart';
 import '../data/notification/notification_controller.dart';
 import '../data/routine/routine_controller.dart';
 import '../data/routine/routine_service.dart';
@@ -37,6 +38,7 @@ class RoutineBox2 extends StatefulWidget {
 class _RoutineBox2State extends State<RoutineBox2> {
   final RoutineController routineController = Get.put(RoutineController());
   final ColorPallet colorPallet = Get.put(ColorPallet());
+  final AuthController authController = Get.put(AuthController());
 
   /// 현재 시간과 비교하여 루틴 예정 시간이 지났는지 판단하는 헬퍼 메서드
   bool _routineTimePassed() {
@@ -69,14 +71,8 @@ class _RoutineBox2State extends State<RoutineBox2> {
           .toString().padLeft(2, '0')}';
     }
 
-    var height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    var width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
 
     return Container(
       padding: EdgeInsets.only(top: 0, bottom: 20, left: 20, right: 20),
@@ -130,7 +126,9 @@ class _RoutineBox2State extends State<RoutineBox2> {
                   context: context,
                   builder: (_) =>
                       CustomModal(
-                        title: "'${widget.name}'\n일과를 완료하셨나요?",
+                        title: authController.isPatient
+                        ? "'${widget.name}'\n일과를 완료하셨나요?"
+                        : "${authController.patientName}님이\n'${widget.name}'\n일과를 완료하셨나요?",
                         yesButtonColor: colorPallet.orange,
                         onYesPressed: () async {
                           await RoutineService().completeRoutine(

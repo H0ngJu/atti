@@ -42,6 +42,15 @@ class ScheduleBox extends StatefulWidget {
 
 class _ScheduleBoxState extends State<ScheduleBox> {
   final ColorPallet colorPallet = Get.put(ColorPallet());
+  final AuthController authController = Get.put(AuthController());
+
+  // 일정 시간이 지났는지 판단하는 헬퍼 메서드
+  bool _scheduleTimePassed() {
+    if (widget.time != null) {
+      return DateTime.now().isAfter(widget.time!);
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +105,9 @@ class _ScheduleBoxState extends State<ScheduleBox> {
                       context: context,
                       builder: (_) {
                         return CustomModal(
-                          title: '\'${widget.name}\'\n일정을 완료하셨나요?',
+                          title: authController.isPatient
+                          ? '\'${widget.name}\'\n일정을 완료하셨나요?' // 환자일 때
+                          : '${authController.patientName}님이\n\'${widget.name}\'\n일정을 완료하셨나요?', // 보호자일 때
                           yesButtonColor: colorPallet.orange,
                           onYesPressed: () async {
                             await ScheduleService().completeSchedule(widget.docRef!);
@@ -151,7 +162,13 @@ class _ScheduleBoxState extends State<ScheduleBox> {
                     color: Colors.black,
                     size: 30,
                   )
-                    : null,
+                    : _scheduleTimePassed()
+                      ? const Icon(
+                        Icons.close,
+                        color: Color(0xffFF6200),
+                        size: 30
+                      )
+                      : null,
                 ),
               ),
             ),

@@ -22,10 +22,12 @@ class ScheduleModal extends StatelessWidget {
   final String? memo;
   final DocumentReference docRef;
 
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    final AuthController authController = Get.put(AuthController());
 
     return AlertDialog(
       contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 0),
