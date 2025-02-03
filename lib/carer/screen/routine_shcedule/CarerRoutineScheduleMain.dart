@@ -1,4 +1,5 @@
 // 새로운 일정/일과 페이지
+import 'package:atti/commons/CarerRoutineModal.dart';
 import 'package:atti/index.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
@@ -567,7 +568,13 @@ class _CarerRoutineScheduleMainState extends State<CarerRoutineScheduleMain> {
 
                       return GestureDetector(
                         onTap: () {
-
+                          showDialog(
+                              context: context,
+                              builder: (_) {
+                                return CarerRoutineModal(
+                                  name: filteredRoutines[index].name!,
+                                );
+                              });
                         },
                         child: RoutineBox2(
                             img: filteredRoutines[index].img!,

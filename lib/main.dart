@@ -98,7 +98,18 @@ class MyApp extends StatelessWidget {
         const Locale('ko', 'KR'), // Korean
       ],
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(),
+      theme: ThemeData(
+        // Material3 사용 시
+        useMaterial3: true,
+        // Material3의 경우 ColorScheme에 surfaceTint을 지정할 수 있습니다.
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue).copyWith(
+          surfaceTint: Colors.transparent,
+        ),
+        // AlertDialog 등 모달의 배경을 변경하려면 dialogTheme을 설정
+        dialogTheme: const DialogTheme(
+          backgroundColor: Colors.white,
+        ),
+      ),
       initialRoute: initialRoute,
 
       // 앱 전체 글자 크기 고정하기 !!
