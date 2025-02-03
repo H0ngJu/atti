@@ -64,6 +64,8 @@ class _CarerRoutineScheduleMainState extends State<CarerRoutineScheduleMain> {
     }
     // print("스피치 버블 출력 테스트");
     // print(selectedMessage);
+    print("환자 도큐먼트 레퍼런스 출력 테스트");
+    print(authController.patientDocRef!.path);
   }
 
   // 데이터 불러오기

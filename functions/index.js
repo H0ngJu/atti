@@ -363,7 +363,7 @@ exports.weeklyReport = onSchedule(
 //    });
 
 exports.sendNotificationOnFinish = onDocumentCreated(
-  "notification_finish/{documentId}",
+  { document: "notification_finish/{documentId}",  region: "asia-northeast3" },
   async (event) => {
     try {
       const documentData = event.data;
@@ -406,7 +406,7 @@ exports.sendNotificationOnFinish = onDocumentCreated(
 
 // ======================================================================
 // 요일 문자열을 숫자로 변환
-const dayToNumber = {
+const dayToCron = {
   일: 0, // Sunday
   월: 1, // Monday
   화: 2,
@@ -420,14 +420,22 @@ const dayToNumber = {
 const _firestore = admin.firestore();
 
 exports.createRoutineScheduler = onDocumentCreated(
-  "routine/{documentId}",
+  { document: "routine/{documentId}", region: "asia-northeast3" },
   async (event) => {
-    const data = event.data;
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log("No data associated with the event");
+      return;
+    }
+
+    const data = snapshot.data();
     if (!data || data.isPatient) return;
 
     const { name, time, repeatDays, patientId } = data;
-    const patientDoc = await _firestore.doc(patientId).get();
+    console.log("name", name);
+    console.log("time", time);
 
+    const patientDoc = await _firestore.doc(patientId.path).get();
     if (!patientDoc.exists) {
       console.error("Patient document not found:", patientId);
       return;
@@ -442,35 +450,42 @@ exports.createRoutineScheduler = onDocumentCreated(
     // 반복 요일마다 Scheduler 생성
     for (const day of repeatDays) {
       const cronDay = dayToCron[day];
-      if (!cronDay) {
+      if (cronDay === undefined) {
         console.error("Invalid repeat day:", day);
         continue;
       }
 
       const schedulerName = `routine-${event.params.documentId}-${day}`;
+      console.log("schedulerName", schedulerName);
 
       // Scheduler 생성
-      await onSchedule({
-        name: schedulerName,
-        schedule: `30 ${time[1]} ${time[0]} * * ${cronDay}`, // 매주 특정 요일에 실행
-        timeZone: "Asia/Seoul",
-      })
-        .onRun(async () => {
+      onSchedule(
+        {
+          name: schedulerName,
+          schedule: "${time[1]} ${time[0]} * * ${cronDay}", // 매주 특정 요일에 실행
+          timeZone: "Asia/Seoul",
+          region: "asia-northeast3",
+        },
+        async () => {
+          console.log("Scheduler callback triggered"); // onSchedule 콜백 시작 시점
           const notificationMessage = {
             notification: {
               title: "일과 알림",
-              body: `'${name}' 일과를 완료하셨나요?`,
+              body: '\'${name}\' 일과를 완료하셨나요?',
             },
             token: patientFCMToken,
           };
+          console.log("NotificationMessage:", notificationMessage); // 알림 메시지 구성 확인
 
           try {
             await admin.messaging().send(notificationMessage);
             console.log(`Routine notification sent for '${name}' to ${patientFCMToken}`);
           } catch (error) {
             console.error("Error sending FCM notification:", error);
+            console.error("Stack trace:", error.stack);
           }
-        });
+        }
+      );
     }
 
     console.log("Routine schedulers created successfully.");

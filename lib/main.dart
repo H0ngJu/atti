@@ -112,7 +112,7 @@ class MyApp extends StatelessWidget {
       },
 
       routes: {
-        '/': (context) => LogInSignUpMainScreen(),
+        '/': (context) => IntroPage(),
         '/schedule': (context) => ScheduleMain(),
         '/routine': (context) => RoutineMain(),
       },
