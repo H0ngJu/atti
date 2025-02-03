@@ -573,6 +573,7 @@ class _CarerRoutineScheduleMainState extends State<CarerRoutineScheduleMain> {
                               builder: (_) {
                                 return CarerRoutineModal(
                                   name: filteredRoutines[index].name!,
+                                  isFinished: filteredRoutines[index].isFinished!
                                 );
                               });
                         },

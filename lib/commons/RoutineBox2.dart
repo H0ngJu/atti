@@ -13,15 +13,16 @@ import 'colorPallet.dart';
 class RoutineBox2 extends StatefulWidget {
   final Function onCompleted; // 콜백 함수 추가
 
-  const RoutineBox2({super.key,
-    required this.time,
-    required this.img,
-    required this.name,
-    required this.docRef,
-    required this.date,
-    required this.isFinished,
-    required this.onCompleted,
-    required this.isEditMode});
+  const RoutineBox2(
+      {super.key,
+      required this.time,
+      required this.img,
+      required this.name,
+      required this.docRef,
+      required this.date,
+      required this.isFinished,
+      required this.onCompleted,
+      required this.isEditMode});
 
   final time;
   final name;
@@ -67,8 +68,7 @@ class _RoutineBox2State extends State<RoutineBox2> {
       int hour12 = hour > 12 ? hour - 12 : hour;
       hour12 = hour12 == 0 ? 12 : hour12;
       formattedTime =
-      '${isPM ? '오후' : '오전'} ${hour12.toString().padLeft(2, '0')}:${minute
-          .toString().padLeft(2, '0')}';
+          '${isPM ? '오후' : '오전'} ${hour12.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
     }
 
     var height = MediaQuery.of(context).size.height;
@@ -76,10 +76,7 @@ class _RoutineBox2State extends State<RoutineBox2> {
 
     return Container(
       padding: EdgeInsets.only(top: 0, bottom: 20, left: 20, right: 20),
-      width: MediaQuery
-          .of(context)
-          .size
-          .width * 0.9,
+      width: MediaQuery.of(context).size.width * 0.9,
       color: Colors.white,
       alignment: Alignment.center,
       child: Row(
@@ -88,89 +85,87 @@ class _RoutineBox2State extends State<RoutineBox2> {
         children: [
           // 완료용 토글 버튼
           widget.isEditMode
-              ? GestureDetector( // 편집모드일 때 -> 삭제 버튼
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (_) =>
-                      CustomModal(
-                          title: '\'${widget.name}\'\n일과를 삭제할까요?',
+              ? GestureDetector(
+                  // 편집모드일 때 -> 삭제 버튼
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) => CustomModal(
+                            title: '\'${widget.name}\'\n일과를 삭제할까요?',
+                            yesButtonColor: colorPallet.orange,
+                            onYesPressed: () async {
+                              await RoutineService()
+                                  .deleteRoutine(widget.docRef);
+                              widget.onCompleted(); // 콜백 함수 호출
+
+                              Navigator.pop(context); // 모달창 닫기
+                            },
+                            onNoPressed: () {
+                              Navigator.pop(context);
+                            }));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(top: 5),
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: colorPallet.orange, shape: BoxShape.circle),
+                    child: Center(
+                      child: Icon(Icons.close, color: Colors.white, size: 18),
+                    ),
+                  ),
+                )
+              : GestureDetector(
+                  // 편집모드X -> 완료 버튼
+                  onTap: () {
+                    if (!widget.isFinished) {
+                      // 완료여부 false일때만 동작
+                      showDialog(
+                        context: context,
+                        builder: (_) => CustomModal(
+                          title: authController.isPatient
+                              ? "'${widget.name}'\n일과를 완료하셨나요?"
+                              : "${authController.patientName}님이\n'${widget.name}'\n일과를 완료하셨나요?",
                           yesButtonColor: colorPallet.orange,
                           onYesPressed: () async {
-                            await RoutineService().deleteRoutine(widget.docRef);
+                            await RoutineService()
+                                .completeRoutine(widget.docRef, widget.date);
+                            await addNotification(
+                                '하루 일과 알림',
+                                '${authController.userName}님이 \'${widget.name}\' 일과를 완료하셨어요!',
+                                DateTime.now(),
+                                false);
                             widget.onCompleted(); // 콜백 함수 호출
-
-                            Navigator.pop(context); // 모달창 닫기
+                            Navigator.pop(context);
                           },
                           onNoPressed: () {
                             Navigator.pop(context);
-                          })
-              );
-            },
-            child: Container(
-              margin: EdgeInsets.only(top: 5),
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                  color: colorPallet.orange, shape: BoxShape.circle),
-              child: Center(
-                child: Icon(Icons.close, color: Colors.white, size: 18),
-              ),
-            ),
-          )
-              : GestureDetector( // 편집모드X -> 완료 버튼
-            onTap: () {
-              if (!widget.isFinished) {
-                // 완료여부 false일때만 동작
-                showDialog(
-                  context: context,
-                  builder: (_) =>
-                      CustomModal(
-                        title: authController.isPatient
-                        ? "'${widget.name}'\n일과를 완료하셨나요?"
-                        : "${authController.patientName}님이\n'${widget.name}'\n일과를 완료하셨나요?",
-                        yesButtonColor: colorPallet.orange,
-                        onYesPressed: () async {
-                          await RoutineService().completeRoutine(
-                              widget.docRef, widget.date);
-                          await addNotification(
-                              '하루 일과 알림',
-                              '${authController.userName}님이 \'${widget
-                                  .name}\' 일과를 완료하셨어요!',
-                              DateTime.now(),
-                              false);
-                          widget.onCompleted(); // 콜백 함수 호출
-                          Navigator.pop(context);
-                        },
-                        onNoPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                );
-              }
-            },
-            child: CustomPaint(
-              painter: RoutineDottedCirclePainter(),
-              child: Container(
-                width: width * 0.12,
-                height: width * 0.12,
-                alignment: Alignment.center,
-                child: widget.isFinished
-                    ? const Icon(
-                  Icons.check,
-                  color: Colors.black,
-                  size: 30,
-                )
-                    : _routineTimePassed()
-                      ? const Icon(
-                      Icons.close,
-                      color: Color(0xffFF6200),
-                      size: 30,
-                      )
-                      : null
-              ),
-            ),
-          ),
+                          },
+                        ),
+                      );
+                    }
+                  },
+                  child: CustomPaint(
+                    painter: RoutineDottedCirclePainter(),
+                    child: Container(
+                        width: width * 0.12,
+                        height: width * 0.12,
+                        alignment: Alignment.center,
+                        child: widget.isFinished
+                            ? const Icon(
+                                Icons.check,
+                                color: Colors.black,
+                                size: 30,
+                              )
+                            : _routineTimePassed()
+                                ? const Icon(
+                                    Icons.close,
+                                    color: Color(0xffFF6200),
+                                    size: 30,
+                                  )
+                                : null),
+                  ),
+                ),
 
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +180,7 @@ class _RoutineBox2State extends State<RoutineBox2> {
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(
                     color:
-                    widget.isEditMode ? Colors.transparent : Colors.black,
+                        widget.isEditMode ? Colors.transparent : Colors.black,
                     width: 1,
                   ),
                 ),
@@ -227,14 +222,8 @@ class _RoutineBox2State extends State<RoutineBox2> {
               // 일과 사진
               Container(
                 alignment: Alignment.center,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.73,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.25,
+                width: MediaQuery.of(context).size.width * 0.73,
+                height: MediaQuery.of(context).size.height * 0.25,
                 child: Container(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
