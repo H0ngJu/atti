@@ -525,7 +525,7 @@ exports.createRoutineScheduler = onDocumentCreated(
 // ======================================================================
 exports.sendScheduledNotifications = onSchedule(
   {
-    schedule: "every 10 minutes", // 매 분 실행
+    schedule: "every 1 minutes", // 매 분 실행 "*/5 * * * *" 작동 확인 후 5분마다 실행으로 바꾸기
     timeZone: "Asia/Seoul",
     region: "asia-northeast3",
   },
