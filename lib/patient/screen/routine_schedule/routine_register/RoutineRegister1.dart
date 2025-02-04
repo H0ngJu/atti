@@ -28,7 +28,6 @@ class _RoutineRegister1State extends State<RoutineRegister1> {
     print(authController.patientDocRef);
   }
 
-  @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;

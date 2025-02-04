@@ -383,8 +383,7 @@ class _TodayToDoState extends State<TodayToDo> {
                               });
                         },
                         child: ScheduleBox(
-                          time: DateFormat('a hh:mm', 'ko_KR')
-                              .format(schedulesByToday[index].time!.toDate()),
+                          time: schedulesByToday[index].time!.toDate(),
                           location: schedulesByToday[index].location,
                           name: schedulesByToday[index].name,
                           isFinished: schedulesByToday[index].isFinished!,

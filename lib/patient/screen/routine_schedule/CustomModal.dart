@@ -1,3 +1,4 @@
+import 'package:atti/data/notification/notification_controller.dart';
 import 'package:flutter/material.dart';
 
 class CustomModal extends StatelessWidget {
@@ -57,10 +58,13 @@ class CustomModal extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 30,
+                height: 1.2
               ),
             ),
 
-            SizedBox(height: height * 0.3),
+            SizedBox(height: authController.isPatient
+                ? height * 0.3
+                : height * 0.25),
 
             // 버튼들
             Row(
