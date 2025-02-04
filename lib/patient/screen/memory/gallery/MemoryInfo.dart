@@ -1,5 +1,6 @@
 import 'package:atti/commons/SimpleAppBar.dart';
 import 'package:atti/patient/screen/memory/chat/ChatScreen.dart';
+import 'package:atti/patient/screen/memory/chat/ChatHistory.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,8 +10,9 @@ import '../../../../commons/AttiBottomNavi.dart';
 class MemoryInfo extends StatefulWidget {
   final MemoryNoteModel memory;
   final List<MemoryNoteModel> albumList;
+  final bool isEditMode;
 
-  const MemoryInfo({Key? key, required this.memory, required this.albumList})
+  const MemoryInfo({Key? key, required this.memory, required this.albumList, required this.isEditMode})
       : super(key: key);
 
   @override
@@ -78,7 +80,23 @@ class _MemoryInfoState extends State<MemoryInfo> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
               ),
-              SizedBox(
+              widget.isEditMode
+              ? SizedBox(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: 60,
+                child: TextButton(
+                  onPressed: () {
+                    Get.to(ChatHistory(memory: currentMemory));
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xff262626)),
+                  child: Text(
+                    '회상 대화 기록 보기',
+                    style: TextStyle(fontSize: 24, color: Colors.white),
+                  ),
+                ),
+              )
+              : SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: 60,
                 child: TextButton(

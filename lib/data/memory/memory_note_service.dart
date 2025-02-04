@@ -120,4 +120,15 @@ class MemoryNoteService {
       return [];
     }
   }
+
+  // 특정 기억 삭제
+  Future<void> deleteMemory(DocumentReference docRef) async {
+    try {
+      // Firestore에서 문서를 삭제
+      await docRef.delete();
+      print('Memory deleted successfully!');
+    } catch (e) {
+      print('Error deleting memory: $e');
+    }
+  }
 }

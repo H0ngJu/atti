@@ -6,12 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../commons/AttiBottomNavi.dart';
+import '../../../../commons/BottomNextButton.dart';
+import '../../../../data/memory/memory_note_service.dart';
+import '../../routine_schedule/CustomModal.dart';
 
 class MemoryAlbum extends StatefulWidget {
   final List<MemoryNoteModel> group;
   final String memoryKey;
+  final bool isEditMode;
 
-  const MemoryAlbum({Key? key, required this.memoryKey, required this.group})
+  const MemoryAlbum(
+      {Key? key,
+      required this.memoryKey,
+      required this.group,
+      required this.isEditMode})
       : super(key: key);
 
   @override
@@ -76,7 +84,7 @@ class _MemoryAlbumState extends State<MemoryAlbum> {
       itemCount: widget.group.length,
       itemBuilder: (context, index) {
         final groupedMemory = widget.group[index];
-        return _buildMemoryCard(context, groupedMemory);
+        return _buildMemoryCard(context, groupedMemory, widget.isEditMode);
       },
     );
   }
@@ -98,7 +106,8 @@ class _MemoryAlbumState extends State<MemoryAlbum> {
             if (currentGroup.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5.0),
-                child: _buildBigMemoryCard(context, currentGroup[0]),
+                child: _buildBigMemoryCard(
+                    context, currentGroup[0], widget.isEditMode),
               ),
             if (currentGroup.length > 1)
               GridView.builder(
@@ -113,7 +122,8 @@ class _MemoryAlbumState extends State<MemoryAlbum> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, gridIndex) {
                   final groupedMemory = currentGroup[gridIndex + 1];
-                  return _buildMemoryCard(context, groupedMemory);
+                  return _buildMemoryCard(
+                      context, groupedMemory, widget.isEditMode);
                 },
               ),
           ],
@@ -122,19 +132,60 @@ class _MemoryAlbumState extends State<MemoryAlbum> {
     );
   }
 
-  Widget _buildMemoryCard(BuildContext context, MemoryNoteModel groupedMemory) {
+  Widget _buildMemoryCard(
+      BuildContext context, MemoryNoteModel groupedMemory, bool isEditMode) {
     return GestureDetector(
-      onTap: () => Get.to(MemoryInfo(memory: groupedMemory, albumList: widget.group)),
+      onTap: () =>
+          Get.to(MemoryInfo(memory: groupedMemory, albumList: widget.group, isEditMode: widget.isEditMode,)),
       child: Column(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: Image.network(
-              groupedMemory.img ?? '',
-              width: MediaQuery.of(context).size.width * 0.45,
-              height: MediaQuery.of(context).size.width * 0.45,
-              fit: BoxFit.cover,
-            ),
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
+                child: Image.network(
+                  groupedMemory.img ?? '',
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  height: MediaQuery.of(context).size.width * 0.45,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              if (isEditMode)
+                Positioned(
+                  top: 5,
+                  right: 5,
+                  child: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => CustomModal(
+                              title:
+                                  '\'${groupedMemory.imgTitle}\'\n일과를 삭제할까요?',
+                              yesButtonColor: colorPallet.orange,
+                              onYesPressed: () async {
+                                await MemoryNoteService()
+                                    .deleteMemory(groupedMemory.reference!);
+                                Navigator.pop(context); // 모달창 닫기
+                              },
+                              onNoPressed: () {
+                                Navigator.pop(context);
+                              }));
+                    },
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Color(0xffFF6200),
+                        shape: BoxShape.circle,
+                      ),
+                      padding: const EdgeInsets.all(4),
+                      child: const Icon(
+                        Icons.close,
+                        size: 30,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
           const SizedBox(height: 8),
           Expanded(
@@ -142,7 +193,7 @@ class _MemoryAlbumState extends State<MemoryAlbum> {
               groupedMemory.imgTitle ?? '',
               style: const TextStyle(
                 color: Colors.black,
-                fontSize: 20,
+                fontSize: 24,
                 fontFamily: 'PretendardRegular',
               ),
               textAlign: TextAlign.center,
@@ -153,19 +204,60 @@ class _MemoryAlbumState extends State<MemoryAlbum> {
     );
   }
 
-  Widget _buildBigMemoryCard(BuildContext context, MemoryNoteModel groupedMemory) {
+  Widget _buildBigMemoryCard(
+      BuildContext context, MemoryNoteModel groupedMemory, bool isEditMode) {
     return GestureDetector(
-      onTap: () => Get.to(MemoryInfo(memory: groupedMemory, albumList: widget.group)),
+      onTap: () =>
+          Get.to(MemoryInfo(memory: groupedMemory, albumList: widget.group, isEditMode: widget.isEditMode)),
       child: Column(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: Image.network(
-              groupedMemory.img ?? '',
-              width: double.infinity,
-              height: MediaQuery.of(context).size.width * 0.4,
-              fit: BoxFit.cover,
-            ),
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
+                child: Image.network(
+                  groupedMemory.img ?? '',
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.width * 0.4,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              if (isEditMode)
+                Positioned(
+                  top: 5,
+                  right: 5,
+                  child: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => CustomModal(
+                              title:
+                                  '\'${groupedMemory.imgTitle}\'\n일과를 삭제할까요?',
+                              yesButtonColor: colorPallet.orange,
+                              onYesPressed: () async {
+                                await MemoryNoteService()
+                                    .deleteMemory(groupedMemory.reference!);
+                                Navigator.pop(context); // 모달창 닫기
+                              },
+                              onNoPressed: () {
+                                Navigator.pop(context);
+                              }));
+                    },
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Color(0xffFF6200),
+                        shape: BoxShape.circle,
+                      ),
+                      padding: const EdgeInsets.all(4),
+                      child: const Icon(
+                        Icons.close,
+                        size: 30,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
           const SizedBox(height: 8),
           Text(
