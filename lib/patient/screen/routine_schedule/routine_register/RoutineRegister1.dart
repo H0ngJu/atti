@@ -26,7 +26,6 @@ class _RoutineRegister1State extends State<RoutineRegister1> {
   void initState() {
     print("환자 도큐먼트 레퍼런스 여기여기!!!!!!!!!!!!");
     print(authController.patientDocRef);
-    print(authController.tmpValue);
   }
 
   @override

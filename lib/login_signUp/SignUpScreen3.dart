@@ -32,7 +32,6 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     String inputBirthDate = '000000';
-    bool isValid = true;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -86,7 +85,32 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                           onChanged: (value) {
                               setState(() {
                                 inputBirthDate = value;
+                                _signUpController.scrn3_isValid.value = inputBirthDate.length == 7;
                               });
+                              if (inputBirthDate.length == 7 && int.tryParse(inputBirthDate) != null) {
+                                print("len **************** ${inputBirthDate.length}");
+                                String birthDateString = inputBirthDate.substring(0, 7);
+                                int yearPrefix;
+                                int year = int.parse(birthDateString.substring(0, 2));
+
+                                if (year >= 0 && year <= 30) {
+                                  yearPrefix = 2000;
+                                } else {
+                                  yearPrefix = 1900;
+                                }
+
+                                year += yearPrefix; // 기준 연도를 더함
+                                int month = int.parse(birthDateString.substring(2, 4));
+                                int day = int.parse(birthDateString.substring(4, 6));
+
+                                userBirthDate = DateTime(year, month, day);
+
+                                _signUpController.userBirthDate = userBirthDate;
+                                int sex = int.parse(birthDateString.substring(6));
+                                _signUpController.userSex.value = sex;
+                                print("성별 : ${_signUpController.userSex.value}");
+                                print("생일 : ${_signUpController.userBirthDate}");
+                              }
                           },
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -122,30 +146,9 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                         ),
                       ),
                       NextBtn(
-                        isButtonDisabled: !isValid,
+                        isButtonDisabled: !_signUpController.scrn3_isValid.value,
                         nextPage: SignUpScreen4(),
                         buttonName: "확인",
-                          onButtonClick: (){
-                            String birthDateString = inputBirthDate.substring(0, 6);
-                            int yearPrefix;
-                            int year = int.parse(birthDateString.substring(0, 2));
-
-                            if (year >= 0 && year <= 30) {
-                              yearPrefix = 2000;
-                            } else {
-                              yearPrefix = 1900;
-                            }
-
-                            year += yearPrefix; // 기준 연도를 더함
-                            int month = int.parse(birthDateString.substring(2, 4));
-                            int day = int.parse(birthDateString.substring(4, 6));
-
-                            userBirthDate = DateTime(year, month, day);
-
-                            _signUpController.userBirthDate = DateTime(year, month, day);
-                            int sex = int.parse(birthDateString.substring(6, 7));
-                            _signUpController.userSex.value = sex == 1 || sex == 3 ? "male" : "female";
-                          }
                       )
                     ],
                   ),
