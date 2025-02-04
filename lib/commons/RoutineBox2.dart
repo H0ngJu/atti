@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
+import '../data/auth_controller.dart';
 import '../data/notification/notification_controller.dart';
 import '../data/routine/routine_controller.dart';
 import '../data/routine/routine_service.dart';
@@ -19,6 +20,7 @@ class RoutineBox2 extends StatefulWidget {
       required this.name,
       required this.docRef,
       required this.date,
+      required this.repeatDays,
       required this.isFinished,
       required this.onCompleted,
       required this.isEditMode});
@@ -26,6 +28,7 @@ class RoutineBox2 extends StatefulWidget {
   final time;
   final name;
   final img;
+  final repeatDays;
   final isFinished;
   final date;
   final DocumentReference docRef;
@@ -38,6 +41,43 @@ class RoutineBox2 extends StatefulWidget {
 class _RoutineBox2State extends State<RoutineBox2> {
   final RoutineController routineController = Get.put(RoutineController());
   final ColorPallet colorPallet = Get.put(ColorPallet());
+  final AuthController authController = Get.put(AuthController());
+
+  /// 현재 시간과 비교하여 루틴 예정 시간이 지났는지 판단하는 헬퍼 메서드
+  bool _routineTimePassed() {
+    if (widget.date != null && widget.time != null && widget.time.length == 2) {
+      // widget.date가 DateTime 타입이라고 가정합니다.
+      final scheduledTime = DateTime(
+        widget.date.year,
+        widget.date.month,
+        widget.date.day,
+        widget.time[0],
+        widget.time[1],
+      );
+      return DateTime.now().isAfter(scheduledTime);
+    }
+    return false;
+  }
+
+  String repeatText = '';
+  String getRepeatText() {
+    if (widget.repeatDays.length == 7) {
+      // 일주일 전체
+      return '매일 반복';
+    } else if (widget.repeatDays.length == 5 &&
+        widget.repeatDays.contains('월') &&
+        widget.repeatDays.contains('화') &&
+        widget.repeatDays.contains('수') &&
+        widget.repeatDays.contains('목') &&
+        widget.repeatDays.contains('금')) {
+      // 평일(월~금)
+      return '평일 반복';
+    } else {
+      // 그 외: 예를 들어 ['월', '수', '금']이면 "월, 수, 금 반복"
+      return widget.repeatDays.join(', ') + ' 반복';
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +107,8 @@ class _RoutineBox2State extends State<RoutineBox2> {
         children: [
           // 완료용 토글 버튼
           widget.isEditMode
-              ? GestureDetector( // 편집모드일 때 -> 삭제 버튼
+              ? GestureDetector(
+                  // 편집모드일 때 -> 삭제 버튼
                   onTap: () {
                     showDialog(
                         context: context,
@@ -75,15 +116,15 @@ class _RoutineBox2State extends State<RoutineBox2> {
                             title: '\'${widget.name}\'\n일과를 삭제할까요?',
                             yesButtonColor: colorPallet.orange,
                             onYesPressed: () async {
-                              await RoutineService().deleteRoutine(widget.docRef);
+                              await RoutineService()
+                                  .deleteRoutine(widget.docRef);
                               widget.onCompleted(); // 콜백 함수 호출
 
                               Navigator.pop(context); // 모달창 닫기
                             },
                             onNoPressed: () {
                               Navigator.pop(context);
-                            })
-                    );
+                            }));
                   },
                   child: Container(
                     margin: EdgeInsets.only(top: 5),
@@ -96,17 +137,21 @@ class _RoutineBox2State extends State<RoutineBox2> {
                     ),
                   ),
                 )
-              : GestureDetector( // 편집모드X -> 완료 버튼
+              : GestureDetector(
+                  // 편집모드X -> 완료 버튼
                   onTap: () {
                     if (!widget.isFinished) {
                       // 완료여부 false일때만 동작
                       showDialog(
                         context: context,
                         builder: (_) => CustomModal(
-                          title: "'${widget.name}'\n일과를 완료하셨나요?",
+                          title: authController.isPatient
+                              ? "'${widget.name}'\n일과를 완료하셨나요?"
+                              : "${authController.patientName}님이\n'${widget.name}'\n일과를 완료하셨나요?",
                           yesButtonColor: colorPallet.orange,
                           onYesPressed: () async {
-                            await RoutineService().completeRoutine(widget.docRef, widget.date);
+                            await RoutineService()
+                                .completeRoutine(widget.docRef, widget.date);
                             await addNotification(
                                 '하루 일과 알림',
                                 '${authController.userName}님이 \'${widget.name}\' 일과를 완료하셨어요!',
@@ -120,49 +165,69 @@ class _RoutineBox2State extends State<RoutineBox2> {
                           },
                         ),
                       );
-
                     }
                   },
                   child: CustomPaint(
                     painter: RoutineDottedCirclePainter(),
                     child: Container(
-                      width: width * 0.12,
-                      height: width * 0.12,
-                      alignment: Alignment.center,
-                      child: widget.isFinished
-                          ? const Icon(
-                              Icons.check,
-                              color: Colors.black,
-                              size: 30,
-                            )
-                          : null,
-                    ),
+                        width: width * 0.1,
+                        height: width * 0.1,
+                        alignment: Alignment.center,
+                        child: widget.isFinished
+                            ? const Icon(
+                                Icons.check,
+                                color: Colors.black,
+                                size: 30,
+                              )
+                            : _routineTimePassed()
+                                ? const Icon(
+                                    Icons.close,
+                                    color: Color(0xffFF6200),
+                                    size: 30,
+                                  )
+                                : null),
                   ),
                 ),
 
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 일과 시간
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
-                decoration: BoxDecoration(
-                  color: widget.isEditMode
-                      ? colorPallet.lightGrey
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(
-                    color:
-                        widget.isEditMode ? Colors.transparent : Colors.black,
-                    width: 1,
-                  ),
-                ),
-                child: Text(
-                  formattedTime,
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.black,
-                  ),
+
+              SizedBox(
+                width: width * 0.75,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // 일과 시간
+                    Container(
+                      padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+                      decoration: BoxDecoration(
+                        color: widget.isEditMode
+                            ? colorPallet.lightGrey
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color:
+                              widget.isEditMode ? Colors.transparent : Colors.black,
+                          width: 1,
+                        ),
+                      ),
+                      child: Text(
+                        formattedTime,
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+
+                    // 일과 요일
+                    Text(
+                      getRepeatText(),
+                      style: TextStyle(color: colorPallet.grey, fontSize: 20),
+                    )
+
+                  ],
                 ),
               ),
               SizedBox(
@@ -171,7 +236,7 @@ class _RoutineBox2State extends State<RoutineBox2> {
 
               // 일과 제목
               Container(
-                  width: width * 0.73,
+                  width: width * 0.75,
                   padding: widget.isEditMode
                       ? EdgeInsets.fromLTRB(10, 2, 10, 2)
                       : EdgeInsets.zero,
@@ -195,7 +260,7 @@ class _RoutineBox2State extends State<RoutineBox2> {
               // 일과 사진
               Container(
                 alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width * 0.73,
+                width: MediaQuery.of(context).size.width * 0.75,
                 height: MediaQuery.of(context).size.height * 0.25,
                 child: Container(
                   child: ClipRRect(

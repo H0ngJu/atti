@@ -1,5 +1,6 @@
 // 새로운 일정/일과 페이지
 import 'package:atti/index.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -81,6 +82,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     }
     // print("스피치 버블 출력 테스트");
     // print(selectedMessage);
+
   }
 
   // 데이터 불러오기
@@ -135,6 +137,8 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     // final List<ActiveNotification> activeNotifications =
     // await flutterLocalNotificationsPlugin.getActiveNotifications();
     // print(activeNotifications);
+    String? FCMToken = await FirebaseMessaging.instance.getToken();
+    print(FCMToken);
   }
 
   // 아띠 말풍선 메시지 만들기
@@ -461,8 +465,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                               });
                         },
                         child: ScheduleBox(
-                          time: DateFormat('a hh:mm', 'ko_KR').
-                            format(schedulesBySelectedDay[index].time!.toDate()),
+                          time: schedulesBySelectedDay[index].time!.toDate(),
                           location: schedulesBySelectedDay[index].location,
                           name: schedulesBySelectedDay[index].name,
                           isFinished: schedulesBySelectedDay[index].isFinished!,
@@ -589,6 +592,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                             name: filteredRoutines[index].name!,
                             docRef: filteredRoutines[index].reference!,
                             time: filteredRoutines[index].time!,
+                            repeatDays: filteredRoutines[index].repeatDays!,
                             date: _selectedDay,
                             onCompleted: _fetchData,
                             isFinished: isFinished,

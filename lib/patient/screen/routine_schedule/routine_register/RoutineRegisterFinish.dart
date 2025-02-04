@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atti/data/routine/routine_controller.dart';
+import '../../../../carer/screen/routine_shcedule/CarerRoutineScheduleMain.dart';
 import '../../../../commons/RoutineBox2.dart';
+import '../../../../data/auth_controller.dart';
 import '../../../../patient/screen/routine_schedule/RoutineScheduleMain.dart';
 import 'dart:io';
 
@@ -22,6 +24,7 @@ class RoutineRegisterFinish extends StatefulWidget {
 
 class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
   final RoutineController routineController = Get.put(RoutineController());
+  final AuthController authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -137,13 +140,11 @@ class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
             margin: EdgeInsets.only(bottom: 20),
             child: TextButton(
               onPressed: () {
-
-
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RoutineScheduleMain()),
-                );
+                if (authController.isPatient) {
+                  Get.to(() => RoutineScheduleMain());
+                } else {
+                  Get.to(() => CarerRoutineScheduleMain());
+                }
               },
               child: Text(
                 '일과/일정 돌아가기',

@@ -1,4 +1,5 @@
 // 새로운 일정/일과 페이지
+import 'package:atti/commons/CarerRoutineModal.dart';
 import 'package:atti/index.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
@@ -64,6 +65,8 @@ class _CarerRoutineScheduleMainState extends State<CarerRoutineScheduleMain> {
     }
     // print("스피치 버블 출력 테스트");
     // print(selectedMessage);
+    print("환자 도큐먼트 레퍼런스 출력 테스트");
+    print(authController.patientDocRef!.path);
   }
 
   // 데이터 불러오기
@@ -250,8 +253,7 @@ class _CarerRoutineScheduleMainState extends State<CarerRoutineScheduleMain> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          //'${patientName}님의',
-                          '임시 텍스트',
+                          '${patientName}님의',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontSize: 24,
@@ -459,8 +461,8 @@ class _CarerRoutineScheduleMainState extends State<CarerRoutineScheduleMain> {
                               });
                         },
                         child: ScheduleBox(
-                          time: DateFormat('a hh:mm', 'ko_KR').
-                            format(schedulesBySelectedDay[index].time!.toDate()),
+                          time: schedulesBySelectedDay[index].time!.toDate(),
+                          //time: DateFormat('a hh:mm', 'ko_KR').format(schedulesBySelectedDay[index].time!.toDate()),
                           location: schedulesBySelectedDay[index].location,
                           name: schedulesBySelectedDay[index].name,
                           isFinished: schedulesBySelectedDay[index].isFinished!,
@@ -566,13 +568,21 @@ class _CarerRoutineScheduleMainState extends State<CarerRoutineScheduleMain> {
 
                       return GestureDetector(
                         onTap: () {
-
+                          showDialog(
+                              context: context,
+                              builder: (_) {
+                                return CarerRoutineModal(
+                                  name: filteredRoutines[index].name!,
+                                  isFinished: filteredRoutines[index].isFinished!
+                                );
+                              });
                         },
                         child: RoutineBox2(
                             img: filteredRoutines[index].img!,
                             name: filteredRoutines[index].name!,
                             docRef: filteredRoutines[index].reference!,
                             time: filteredRoutines[index].time!,
+                            repeatDays: filteredRoutines[index].repeatDays!,
                             date: _selectedDay,
                             onCompleted: _fetchData,
                             isFinished: isFinished,
