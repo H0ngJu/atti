@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/data/schedule/schedule_controller.dart';
 import 'package:intl/intl.dart';
+import '../../../../carer/screen/routine_shcedule/CarerRoutineScheduleMain.dart';
 import '../../../../commons/ScheduleBox.dart';
 import '../../../../commons/colorPallet.dart';
 import '../../../../data/notification/notification_controller.dart';
@@ -157,7 +158,11 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
                   // );
 
                 }
-                Get.to(RoutineScheduleMain());
+                if (authController.isPatient) {
+                  Get.to(() => RoutineScheduleMain());
+                } else {
+                  Get.to(() => CarerRoutineScheduleMain());
+                }
               },
               child: Text('일과/일정으로 돌아가기', style: TextStyle(color: Colors.black, fontSize: 20),),
               style: ButtonStyle(
