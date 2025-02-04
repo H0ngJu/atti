@@ -46,7 +46,7 @@ class _ChatCompleteState extends State<ChatComplete> {
   Widget GalleryContent(memory) {
     return GestureDetector(
       onTap: () {
-        Get.to(MemoryInfo(memory: memory, albumList: widget.albumList));
+        Get.to(MemoryInfo(memory: memory, albumList: widget.albumList, isEditMode: false));
       },
       child: Container(
         child: Column(

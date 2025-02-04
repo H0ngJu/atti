@@ -35,6 +35,7 @@ class _MainGalleryState extends State<MainMemory>
   int _selectedIndex = 0;
   int _selectedCategory = 0;
   final List<String> categories = ["연도", "인물", "좋아하는 기억"];
+  bool isEditMode = false;
 
   @override
   void initState() {
@@ -207,23 +208,25 @@ class _MainGalleryState extends State<MainMemory>
               SingleChildScrollView(
                   //padding: EdgeInsets.only(left: 16, right: 16),
                   child: Column(
-                    children: [
-                      SizedBox(height: height * 0.06,),
-                      _buildHeader(),
-                      SizedBox(height: 20),
-                      _buildImageSection(),
-                      SizedBox(height: 20),
-                      Container(
-                        width: width * 0.9,
-                        child: AttiSpeechBubble(
-                            comment: '사진을 눌러\n그 기억에 대해 이야기해요',
-                            color: colorPallet.lightYellow),
-                      ),
-                      SizedBox(height: 10),
-                      _buildCategoryTabs(),
-                      Container(child: _buildGroupedMemoryCards()),
-                    ],
-                  )),
+                children: [
+                  SizedBox(
+                    height: height * 0.06,
+                  ),
+                  _buildHeader(),
+                  SizedBox(height: 20),
+                  _buildImageSection(),
+                  SizedBox(height: 20),
+                  Container(
+                    width: width * 0.9,
+                    child: AttiSpeechBubble(
+                        comment: '사진을 눌러\n그 기억에 대해 이야기해요',
+                        color: colorPallet.lightYellow),
+                  ),
+                  SizedBox(height: 10),
+                  _buildCategoryTabs(),
+                  Container(child: _buildGroupedMemoryCards()),
+                ],
+              )),
               Positioned(
                   bottom: MediaQuery.of(context).size.height * 0.2,
                   //left: 0,
@@ -243,44 +246,61 @@ class _MainGalleryState extends State<MainMemory>
 
   Widget _buildHeader() {
     return Padding(
-        padding: const EdgeInsets.only(left: 16),
+        padding: const EdgeInsets.only(left: 16, right: 16),
         child: Container(
             //margin: EdgeInsets.only(top: 20),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 24,
-                        height: 1.5,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: '${authController.userName.value}님의\n',
-                          style: TextStyle(
-                              fontSize: 24,
-                              height: 1.2
-                          ),
-                        ),
-                        TextSpan(
-                          text: '소중한 기억을 모아봤어요',
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    height: 1.5,
                   ),
+                  children: [
+                    TextSpan(
+                      text: authController.isPatient
+                          ? '${authController.userName.value}님의\n'
+                          : '${authController.patientName.value}님의\n',
+                      style: TextStyle(fontSize: 24, height: 1.2),
+                    ),
+                    TextSpan(
+                      text: isEditMode ? '내 기억 편집 모드' : '소중한 기억을 모아봤어요',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  isEditMode = !isEditMode; // 상태 토글
+                });
+              },
+              child: Container(
+                width: 35,
+                height: 35,
+                decoration: BoxDecoration(
+                    color: isEditMode ? Colors.white : Colors.black,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.black, width: 1)),
+                child: Icon(
+                  isEditMode ? Icons.close : Icons.edit,
+                  color: isEditMode ? Colors.black : Colors.white,
+                  size: 22,
+                ),
+              ),
             )
-        )
-    );
+          ],
+        )));
   }
 
   Widget _buildImageSection() {
@@ -333,7 +353,8 @@ class _MainGalleryState extends State<MainMemory>
                   fontWeight: _selectedCategory == index
                       ? FontWeight.bold
                       : FontWeight.normal, // 선택된 카테고리는 bold
-                  color: _selectedCategory == index ? Colors.black : Colors.grey,
+                  color:
+                      _selectedCategory == index ? Colors.black : Colors.grey,
                 ),
               ),
             ),
@@ -485,6 +506,7 @@ class _MainGalleryState extends State<MainMemory>
       onTap: () => Get.to(MemoryAlbum(
         memoryKey: groupKey,
         group: group,
+        isEditMode: isEditMode,
       )),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 5),
@@ -560,6 +582,7 @@ class _MainGalleryState extends State<MainMemory>
       onTap: () => Get.to(MemoryAlbum(
         memoryKey: groupKey,
         group: group,
+        isEditMode: isEditMode,
       )),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
