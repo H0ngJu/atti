@@ -118,52 +118,76 @@ class CarerRoutineModal extends StatelessWidget {
 
                       // 각 셀의 날짜 (시간은 00:00:00.000)
                       final DateTime cellDate = DateTime(now.year, now.month, day);
-                      Widget iconWidget;
 
-                      // 오늘 이후의 날짜는 표시하지 않음
+                      // 셀에 표시할 내용(원 내부)을 결정
+                      Widget content;
+
                       if (cellDate.isAfter(DateTime.now())) {
-                        iconWidget = Container();
-                      }
-
-                      // isFinished 맵에 해당 날짜의 키가 없으면, 해당 날은 루틴이 없는 날이므로 "-" 표시
-                      else if (!isFinished.containsKey(cellDate.toString())) {
-                        iconWidget = const Text(
-                          "-",
-                          style: TextStyle(fontSize: 15, color: Colors.grey),
+                        // 오늘 이후의 날짜: 아이콘이나 채우기 없이 점선 원만 표시
+                        content = CustomPaint(
+                          painter: RoutineDottedCirclePainter(),
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                          ),
                         );
-                      }
-
-                      // 루틴 완료한 날 → check 아이콘
-                      else if (isFinished[cellDate.toString()] == true) {
-                        iconWidget = const Icon(
-                          Icons.check,
-                          size: 20,
-                          color: Colors.black,
+                      } else if (!isFinished.containsKey(cellDate.toString())) {
+                        // 해당 날짜에 루틴 데이터가 없으면: 회색으로 채운 원 위에 점선 테두리
+                        content = Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                color: _colorPallet.lightGrey,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            CustomPaint(
+                              painter: RoutineDottedCirclePainter(),
+                              child: Container(
+                                width: 30,
+                                height: 30,
+                              ),
+                            ),
+                          ],
                         );
-                      }
-
-                      // 루틴이 있지만 완료되지 않은 날 → x 아이콘
-                      else {
-                        iconWidget = Icon(
-                          Icons.close,
-                          size: 20,
-                          color: _colorPallet.orange
+                      } else if (isFinished[cellDate.toString()] == true) {
+                        // 루틴이 완료된 날: check 아이콘 표시
+                        content = CustomPaint(
+                          painter: RoutineDottedCirclePainter(),
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            alignment: Alignment.center,
+                            child: const Icon(
+                              Icons.check,
+                              size: 20,
+                              color: Colors.black,
+                            ),
+                          ),
+                        );
+                      } else {
+                        // 루틴이 있지만 완료되지 않은 날: x 아이콘 표시 (컬러팔레트 사용)
+                        content = CustomPaint(
+                          painter: RoutineDottedCirclePainter(),
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.close,
+                              size: 20,
+                              color: _colorPallet.orange,
+                            ),
+                          ),
                         );
                       }
 
                       return Column(
-                        //mainAxisSize: MainAxisSize.min,
                         children: [
-                          // 점선 외곽 원
-                          CustomPaint(
-                            painter: RoutineDottedCirclePainter(),
-                            child: Container(
-                              width: 30,
-                              height: 30,
-                              alignment: Alignment.center,
-                              child: iconWidget
-                            ),
-                          ),
+                          content,
                           SizedBox(height: 3,),
                           Text(
                             '$day',
