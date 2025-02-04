@@ -20,6 +20,7 @@ class RoutineBox2 extends StatefulWidget {
       required this.name,
       required this.docRef,
       required this.date,
+      required this.repeatDays,
       required this.isFinished,
       required this.onCompleted,
       required this.isEditMode});
@@ -27,6 +28,7 @@ class RoutineBox2 extends StatefulWidget {
   final time;
   final name;
   final img;
+  final repeatDays;
   final isFinished;
   final date;
   final DocumentReference docRef;
@@ -56,6 +58,26 @@ class _RoutineBox2State extends State<RoutineBox2> {
     }
     return false;
   }
+
+  String repeatText = '';
+  String getRepeatText() {
+    if (widget.repeatDays.length == 7) {
+      // 일주일 전체
+      return '매일 반복';
+    } else if (widget.repeatDays.length == 5 &&
+        widget.repeatDays.contains('월') &&
+        widget.repeatDays.contains('화') &&
+        widget.repeatDays.contains('수') &&
+        widget.repeatDays.contains('목') &&
+        widget.repeatDays.contains('금')) {
+      // 평일(월~금)
+      return '평일 반복';
+    } else {
+      // 그 외: 예를 들어 ['월', '수', '금']이면 "월, 수, 금 반복"
+      return widget.repeatDays.join(', ') + ' 반복';
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -148,8 +170,8 @@ class _RoutineBox2State extends State<RoutineBox2> {
                   child: CustomPaint(
                     painter: RoutineDottedCirclePainter(),
                     child: Container(
-                        width: width * 0.12,
-                        height: width * 0.12,
+                        width: width * 0.1,
+                        height: width * 0.1,
                         alignment: Alignment.center,
                         child: widget.isFinished
                             ? const Icon(
@@ -170,26 +192,42 @@ class _RoutineBox2State extends State<RoutineBox2> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 일과 시간
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
-                decoration: BoxDecoration(
-                  color: widget.isEditMode
-                      ? colorPallet.lightGrey
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(
-                    color:
-                        widget.isEditMode ? Colors.transparent : Colors.black,
-                    width: 1,
-                  ),
-                ),
-                child: Text(
-                  formattedTime,
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.black,
-                  ),
+
+              SizedBox(
+                width: width * 0.75,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // 일과 시간
+                    Container(
+                      padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+                      decoration: BoxDecoration(
+                        color: widget.isEditMode
+                            ? colorPallet.lightGrey
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color:
+                              widget.isEditMode ? Colors.transparent : Colors.black,
+                          width: 1,
+                        ),
+                      ),
+                      child: Text(
+                        formattedTime,
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+
+                    // 일과 요일
+                    Text(
+                      getRepeatText(),
+                      style: TextStyle(color: colorPallet.grey, fontSize: 20),
+                    )
+
+                  ],
                 ),
               ),
               SizedBox(
@@ -198,7 +236,7 @@ class _RoutineBox2State extends State<RoutineBox2> {
 
               // 일과 제목
               Container(
-                  width: width * 0.73,
+                  width: width * 0.75,
                   padding: widget.isEditMode
                       ? EdgeInsets.fromLTRB(10, 2, 10, 2)
                       : EdgeInsets.zero,
@@ -222,7 +260,7 @@ class _RoutineBox2State extends State<RoutineBox2> {
               // 일과 사진
               Container(
                 alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width * 0.73,
+                width: MediaQuery.of(context).size.width * 0.75,
                 height: MediaQuery.of(context).size.height * 0.25,
                 child: Container(
                   child: ClipRRect(

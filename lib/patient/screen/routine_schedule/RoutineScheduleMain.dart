@@ -592,6 +592,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                             name: filteredRoutines[index].name!,
                             docRef: filteredRoutines[index].reference!,
                             time: filteredRoutines[index].time!,
+                            repeatDays: filteredRoutines[index].repeatDays!,
                             date: _selectedDay,
                             onCompleted: _fetchData,
                             isFinished: isFinished,
