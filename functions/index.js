@@ -419,76 +419,73 @@ const dayToCron = {
 // Firestore 객체 생성
 const _firestore = admin.firestore();
 
+// 보호자가 일과 등록했을 때 환자에게 FCM 알림 전송
 exports.createRoutineScheduler = onDocumentCreated(
   { document: "routine/{documentId}", region: "asia-northeast3" },
   async (event) => {
     const snapshot = event.data;
-    if (!snapshot) {
-      console.log("No data associated with the event");
-      return;
-    }
-
     const data = snapshot.data();
-    if (!data || data.isPatient) return;
+    if (!data || data.isPatient) return; // data가 없거나 환자가 등록한 루틴이라면 작업x
 
     const { name, time, repeatDays, patientId } = data;
     console.log("name", name);
     console.log("time", time);
+    console.log("Repeat Days:", repeatDays);
 
-    const patientDoc = await _firestore.doc(patientId.path).get();
-    if (!patientDoc.exists) {
-      console.error("Patient document not found:", patientId);
-      return;
-    }
+    try {
+        const patientDoc = await _firestore.doc(patientId.path).get();
+        const patientFCMToken = patientDoc.data().userFCMToken;
+        console.log("patientFCMToken", patientFCMToken);
 
-    const patientFCMToken = patientDoc.data().userFCMToken;
-    if (!patientFCMToken) {
-      console.error("FCM Token not found for patient:", patientId);
-      return;
-    }
+        // repeatDays 배열에 있는 모든 요일을 dayToCron을 통해 숫자로 매핑한 후, 콤마로 연결
+        const cronDays = repeatDays
+          .map(day => dayToCron[day])
+          .filter(val => val != undefined)
+          .join(",");
 
-    // 반복 요일마다 Scheduler 생성
-    for (const day of repeatDays) {
-      const cronDay = dayToCron[day];
-      if (cronDay === undefined) {
-        console.error("Invalid repeat day:", day);
-        continue;
-      }
-
-      const schedulerName = `routine-${event.params.documentId}-${day}`;
-      console.log("schedulerName", schedulerName);
-
-      // Scheduler 생성
-      onSchedule(
-        {
-          name: schedulerName,
-          schedule: "${time[1]} ${time[0]} * * ${cronDay}", // 매주 특정 요일에 실행
-          timeZone: "Asia/Seoul",
-          region: "asia-northeast3",
-        },
-        async () => {
-          console.log("Scheduler callback triggered"); // onSchedule 콜백 시작 시점
-          const notificationMessage = {
-            notification: {
-              title: "일과 알림",
-              body: '\'${name}\' 일과를 완료하셨나요?',
-            },
-            token: patientFCMToken,
-          };
-          console.log("NotificationMessage:", notificationMessage); // 알림 메시지 구성 확인
-
-          try {
-            await admin.messaging().send(notificationMessage);
-            console.log(`Routine notification sent for '${name}' to ${patientFCMToken}`);
-          } catch (error) {
-            console.error("Error sending FCM notification:", error);
-            console.error("Stack trace:", error.stack);
-          }
+        if (!cronDays) {
+          console.error("No valid repeat days found in:", repeatDays);
+          return;
         }
-      );
+        console.log("cronDays:", cronDays);
+
+        const schedulerName = `routine-${event.params.documentId}`;
+
+        // Scheduler 생성: 매주 특정 요일(예: "1,3,5")에 실행하도록 Cron 표현식 작성
+        // Cron 표현식 형식: "<minute> <hour> * * <day-of-week>"
+        // 예를 들어, time[1]=30 (분), time[0]=18 (시)라면 "30 18 * * 1,3,5"가 됩니다.
+        onSchedule(
+          {
+              name: schedulerName,
+              schedule: `${time[1]} ${time[0]} * * ${cronDays}`,
+              timeZone: "Asia/Seoul",
+              region: "asia-northeast3",
+          },
+          async () => {
+              console.log("Scheduler callback triggered");
+              const notificationMessage = {
+                notification: {
+                  title: "일과 알림",
+                  body: `${name} 일과를 완료하셨나요?`,
+                },
+                token: patientFCMToken,
+              };
+              console.log("NotificationMessage:", notificationMessage);
+
+              try {
+                await admin.messaging().send(notificationMessage);
+                console.log(`Routine notification sent for '${name}' to ${patientFCMToken}`);
+              } catch (error) {
+                console.error("Error sending FCM notification:", error.message);
+                console.error("Stack trace:", error.stack);
+              }
+          }
+        );
+        console.log("Routine schedulers created successfully.");
+    } catch (error) {
+      console.error("Error accessing Firestore document:", error);
     }
 
-    console.log("Routine schedulers created successfully.");
   }
 );
 
@@ -524,3 +521,119 @@ exports.createRoutineScheduler = onDocumentCreated(
 //        }
 //
 //    });
+
+// ======================================================================
+exports.sendScheduledNotifications = onSchedule(
+  {
+    schedule: "every 10 minutes", // 매 분 실행
+    timeZone: "Asia/Seoul",
+    region: "asia-northeast3",
+  },
+  async (event) => {
+    const now = new Date();
+
+    // 현재 분의 시작과 끝을 구함
+    const currentStart = new Date(now);
+    const currentEnd = new Date(now);
+    currentStart.setSeconds(0, 0);
+    currentEnd.setSeconds(59, 999);
+
+    // 1시간 후의 시점을 계산
+    const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
+    const oneHourStart = new Date(oneHourLater);
+    const oneHourEnd = new Date(oneHourLater);
+    oneHourStart.setSeconds(0, 0);
+    oneHourEnd.setSeconds(59, 999);
+
+    try {
+      // 현재 시간에 실행할 알림(정확한 알림 시각)을 조회
+      const querySnapshotOnTime = await _firestore
+        .collection("schedule")
+        .where("time", ">=", currentStart.toISOString())
+        .where("time", "<=", currentEnd.toISOString())
+        .where("notified", "==", false) // 아직 알림이 전송되지 않은 일정
+        .get();
+
+      // 1시간 후에 실행할 알림(1시간 전 알림)을 조회
+      // (이때 별도의 플래그 notifiedOneHour를 사용)
+      const querySnapshotOneHour = await _firestore
+        .collection("schedule")
+        .where("time", ">=", oneHourStart.toISOString())
+        .where("time", "<=", oneHourEnd.toISOString())
+        .where("notifiedOneHour", "==", false)
+        .get();
+
+      const batch = _firestore.batch();
+
+      // [1] 정각 알림: "일정을 진행하고 있나요?"
+      querySnapshotOnTime.forEach((doc) => {
+        const data = doc.data();
+        const { name, patientFCMToken } = data;
+
+        if (!patientFCMToken) {
+          console.error("FCM Token not found for document:", doc.id);
+          return;
+        }
+
+        const notificationMessage = {
+          notification: {
+            title: "일정 알림",
+            body: `'${name}' 일정을 진행하고 있나요?`,
+          },
+          token: patientFCMToken,
+        };
+
+        admin
+          .messaging()
+          .send(notificationMessage)
+          .then((response) => {
+            console.log(`On-time notification sent: ${response}`);
+          })
+          .catch((error) => {
+            console.error("Error sending on-time notification:", error);
+          });
+
+        // 알림 발송 후 플래그 업데이트
+        batch.update(doc.ref, { notified: true });
+      });
+
+      // [2] 1시간 전 알림: "1시간 뒤 '${name}'을(를) 하실 시간이에요!"
+      querySnapshotOneHour.forEach((doc) => {
+        const data = doc.data();
+        const { name, patientFCMToken } = data;
+
+        if (!patientFCMToken) {
+          console.error("FCM Token not found for document:", doc.id);
+          return;
+        }
+
+        const notificationMessage = {
+          notification: {
+            title: "일정 알림",
+            body: `1시간 뒤 '${name}'을(를) 하실 시간이에요!`,
+          },
+          token: patientFCMToken,
+        };
+
+        admin
+          .messaging()
+          .send(notificationMessage)
+          .then((response) => {
+            console.log(`1-hour prior notification sent: ${response}`);
+          })
+          .catch((error) => {
+            console.error("Error sending 1-hour prior notification:", error);
+          });
+
+        // 알림 발송 후 플래그 업데이트
+        batch.update(doc.ref, { notifiedOneHour: true });
+      });
+
+      // Firestore 배치 업데이트 커밋
+      await batch.commit();
+      console.log("Notifications sent and updated successfully.");
+    } catch (error) {
+      console.error("Error processing notifications:", error);
+    }
+  }
+);
