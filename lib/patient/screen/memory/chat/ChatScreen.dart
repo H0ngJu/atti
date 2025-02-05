@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:atti/data/memory/memory_note_model.dart';
 import 'package:atti/data/report/dangerword_controller.dart';
 import 'package:atti/data/report/emotion_controller.dart';
-import 'package:atti/tmp/screen/chatbot/Chatbot.dart';
+import 'package:atti/data/memory/Chatbot.dart';
 import 'package:atti/patient/screen/memory/chat/BeforeSave.dart';
 import 'package:atti/patient/screen/memory/chat/ChatBubble.dart';
 import 'package:get/get.dart';
