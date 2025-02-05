@@ -1,9 +1,11 @@
+import 'package:atti/index.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
 import '../../../../../data/memory/memory_note_model.dart';
 import 'package:atti/data/memory/chatController.dart';
 import 'package:atti/patient/screen/memory/chat/ChatComplete.dart';
-import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
 
+import '../../../../data/auth_controller.dart';
 import '../gallery/MainMemory.dart';
 
 class BeforeSave extends StatelessWidget {
@@ -17,6 +19,7 @@ class BeforeSave extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ChatController chatController = ChatController();
+    final AuthController authController = Get.put(AuthController());
 
     return Scaffold(
       backgroundColor: Colors.white,

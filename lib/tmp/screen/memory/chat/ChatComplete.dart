@@ -8,17 +8,17 @@ import '../../../../data/memory/memory_note_service.dart';
 import '../gallery/MainGallery.dart';
 import '../gallery/MemoryDetail.dart';
 
-class ChatComplete extends StatefulWidget {
+class TmpChatComplete extends StatefulWidget {
   final MemoryNoteModel memory;
 
-  const ChatComplete({Key? key, required this.memory})
+  const TmpChatComplete({Key? key, required this.memory})
       : super(key: key);
 
   @override
-  _ChatCompleteState createState() => _ChatCompleteState();
+  _TmpChatCompleteState createState() => _TmpChatCompleteState();
 }
 
-class _ChatCompleteState extends State<ChatComplete> {
+class _TmpChatCompleteState extends State<TmpChatComplete> {
   AuthController authController = Get.put(AuthController());
   MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
   MemoryNoteService memoryNoteService = MemoryNoteService();

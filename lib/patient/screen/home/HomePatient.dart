@@ -12,6 +12,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
+import '../../../carer/screen/memory/gallery/CarerMainMemory.dart';
 import '../../../data/auth_controller.dart';
 import '../../../data/notification/notification.dart';
 import '../../../data/routine/routine_model.dart';
@@ -453,7 +454,12 @@ class _HomePatientState extends State<HomePatient> {
                 SizedBox(height: width * 0.02),
                 TextButton(
                   onPressed: () {
-                    Get.to(MainMemory());
+                    if (authController.isPatient) {
+                      Get.to(() => MainMemory());
+                    } else {
+                      Get.to(() => CarerMainMemory());
+                    }
+
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: colorPallet.goldYellow, // 배경색

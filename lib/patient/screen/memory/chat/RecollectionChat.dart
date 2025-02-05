@@ -18,6 +18,8 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
 
 import '../../../../../data/memory/RecollectionChatbot.dart';
+import '../../../../carer/screen/memory/gallery/CarerMainMemory.dart';
+import '../../../../data/auth_controller.dart';
 
 class ChatMessage {
   final String sender; // I or ATTI
@@ -112,6 +114,7 @@ class _RecollectionChatState extends State<RecollectionChat> {
   final FlutterTts flutterTts = FlutterTts();
   String _currentImage = 'lib/assets/Atti/default1.png'; // 기본 이미지 설정
   bool _isTTSEnabled = true;
+  final AuthController authController = Get.put(AuthController());
 
   @override
   void initState() {
@@ -252,6 +255,7 @@ class _VoiceButtonState extends State<VoiceButton> {
   final EmotionController emotionController = Get.put(EmotionController());
   final DangerWordController dangerWordController =
       Get.put(DangerWordController());
+  final AuthController authController = Get.put(AuthController());
 
   @override
   void initState() {
@@ -526,7 +530,11 @@ class _VoiceButtonState extends State<VoiceButton> {
             margin: EdgeInsets.only(top: 20, right: 25),
             child: ElevatedButton(
                 onPressed: () {
-                  Get.to(MainMemory());
+                  if (authController.isPatient) {
+                    Get.to(() => MainMemory());
+                  } else {
+                    Get.to(() => CarerMainMemory());
+                  }
                   var chat = ChatMessage.messagesToJsonString(chatMessages);
                   //print(onlyUserMessages);
                   if (onlyUserMessages.isNotEmpty) {

@@ -2,6 +2,7 @@ import 'package:atti/patient/screen/memory/gallery/MemoryInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:math' as math;
+import '../../../../carer/screen/memory/gallery/CarerMainMemory.dart';
 import '../../../../data/auth_controller.dart';
 import '../../../../data/memory/memory_note_controller.dart';
 import '../../../../data/memory/memory_note_model.dart';
@@ -140,7 +141,11 @@ class _ChatCompleteState extends State<ChatComplete> {
                 height: 60,
                 child: TextButton(
                   onPressed: () {
-                    Get.to(MainMemory());
+                    if (authController.isPatient) {
+                      Get.to(() => MainMemory());
+                    } else {
+                      Get.to(() => CarerMainMemory());
+                    }
                   },
                   style:
                       TextButton.styleFrom(backgroundColor: Color(0xffFFC215)),

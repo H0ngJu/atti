@@ -123,7 +123,7 @@ class MyApp extends StatelessWidget {
       },
 
       routes: {
-        '/': (context) => IntroPage(),
+        '/': (context) => LogInScreen(),
         '/schedule': (context) => ScheduleMain(),
         '/routine': (context) => RoutineMain(),
       },

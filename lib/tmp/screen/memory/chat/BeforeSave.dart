@@ -59,7 +59,7 @@ class BeforeSave extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ChatComplete(memory: memory,)),
+                                builder: (context) => TmpChatComplete(memory: memory,)),
                           );
                         } else {
                           print('Error: memory.reference?.path is null');

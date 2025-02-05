@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 
+import '../../../../carer/screen/memory/gallery/CarerMainMemory.dart';
+import '../../../../data/auth_controller.dart';
 import '../gallery/MainMemory.dart';
 
 class MemoryRegisterFinish extends StatefulWidget {
@@ -20,6 +22,8 @@ class MemoryRegisterFinish extends StatefulWidget {
 class _MemoryRegisterFinishState extends State<MemoryRegisterFinish> {
   final MemoryNoteController memoryNoteController =
       Get.put(MemoryNoteController());
+  final AuthController authController = Get.put(AuthController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -92,10 +96,11 @@ class _MemoryRegisterFinishState extends State<MemoryRegisterFinish> {
             margin: EdgeInsets.only(bottom: 20, left: width * 0.05),
             child: TextButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MainMemory()),
-                );
+                if (authController.isPatient) {
+                  Get.to(() => MainMemory());
+                } else {
+                  Get.to(() => CarerMainMemory());
+                }
               },
               child: Text(
                 '내 기억으로 가기',
