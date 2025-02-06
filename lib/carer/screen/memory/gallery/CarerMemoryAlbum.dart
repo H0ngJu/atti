@@ -10,6 +10,8 @@ import '../../../../commons/BottomNextButton.dart';
 import '../../../../data/memory/memory_note_service.dart';
 import 'package:atti/patient/screen/routine_schedule/CustomModal.dart';
 
+import 'edit/MemoryEdit1.dart';
+
 
 class CarerMemoryAlbum extends StatefulWidget {
   final List<MemoryNoteModel> group;
@@ -136,8 +138,13 @@ class _CarerMemoryAlbumState extends State<CarerMemoryAlbum> {
   Widget _buildMemoryCard(
       BuildContext context, MemoryNoteModel groupedMemory, bool isEditMode) {
     return GestureDetector(
-      onTap: () =>
+      onTap: () => {
+        if (isEditMode) { // 편집모드일 때 -> 수정 페이지로 이동
+          Get.to(MemoryEdit1(memory: groupedMemory))
+        } else {
           Get.to(MemoryInfo(memory: groupedMemory, albumList: widget.group, isEditMode: widget.isEditMode,)),
+        }
+      },
       child: Column(
         children: [
           Stack(
@@ -208,8 +215,13 @@ class _CarerMemoryAlbumState extends State<CarerMemoryAlbum> {
   Widget _buildBigMemoryCard(
       BuildContext context, MemoryNoteModel groupedMemory, bool isEditMode) {
     return GestureDetector(
-      onTap: () =>
-          Get.to(MemoryInfo(memory: groupedMemory, albumList: widget.group, isEditMode: widget.isEditMode)),
+      onTap: () => {
+        if (isEditMode) { // 편집모드일 때 -> 수정 페이지로 이동
+          Get.to(MemoryEdit1(memory: groupedMemory))
+        } else {
+          Get.to(MemoryInfo(memory: groupedMemory, albumList: widget.group, isEditMode: widget.isEditMode,)),
+        }
+      },
       child: Column(
         children: [
           Stack(

@@ -14,6 +14,7 @@ import 'package:atti/patient/screen/memory/gallery/AddButton.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
 import 'dart:math';
 import '../../../../commons/colorPallet.dart';
+import 'CarerMemoryAlbum.dart';
 
 class CarerMainMemory extends StatefulWidget {
   const CarerMainMemory({Key? key}) : super(key: key);
@@ -219,7 +220,7 @@ class _MainGalleryState extends State<CarerMainMemory>
                   Container(
                     width: width * 0.9,
                     child: AttiSpeechBubble(
-                        comment: '사진을 눌러\n그 기억에 대해 이야기해요',
+                        comment: '보호자페이지\n사진을 눌러 그 기억에\n대해 이야기해요',
                         color: colorPallet.lightYellow),
                   ),
                   SizedBox(height: 10),
@@ -503,7 +504,7 @@ class _MainGalleryState extends State<CarerMainMemory>
     List<MemoryNoteModel> group = groupedNotes[groupKey]!; // 앨범 목록 전달
 
     return GestureDetector(
-      onTap: () => Get.to(MemoryAlbum(
+      onTap: () => Get.to(CarerMemoryAlbum(
         memoryKey: groupKey,
         group: group,
         isEditMode: isEditMode,
@@ -579,7 +580,7 @@ class _MainGalleryState extends State<CarerMainMemory>
     List<MemoryNoteModel> group = groupedNotes[groupKey]!;
 
     return GestureDetector(
-      onTap: () => Get.to(MemoryAlbum(
+      onTap: () => Get.to(CarerMemoryAlbum(
         memoryKey: groupKey,
         group: group,
         isEditMode: isEditMode,

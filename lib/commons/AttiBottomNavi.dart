@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../carer/screen/memory/gallery/CarerMainMemory.dart';
 import '../carer/screen/routine_shcedule/CarerRoutineScheduleMain.dart';
 import '../data/auth_controller.dart';
 import '../patient/screen/routine_schedule/RoutineScheduleMain.dart';
@@ -76,8 +77,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   // 추가한 부분
   void _onItemTapped(int index) {
-    if (index == 0) {
+    if (index == 0 && authController.isPatient) {
       Get.to(MainMemory());
+    } else if (index == 0 && !authController.isPatient) {
+      Get.to(CarerMainMemory());
     } else if (index == 1 && authController.isPatient ) {
       Get.to(HomePatient());
     } else if(index == 1 && !authController.isPatient){

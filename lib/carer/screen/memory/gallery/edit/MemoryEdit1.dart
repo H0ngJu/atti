@@ -9,15 +9,25 @@ import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
 import 'package:atti/patient/screen/memory/memory_register/MemoryRegister3.dart';
 
-class MemoryRegister2 extends StatefulWidget {
-  const MemoryRegister2({super.key});
+import '../../../../../data/memory/memory_note_model.dart';
+import 'MemoryEdit2.dart';
+
+class MemoryEdit1 extends StatefulWidget {
+  const MemoryEdit1({super.key, required this.memory});
+  final MemoryNoteModel memory;
 
   @override
-  State<MemoryRegister2> createState() => _MemoryRegister2State();
+  State<MemoryEdit1> createState() => _MemoryEdit1State();
 }
 
-class _MemoryRegister2State extends State<MemoryRegister2> {
+class _MemoryEdit1State extends State<MemoryEdit1> {
   final MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
+
+  @override
+  void initState() {
+    super.initState();
+    memoryNoteController.memoryNote.value.img = widget.memory.img;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +44,7 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
         child: Column(
           children: [
             DetailPageTitle(
-              title: '기억 남기기',
+              title: '기억 수정하기',
               totalStep: 3,
               currentStep: 1,
             ),
@@ -68,8 +78,8 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
                       ),
                       clipBehavior: Clip.antiAlias,
                       child: memoryNoteController.memoryNote.value.img != null
-                          ? Image.file(
-                        File(memoryNoteController.memoryNote.value.img!),
+                          ? Image.network(
+                        memoryNoteController.memoryNote.value.img!,
                         fit: BoxFit.cover, // 이미지의 크기를 조정
                         width: MediaQuery.of(context).size.width * 0.9,
                       )
@@ -85,8 +95,8 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
                         cursorColor: Colors.black,
                         style: TextStyle(fontSize: 24),
                         decoration: InputDecoration(
-                          hintText: '제목으로 무엇이 좋을까요?',
-                          hintStyle: TextStyle(fontSize: 24, color:_colorPallet.textColor),
+                          hintText: widget.memory.imgTitle,
+                          hintStyle: TextStyle(fontSize: 24, color:_colorPallet.textColor, fontWeight: FontWeight.w400),
                           filled: true,
                           fillColor: _colorPallet.lightYellow,
                           border: OutlineInputBorder(
@@ -103,7 +113,7 @@ class _MemoryRegister2State extends State<MemoryRegister2> {
               ),
             ),
             SizedBox(height: 15,),
-            BottomNextButton(content: '다음', next: MemoryRegister3(),
+            BottomNextButton(content: '다음', next: MemoryEdit2(memory: widget.memory),
               isEnabled: memoryNoteController.memoryNote.value.imgTitle != null &&
                   memoryNoteController.memoryNote.value.imgTitle!.isNotEmpty,)
           ],
