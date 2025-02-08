@@ -52,6 +52,18 @@ class MemoryNoteService {
     }
   }
 
+  // 업데이트 함수: 도큐먼트 레퍼런스와 업데이트할 데이터 맵을 받아 Firestore 도큐먼트를 업데이트합니다.
+  Future<void> updateMemoryNote(DocumentReference docRef, Map<String, dynamic> updateData)
+  async {
+    try {
+      // 해당 도큐먼트의 id를 사용하여 업데이트
+      await firestore.collection('memoryNote').doc(docRef.id).update(updateData);
+    } catch (e) {
+      print('Error updating memory note: $e');
+      rethrow;
+    }
+  }
+
   // 이미지 URL을 다운로드하고 바이트 데이터로 반환
   Future<List<int>> _downloadImage(String url) async {
     final response = await http.get(Uri.parse(url));

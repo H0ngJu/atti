@@ -11,6 +11,7 @@ import 'package:atti/patient/screen/memory/memory_register/MemoryRegister4.dart'
 
 import '../../../../../data/auth_controller.dart';
 import '../../../../../data/memory/memory_note_model.dart';
+import 'MemoryEdit3.dart';
 
 class MemoryEdit2 extends StatefulWidget {
   const MemoryEdit2({super.key, required this.memory});
@@ -42,7 +43,7 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
     '2020년대',
   ];
   String? _selectedEra;
-  late List<String> familyMembers;
+  late List<String> familyMembers = [];
   late List<bool> memberIsSelected = [];
   late List<String> selectedMembers = [];
 
@@ -58,12 +59,11 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
     _selectedEra = '${widget.memory.era}년대';
     memoryNoteController.memoryNote.value.era = eraStringToInt(_selectedEra!);
     _fetchFamilyMembers(); // 비동기로 가족 구성원 데이터를 가져오는 함수 호출
-    memberIsSelected = List.generate(familyMembers.length, (index) => false);
+
   }
 
   Future<void> _fetchFamilyMembers() async {
     try {
-      // patientDocRef가 null이 아닐 경우에만 진행합니다.
       if (authController.patientDocRef == null) {
         setState(() {
           familyMembers = [];
@@ -72,15 +72,27 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
         return;
       }
 
-      // patientDocRef가 null이 아니므로 !를 붙여 호출
       var docSnapshot = await authController.patientDocRef!.get();
-
-      // 데이터의 타입을 Map<String, dynamic>으로 캐스팅
       final data = docSnapshot.data() as Map<String, dynamic>?;
+
+      // keyword에는 기존에 선택된 가족 구성원과 기억 단어가 합쳐져 있음
+      List<String> keywordList = widget.memory.selectedFamilyMember ?? [];
+      // familyMembers에 포함되는 항목만 selectedMembers에 저장
+      selectedMembers = keywordList.where((keyword) =>
+      (data?['familyMember'] as List<dynamic>?)?.contains(keyword) ?? false
+      ).toList();
 
       setState(() {
         familyMembers = List<String>.from(data?['familyMember'] ?? []);
-        memberIsSelected = List.generate(familyMembers.length, (index) => false);
+        // 각 가족 구성원이 selectedMembers에 포함되어 있으면 true로 설정
+        memberIsSelected = List.generate(
+          familyMembers.length,
+              (index) => selectedMembers.contains(familyMembers[index]),
+        );
+        addedMember = keywordList.where((keyword) => !data?['familyMember'].contains(keyword)).toList();
+
+        selectedMembers.addAll(addedMember);
+        memoryNoteController.memoryNote.value.selectedFamilyMember = selectedMembers;
       });
     } catch (e) {
       print('Error fetching family members: $e');
@@ -90,6 +102,7 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
       });
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -174,9 +187,7 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
                                   .remove(member); // addedMember 리스트에서 삭제
                               selectedMembers
                                   .remove(member); // selectedMembers 리스트에서도 삭제
-                              memoryNoteController
-                                      .memoryNote.value.selectedFamilyMember =
-                                  selectedMembers; // 상태 업데이트
+                              memoryNoteController.memoryNote.value.selectedFamilyMember = selectedMembers; // 상태 업데이트
                             });
                           },
                         );
@@ -223,8 +234,7 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
                                   _addedMemberController.clear(); // 입력 필드 비우기
 
                                   selectedMembers.add(memberName);
-                                  memoryNoteController.memoryNote.value
-                                      .selectedFamilyMember = selectedMembers;
+                                  memoryNoteController.memoryNote.value.selectedFamilyMember = selectedMembers;
                                 });
                               }
                             },
@@ -257,7 +267,7 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
               ),
             )),
             BottomNextButton(
-                next: MemoryRegister4(), content: '다음', isEnabled: true),
+                next: MemoryEdit3(memory: widget.memory), content: '다음', isEnabled: true),
           ],
         ),
       ),

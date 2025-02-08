@@ -9,8 +9,13 @@ import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
 import 'package:atti/patient/screen/memory/memory_register/MemoryRegisterFinish.dart';
 
+import '../../../../../data/memory/memory_note_model.dart';
+import 'MemoryEdit1.dart';
+import 'MemoryEditFinish.dart';
+
 class MemoryEditCheck extends StatefulWidget {
-  const MemoryEditCheck({super.key});
+  const MemoryEditCheck({super.key, required this.memory});
+  final MemoryNoteModel memory;
 
   @override
   State<MemoryEditCheck> createState() => _MemoryEditCheckState();
@@ -35,7 +40,7 @@ class _MemoryEditCheckState extends State<MemoryEditCheck> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           DetailPageTitle(
-              title: '기억 남기기',
+              title: '기억 수정하기',
               totalStep: 0,
               currentStep: 0),
 
@@ -48,7 +53,7 @@ class _MemoryEditCheckState extends State<MemoryEditCheck> {
                   margin: EdgeInsets.only(left: 15),
                   width: MediaQuery.of(context).size.width * 0.9,
                   alignment: Alignment.centerLeft,
-                  child: Text('다음과 같이 등록할까요?',
+                  child: Text('다음과 같이 수정할까요?',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontSize: 30,
@@ -97,8 +102,8 @@ class _MemoryEditCheckState extends State<MemoryEditCheck> {
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: memoryNoteController.memoryNote.value.img != null
-                      ? Image.file(
-                      File(memoryNoteController.memoryNote.value.img!),
+                      ? Image.network(
+                    memoryNoteController.memoryNote.value.img!,
                     fit: BoxFit.cover, // 이미지의 크기를 조정
                     width: MediaQuery.of(context).size.width * 0.7,
                   )
@@ -153,13 +158,14 @@ class _MemoryEditCheckState extends State<MemoryEditCheck> {
                 child: TextButton(
                   onPressed: () {
                     memoryNoteController.tmpImgTitle.value = memoryNoteController.memoryNote.value.imgTitle!;
-                    memoryNoteController.addMemoryNote();
+                    //memoryNoteController.addMemoryNote();
+                    memoryNoteController.updateMemoryNote(widget.memory.reference!);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MemoryRegisterFinish()),
+                      MaterialPageRoute(builder: (context) => MemoryEditFinish()),
                     );
                   },
-                  child: Text('등록', style: TextStyle(color: Colors.black, fontSize: 20),),
+                  child: Text('수정', style: TextStyle(color: Colors.black, fontSize: 20),),
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all(_colorPallet.orange),
                     minimumSize: WidgetStateProperty.all(
@@ -175,7 +181,7 @@ class _MemoryEditCheckState extends State<MemoryEditCheck> {
                     memoryNoteController.addMemoryNote();
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MemoryRegister1()),
+                      MaterialPageRoute(builder: (context) => MemoryEdit1(memory: widget.memory)),
                     );
                   },
                   child: Text('수정', style: TextStyle(color: Colors.black, fontSize: 20),),

@@ -11,8 +11,12 @@ import 'package:atti/patient/screen/memory/memory_register/MemoryRegisterCheck.d
 import 'package:material_tag_editor/tag_editor.dart';
 import 'package:atti/patient/screen/memory/memory_register/MemoryRegister5.dart';
 
+import '../../../../../data/memory/memory_note_model.dart';
+import 'MemoryEditCheck.dart';
+
 class MemoryEdit3 extends StatefulWidget {
-  const MemoryEdit3({super.key});
+  const MemoryEdit3({super.key, required this.memory});
+  final MemoryNoteModel memory;
 
   @override
   State<MemoryEdit3> createState() => _MemoryEdit3State();
@@ -31,7 +35,8 @@ class _MemoryEdit3State extends State<MemoryEdit3> {
 
   @override
   void initState() {
-    memoryNoteController.memoryNote.value.keyword = [];
+    _values = widget.memory.keyword!;
+    memoryNoteController.memoryNote.value.keyword = _values;
   }
 
   @override
@@ -50,7 +55,7 @@ class _MemoryEdit3State extends State<MemoryEdit3> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DetailPageTitle(
-              title: '기억 남기기',
+              title: '기억 수정하기',
               totalStep: 3,
               currentStep: 3,
               //description: '\'${memoryNoteController.memoryNote.value.imgTitle}\'에 대한\n기억 단어를 알려주세요',
@@ -211,22 +216,7 @@ class _MemoryEdit3State extends State<MemoryEdit3> {
                 ),),
             ),
             SizedBox(height: 20,),
-            BottomNextButton(next: MemoryRegisterCheck(), content: '다음', isEnabled: true),
-            // Container(
-            //   margin: EdgeInsets.only(bottom: 20),
-            //   child: TextButton(
-            //     onPressed: () {
-            //       memoryNoteController.memoryNote.value.keyword?.addAll(_values);
-            //       Navigator.push(context, MaterialPageRoute(builder: (context) => MemoryRegisterCheck()),);
-            //     },
-            //     child: Text('등록', style: TextStyle(color: Colors.white, fontSize: 20),),
-            //     style: ButtonStyle(
-            //       backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
-            //       minimumSize: MaterialStateProperty.all(
-            //           Size(MediaQuery.of(context).size.width * 0.9, 50)),
-            //     ),
-            //   ),
-            // ),
+            BottomNextButton(next: MemoryEditCheck(memory: widget.memory), content: '다음', isEnabled: true),
           ],
         ),
       ),

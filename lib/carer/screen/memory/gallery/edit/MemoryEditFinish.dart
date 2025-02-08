@@ -43,7 +43,7 @@ class _MemoryEditFinishState extends State<MemoryEditFinish> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.only(left: 15),
                   child: Text(
-                    '\'${memoryNoteController.tmpImgTitle.value}\'\n기억을 남겼어요!',
+                    '\'${memoryNoteController.tmpImgTitle.value}\'\n기억을 수정했어요!',
                     style: TextStyle(
                         fontSize: 40, color: Colors.black, height: 1.2),
                   ),
@@ -59,8 +59,8 @@ class _MemoryEditFinishState extends State<MemoryEditFinish> {
                   child: memoryNoteController.memoryNote.value.img != null
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(20), // 둥근 테두리 설정
-                          child: Image.file(
-                            File(memoryNoteController.memoryNote.value.img!),
+                          child: Image.network(
+                            memoryNoteController.memoryNote.value.img!,
                             fit: BoxFit.cover, // 이미지의 크기를 조정
                             width: MediaQuery.of(context).size.width * 0.72,
                           ),
