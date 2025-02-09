@@ -1,6 +1,7 @@
 // 새로운 일정/일과 페이지
 import 'package:atti/commons/CarerRoutineModal.dart';
 import 'package:atti/index.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:intl/intl.dart';
 
 class CarerRoutineScheduleMain extends StatefulWidget {
@@ -64,6 +65,7 @@ class _CarerRoutineScheduleMainState extends State<CarerRoutineScheduleMain> {
     // print(selectedMessage);
     print("환자 도큐먼트 레퍼런스 출력 테스트");
     print(authController.patientDocRef!.path);
+
   }
 
   // 데이터 불러오기
@@ -86,7 +88,9 @@ class _CarerRoutineScheduleMainState extends State<CarerRoutineScheduleMain> {
       routinesBySelectedDay = fetchedRoutines;
       numberOfRoutines = routinesBySelectedDay.length;
     });
-  
+
+    String? FCMToken = await FirebaseMessaging.instance.getToken();
+    print(FCMToken);
   }
 
   // 날짜 선택 달력

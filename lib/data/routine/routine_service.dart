@@ -209,7 +209,21 @@ class RoutineService {
   // 특정 루틴 삭제
   Future<void> deleteRoutine(DocumentReference docRef) async {
     try {
-      // Firestore에서 문서를 삭제
+      // 먼저 도큐먼트를 읽어서 이미지 URL을 가져옴
+      DocumentSnapshot docSnapshot = await docRef.get();
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data() as Map<String, dynamic>;
+        final String? imageUrl = data['img'];
+
+        if (imageUrl != null && imageUrl.isNotEmpty) {
+          // Firebase Storage에서 해당 URL의 파일 참조를 얻어 삭제
+          final Reference storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+          await storageRef.delete();
+          print('Image deleted from Storage successfully!');
+        }
+      }
+
+      // Firestore 도큐먼트 삭제
       await docRef.delete();
       await flutterLocalNotificationsPlugin.cancel(docRef.id.hashCode);
       print('Routine deleted successfully!');
