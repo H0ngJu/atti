@@ -45,7 +45,7 @@ class _CarerMemoryAlbumState extends State<CarerMemoryAlbum> {
       body: Stack(
         children: [
           Center(
-            child: Container(
+            child: SizedBox(
               width: width * 0.9,
               child: Column(
                 children: [
@@ -61,7 +61,7 @@ class _CarerMemoryAlbumState extends State<CarerMemoryAlbum> {
           Positioned(
             bottom: height * 0.2,
             right: 0,
-            child: AddButton(),
+            child: const AddButton(),
           ),
         ],
       ),

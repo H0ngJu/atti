@@ -525,7 +525,7 @@ exports.createRoutineScheduler = onDocumentCreated(
 // ======================================================================
 exports.sendScheduledNotifications = onSchedule(
   {
-    schedule: "every 1 minutes", // 매 분 실행 "*/5 * * * *" 작동 확인 후 5분마다 실행으로 바꾸기
+    schedule: "every 1 minutes", // 매 분 실행 (테스트 후 "*/5 * * * *"로 변경 가능)
     timeZone: "Asia/Seoul",
     region: "asia-northeast3",
   },
@@ -563,12 +563,19 @@ exports.sendScheduledNotifications = onSchedule(
         .where("notifiedOneHour", "==", false)
         .get();
 
+      // 두 쿼리 모두 결과가 없으면 알림이 없다는 로그를 남기고 종료
+      if (querySnapshotOnTime.empty && querySnapshotOneHour.empty) {
+        console.log("No notifications to send at this time.");
+        return;
+      }
+
       const batch = _firestore.batch();
 
       // [1] 정각 알림: "일정을 진행하고 있나요?"
       querySnapshotOnTime.forEach((doc) => {
         const data = doc.data();
         const { name, patientFCMToken } = data;
+        console.log("정각 알림", name);
 
         if (!patientFCMToken) {
           console.error("FCM Token not found for document:", doc.id);
@@ -602,6 +609,8 @@ exports.sendScheduledNotifications = onSchedule(
         const data = doc.data();
         const { name, patientFCMToken } = data;
 
+        console.log("1시간 전 알림", name);
+
         if (!patientFCMToken) {
           console.error("FCM Token not found for document:", doc.id);
           return;
@@ -629,7 +638,7 @@ exports.sendScheduledNotifications = onSchedule(
         batch.update(doc.ref, { notifiedOneHour: true });
       });
 
-      // Firestore 배치 업데이트 커밋
+      // Firestore 배치 업데이트 커밋 (알림이 있을 때만 커밋)
       await batch.commit();
       console.log("Notifications sent and updated successfully.");
     } catch (error) {

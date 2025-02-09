@@ -1,19 +1,10 @@
-import 'package:atti/data/notification/notification_controller.dart';
-import 'package:atti/data/report/viewsController.dart';
-import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/commons/SimpleAppBar.dart';
-import 'package:atti/tmp/screen/memory/chat/Chat.dart';
 import 'package:atti/tmp/screen/memory/chat/RecollectionChat.dart';
-import 'package:atti/tmp/screen/memory/gallery/GalleryOption.dart';
 import 'package:atti/data/memory/RecollectionData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
-import '../../../../data/memory/memory_note_model.dart';
 
 class RecollectionModel {
   // 자료형
@@ -50,13 +41,13 @@ class RecollectionDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-        appBar: SimpleAppBar(
+        appBar: const SimpleAppBar(
             title: '그때 그 시절',
         ),
         body: Stack(children: <Widget>[
           SingleChildScrollView(
             child: Container(
-              margin: EdgeInsets.all(16),
+              margin: const EdgeInsets.all(16),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -66,20 +57,20 @@ class RecollectionDetail extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(30),
                       child: Image.network(
-                        '${data.img}',
+                        data.img,
                         fit: BoxFit.cover,
                         width: MediaQuery.of(context).size.width * 0.55,
                         //height: 150,
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Container(
                     child: Text(
                       '${data.year}년대',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 24,
                         fontFamily: 'PretendardRegular',
                       ),
@@ -88,36 +79,36 @@ class RecollectionDetail extends StatelessWidget {
                   Container(
                     child: Text(
                       '\'${data.title}\'',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 30,
                         fontFamily: 'PretendardMedium',
                       ),
                     ),
                   ),
-                  Divider(color: Color(0xffE1E1E1)),
-                  SizedBox(
+                  const Divider(color: Color(0xffE1E1E1)),
+                  const SizedBox(
                     height: 14,
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('기억 정보',
+                      const Text('기억 정보',
                           style: TextStyle(
                             fontSize: 24,
                             fontFamily: 'PretendardRegular',
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       Container(
-                        padding: EdgeInsets.all(15),
+                        padding: const EdgeInsets.all(15),
                         decoration: BoxDecoration(
-                            color: Color(0xffF3F3F3),
+                            color: const Color(0xffF3F3F3),
                             borderRadius: BorderRadius.circular(15)),
                         child: Text(
-                          '${data.description}',
-                          style: TextStyle(
+                          data.description,
+                          style: const TextStyle(
                               fontSize: 24,
                               fontFamily: 'PretendardRegular',
                               height: 2),
@@ -135,7 +126,7 @@ class RecollectionDetail extends StatelessWidget {
             left: 0,
             right: 0,
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: ElevatedButton(
                 onPressed: () {
                   // 버튼 클릭 이벤트
@@ -143,13 +134,13 @@ class RecollectionDetail extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   elevation: 0, // 버튼의 그림자를 제거
-                  backgroundColor: Color(0xffFFC215),
+                  backgroundColor: const Color(0xffFFC215),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                   minimumSize: Size(MediaQuery.of(context).size.width * 0.9, 50), // 버튼의 크기 설정
                 ),
-                child: Text(
+                child: const Text(
                   '회상 대화 시작하기',
                   style: TextStyle(
                       color: Colors.white,

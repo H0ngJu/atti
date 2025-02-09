@@ -1,7 +1,6 @@
 import 'package:atti/commons/Tag.dart';
 import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/data/auth_controller.dart';
-import 'package:atti/data/signup_login/SignUpController.dart';
 import 'package:atti/data/userinfo/UserInfoUpdateController.dart';
 import 'package:atti/tmp/screen/Menu.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +14,14 @@ class UserInfoEditPage extends StatefulWidget {
 }
 
 class _UserInfoEditPageState extends State<UserInfoEditPage> {
-  AuthController _authController = Get.find<AuthController>();
-  UserInfoUpdateController _userInfoUpdateController = Get.put(UserInfoUpdateController());
+  final AuthController _authController = Get.find<AuthController>();
+  final UserInfoUpdateController _userInfoUpdateController = Get.put(UserInfoUpdateController());
 
-  ColorPallet _colorPallet = ColorPallet();
+  final ColorPallet _colorPallet = ColorPallet();
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _birthDateController = TextEditingController();
-  TextEditingController _familyMemberController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _birthDateController = TextEditingController();
+  final TextEditingController _familyMemberController = TextEditingController();
 
   @override
   void initState() {
@@ -67,14 +66,14 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           '나의 정보 수정',
           style: TextStyle(
             fontSize: 24,
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -82,18 +81,18 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('이름', style: TextStyle(fontSize: 24)),
-              SizedBox(height: 10),
+              const Text('이름', style: TextStyle(fontSize: 24)),
+              const SizedBox(height: 10),
               TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
                   fillColor: _colorPallet.lightYellow,
                   filled: true,
-                  hintStyle: TextStyle(fontSize: 24),
+                  hintStyle: const TextStyle(fontSize: 24),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.0),
                     borderSide: BorderSide.none,
@@ -101,13 +100,13 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                   hintText: userName,
                 ),
               ),
-              SizedBox(height: 16),
-              Text('생년월일', style: TextStyle(fontSize: 24)),
-              SizedBox(height: 10),
+              const SizedBox(height: 16),
+              const Text('생년월일', style: TextStyle(fontSize: 24)),
+              const SizedBox(height: 10),
               TextField(
                 controller: _birthDateController,
                 decoration: InputDecoration(
-                  hintStyle: TextStyle(fontSize: 24),
+                  hintStyle: const TextStyle(fontSize: 24),
                   fillColor: _colorPallet.lightYellow,
                   filled: true,
                   border: OutlineInputBorder(
@@ -117,11 +116,11 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                   hintText: formatDate(birthDate),
                 ),
               ),
-              SizedBox(height: 16),
-              Text('가족 및 친한 지인', style: TextStyle(fontSize: 24)),
-              SizedBox(height: 10),
+              const SizedBox(height: 16),
+              const Text('가족 및 친한 지인', style: TextStyle(fontSize: 24)),
+              const SizedBox(height: 10),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                   color: _colorPallet.lightYellow,
                   borderRadius: BorderRadius.circular(15),
@@ -138,7 +137,7 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     ElevatedButton(
                       onPressed: () {
                         String memberName = _familyMemberController.text;
@@ -154,9 +153,9 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+                        padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
                       ),
-                      child: Text(
+                      child: const Text(
                         '등록',
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
@@ -164,7 +163,7 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                   ],
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Wrap(
                 spacing: 8.0,
                 children: familyMembers.map((member) {
@@ -182,7 +181,7 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Container(
+                  SizedBox(
                     width: width*0.4,
                     child: TextButton(
                       style: ButtonStyle(
@@ -197,23 +196,23 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                           builder: (BuildContext context) {
                             return AlertDialog(
                               backgroundColor: Colors.white,
-                              contentPadding: EdgeInsets.all(20),
-                              content: Container(
+                              contentPadding: const EdgeInsets.all(20),
+                              content: SizedBox(
                                 height: height*0.5,
                                 width: width*0.8,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Text(
+                                    const Text(
                                       '회원정보가 수정됩니다.\n정말 수정하시겠습니까?',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(fontSize: 24),
                                     ),
-                                    SizedBox(height: 20),
+                                    const SizedBox(height: 20),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Container(
+                                        SizedBox(
                                           width: width*0.3,
                                           child: TextButton(
                                             onPressed: () {
@@ -232,25 +231,25 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                                               // Menu()로 이동
                                               Navigator.pushAndRemoveUntil(
                                                 context,
-                                                MaterialPageRoute(builder: (context) => Menu()),
+                                                MaterialPageRoute(builder: (context) => const Menu()),
                                                     (Route<dynamic> route) => false,
                                               );
                                             },
                                             style: TextButton.styleFrom(
                                               backgroundColor: _colorPallet.goldYellow,
                                             ),
-                                            child: Text('네', style: TextStyle(color: Colors.black,
+                                            child: const Text('네', style: TextStyle(color: Colors.black,
                                             fontSize: 24),),
                                           ),
                                         ),
-                                        Container(
+                                        SizedBox(
                                           width: width*0.3,
                                           child: TextButton(
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
                                             style: ButtonStyle(
-                                              side: WidgetStateProperty.all(BorderSide(
+                                              side: WidgetStateProperty.all(const BorderSide(
                                                 color: Colors.black, // 보더 색상
                                                 width: 1.0, // 보더 두께
                                               )),
@@ -258,7 +257,7 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                                                 borderRadius: BorderRadius.circular(30), // 모서리 둥글기
                                               )),
                                             ),
-                                            child: Text('아니요',
+                                            child: const Text('아니요',
                                               style: TextStyle(color: Colors.black,
                                               fontSize: 24),
                                             ),
@@ -273,7 +272,7 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                           },
                         );
                       },
-                      child: Text('수정',
+                      child: const Text('수정',
                         style: TextStyle(
                           fontSize: 24,
                           color: Colors.black,
@@ -281,11 +280,11 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                       ),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: width*0.4,
                     child: TextButton(
                       style: ButtonStyle(
-                        side: WidgetStateProperty.all(BorderSide(
+                        side: WidgetStateProperty.all(const BorderSide(
                           color: Colors.black, // 보더 색상
                           width: 1.0, // 보더 두께
                         )),
@@ -299,23 +298,23 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                           builder: (BuildContext context) {
                             return AlertDialog(
                               backgroundColor: Colors.white,
-                              contentPadding: EdgeInsets.all(20),
-                              content: Container(
+                              contentPadding: const EdgeInsets.all(20),
+                              content: SizedBox(
                                 height: height*0.5,
                                 width: width*0.8,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Text(
+                                    const Text(
                                       '수정한 내용이 사라집니다.\n정말 수정을 취소하시겠습니까?',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(fontSize: 24),
                                     ),
-                                    SizedBox(height: 20),
+                                    const SizedBox(height: 20),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Container(
+                                        SizedBox(
                                           width: width*0.3,
                                           child: TextButton(
                                             onPressed: () {
@@ -325,18 +324,18 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                                             style: TextButton.styleFrom(
                                               backgroundColor: _colorPallet.goldYellow,
                                             ),
-                                            child: Text('네', style: TextStyle(color: Colors.black,
+                                            child: const Text('네', style: TextStyle(color: Colors.black,
                                                 fontSize: 24),),
                                           ),
                                         ),
-                                        Container(
+                                        SizedBox(
                                           width: width*0.3,
                                           child: TextButton(
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
                                             style: ButtonStyle(
-                                              side: WidgetStateProperty.all(BorderSide(
+                                              side: WidgetStateProperty.all(const BorderSide(
                                                 color: Colors.black, // 보더 색상
                                                 width: 1.0, // 보더 두께
                                               )),
@@ -344,7 +343,7 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                                                 borderRadius: BorderRadius.circular(30), // 모서리 둥글기
                                               )),
                                             ),
-                                            child: Text('아니요',
+                                            child: const Text('아니요',
                                               style: TextStyle(color: Colors.black,
                                                   fontSize: 24),
                                             ),
@@ -359,7 +358,7 @@ class _UserInfoEditPageState extends State<UserInfoEditPage> {
                           },
                         );
                       },
-                      child: Text('취소',
+                      child: const Text('취소',
                         style: TextStyle(
                           fontSize: 24,
                           color: Colors.black,

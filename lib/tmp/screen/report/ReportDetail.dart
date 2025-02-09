@@ -14,7 +14,7 @@ class ReportDetail extends StatefulWidget {
 }
 
 class _ReportDetailState extends State<ReportDetail> {
-  AuthController _authController = Get.find<AuthController>();
+  final AuthController _authController = Get.find<AuthController>();
   var reportData = {};
   List<dynamic>? reportPeriod;
   Map<String, dynamic>? weeklyEmotion;
@@ -101,7 +101,7 @@ class _ReportDetailState extends State<ReportDetail> {
     Map<String, int>? entry = routineCompletion[timestampKey];
     print(entry);
     fetchHighestViewedDocument();
-    print("${scheduleCompletion}\n${routineCompletion}");
+    print("$scheduleCompletion\n$routineCompletion");
   }
 
   Widget TileContainer({int total = 0, int completed = 0, required String date}) {
@@ -114,18 +114,18 @@ class _ReportDetailState extends State<ReportDetail> {
       decoration: BoxDecoration(
           color: tileColor,
           borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: Color(0xffDDDDDD), width: 1)
+          border: Border.all(color: const Color(0xffDDDDDD), width: 1)
       ),
-      padding: EdgeInsets.all(13),
+      padding: const EdgeInsets.all(13),
       child:
       Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(
           '${date.substring(8, 10)}일',
-          style: TextStyle(fontFamily: 'PretendardRegular', fontSize: 20),
+          style: const TextStyle(fontFamily: 'PretendardRegular', fontSize: 20),
         ),
         Text(
-          '${completed}/${total}',
-          style: TextStyle(
+          '$completed/$total',
+          style: const TextStyle(
               fontFamily: 'PretendardRegular',
               fontSize: 24,
               color: Color(0xffA38130)),
@@ -137,7 +137,7 @@ class _ReportDetailState extends State<ReportDetail> {
   // 완료율에 따른 색상을 계산
   Color _calculateTileColor(double completionPercentage) {
     if (completionPercentage == 100) {
-      return Color(0xFFFFD356); // 완료율이 100%일 때의 색상
+      return const Color(0xFFFFD356); // 완료율이 100%일 때의 색상
     } else if (completionPercentage == 0) {
       return Colors.white; // 완료율이 0%일 때의 색상
     } else {
@@ -167,17 +167,17 @@ class _ReportDetailState extends State<ReportDetail> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             '일정 및 일과',
             style: TextStyle(fontSize: 28, fontFamily: 'PretendardMedium'),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 '일과 완료율',
                 style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
               ),
@@ -185,11 +185,11 @@ class _ReportDetailState extends State<ReportDetail> {
                 totalRoutines != 0 ?
                 '${(completedRoutines / totalRoutines * 100).toStringAsFixed(1)} %':
                 "지난 주 일정이 없어요",
-                style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
+                style: const TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
               )
             ],
           ),
-          Container(
+          SizedBox(
             // color: Colors.red,
             // 영역 확인용
             height: MediaQuery.of(context).size.height * 0.45,
@@ -231,7 +231,7 @@ class _ReportDetailState extends State<ReportDetail> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 '일정 완료율',
                 style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
               ),
@@ -239,11 +239,11 @@ class _ReportDetailState extends State<ReportDetail> {
                 totalSchedules != 0 ?
                 '${(completedSchedules / totalSchedules * 100).toStringAsFixed(1)} %':
                 "지난 주 일정이 없어요",
-                style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
+                style: const TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
               )
             ],
           ),
-          Container(
+          SizedBox(
             // color: Colors.red,
             // 영역 확인용
             height: MediaQuery.of(context).size.height * 0.45,
@@ -267,18 +267,18 @@ class _ReportDetailState extends State<ReportDetail> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             '내 기억',
             style: TextStyle(fontSize: 28, fontFamily: 'PretendardMedium'),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Text(
+          const Text(
             '회상 대화 주요 감정',
             style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
           ),
-          if (weeklyEmotion!.length > 0)
+          if (weeklyEmotion!.isNotEmpty)
             Wrap(
               spacing: 8.0, // 가로 방향 자식 사이의 간격
               runSpacing: 4.0, // 세로 방향 자식 사이의 간격
@@ -291,15 +291,15 @@ class _ReportDetailState extends State<ReportDetail> {
 
   Widget TagContainer(String tag) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(25),
-          border: Border.all(color: Color(0xffDDDDDD), width: 1)),
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+          border: Border.all(color: const Color(0xffDDDDDD), width: 1)),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
       child: Text(
-        '${tag}',
-        style: TextStyle(fontSize: 24, color: Color(0xffA38130)),
+        tag,
+        style: const TextStyle(fontSize: 24, color: Color(0xffA38130)),
       ),
     );
   }
@@ -312,17 +312,17 @@ class _ReportDetailState extends State<ReportDetail> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             '위험 단어 분석',
             style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           if (dangerWords!.length > 0)
             ...dangerWords!.keys.map((emotion) => TagContainer(emotion)).toList(),
           if (dangerWords!.length == 0)
-            Text("위험 단어가 없어요",
+            const Text("위험 단어가 없어요",
               style:
               TextStyle(fontSize: 24, color: Color(0xffA38130)
               ,fontFamily: 'PretendardRegular'),
@@ -338,8 +338,8 @@ class _ReportDetailState extends State<ReportDetail> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text('최다 열람 기억', style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular',)),
-          SizedBox(height: 10,),
+          const Text('최다 열람 기억', style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular',)),
+          const SizedBox(height: 10,),
           highestViewedData != null ? Row( // 여기서 삼항 연산자를 사용합니다.
             children: [
               ClipRRect(
@@ -357,17 +357,17 @@ class _ReportDetailState extends State<ReportDetail> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text('${highestViewedData!['era']}년대',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 24,
                               fontFamily: 'PretendardRegular',
                               color: Color(0xffA38130))),
                       Text('${highestViewedData!['imgTitle']}',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 24,
                               fontFamily: 'PretendardRegular',
                               color: Color(0xffA38130))),
                       Text('${highestViewedData!['viewCounts']}회 열람',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 24,
                               fontFamily: 'PretendardRegular',
                               color: Color(0xffA38130)))
@@ -375,7 +375,7 @@ class _ReportDetailState extends State<ReportDetail> {
                   )
               )
             ],
-          ) : Center(child: Text('데이터를 불러오는 중...')),
+          ) : const Center(child: Text('데이터를 불러오는 중...')),
         ],
       ),
     );
@@ -390,7 +390,7 @@ class _ReportDetailState extends State<ReportDetail> {
     return Scaffold(
         body: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.only(left: 16, right: 16, top: 50),
+            margin: const EdgeInsets.only(left: 16, right: 16, top: 50),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -403,46 +403,46 @@ class _ReportDetailState extends State<ReportDetail> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${reportStartDate.month}월 ${weekOfMonth}주차 기록 보고',
-                          style: TextStyle(
+                          '${reportStartDate.month}월 $weekOfMonth주차 기록 보고',
+                          style: const TextStyle(
                               fontSize: 28, fontFamily: 'PretendardMedium'),
                         ),
                       ],
                     ),
                     TextButton(
                         onPressed: () {
-                          Get.to(ReportHistory());
+                          Get.to(const ReportHistory());
                         },
                         style: TextButton.styleFrom(
-                            backgroundColor: Color(0xffFFC215),
-                            minimumSize: Size(100, 30)),
-                        child: Text(
+                            backgroundColor: const Color(0xffFFC215),
+                            minimumSize: const Size(100, 30)),
+                        child: const Text(
                           '지난 기록',
                           style: TextStyle(fontSize: 20, color: Color(0xffA38130)),
                         ))
                   ],
                 ),
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
                 Text(
                   '${reportStartDate.year}년 ${reportStartDate.month}월 ${reportStartDate.day}일 - ${reportEndDate.year}년 ${reportEndDate.month}월 ${reportEndDate.day}일',
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'PretendardRegular',
                       fontSize: 20,
                       color: Color(0xff737373)),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 RoutineSummary(),
-                Divider(height: 40),
+                const Divider(height: 40),
                 ScheduleSummary(),
-                Divider(height: 40),
+                const Divider(height: 40),
                 Emotion(),
-                Divider(height: 40),
+                const Divider(height: 40),
                 DangerousWord(),
-                Divider(height: 40),
+                const Divider(height: 40),
                 MostReadMem(),
-                SizedBox(height: 40,)
+                const SizedBox(height: 40,)
               ],
             ),
           ),
@@ -466,15 +466,15 @@ class TagContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(25),
-          border: Border.all(color: Color(0xffDDDDDD), width: 1)),
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+          border: Border.all(color: const Color(0xffDDDDDD), width: 1)),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
       child: Text(
         tag,
-        style: TextStyle(fontSize: 24, color: Color(0xffA38130)),
+        style: const TextStyle(fontSize: 24, color: Color(0xffA38130)),
       ),
     );
   }

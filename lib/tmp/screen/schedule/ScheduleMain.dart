@@ -1,12 +1,9 @@
 // 일정 메인 화면
 import 'package:atti/data/auth_controller.dart';
-import 'package:atti/data/notification/notification.dart';
 import 'package:atti/tmp/screen/schedule/register/ScheduleRegister1.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:atti/data/schedule/schedule_service.dart';
-import 'package:atti/commons/AttiBottomNavi.dart';
 import '../../../commons/ScheduleBox.dart';
 import '../../../commons/ScheduleModal.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -43,18 +40,11 @@ class _ScheduleMainState extends State<ScheduleMain> {
 
   Future<void> _fetchData() async {
     List<ScheduleModel>? fetchedSchedules = await ScheduleService().getSchedulesByDate(_selectedDay);
-    if (fetchedSchedules != null) {
-      setState(() {
-        schedulesBySelectedDay = fetchedSchedules;
-        numberOfSchedules = schedulesBySelectedDay.length;
-      });
-    } else {
-      setState(() {
-        schedulesBySelectedDay = [];
-        numberOfSchedules = 0;
-      });
+    setState(() {
+      schedulesBySelectedDay = fetchedSchedules;
+      numberOfSchedules = schedulesBySelectedDay.length;
+    });
     }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +57,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
               width: MediaQuery.of(context).size.width * 0.9,
               alignment: Alignment.centerLeft,
               child: Text('${authController.userName.value}님의',
-                textAlign: TextAlign.left, style: TextStyle(
+                textAlign: TextAlign.left, style: const TextStyle(
                   fontSize: 24,
                 ),),
             ),
@@ -79,7 +69,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
                   Container(
                     //margin: EdgeInsets.only(left: 15),
                     alignment: Alignment.centerLeft,
-                    child: Text('일정',
+                    child: const Text('일정',
                       style: TextStyle(
                         fontSize: 30, fontWeight: FontWeight.w600
                       ),)
@@ -88,21 +78,21 @@ class _ScheduleMainState extends State<ScheduleMain> {
                 ],
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             ScheduleCalendar(),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 
             Container(
               width: MediaQuery.of(context).size.width,
-              color: Color(0xffFFFAEF),
+              color: const Color(0xffFFFAEF),
               child: Column(
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
-                    margin: EdgeInsets.only(top: 10),
+                    margin: const EdgeInsets.only(top: 10),
                     child: Text(
                       DateFormat('yyyy년 MM월 dd일', 'ko_KR').format(_selectedDay),
-                      style: TextStyle(fontSize: 24),
+                      style: const TextStyle(fontSize: 24),
                     ),
                   ),
                   numberOfSchedules != null && numberOfSchedules! >= 1
@@ -110,12 +100,12 @@ class _ScheduleMainState extends State<ScheduleMain> {
                   : Container(
                     height: MediaQuery.of(context).size.height * 0.5,
                     alignment: Alignment.center,
-                    child: Text('아직 오늘의 일정이 없네요!', style: TextStyle(
+                    child: const Text('아직 오늘의 일정이 없네요!', style: TextStyle(
                       fontSize: 30, fontWeight: FontWeight.w600
                     ),),
                   ),
-                  SizedBox(height: 10,),
-                  BottomNextButton(next: ScheduleRegister1(), content: '일정 등록하기', isEnabled: true),
+                  const SizedBox(height: 10,),
+                  const BottomNextButton(next: ScheduleRegister1(), content: '일정 등록하기', isEnabled: true),
                 ],
               ),
             )
@@ -129,12 +119,12 @@ class _ScheduleMainState extends State<ScheduleMain> {
     return ToggleSwitch(
       initialLabelIndex: _calendarFormat == CalendarFormat.week ? 0 : 1,
       totalSwitches: 2,
-      labels: ['주간', '월간'],
+      labels: const ['주간', '월간'],
       fontSize: 16,
       cornerRadius: 20,
-      activeBgColor: [Color(0xffFFC215)],
-      inactiveBgColor: Color(0xffFFF5DB),
-      inactiveFgColor: Color(0xff737373),
+      activeBgColor: const [Color(0xffFFC215)],
+      inactiveBgColor: const Color(0xffFFF5DB),
+      inactiveFgColor: const Color(0xff737373),
       minWidth: 60,
       minHeight: 35,
       onToggle: (index) {
@@ -173,26 +163,26 @@ class _ScheduleMainState extends State<ScheduleMain> {
       headerVisible: false,
       calendarStyle: CalendarStyle(
         outsideDaysVisible: false,
-        defaultTextStyle: TextStyle(color: Color(0xff737373), fontSize: 20),
-        weekendTextStyle: TextStyle(color: Color(0xff737373), fontSize: 20),
-        todayTextStyle: TextStyle(color: Color(0xff737373), fontSize: 20),
-        selectedDecoration: BoxDecoration(
+        defaultTextStyle: const TextStyle(color: Color(0xff737373), fontSize: 20),
+        weekendTextStyle: const TextStyle(color: Color(0xff737373), fontSize: 20),
+        todayTextStyle: const TextStyle(color: Color(0xff737373), fontSize: 20),
+        selectedDecoration: const BoxDecoration(
           color: Color(0xffFFC215),
           shape: BoxShape.circle,
         ),
-        selectedTextStyle: TextStyle(
+        selectedTextStyle: const TextStyle(
           fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
         todayDecoration: BoxDecoration(
           color: Colors.transparent,
           shape: BoxShape.circle,
-          border: Border.all(color: Color(0xffFFC215), width: 1.5)
+          border: Border.all(color: const Color(0xffFFC215), width: 1.5)
         ),
       ),
     );
   }
 
   Widget ScheduleTimeline() {
-    return Container(
+    return SizedBox(
       height: numberOfSchedules! <= 2
           ? MediaQuery.of(context).size.height * 0.575
           : (numberOfSchedules! * MediaQuery.of(context).size.height * 0.28),
@@ -202,13 +192,13 @@ class _ScheduleMainState extends State<ScheduleMain> {
         data: TimelineThemeData(
             nodePosition: 0,
             indicatorPosition: 0,
-            color: Color(0xffFFC215),
-            connectorTheme: ConnectorThemeData(
+            color: const Color(0xffFFC215),
+            connectorTheme: const ConnectorThemeData(
                 color: Color(0xff9C9C9C),
                 indent: 5,
                 thickness: 1.5
             ),
-            indicatorTheme: IndicatorThemeData(
+            indicatorTheme: const IndicatorThemeData(
               size: 17,
             )
         ),
@@ -245,11 +235,11 @@ class _ScheduleMainState extends State<ScheduleMain> {
                   children: [
                     Text(schedulesBySelectedDay[index].isFinished! ? '완료됨' : '완료되지 않음',
                       textAlign: TextAlign.start,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Color(0xff737373),
                         fontSize: 18,
                       ), ),
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
                     ScheduleBox(
                       time: schedulesBySelectedDay[index].time!.toDate(),
                       location: schedulesBySelectedDay[index].location,
@@ -264,7 +254,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
             ),
             itemCount: numberOfSchedules ?? 0,
           ),
-          physics: NeverScrollableScrollPhysics(), // 타임라인 빌더 내 스크롤 막기
+          physics: const NeverScrollableScrollPhysics(), // 타임라인 빌더 내 스크롤 막기
         ),
       ),
     );

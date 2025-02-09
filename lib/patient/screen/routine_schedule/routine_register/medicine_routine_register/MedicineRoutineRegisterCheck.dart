@@ -1,9 +1,6 @@
-import 'package:atti/commons/YesNoActionButtons.dart';
 import 'package:atti/data/notification/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/data/routine/routine_controller.dart';
 import '../../../../../commons/RoutineBox.dart';
@@ -62,20 +59,20 @@ class _MedicineRoutineRegisterCheckState
                   child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    DetailPageTitle(
+                    const DetailPageTitle(
                       title: '일과 등록하기',
                       description: '다음과 같이 등록할까요?',
                       totalStep: 0,
                       currentStep: 0,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     RoutineBox(
-                      time: routineController.routine.value?.time ?? '',
-                      name: routineController.routine.value?.name ?? '',
-                      img: routineController.routine.value?.img ?? '',
-                      days: (routineController.routine.value?.repeatDays ?? [])
+                      time: routineController.routine.value.time ?? '',
+                      name: routineController.routine.value.name ?? '',
+                      img: routineController.routine.value.img ?? '',
+                      days: (routineController.routine.value.repeatDays ?? [])
                           .map<String>((day) => day.toString())
                           .toList(), // 형 변환 및 기본값 할당
                     ),
@@ -115,7 +112,7 @@ class _MedicineRoutineRegisterCheckState
                                   repeatDaysToNumList,
                                   tmpTime[0],
                                   tmpTime[1],
-                                  '${updatedRoutine.reference!.id}');
+                                  updatedRoutine.reference!.id);
                             }
                             // setState(() {
                             //   isButtonEnabled = true; // 버튼 다시 활성화

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SignUpScreen2_socialLogin extends StatefulWidget {
-  SignUpScreen2_socialLogin({super.key});
+  const SignUpScreen2_socialLogin({super.key});
 
   @override
   State<SignUpScreen2_socialLogin> createState() => _SignUpScreen2_socialLoginState();
@@ -31,7 +31,7 @@ class _SignUpScreen2_socialLoginState extends State<SignUpScreen2_socialLogin> {
         },
         child: Stack(
           children: [
-            DetailPageTitle(
+            const DetailPageTitle(
               title: '회원가입',
               description: '',
               totalStep: 3,
@@ -39,16 +39,16 @@ class _SignUpScreen2_socialLoginState extends State<SignUpScreen2_socialLogin> {
             ),
             Container(
               margin: EdgeInsets.only(top: height*0.2),
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Column(
                     children: [
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: width*0.1, vertical: width*0.15),
-                        child: Text(
+                        child: const Text(
                           "간편하게 로그인하고\n다양한 서비스를 이용해 보세요",
                           style: TextStyle(
                             fontSize: 24,

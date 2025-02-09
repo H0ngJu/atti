@@ -1,15 +1,8 @@
-import 'package:atti/commons/DetailPageTitle.dart';
-import 'package:atti/data/signup_login/SignUpController.dart';
 import 'package:atti/index.dart';
 import 'package:atti/login_signUp/SignUpScreen3.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
-import 'package:atti/commons/colorPallet.dart';
 
 class SignUpScreen2 extends StatefulWidget {
-  SignUpScreen2({super.key});
+  const SignUpScreen2({super.key});
 
   @override
   State<SignUpScreen2> createState() => _SignUpScreen2State();
@@ -26,7 +19,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
   @override
   Widget build(BuildContext context) {
 
-    ColorPallet _colorPallet = ColorPallet();
+    ColorPallet colorPallet = ColorPallet();
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -40,7 +33,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
         },
         child: Stack(
           children: [
-            DetailPageTitle(
+            const DetailPageTitle(
               title: '본인인증',
               description: '',
               totalStep: 3,
@@ -52,11 +45,11 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
               child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         '이름을 입력해 주세요.',
                         style: TextStyle(
                             letterSpacing: 0.01,
@@ -66,12 +59,12 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                       ),
                       Container(
                         margin: EdgeInsets.only(top: height*0.01),
-                        padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 7.0, left: 9.0),
+                        padding: const EdgeInsets.only(top: 2.0, bottom: 2.0, right: 7.0, left: 9.0),
                         decoration: BoxDecoration(
-                          color: _colorPallet.lightYellow,
+                          color: colorPallet.lightYellow,
                           borderRadius: BorderRadius.circular(15.0),
                           border: Border.all(
-                            color: _signUpController.isPressed.value == 1 ? _colorPallet.textColor : _colorPallet.lightYellow,
+                            color: _signUpController.isPressed.value == 1 ? colorPallet.textColor : colorPallet.lightYellow,
                           ),
                         ),
                         child: TextFormField(
@@ -87,11 +80,11 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                             hintText: "이름",
                             hintStyle: TextStyle(
                               fontSize: 24,
-                              color: _colorPallet.textColor,
+                              color: colorPallet.textColor,
                               fontFamily: 'PretendardRegular',
                             ),
                           ),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 24,
                             fontFamily: 'PretendardRegular',
                           ),
@@ -99,7 +92,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                       ),
                       NextBtn(
                         isButtonDisabled: !isValid,
-                        nextPage: SignUpScreen3(),
+                        nextPage: const SignUpScreen3(),
                         buttonName: "확인",
                       )
                     ],

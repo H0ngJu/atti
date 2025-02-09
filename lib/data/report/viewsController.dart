@@ -5,7 +5,6 @@
 import 'package:atti/data/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:core';
 
 class ViewsModel {
@@ -36,7 +35,7 @@ class ViewsModel {
   ViewsModel.fromJson(dynamic json, this.reference) {
     patientId = json['patientId'];
     createdAt = json['createdAt'];
-    memoryViews = (json['memoryViews'] as Map)?.map((key, value) => MapEntry(_db.doc(key), value));
+    memoryViews = (json['memoryViews'] as Map).map((key, value) => MapEntry(_db.doc(key), value));
     reference = _db.doc(json['reference']);
   }
 
@@ -77,12 +76,10 @@ class ViewsService {
               .where('patientId', isEqualTo: patientRef)
               .get();
           // Doc이 이미 존재한다면 : Doc 갱신
-          if (snapshot.docs.length > 0) {
+          if (snapshot.docs.isNotEmpty) {
             DocumentSnapshot document = snapshot.docs[0];
             ViewsModel existingViews = ViewsModel.fromSnapShot(document as DocumentSnapshot<Map<String, dynamic>>);
-            if (existingViews.memoryViews == null) {
-              existingViews.memoryViews = {};
-            }
+            existingViews.memoryViews ??= {};
             existingViews.memoryViews![views.memoryReference!] =
                 (existingViews.memoryViews![views.memoryReference!] ?? 0) + 1; // memoryViews를 1 증가
             await document.reference.update(existingViews.toJson()); // 변경된 정보를 업데이트

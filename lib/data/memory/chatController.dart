@@ -1,8 +1,6 @@
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import '../auth_controller.dart';
 
 class ChatController extends GetxController {
@@ -14,8 +12,8 @@ class ChatController extends GetxController {
     try {
       var documentSnapshot = await _db.doc(path).get();
       String currentChat = documentSnapshot['chat'] ?? "";
-      if (currentChat.length > 0) {
-        chat = currentChat + "," + chat.substring(1, chat.length - 1);
+      if (currentChat.isNotEmpty) {
+        chat = "$currentChat,${chat.substring(1, chat.length - 1)}";
       }
       else {
         chat = chat.substring(1, chat.length - 1);

@@ -1,5 +1,4 @@
 import 'package:atti/data/auth_controller.dart';
-import 'package:atti/data/report/reportController.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class LoginController extends GetxController {
   final FirebaseAuth _authentication = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-  AuthController _authController = Get.put(AuthController());
+  final AuthController _authController = Get.put(AuthController());
 
 
   // 로그인 시 사용하는 데이터
@@ -43,17 +42,17 @@ class LoginController extends GetxController {
       // _authController.login();
       return true;
     } on FirebaseAuthException catch (e) {
-      print("Error : ${e}");
+      print("Error : $e");
       Get.snackbar(
         '로그인 실패', // 제목
         '아이디 또는 비밀번호가 일치하지 않습니다', // 메시지
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Color(0xffFFC215),
+        backgroundColor: const Color(0xffFFC215),
         colorText: Colors.black,
         borderRadius: 20,
-        margin: EdgeInsets.all(15),
+        margin: const EdgeInsets.all(15),
         snackStyle: SnackStyle.FLOATING,
-        duration: Duration(seconds: 4),
+        duration: const Duration(seconds: 4),
         isDismissible: true,
         dismissDirection: DismissDirection.horizontal,
         forwardAnimationCurve: Curves.easeOutBack,

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SignUpScreen2 extends StatefulWidget {
-  SignUpScreen2({super.key});
+  const SignUpScreen2({super.key});
 
   @override
   State<SignUpScreen2> createState() => _SignUpScreen2State();
@@ -36,7 +36,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
         },
           child: Stack(
             children: [
-              DetailPageTitle(
+              const DetailPageTitle(
                 title: '회원가입',
                 description: '',
                 totalStep: 3,
@@ -44,11 +44,11 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
               ),
               Container(
                 margin: EdgeInsets.only(top: height*0.2),
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Form(
                   key: _formKey,
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.only(bottom: 20),
                     child: Column(
                       children: [
                         EntryField(

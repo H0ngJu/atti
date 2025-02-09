@@ -1,15 +1,12 @@
 // 피그마 '일정 등록 완료' 화면
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/data/schedule/schedule_controller.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../commons/ScheduleBox.dart';
 import '../../../../data/notification/notification_controller.dart';
 import '../../../../patient/screen/routine_schedule/RoutineScheduleMain.dart';
-import '../ScheduleMain.dart';
-import 'package:atti/data/schedule/schedule_controller.dart';
 import '../../../../data/notification/notification.dart';
 class ScheduleRegisterFinish extends StatefulWidget {
   const ScheduleRegisterFinish({super.key});
@@ -37,26 +34,26 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
                 SizedBox(height: MediaQuery.of(context).size.height * 0.13),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  margin: EdgeInsets.only(left: 15),
+                  margin: const EdgeInsets.only(left: 15),
                   child: Text('\'${scheduleController.schedule.value.name}\'\n일정을 등록했어요!',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 34, fontWeight: FontWeight.w600, color: Colors.black
                   ),),
                 ),
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
 
                 Container(
                   width: width * 0.85,
                   alignment: Alignment.topLeft,
-                  child: Text(scheduleController.schedule.value?.time?.toDate() != null
+                  child: Text(scheduleController.schedule.value.time?.toDate() != null
                     ? DateFormat('yyyy년 M월 d일', 'ko_KR').format(scheduleController.schedule.value.time!.toDate())
                     : '',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24, color: Colors.black,
                     ),
                   ),
                 ),
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
                 ScheduleBox(
                   time: scheduleController.schedule.value.time!.toDate(),
                   name: scheduleController.schedule.value.name,
@@ -72,20 +69,20 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
           ),
           Container(
             alignment: Alignment.bottomCenter,
-            margin: EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(bottom: 20),
             child: TextButton(
               onPressed: () async {
                 final updatedSchedule = await scheduleController.addSchedule();
                 print(authController.isPatient);
                 if (authController.isPatient) {
-                  print('updatedSchedule: ${updatedSchedule}');
+                  print('updatedSchedule: $updatedSchedule');
 
                   // 일정 1시간 전 알림
                   notificationService.showDateTimeNotification(
                     notificationService.createUniqueId(),
                     '일정 알림',
                     '1시간 뒤 \'${updatedSchedule.name}\'을(를) 하실 시간이에요!',
-                    updatedSchedule.time!.toDate().subtract(Duration(hours: 1)),
+                    updatedSchedule.time!.toDate().subtract(const Duration(hours: 1)),
                     '/schedule1/${updatedSchedule.reference!.id}',
                   );
 
@@ -95,7 +92,7 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
                     '일정 알림',
                     '\'${updatedSchedule.name}\'일정을(를) 진행하고 있나요?',
                     //updatedSchedule.time!.toDate(),
-                    updatedSchedule.time!.toDate().subtract(Duration(minutes:58)),
+                    updatedSchedule.time!.toDate().subtract(const Duration(minutes:58)),
                     '/schedule2/${updatedSchedule.reference!.id}',
                   );
 
@@ -110,14 +107,14 @@ class _ScheduleRegisterFinishState extends State<ScheduleRegisterFinish> {
                   // );
 
                 }
-                Get.to(RoutineScheduleMain());
+                Get.to(const RoutineScheduleMain());
               },
-              child: Text('일과/일정으로 돌아가기', style: TextStyle(color: Colors.white, fontSize: 20),),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
-                minimumSize: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(const Color(0xffFFC215)),
+                minimumSize: WidgetStateProperty.all(
                     Size(MediaQuery.of(context).size.width * 0.9, 50)),
               ),
+              child: const Text('일과/일정으로 돌아가기', style: TextStyle(color: Colors.white, fontSize: 20),),
             ),
           ),
         ],

@@ -4,7 +4,6 @@ import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/tmp/screen/memory/register/MemoryRegisterAppBar.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:atti/tmp/screen/memory/register/MemoryRegister2.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
@@ -37,7 +36,7 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    ColorPallet _colorPallet = ColorPallet();
+    ColorPallet colorPallet = ColorPallet();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -48,16 +47,16 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
           child: Column(
             children: [
               Container(
+                  alignment: Alignment.topLeft,
+                padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.05),
                   child: Text(
                     _image != null
                         ? '앨범에서 사진을\n선택했어요':
                           '사진을 추가할 방식을\n선택해주세요',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 30,
                     ),
                   ),
-                alignment: Alignment.topLeft,
-                padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.05),
               ),
               SizedBox(
                 height: height * 0.04,
@@ -102,7 +101,7 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text('카메라로 사진 찍기', style: TextStyle(fontSize: 24, ),),
+                                      const Text('카메라로 사진 찍기', style: TextStyle(fontSize: 24, ),),
                                       Image.asset('lib/assets/images/register_memory_camera.png',
                                         width: width*0.25,),
                                     ],
@@ -121,7 +120,7 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                             alignment: Alignment.center,
                             width: MediaQuery.of(context).size.width * 0.9,
                             decoration: BoxDecoration(
-                              color: _colorPallet.lightYellow,
+                              color: colorPallet.lightYellow,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Column(
@@ -131,7 +130,7 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text('앨범에서 불러오기', style: TextStyle(fontSize: 24, ),),
+                                      const Text('앨범에서 불러오기', style: TextStyle(fontSize: 24, ),),
                                       Image.asset('lib/assets/images/register_memory_album.png',
                                         width: width*0.25,
                                       ),
@@ -150,7 +149,7 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
         _image != null
             ? Container(
                 width: MediaQuery.of(context).size.width * 0.9,
-                margin: EdgeInsets.only(bottom: 20),
+                margin: const EdgeInsets.only(bottom: 20),
                 alignment: Alignment.center,
                 child: Row(
                   children: [
@@ -162,18 +161,18 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MemoryRegister2()),
+                              builder: (context) => const MemoryRegister2()),
                         );
                       },
-                      child: Text(
-                        '다음',
-                        style: TextStyle(color: Colors.black, fontSize: 20),
-                      ),
                       style: ButtonStyle(
                         backgroundColor:
-                        WidgetStateProperty.all(Color(0xffFFC215)),
+                        WidgetStateProperty.all(const Color(0xffFFC215)),
                         minimumSize: WidgetStateProperty.all(
                             Size(MediaQuery.of(context).size.width * 0.43, 50)),
+                      ),
+                      child: const Text(
+                        '다음',
+                        style: TextStyle(color: Colors.black, fontSize: 20),
                       ),
                     ),
                     SizedBox(
@@ -183,26 +182,26 @@ class _MemoryRegister1State extends State<MemoryRegister1> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text(
-                        '다시 선택',
-                        style:
-                            TextStyle(color: Colors.black, fontSize: 20),
-                      ),
                       style: ButtonStyle(
                         backgroundColor:
                         WidgetStateProperty.all(Colors.white),
                         minimumSize: WidgetStateProperty.all(
                             Size(MediaQuery.of(context).size.width * 0.43, 50)),
-                        side: WidgetStateProperty.all(BorderSide(
+                        side: WidgetStateProperty.all(const BorderSide(
                           color: Colors.black, // 외곽선 색상 설정
                           width: 1, // 외곽선 두께 설정
                         )),
+                      ),
+                      child: const Text(
+                        '다시 선택',
+                        style:
+                            TextStyle(color: Colors.black, fontSize: 20),
                       ),
                     ),
                   ],
                 ),
               )
-            : SizedBox(),
+            : const SizedBox(),
       ],
     ));
   }

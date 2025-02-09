@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../../data/memory/memory_note_model.dart';
 import 'package:atti/data/memory/chatController.dart';
 import 'package:atti/tmp/screen/memory/chat/ChatComplete.dart';
-import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
 
 import '../../../../patient/screen/memory/gallery/MainMemory.dart';
 
@@ -25,14 +24,14 @@ class BeforeSave extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.all(16),
+            margin: const EdgeInsets.all(16),
             child: Column(
               children: [
                 SizedBox(height: MediaQuery.of(context).size.height*0.1),
                 Container(
                     alignment: Alignment.center,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderRadius: const BorderRadius.all(Radius.circular(15)),
                       child: Image.network(
                         '${memory.img}',
                         fit: BoxFit.cover,
@@ -40,8 +39,8 @@ class BeforeSave extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * 0.15,
                       ),
                     )),
-                SizedBox(height: 15),
-                Text(
+                const SizedBox(height: 15),
+                const Text(
                   textAlign: TextAlign.center,
                   '아띠와 나눈 대화를\n기록할까요?',
                   style: TextStyle(
@@ -65,32 +64,32 @@ class BeforeSave extends StatelessWidget {
                           print('Error: memory.reference?.path is null');
                         }
                       },
-                      child: Text(
-                        '네',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
                       style: ButtonStyle(
                         backgroundColor:
-                        MaterialStateProperty.all(Color(0xffFFC215)),
-                        minimumSize: MaterialStateProperty.all(
+                        WidgetStateProperty.all(const Color(0xffFFC215)),
+                        minimumSize: WidgetStateProperty.all(
                             Size(MediaQuery.of(context).size.width * 0.4, 60)),
+                      ),
+                      child: const Text(
+                        '네',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ),
                     Container(
                       child: TextButton(
                         style: ButtonStyle(
-                          minimumSize: MaterialStateProperty.all(
+                          minimumSize: WidgetStateProperty.all(
                               Size(MediaQuery.of(context).size.width * 0.4, 60)),
                           backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                          side: MaterialStateProperty.all(
-                              BorderSide(color: Colors.black, width: 1)),
+                          WidgetStateProperty.all<Color>(Colors.white),
+                          side: WidgetStateProperty.all(
+                              const BorderSide(color: Colors.black, width: 1)),
                         ),
                         onPressed: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MainMemory()),
+                          MaterialPageRoute(builder: (context) => const MainMemory()),
                         ),
-                        child: Text(
+                        child: const Text(
                           '아니요',
                           style: TextStyle(color: Colors.black, fontSize: 20),
                         ),
@@ -104,7 +103,7 @@ class BeforeSave extends StatelessWidget {
         ),
       bottomNavigationBar: Container(
         height: MediaQuery.of(context).size.height * 0.25,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('lib/assets/Atti/default1.png'),
             fit: BoxFit.contain,

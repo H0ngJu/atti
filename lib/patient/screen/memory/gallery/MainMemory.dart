@@ -129,9 +129,9 @@ class _MainGalleryState extends State<MainMemory>
       print("좋아하는 기억 데이터:");
       sortedGroupedMemories.forEach((key, value) {
         print('$key:');
-        value.forEach((memory) {
+        for (var memory in value) {
           print(memory); // MemoryNoteModel의 toString 메서드 호출
-        });
+        }
       });
       return sortedGroupedMemories;
     } catch (e) {
@@ -213,16 +213,16 @@ class _MainGalleryState extends State<MainMemory>
                     height: height * 0.06,
                   ),
                   _buildHeader(),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   _buildImageSection(),
-                  SizedBox(height: 20),
-                  Container(
+                  const SizedBox(height: 20),
+                  SizedBox(
                     width: width * 0.9,
                     child: AttiSpeechBubble(
                         comment: '사진을 눌러\n그 기억에 대해 이야기해요',
                         color: colorPallet.lightYellow),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   _buildCategoryTabs(),
                   Container(child: _buildGroupedMemoryCards()),
                 ],
@@ -231,7 +231,7 @@ class _MainGalleryState extends State<MainMemory>
                   bottom: MediaQuery.of(context).size.height * 0.2,
                   //left: 0,
                   right: 0,
-                  child: AddButton())
+                  child: const AddButton())
             ]),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _selectedIndex,
@@ -252,11 +252,11 @@ class _MainGalleryState extends State<MainMemory>
             child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               child: RichText(
                 text: TextSpan(
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 24,
                     height: 1.5,
@@ -266,11 +266,11 @@ class _MainGalleryState extends State<MainMemory>
                       text: authController.isPatient
                           ? '${authController.userName.value}님의\n'
                           : '${authController.patientName.value}님의\n',
-                      style: TextStyle(fontSize: 24, height: 1.2),
+                      style: const TextStyle(fontSize: 24, height: 1.2),
                     ),
                     TextSpan(
                       text: isEditMode ? '내 기억 편집 모드' : '소중한 기억을 모아봤어요',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w600,
                       ),
@@ -309,7 +309,7 @@ class _MainGalleryState extends State<MainMemory>
       mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
       children: [
         Image(
-            image: AssetImage('lib/assets/Atti/Stars.png'),
+            image: const AssetImage('lib/assets/Atti/Stars.png'),
             width: MediaQuery.of(context).size.width * 0.57),
       ],
     );
@@ -330,7 +330,7 @@ class _MainGalleryState extends State<MainMemory>
   // }
 
   Widget _buildCategoryTabs() {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.9,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start, // 왼쪽 정렬
@@ -344,8 +344,8 @@ class _MainGalleryState extends State<MainMemory>
               });
             },
             child: Container(
-              margin: EdgeInsets.only(right: 20), // 카테고리 간격
-              padding: EdgeInsets.only(top: 10),
+              margin: const EdgeInsets.only(right: 20), // 카테고리 간격
+              padding: const EdgeInsets.only(top: 10),
               child: Text(
                 category,
                 style: TextStyle(
@@ -367,7 +367,7 @@ class _MainGalleryState extends State<MainMemory>
   Widget _buildGroupedMemoryCards() {
     if (_selectedCategory == 0) {
       // 연도를 클릭한 경우
-      return Container(
+      return SizedBox(
         width: MediaQuery.of(context).size.width * 0.9,
         child: ListView.builder(
           itemCount: groupedNotes.length,
@@ -463,9 +463,9 @@ class _MainGalleryState extends State<MainMemory>
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           "그때 그 시절",
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
@@ -536,7 +536,7 @@ class _MainGalleryState extends State<MainMemory>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          memory.era.toString() + "년대" ?? '',
+                          "${memory.era}년대" ?? '',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -550,10 +550,7 @@ class _MainGalleryState extends State<MainMemory>
                         Text(
                           MemoryCnt == 0
                               ? memory.imgTitle.toString()
-                              : memory.imgTitle.toString() +
-                                      " 외 " +
-                                      MemoryCnt.toString() +
-                                      "개" ??
+                              : "${memory.imgTitle} 외 $MemoryCnt개" ??
                                   '',
                           style: const TextStyle(
                             color: Colors.white,
@@ -612,7 +609,7 @@ class _MainGalleryState extends State<MainMemory>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "${groupKey}",
+                          groupKey,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -626,10 +623,7 @@ class _MainGalleryState extends State<MainMemory>
                         Text(
                           MemoryCnt == 0
                               ? memory.imgTitle.toString()
-                              : memory.imgTitle.toString() +
-                                      " 외 " +
-                                      MemoryCnt.toString() +
-                                      "개" ??
+                              : "${memory.imgTitle} 외 $MemoryCnt개" ??
                                   '',
                           style: const TextStyle(
                             color: Colors.white,

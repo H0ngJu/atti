@@ -2,8 +2,6 @@ import 'package:atti/commons/YesNoActionButtonsAsync.dart';
 import 'package:atti/data/notification/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/data/routine/routine_controller.dart';
 import '../../../../commons/RoutineBox.dart';
@@ -11,7 +9,6 @@ import '../../../../commons/colorPallet.dart';
 import '../../../../data/notification/notification_controller.dart';
 import 'RoutineRegister1.dart';
 import 'RoutineRegisterFinish.dart';
-import '../../../../data/notification/notification.dart';
 
 class RoutineRegisterCheck extends StatefulWidget {
   const RoutineRegisterCheck({super.key});
@@ -62,18 +59,18 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      DetailPageTitle(
+                      const DetailPageTitle(
                         title: '일과 등록하기',
                         description: '다음과 같이 등록할까요?',
                         totalStep: 0,
                         currentStep: 0,
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                       RoutineBox(
-                        time: routineController.routine.value?.time ?? '',
-                        name: routineController.routine.value?.name ?? '',
-                        img: routineController.routine.value?.img ?? '',
-                        days: (routineController.routine.value?.repeatDays ?? [])
+                        time: routineController.routine.value.time ?? '',
+                        name: routineController.routine.value.name ?? '',
+                        img: routineController.routine.value.img ?? '',
+                        days: (routineController.routine.value.repeatDays ?? [])
                             .map<String>((day) => day.toString())
                             .toList(),
                       ),
@@ -107,7 +104,7 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
                         repeatDaysToNumList,
                         tmpTime[0],
                         tmpTime[1],
-                        '${updatedRoutine.reference!.id}',
+                        updatedRoutine.reference!.id,
                       );
                     }
 
@@ -131,7 +128,7 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
                   }
                 },
                 onSecondaryPressed: () {
-                  Get.to(RoutineRegister1());
+                  Get.to(const RoutineRegister1());
                 },
               ),
             ],

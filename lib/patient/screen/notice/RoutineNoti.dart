@@ -1,22 +1,16 @@
 import 'package:atti/patient/screen/routine_schedule/RoutineScheduleMain.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import '../../../commons/ScheduleModal.dart';
 import '../../../commons/colorPallet.dart';
 import '../../../data/notification/notification_controller.dart';
 import '../../../data/routine/routine_controller.dart';
 import '../../../data/routine/routine_model.dart';
 import '../../../data/routine/routine_service.dart';
-import '../../../data/schedule/schedule_model.dart';
-import 'package:atti/data/schedule/schedule_service.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import '../../../data/notification/notification.dart';
-import 'package:atti/data/notification/notification_controller.dart';
 
-import '../../../tmp/screen/routine/RoutineMain.dart';
 import '../routine_schedule/CustomModal.dart';
 
 class RoutineNoti extends StatefulWidget {
@@ -46,7 +40,7 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
       period = "오후";
       if (hour > 12) hour -= 12;
     }
-    String formattedTime = "$period ${hour}시 ${minute}분";
+    String formattedTime = "$period $hour시 $minute분";
     return formattedTime;
   }
 
@@ -56,7 +50,7 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
     String period = now.hour >= 12 ? "오후" : "오전";
     int hour = now.hour > 12 ? now.hour - 12 : (now.hour == 0 ? 12 : now.hour);
     String minute = now.minute.toString().padLeft(2, '0');
-    return "$period ${hour.toString().padLeft(2, '0')}:${minute}";
+    return "$period ${hour.toString().padLeft(2, '0')}:$minute";
   }
 
   Future<void> _fetchData() async {
@@ -99,7 +93,7 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
     var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Color(0xffFFF7E3),
+      backgroundColor: const Color(0xffFFF7E3),
       body: Stack(children: [
         Positioned.fill(
           child: Image.asset(
@@ -127,14 +121,14 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
             // 현재 시간
             Text(
               formatTime(routine?.time ?? [0,0]),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 40,
                 //height: 1.0
               ),
             ),
             Text(
               DateFormat('MM월 dd일 EEEE', 'ko').format(DateTime.now()),
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 24,
                   height: 1.0
               ),
@@ -166,14 +160,14 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
               child: Column(
                 children: [
                   SizedBox(height: height * 0.02,),
-                  Text(
+                  const Text(
                     '지금',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, height: 1.2),
                   ),
                   SizedBox(width: width * 0.06,),
                   Text(
                     '\'${routine?.name}\'',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 28,
                         color: Colors.black,
                         fontWeight: FontWeight.w500),
@@ -185,7 +179,7 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
               ),
             ),
             SizedBox(height: width * 0.04,),
-            Container(
+            SizedBox(
               width: width * 0.52,
               child: TextButton(
                 onPressed: () {
@@ -205,30 +199,30 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
                             false);
                         // widget.onCompleted(); // 콜백 함수 호출
 
-                        Get.to(RoutineScheduleMain());
+                        Get.to(const RoutineScheduleMain());
                       },
 
                       onNoPressed: () {
                         //Navigator.pop(context);
-                        Get.to(RoutineScheduleMain());
+                        Get.to(const RoutineScheduleMain());
                       },
                     ),
                   );
 
                   //SystemNavigator.pop();
                 },
-                child: Text(
-                  '완료했어요',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                  ),
-                ),
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all(colorPallet.orange),
                   minimumSize: WidgetStateProperty.all(Size(width * 0.55, 40)),
                   padding: WidgetStateProperty.all(
-                    EdgeInsets.only(top: 7, bottom: 9), // 위아래 패딩 추가
+                    const EdgeInsets.only(top: 7, bottom: 9), // 위아래 패딩 추가
+                  ),
+                ),
+                child: const Text(
+                  '완료했어요',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
                   ),
                 ),
               ),
@@ -240,15 +234,11 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
                 height: width * 0.13,
                 child: TextButton(
                   onPressed: () {
-                    Get.to(RoutineScheduleMain());
+                    Get.to(const RoutineScheduleMain());
                   },
-                  child: Icon(
-                      Icons.close,
-                      color: Colors.black
-                  ),
                   style: ButtonStyle(
                       shape: WidgetStateProperty.all(
-                          CircleBorder(
+                          const CircleBorder(
                               side: BorderSide(
                                   color: Colors.black,
                                   width: 1
@@ -258,6 +248,10 @@ class _ScheduleNoti1State extends State<RoutineNoti> {
                       backgroundColor: WidgetStateProperty.all(
                         Colors.white.withOpacity(0.5),
                       )
+                  ),
+                  child: const Icon(
+                      Icons.close,
+                      color: Colors.black
                   ),
                 ),
               ),

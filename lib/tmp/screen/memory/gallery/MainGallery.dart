@@ -6,11 +6,9 @@ import 'package:atti/tmp/screen/memory/gallery/GalleryOption.dart';
 import 'package:atti/tmp/screen/memory/gallery/MemoryDetail.dart';
 import 'package:atti/tmp/screen/memory/gallery/RecollectionDetail.dart';
 import 'package:atti/tmp/screen/memory/register/MemoryRegister1.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import '../../../../data/auth_controller.dart';
 import '../../../../data/memory/memory_note_model.dart';
 import '../../../../data/memory/memory_note_service.dart';
@@ -123,7 +121,7 @@ class _MainGalleryState extends State<MainGallery> {
               alignment: Alignment.center,
               child: Text(
                 '${memory.imgTitle}',
-                style: TextStyle(fontSize: 24),
+                style: const TextStyle(fontSize: 24),
               ),
             ),
           ],
@@ -138,19 +136,19 @@ class _MainGalleryState extends State<MainGallery> {
       backgroundColor: Colors.white,
       body: Stack(children: <Widget>[
         SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.only(top: 20),
+                margin: const EdgeInsets.only(top: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width * 0.72,
                       child: RichText(
                         text: TextSpan(
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black,
                             fontSize: 24,
                             height: 1.5,
@@ -161,7 +159,7 @@ class _MainGalleryState extends State<MainGallery> {
                             TextSpan(
                               text:
                                   '\'${tagController.selectedTag.value}\' 기억을 모아봤어요',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 26,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -172,15 +170,15 @@ class _MainGalleryState extends State<MainGallery> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Get.to(GalleryOption());
+                        Get.to(const GalleryOption());
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.white,
-                        side: BorderSide(color: Colors.black),
-                        shape: CircleBorder(),
-                        minimumSize: Size(48, 48),
+                        side: const BorderSide(color: Colors.black),
+                        shape: const CircleBorder(),
+                        minimumSize: const Size(48, 48),
                       ),
-                      child: Text(
+                      child: const Text(
                         '나열\n변경',
                         style: TextStyle(fontSize: 12, color: Colors.black),
                       ),
@@ -188,24 +186,24 @@ class _MainGalleryState extends State<MainGallery> {
                   ],
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 // 이미지를 중앙 정렬하기 위한 Row 위젯
                 mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
                 children: [
                   Image(
-                      image: AssetImage('lib/assets/Atti/Stars.png'),
+                      image: const AssetImage('lib/assets/Atti/Stars.png'),
                       width: MediaQuery.of(context).size.width * 0.46),
                 ],
               ),
-              SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
+              const SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
               Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(20),
+                decoration: const BoxDecoration(
                     color: Color(0xffFFC215),
                     borderRadius: BorderRadius.all(Radius.circular(15))),
-                child: Text('사진을 눌러\n그 시절에 대해 이야기해요',
+                child: const Text('사진을 눌러\n그 시절에 대해 이야기해요',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
@@ -214,7 +212,7 @@ class _MainGalleryState extends State<MainGallery> {
               ),
               // GridView를 사용하여 2열로 메모리 정보를 표시합니다.
               GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 30,
@@ -222,7 +220,7 @@ class _MainGalleryState extends State<MainGallery> {
                 itemCount: memoryNotes.length + 1,
                 // 첫 번째 고정 아이템을 위해 +1을 합니다.
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 // GridView가 스크롤되지 않도록 합니다.
                 itemBuilder: (context, index) {
                   // 첫 번째 아이템 처리
@@ -239,25 +237,25 @@ class _MainGalleryState extends State<MainGallery> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
                                 border: Border.all(
-                                  color: Color(0xffFFC215),
+                                  color: const Color(0xffFFC215),
                                   width: 5,
                                 ),
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(30),
                                 child: ColorFiltered(
-                                  colorFilter: ColorFilter.mode(
+                                  colorFilter: const ColorFilter.mode(
                                     Colors.grey,
                                     BlendMode.saturation,
                                   ),
                                   child: Image.network(
-                                    '${randomData.img}',
+                                    randomData.img,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
                             ),
-                            Positioned(
+                            const Positioned(
                               top: 15, // 별 아이콘의 위쪽 여백
                               left: 15, // 별 아이콘의 왼쪽 여백
                               child: Icon(
@@ -270,8 +268,8 @@ class _MainGalleryState extends State<MainGallery> {
                           Container(
                             alignment: Alignment.center,
                             child: Text(
-                              '${randomData.title}',
-                              style: TextStyle(fontSize: 24),
+                              randomData.title,
+                              style: const TextStyle(fontSize: 24),
                             ),
                           ),
                         ],
@@ -285,7 +283,7 @@ class _MainGalleryState extends State<MainGallery> {
                 },
               ),
 
-              SizedBox(
+              const SizedBox(
                 height: 60,
               )
             ],
@@ -296,21 +294,21 @@ class _MainGalleryState extends State<MainGallery> {
           left: 0,
           right: 0,
           child: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: ElevatedButton(
               onPressed: () {
-                Get.to(MemoryRegister1());
+                Get.to(const MemoryRegister1());
               },
               style: ElevatedButton.styleFrom(
                 elevation: 0, // 버튼의 그림자를 제거
-                backgroundColor: Color(0xffFFC215),
+                backgroundColor: const Color(0xffFFC215),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
                 minimumSize: Size(
                     MediaQuery.of(context).size.width * 0.9, 50), // 버튼의 크기 설정
               ),
-              child: Text(
+              child: const Text(
                 '기억 추가하기',
                 style: TextStyle(
                     color: Colors.white,

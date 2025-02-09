@@ -1,15 +1,7 @@
-import 'package:atti/commons/DetailPageTitle.dart';
-import 'package:atti/data/signup_login/SignUpController.dart';
-import 'package:atti/login_signUp/SignUpScreen4.dart';
 import 'package:atti/index.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
-import 'package:atti/commons/colorPallet.dart';
 
 class SignUpScreen4 extends StatefulWidget {
-  SignUpScreen4({super.key});
+  const SignUpScreen4({super.key});
 
   @override
   State<SignUpScreen4> createState() => _SignUpScreen4State();
@@ -28,7 +20,7 @@ class _SignUpScreen4State extends State<SignUpScreen4> {
   @override
   Widget build(BuildContext context) {
 
-    ColorPallet _colorPallet = ColorPallet();
+    ColorPallet colorPallet = ColorPallet();
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -51,7 +43,7 @@ class _SignUpScreen4State extends State<SignUpScreen4> {
         },
         child: Stack(
           children: [
-            DetailPageTitle(
+            const DetailPageTitle(
               title: '본인인증',
               description: '',
               totalStep: 3,
@@ -63,11 +55,11 @@ class _SignUpScreen4State extends State<SignUpScreen4> {
               child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         '휴대폰 번호를 입력해 주세요.',
                         style: TextStyle(
                           letterSpacing: 0.01,
@@ -81,12 +73,12 @@ class _SignUpScreen4State extends State<SignUpScreen4> {
                         children: [
                           Container(
                             width: width * 0.2,
-                            padding: EdgeInsets.symmetric(vertical: 9.0, horizontal: 9.0),
+                            padding: const EdgeInsets.symmetric(vertical: 9.0, horizontal: 9.0),
                             decoration: BoxDecoration(
-                              color: Color(0xFFFFF5DB),
+                              color: const Color(0xFFFFF5DB),
                               borderRadius: BorderRadius.circular(15.0),
                             ),
-                            child: Text(
+                            child: const Text(
                               "010",
                               style: TextStyle(
                                 letterSpacing: 0.01,
@@ -99,9 +91,9 @@ class _SignUpScreen4State extends State<SignUpScreen4> {
                           Container(
                             // margin: EdgeInsets.only(top: height * 0.01),
                             width: width * 0.66, // 너비를 조정
-                            padding: EdgeInsets.symmetric(horizontal: 9.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 9.0),
                             decoration: BoxDecoration(
-                              color: _colorPallet.lightYellow,
+                              color: colorPallet.lightYellow,
                               borderRadius: BorderRadius.circular(15.0),
                             ),
                             child: TextFormField(
@@ -121,11 +113,11 @@ class _SignUpScreen4State extends State<SignUpScreen4> {
                                 hintText: "12345678",
                                 hintStyle: TextStyle(
                                   fontSize: 24,
-                                  color: _colorPallet.textColor,
+                                  color: colorPallet.textColor,
                                   fontFamily: 'PretendardRegular',
                                 ),
                               ),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 24,
                                 fontFamily: 'PretendardRegular',
                               ),
@@ -141,14 +133,14 @@ class _SignUpScreen4State extends State<SignUpScreen4> {
                       style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
-                          side: _signUpController.scrn4_btnIsValid.value ? BorderSide(color: _colorPallet.orange) : BorderSide(color: Colors.black), // 테두리 색상
+                          side: _signUpController.scrn4_btnIsValid.value ? BorderSide(color: colorPallet.orange) : const BorderSide(color: Colors.black), // 테두리 색상
                         ),
-                        backgroundColor: _signUpController.scrn4_btnIsValid.value ? _colorPallet.orange : Colors.white, // 배경 색상
+                        backgroundColor: _signUpController.scrn4_btnIsValid.value ? colorPallet.orange : Colors.white, // 배경 색상
                       ),
                       child: Container(
                         alignment: Alignment.center,
                         width: width*0.9,
-                        child: Text(
+                        child: const Text(
                           "인증번호 발송하기",
                           style: TextStyle(
                             fontSize: 18,
@@ -162,9 +154,9 @@ class _SignUpScreen4State extends State<SignUpScreen4> {
                       if (_signUpController.scrn4_btnIsValid.value)
                         Container(
                           width: width * 0.9,
-                          padding: EdgeInsets.symmetric(horizontal: 9.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 9.0),
                           decoration: BoxDecoration(
-                            color: _colorPallet.lightYellow,
+                            color: colorPallet.lightYellow,
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: TextFormField(
@@ -183,11 +175,11 @@ class _SignUpScreen4State extends State<SignUpScreen4> {
                               hintText: "000000",
                               hintStyle: TextStyle(
                                 fontSize: 24,
-                                color: _colorPallet.textColor,
+                                color: colorPallet.textColor,
                                 fontFamily: 'PretendardRegular',
                               ),
                             ),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 24,
                               fontFamily: 'PretendardRegular',
                             ),
@@ -201,14 +193,14 @@ class _SignUpScreen4State extends State<SignUpScreen4> {
                         style: TextButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
-                            side: _signUpController.scrn4_codeIsValid.value ? BorderSide(color: _colorPallet.orange) : BorderSide(color: Colors.black), // 테두리 색상
+                            side: _signUpController.scrn4_codeIsValid.value ? BorderSide(color: colorPallet.orange) : const BorderSide(color: Colors.black), // 테두리 색상
                           ),
-                          backgroundColor: _signUpController.scrn4_codeIsValid.value ? _colorPallet.orange : Colors.white, // 배경 색상
+                          backgroundColor: _signUpController.scrn4_codeIsValid.value ? colorPallet.orange : Colors.white, // 배경 색상
                         ),
                         child: Container(
                           alignment: Alignment.center,
                           width: width*0.9,
-                          child: Text(
+                          child: const Text(
                             "인증번호 확인",
                             style: TextStyle(
                               fontSize: 18,
@@ -223,14 +215,14 @@ class _SignUpScreen4State extends State<SignUpScreen4> {
                         margin: EdgeInsets.only(top: height*0.01),
                         width: width*0.9,
                         // height: height*0.08,
-                        padding: EdgeInsets.only(top: 10.0, bottom: 10.0, right: 7.0, left: 9.0),
+                        padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, right: 7.0, left: 9.0),
                         decoration: BoxDecoration(
-                          color: Color(0xFFFFF5DB),
+                          color: const Color(0xFFFFF5DB),
                           borderRadius: BorderRadius.circular(15.0),
                         ),
                         child: Text(
-                          "${userNumber} - ${_signUpController.userSex.value}●●●●●●",
-                          style: TextStyle(
+                          "$userNumber - ${_signUpController.userSex.value}●●●●●●",
+                          style: const TextStyle(
                             letterSpacing: 0.01,
                             fontSize: 24,
                             fontFamily: 'PretendardRegular',
@@ -242,14 +234,14 @@ class _SignUpScreen4State extends State<SignUpScreen4> {
                         margin: EdgeInsets.only(top: height*0.01),
                         width: width*0.9,
                         // height: height*0.08,
-                        padding: EdgeInsets.only(top: 10.0, bottom: 10.0, right: 7.0, left: 9.0),
+                        padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, right: 7.0, left: 9.0),
                         decoration: BoxDecoration(
-                          color: Color(0xFFFFF5DB),
+                          color: const Color(0xFFFFF5DB),
                           borderRadius: BorderRadius.circular(15.0),
                         ),
                         child: Text(
                           _signUpController.userName.value,
-                          style: TextStyle(
+                          style: const TextStyle(
                             letterSpacing: 0.01,
                             fontSize: 24,
                             fontFamily: 'PretendardRegular',
@@ -258,7 +250,7 @@ class _SignUpScreen4State extends State<SignUpScreen4> {
                       ),
                       NextBtn(
                         isButtonDisabled: !_signUpController.scrn4_isValid.value,
-                        nextPage: SignUpScreen4(),
+                        nextPage: const SignUpScreen4(),
                         buttonName: "확인",
                         onButtonClick: (){
 

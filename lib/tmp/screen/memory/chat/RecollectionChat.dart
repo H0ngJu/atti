@@ -1,23 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:atti/commons/SimpleAppBar.dart';
-import 'package:atti/data/memory/memory_note_model.dart';
 import 'package:atti/data/report/dangerword_controller.dart';
 import 'package:atti/data/report/emotion_controller.dart';
 import 'package:atti/tmp/screen/chatbot/Chatbot.dart';
-import 'package:atti/tmp/screen/memory/chat/BeforeSave.dart';
 import 'package:atti/tmp/screen/memory/chat/ChatBubble.dart';
-import 'package:atti/tmp/screen/memory/chat/ChatHistory.dart';
 import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
 import 'package:atti/data/memory/RecollectionData.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
 
-import '../../chatbot/RecollectionChatbot.dart';
 
 class ChatMessage {
   final String sender; // I or ATTI
@@ -152,7 +146,7 @@ class _RecollectionChatState extends State<RecollectionChat> {
       ),
       body: Stack(children: [
         Container(
-          margin: EdgeInsets.all(16),
+          margin: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,13 +158,13 @@ class _RecollectionChatState extends State<RecollectionChat> {
                 //onTextChanged: onBubbleTextChanged,
               ),
               GestureDetector(
-                onTap: () => _showImageDialog('${widget.recollection.img}'),
+                onTap: () => _showImageDialog(widget.recollection.img),
                 child: Container(
                   alignment: Alignment.center,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    borderRadius: const BorderRadius.all(Radius.circular(15)),
                     child: Image.network(
-                      '${widget.recollection.img}',
+                      widget.recollection.img,
                       fit: BoxFit.contain,
                       width: MediaQuery.of(context).size.width * 0.35,
                       height: MediaQuery.of(context).size.height * 0.3,
@@ -242,10 +236,10 @@ class VoiceButton extends StatefulWidget {
 class _VoiceButtonState extends State<VoiceButton> {
   String _currentMessage = '대화를 시작하려면\n마이크 버튼을 누르세요';
   final _chatbot = Chatbot();
-  stt.SpeechToText _speech = stt.SpeechToText();
+  final stt.SpeechToText _speech = stt.SpeechToText();
   String _spokenText = '버튼을 누르고 음성을 입력';
   bool _isListening = false;
-  int _staticTimeout = 5; // 정적 상태 타임아웃 (2초)
+  final int _staticTimeout = 5; // 정적 상태 타임아웃 (2초)
   int _elapsedTime = 0;
   late List<ChatMessage> chatMessages = []; // 대화 리스트
   late List<String> onlyUserMessages = []; // 사용자 응답만 저장
@@ -292,14 +286,14 @@ class _VoiceButtonState extends State<VoiceButton> {
           });
           String message = result.recognizedWords ?? "";
 
-          Future.delayed(Duration(seconds: 2), () async {
+          Future.delayed(const Duration(seconds: 2), () async {
             if (_spokenText == message) {
               try {
                 _appendMessage("User", message);
                 _onUserMessage(message);
 
                 updateTTSEnabled(false);
-                Stream<String> response = await _chatbot.getRecollectionResponse(message, widget.recollection.description!);
+                Stream<String> response = _chatbot.getRecollectionResponse(message, widget.recollection.description);
                 String fullResponse = ""; // 전체 응답
 
                 response.listen((chunk) { // 스트림에서 각 청크를 처리
@@ -356,7 +350,7 @@ class _VoiceButtonState extends State<VoiceButton> {
 
   void _startStaticTimer() {
     _resetStaticTimer();
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _elapsedTime++;
         if (_elapsedTime >= _staticTimeout) {
@@ -506,13 +500,13 @@ class _VoiceButtonState extends State<VoiceButton> {
         children: [
           Container(
             height: MediaQuery.of(context).size.width * 0.2,
-            margin: EdgeInsets.only(top: 20, left: 25),
+            margin: const EdgeInsets.only(top: 20, left: 25),
             child: ElevatedButton(
               onPressed: _isListening ? _stopListening : _toggleListening,
               style: ElevatedButton.styleFrom(
                   backgroundColor:
-                      _isListening ? Color(0xff231FAD) : Color(0xffFFC215),
-                  shape: CircleBorder()),
+                      _isListening ? const Color(0xff231FAD) : const Color(0xffFFC215),
+                  shape: const CircleBorder()),
               child: Icon(
                 _isListening ? Icons.stop : Icons.mic,
                 size: 40,
@@ -523,10 +517,10 @@ class _VoiceButtonState extends State<VoiceButton> {
           // 대화 버튼
           Container(
             height: MediaQuery.of(context).size.width * 0.2,
-            margin: EdgeInsets.only(top: 20, right: 25),
+            margin: const EdgeInsets.only(top: 20, right: 25),
             child: ElevatedButton(
                 onPressed: () {
-                  Get.to(MainGallery());
+                  Get.to(const MainGallery());
                   var chat = ChatMessage.messagesToJsonString(chatMessages);
                   //print(onlyUserMessages);
                   if (onlyUserMessages.isNotEmpty) {
@@ -542,8 +536,8 @@ class _VoiceButtonState extends State<VoiceButton> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xffFFF5DB), shape: CircleBorder()),
-                child: Text(
+                    backgroundColor: const Color(0xffFFF5DB), shape: const CircleBorder()),
+                child: const Text(
                   '대화\n종료',
                   style: TextStyle(color: Color(0xffA38130)),
                 )),

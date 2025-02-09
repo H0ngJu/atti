@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
@@ -30,7 +29,7 @@ class _ChatBubbleState extends State<ChatBubble> {
   }
 
   void printSpeaker() {
-    print("here : " + widget.speaker);
+    print("here : ${widget.speaker}");
   }
 
   // message tts 읽기
@@ -51,8 +50,8 @@ class _ChatBubbleState extends State<ChatBubble> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: EdgeInsets.only(top: 20),
-        padding: EdgeInsets.only(top: 10, bottom: 10),
+        margin: const EdgeInsets.only(top: 20),
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
         decoration: BoxDecoration(
           //color: Color(0xffFFE9B3),
           borderRadius: BorderRadius.circular(15),
@@ -60,7 +59,7 @@ class _ChatBubbleState extends State<ChatBubble> {
         child: Text(
           widget.message,
           style: TextStyle(fontSize: 24, fontFamily: 'UhBee',
-          color: widget.speaker == "Assistant" ? Color(0xffA38130) : Colors.black),
+          color: widget.speaker == "Assistant" ? const Color(0xffA38130) : Colors.black),
           textAlign: TextAlign.center,
         ),
       ),

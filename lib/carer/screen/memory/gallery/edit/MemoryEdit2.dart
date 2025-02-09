@@ -2,12 +2,10 @@
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/Tag.dart';
 import 'package:atti/commons/colorPallet.dart';
-import 'package:atti/tmp/screen/memory/register/MemoryRegisterAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
-import 'package:atti/patient/screen/memory/memory_register/MemoryRegister4.dart';
 
 import '../../../../../data/auth_controller.dart';
 import '../../../../../data/memory/memory_note_model.dart';
@@ -25,7 +23,7 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
   final MemoryNoteController memoryNoteController =
       Get.put(MemoryNoteController());
   final AuthController authController = Get.put(AuthController());
-  TextEditingController _addedMemberController = TextEditingController();
+  final TextEditingController _addedMemberController = TextEditingController();
 
   final _era = [
     '1900년대',
@@ -108,7 +106,7 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    ColorPallet _colorPallet = ColorPallet();
+    ColorPallet colorPallet = ColorPallet();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -118,7 +116,7 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
         },
         child: Column(
           children: [
-            DetailPageTitle(
+            const DetailPageTitle(
               title: '기억 수정하기',
               totalStep: 3,
               currentStep: 2,
@@ -134,7 +132,7 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
                       //margin: EdgeInsets.only(left: 15),
                       width: MediaQuery.of(context).size.width * 0.9,
                       alignment: Alignment.centerLeft,
-                      child: Text(
+                      child: const Text(
                         '기억 연도를 선택해주세요',
                         textAlign: TextAlign.left,
                         style: TextStyle(
@@ -155,7 +153,7 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
                       //margin: EdgeInsets.only(left: 15),
                       width: MediaQuery.of(context).size.width * 0.9,
                       alignment: Alignment.centerLeft,
-                      child: Text(
+                      child: const Text(
                         '기억과 함께한 사람을 \n선택 및 입력해주세요',
                         textAlign: TextAlign.left,
                         style: TextStyle(
@@ -170,7 +168,7 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
                   Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.only(left: 15),
+                      margin: const EdgeInsets.only(left: 15),
                       child: SelectFamilyMemberButtons()),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: width * 0.05),
@@ -180,7 +178,7 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
                         return Tag(
                           name: member,
                           fontsize: 24,
-                          backgroundColor: _colorPallet.goldYellow,
+                          backgroundColor: colorPallet.goldYellow,
                           onDelete: () {
                             setState(() {
                               addedMember
@@ -195,22 +193,22 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     margin: EdgeInsets.all(width * 0.05),
                     decoration: BoxDecoration(
-                      color: _colorPallet.lightYellow,
+                      color: colorPallet.lightYellow,
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Row(
                       children: [
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Expanded(
                           child: Container(
                             //margin: EdgeInsets.symmetric(horizontal: width*0.05),
                             child: TextField(
                               controller: _addedMemberController,
                               cursorColor: Colors.black,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 hintText: '그 외 사람을 입력하세요',
                                 hintStyle: TextStyle(
@@ -221,7 +219,7 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         SizedBox(
                           width: width * 0.16,
                           height: width * 0.09,
@@ -241,26 +239,26 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
                             style: TextButton.styleFrom(
                               backgroundColor:
                                   _addedMemberController.text.isNotEmpty
-                                      ? _colorPallet.goldYellow
+                                      ? colorPallet.goldYellow
                                       : Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               padding: EdgeInsets.zero,
                             ),
-                            child: Text(
+                            child: const Text(
                               '등록',
                               style:
                                   TextStyle(color: Colors.black, fontSize: 15),
                             ),
                           ),
                         ),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
                       ],
                     ),
                   ),
-                  SizedBox(height: 16),
-                  SizedBox(
+                  const SizedBox(height: 16),
+                  const SizedBox(
                     height: 30,
                   ),
                 ],
@@ -275,10 +273,10 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
   }
 
   Widget SelectEraDropDownButton() {
-    ColorPallet _colorPallet = ColorPallet();
+    ColorPallet colorPallet = ColorPallet();
     return Container(
       //alignment: Alignment.centerLeft,
-      margin: EdgeInsets.only(left: 15),
+      margin: const EdgeInsets.only(left: 15),
       width: MediaQuery.of(context).size.width * 0.53,
       child: DropdownButtonFormField(
         menuMaxHeight: 250,
@@ -288,7 +286,7 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
                   value: e,
                   child: Text(
                     e,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.normal,
                         color: Colors.black),
@@ -306,23 +304,23 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide:
-                  BorderSide(color: _colorPallet.lightYellow, width: 2)),
+                  BorderSide(color: colorPallet.lightYellow, width: 2)),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide:
-                  BorderSide(color: _colorPallet.lightYellow, width: 1)),
+                  BorderSide(color: colorPallet.lightYellow, width: 1)),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide:
-                  BorderSide(color: _colorPallet.lightYellow, width: 2)),
+                  BorderSide(color: colorPallet.lightYellow, width: 2)),
           filled: true,
-          fillColor: _colorPallet.lightYellow,
-          iconColor: _colorPallet.khaki,
-          contentPadding: EdgeInsets.only(top: 5, bottom: 5, left: 15),
+          fillColor: colorPallet.lightYellow,
+          iconColor: colorPallet.khaki,
+          contentPadding: const EdgeInsets.only(top: 5, bottom: 5, left: 15),
         ),
-        dropdownColor: _colorPallet.lightYellow,
-        iconDisabledColor: _colorPallet.khaki,
-        iconEnabledColor: _colorPallet.khaki,
+        dropdownColor: colorPallet.lightYellow,
+        iconDisabledColor: colorPallet.khaki,
+        iconEnabledColor: colorPallet.khaki,
         iconSize: 50,
       ),
     );
@@ -331,7 +329,7 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
   Widget SelectFamilyMemberButtons() {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    ColorPallet _colorPallet = ColorPallet();
+    ColorPallet colorPallet = ColorPallet();
 
     return Wrap(
       direction: Axis.horizontal,
@@ -359,13 +357,9 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
               }
             });
           },
-          child: Container(
-            padding: EdgeInsets.only(bottom: 3),
-              child: Text(familyMembers[index])
-          ),
           style: ButtonStyle(
             textStyle: WidgetStateProperty.all<TextStyle>(
-              TextStyle(fontSize: 24), // 텍스트 크기
+              const TextStyle(fontSize: 24), // 텍스트 크기
             ),
             foregroundColor: WidgetStateProperty.resolveWith<Color>(
               (states) {
@@ -375,24 +369,28 @@ class _MemoryEdit2State extends State<MemoryEdit2> {
             backgroundColor: WidgetStateProperty.resolveWith<Color>(
               (states) {
                 if (memberIsSelected[index]) {
-                  return _colorPallet.goldYellow; // 선택됐을 때 배경색
+                  return colorPallet.goldYellow; // 선택됐을 때 배경색
                 } else {
                   return Colors.white; // 선택되지 않았을 때 배경색
                 }
               },
             ),
             padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-              EdgeInsets.symmetric(vertical: 3, horizontal: 15), // 버튼 내부 패딩 설정
+              const EdgeInsets.symmetric(vertical: 3, horizontal: 15), // 버튼 내부 패딩 설정
             ),
             shape: WidgetStateProperty.all<OutlinedBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(22), // 버튼 모서리 둥글기 설정
-                side: BorderSide(
+                side: const BorderSide(
                   color: Colors.black, // 테두리 색상
                   width: 0.7, // 테두리 두께
                 ),
               ),
             ),
+          ),
+          child: Container(
+            padding: const EdgeInsets.only(bottom: 3),
+              child: Text(familyMembers[index])
           ),
         );
       }).toList(),

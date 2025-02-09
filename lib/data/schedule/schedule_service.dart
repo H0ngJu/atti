@@ -1,7 +1,6 @@
 import 'package:atti/data/schedule/schedule_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import '../../main.dart';
 import '../auth_controller.dart';
 
@@ -39,9 +38,9 @@ class ScheduleService {
           .get();
 
       List<ScheduleModel> schedules = [];
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
         schedules.add(ScheduleModel.fromSnapShot(doc as DocumentSnapshot<Map<String, dynamic>>));
-      });
+      }
       return schedules;
     } catch (e) {
       print('Error getting schedules: $e');
@@ -68,9 +67,9 @@ class ScheduleService {
           .get();
 
       List<ScheduleModel> schedules = [];
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
         schedules.add(ScheduleModel.fromSnapShot(doc as DocumentSnapshot<Map<String, dynamic>>));
-      });
+      }
       return schedules;
     } catch (e) {
       print('Error getting all schedules: $e');

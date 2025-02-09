@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 class MemoryWordsTag extends StatelessWidget {
   final String name;
 
-  MemoryWordsTag({required this.name});
+  const MemoryWordsTag({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
-    ColorPallet _colorPallet = ColorPallet();
+    ColorPallet colorPallet = ColorPallet();
 
     return Container(
-      margin: EdgeInsets.only(top: 12),
-      padding: EdgeInsets.only(left: 10, right: 5),
+      margin: const EdgeInsets.only(top: 12),
+      padding: const EdgeInsets.only(left: 10, right: 5),
       decoration: BoxDecoration(
-        color: _colorPallet.lightYellow,
-        border: Border.all(color: _colorPallet.grey),
+        color: colorPallet.lightYellow,
+        border: Border.all(color: colorPallet.grey),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Row(
@@ -23,22 +23,22 @@ class MemoryWordsTag extends StatelessWidget {
         children: [
           Text(
             name,
-            style: TextStyle(fontSize: 24),
+            style: const TextStyle(fontSize: 24),
           ),
-          SizedBox(width: 10),
-          Container(
+          const SizedBox(width: 10),
+          SizedBox(
             height: 38,
             child: VerticalDivider(
               width: 1,
               thickness: 1,
-              color: _colorPallet.grey,
+              color: colorPallet.grey,
             ),
           ),
-          SizedBox(width: 3),
+          const SizedBox(width: 3),
           GestureDetector(
             onTap: () {
             },
-            child: Icon(
+            child: const Icon(
               Icons.close,
               size: 24,
               color: Colors.black,

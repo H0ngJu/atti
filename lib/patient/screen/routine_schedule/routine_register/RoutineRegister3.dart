@@ -63,7 +63,7 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
           Expanded(
             child: Column(
               children: [
-                DetailPageTitle(
+                const DetailPageTitle(
                   title: '일과 등록하기',
                   description: '해당 일과와 관련된 사진을 \n선택해주세요',
                   totalStep: 3,
@@ -86,7 +86,7 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
                         onTap: () {
                           getImage(ImageSource.gallery);
                         },
-                        child: Container(
+                        child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: Image.asset(
                             'lib/assets/images/imgpick.png',
@@ -108,15 +108,15 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
 
                       _image = XFile(defaultImagePath); // XFile 객체 생성
 
-                      Get.to(RoutineRegisterCheck());
+                      Get.to(const RoutineRegisterCheck());
                     });
                   },
                   child: Align(
                     alignment: Alignment.centerRight, // 텍스트를 오른쪽 정렬
                     child: Padding(
-                      padding:  EdgeInsets.only(right: 15),
+                      padding:  const EdgeInsets.only(right: 15),
                       child: Container(
-                        padding: EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(top: 10),
                         decoration: BoxDecoration(
                           border: Border(
                             bottom: BorderSide(
@@ -152,13 +152,13 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => RoutineRegisterCheck()),
+                          builder: (context) => const RoutineRegisterCheck()),
                     );
                   },
                   onSecondaryPressed: () {
                     getImage(ImageSource.gallery);
                   })
-              : SizedBox(),
+              : const SizedBox(),
         ],
       ),
     );

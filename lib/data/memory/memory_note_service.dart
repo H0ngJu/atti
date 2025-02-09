@@ -78,10 +78,6 @@ class MemoryNoteService {
   Future<void> callGeminiAPI(MemoryNoteModel memoryNote, DocumentReference docRef) async {
     await dotenv.load(fileName: '.env');
     final String apiKey = dotenv.env['GEMINI_API_KEY']!;
-    if (apiKey == null) {
-      print('No \$API_KEY environment variable');
-      exit(1);
-    }
     print('callGeminiAPI 함수');
 
     // 이미지 처리
@@ -123,9 +119,9 @@ class MemoryNoteService {
           .get();
 
       List<MemoryNoteModel> memoryNotes = [];
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
         memoryNotes.add(MemoryNoteModel.fromSnapShot(doc as DocumentSnapshot<Map<String, dynamic>>));
-      });
+      }
       return memoryNotes;
     } catch (e) {
       print('Error getting memory note : $e');

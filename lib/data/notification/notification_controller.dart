@@ -166,13 +166,13 @@ Future<List<NotificationModel>> getNotification() async {
         .where('isPatient', isEqualTo: authController.isPatient)
         .get();
 
-    querySnapshot.docs.forEach((doc) { // 현재 시간 이전의 알림만 선택
+    for (var doc in querySnapshot.docs) { // 현재 시간 이전의 알림만 선택
       NotificationModel notification = NotificationModel.fromSnapshot(
           doc as DocumentSnapshot<Map<String, dynamic>>);
       if (notification.time!.toDate().isBefore(now)) {
         notifications.add(notification);
       }
-    });
+    }
     return notifications;
   } catch (e) {
     print('Error loading notifications from Firestore: $e');

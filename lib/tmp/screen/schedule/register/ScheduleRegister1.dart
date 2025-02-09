@@ -31,15 +31,15 @@ class _ScheduleRegister1State extends State<ScheduleRegister1> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  DetailPageTitle(
+                  const DetailPageTitle(
                     title: '일정 등록하기',
                     description: '일정 이름을 입력해주세요',
                     totalStep: 4,
                     currentStep: 1,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
         
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: TextField(
                       onChanged: (value) {
@@ -47,17 +47,17 @@ class _ScheduleRegister1State extends State<ScheduleRegister1> {
                         //print(scheduleController.name.value);
                       },
                       cursorColor: Colors.black,
-                      style: TextStyle(fontSize: 24),
+                      style: const TextStyle(fontSize: 24),
                       decoration: InputDecoration(
                         hintText: '예정된 일정이 무엇인가요?',
-                        hintStyle: TextStyle(fontSize: 24, color: Color(0xffA38130)),
+                        hintStyle: const TextStyle(fontSize: 24, color: Color(0xffA38130)),
                         filled: true, // 배경을 채움
-                        fillColor: Color(0xffFFF5DB),
+                        fillColor: const Color(0xffFFF5DB),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: BorderSide.none,
                         ),
-                        contentPadding: EdgeInsets.all(15), // 위아래 여백 조절
+                        contentPadding: const EdgeInsets.all(15), // 위아래 여백 조절
                       ),
                     ),
                   ),
@@ -66,7 +66,7 @@ class _ScheduleRegister1State extends State<ScheduleRegister1> {
             ),
           ),
         
-         BottomNextButton(next: ScheduleRegister2(), content: '다음', isEnabled: scheduleController.schedule.value.name != null,),
+         BottomNextButton(next: const ScheduleRegister2(), content: '다음', isEnabled: scheduleController.schedule.value.name != null,),
         ]),
       ),
     );

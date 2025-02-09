@@ -1,16 +1,9 @@
-import 'package:atti/tmp/screen/RoutineScheduleMain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../data/notification/notification_controller.dart';
 import '../../../data/schedule/schedule_model.dart';
-import 'package:atti/data/schedule/schedule_service.dart';
-import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
-import '../schedule/ScheduleMain.dart';
 import '../../../data/notification/notification.dart';
-import 'package:atti/data/notification/notification_controller.dart';
 import 'dart:math';
 
 // 이미지 파일 이름 목록
@@ -42,7 +35,7 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
   String getFormattedTime(String mode) {
     DateTime dateTime;
     if (mode == 'future') {
-      dateTime = DateTime.now().add(Duration(hours: 1));
+      dateTime = DateTime.now().add(const Duration(hours: 1));
     } else {
       dateTime = schedule?.time?.toDate() ?? DateTime.now();
     }
@@ -95,7 +88,7 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
     String randomImageName = imageNames[random.nextInt(imageNames.length)];
 
     return Scaffold(
-      backgroundColor: Color(0xffFFF7E3),
+      backgroundColor: const Color(0xffFFF7E3),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -117,20 +110,20 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
           TextButton(
             onPressed: () {
             },
+            style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.all(const Color(0xffFFECB5)),
+              overlayColor: WidgetStateProperty.all(Colors.transparent), // 클릭 시 효과나 모션 없애기
+              shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              )),
+              visualDensity: const VisualDensity(vertical: -1),
+            ),
             child: Text(getFormattedTime('now'),
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 24,
                   color: Color(0xffA38130),
                   fontWeight: FontWeight.w500
               ),
-            ),
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Color(0xffFFECB5)),
-              overlayColor: MaterialStateProperty.all(Colors.transparent), // 클릭 시 효과나 모션 없애기
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              )),
-              visualDensity: VisualDensity(vertical: -1),
             ),
           ),
           SizedBox(height: height * 0.02,),
@@ -138,27 +131,27 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
             child: Column(
               children: [
                 SizedBox(height: height * 0.02,),
-                Text('1시간 뒤 일정이 있어요',
+                const Text('1시간 뒤 일정이 있어요',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                 ),
                 Text('\'${schedule?.name}\'',
-                  style: TextStyle(fontSize: 28, color: Color(0xffA38130), fontWeight: FontWeight.w600),
+                  style: const TextStyle(fontSize: 28, color: Color(0xffA38130), fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: height * 0.02,),
                 Container(
                   width: width * 0.77,
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: Colors.transparent,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Color(0xffA38130), width: 1),
+                    border: Border.all(color: const Color(0xffA38130), width: 1),
                   ),
                   child: Column(
                     children: [
-                      Text('시간 : ${getFormattedTime('future')}', style: TextStyle(
+                      Text('시간 : ${getFormattedTime('future')}', style: const TextStyle(
                         fontSize: 24, color: Color(0xffA38130)
                       ),),
-                      Text('장소 : ${schedule?.location ?? ''}', style: TextStyle(
+                      Text('장소 : ${schedule?.location ?? ''}', style: const TextStyle(
                           fontSize: 24, color: Color(0xffA38130)
                       ),)
                     ],
@@ -185,18 +178,18 @@ class _FullScreenScheduleState extends State<FullScreenSchedule> {
               2,
               '일정 알림',
               '\'${schedule?.name}\'일정의 기억 사진을 남길까요?',
-              schedule!.time!.toDate().add(Duration(hours: 1)),
+              schedule!.time!.toDate().add(const Duration(hours: 1)),
               //schedule!.time!.toDate().subtract(Duration(minutes:58)),
               '/schedule3/${schedule?.reference!.id}',
             );
             SystemNavigator.pop();
           },
-            child: Text('알겠어요', style: TextStyle(
-              color: Colors.white, fontSize: 24, ),),
             style: ButtonStyle(
-              backgroundColor:  MaterialStateProperty.all(Color(0xffFFC215)),
-              minimumSize: MaterialStateProperty.all(Size(width * 0.55, 40)),
+              backgroundColor:  WidgetStateProperty.all(const Color(0xffFFC215)),
+              minimumSize: WidgetStateProperty.all(Size(width * 0.55, 40)),
             ),
+            child: const Text('알겠어요', style: TextStyle(
+              color: Colors.white, fontSize: 24, ),),
           )
 
         ],

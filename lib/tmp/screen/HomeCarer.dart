@@ -1,22 +1,16 @@
 import 'package:atti/commons/AttiAppBar.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
-import 'package:atti/data/report/reportController.dart';
 import 'package:atti/tmp/screen/report/ReportDetail.dart';
 //import 'package:atti/screen/report/_ReportDetail.dart';
-import 'package:atti/tmp/screen/report/ReportHistory.dart';
 //import 'package:atti/screen/report/ReportNew.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 import '../../data/auth_controller.dart';
 import '../../data/notification/notification.dart';
-import '../../data/notification/notification_controller.dart';
 import '../../data/routine/routine_model.dart';
 import '../../data/routine/routine_service.dart';
 import '../../data/schedule/schedule_model.dart';
@@ -37,7 +31,7 @@ class _HomeCarerState extends State<HomeCarer> {
   User? loggedUser;
   final AuthController authController = Get.find<AuthController>();
 
-  DateTime _selectedDay = DateTime.now();
+  final DateTime _selectedDay = DateTime.now();
   List<ScheduleModel> schedulesBySelectedDay = []; // 선택된 날짜의 일정들이 반환되는 리스트
   int? numberOfSchedules; // 선택된 날짜의 일정 개수
   int? numberOfDoneSchedules; // 선택된 날짜의 완료된 일정 개수
@@ -61,31 +55,21 @@ class _HomeCarerState extends State<HomeCarer> {
     await ScheduleService().getSchedulesByDate(_selectedDay);
     List<RoutineModel> fetchedRoutines =
     await RoutineService().getRoutinesByDay(selectedDayInWeek);
-    if (fetchedSchedules != null) {
-      int doneSchedulesCount = fetchedSchedules
-          .where((schedule) => schedule.isFinished ?? false)
-          .length;
-      int doneRoutinesCount = fetchedSchedules
-          .where((routines) => routines.isFinished ?? false)
-          .length;
-      setState(() {
-        schedulesBySelectedDay = fetchedSchedules;
-        routinesBySelectedDay = fetchedRoutines;
-        numberOfSchedules = schedulesBySelectedDay.length;
-        numberOfRoutines = routinesBySelectedDay.length;
-        numberOfDoneSchedules = doneSchedulesCount;
-        numberOfDoneRoutines = doneRoutinesCount;
-      });
-    } else {
-      setState(() {
-        schedulesBySelectedDay = [];
-        numberOfSchedules = 0;
-        numberOfRoutines = 0;
-        numberOfDoneSchedules = 0;
-        numberOfDoneRoutines = 0;
-      });
+    int doneSchedulesCount = fetchedSchedules
+        .where((schedule) => schedule.isFinished ?? false)
+        .length;
+    int doneRoutinesCount = fetchedSchedules
+        .where((routines) => routines.isFinished ?? false)
+        .length;
+    setState(() {
+      schedulesBySelectedDay = fetchedSchedules;
+      routinesBySelectedDay = fetchedRoutines;
+      numberOfSchedules = schedulesBySelectedDay.length;
+      numberOfRoutines = routinesBySelectedDay.length;
+      numberOfDoneSchedules = doneSchedulesCount;
+      numberOfDoneRoutines = doneRoutinesCount;
+    });
     }
-  }
 
   void _requestNotificationPermissions() async {
     NotificationService notificationService = NotificationService();
@@ -100,11 +84,8 @@ class _HomeCarerState extends State<HomeCarer> {
       final user = _authentication.currentUser;
       print("loggedUser: ${user!.uid}");
       print("check: ${authController.userName.value}");
-      if (user != null) {
-        loggedUser = user as User?;
-      }
-      ;
-    } catch (e) {
+      loggedUser = user as User?;
+        } catch (e) {
       print(e);
     }
   }
@@ -132,14 +113,14 @@ class _HomeCarerState extends State<HomeCarer> {
         child: Column(
           children: [
             Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(30),
                         bottomRight: Radius.circular(30))),
                 child: HomePatientTop(patientName: authController.patientName.value)),
             Container(
-                margin: EdgeInsets.all(16),
+                margin: const EdgeInsets.all(16),
                 child: HomeTodaySummary(
                   scheduleCnt: numberOfSchedules,
                   routineCnt: numberOfRoutines,
@@ -148,8 +129,8 @@ class _HomeCarerState extends State<HomeCarer> {
                   doneRoutineCnt: numberOfDoneRoutines,
                 )),
             Container(
-              margin: EdgeInsets.all(16),
-              child: HomeReport(),
+              margin: const EdgeInsets.all(16),
+              child: const HomeReport(),
             )
           ],
         ),
@@ -183,48 +164,48 @@ class _HomePatientTopState extends State<HomePatientTop> {
     String weekday = _getWeekday(now.weekday);
 
     return Container(
-      margin: EdgeInsets.only(left: 16, right: 16),
+      margin: const EdgeInsets.only(left: 16, right: 16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start, // 열을 위에서부터 시작하도록 정렬
         crossAxisAlignment: CrossAxisAlignment.start, // 자식 위젯을 왼쪽 정렬
         children: [
-          SizedBox(height: 25),
+          const SizedBox(height: 25),
           RichText(
             text: TextSpan(
-              style: TextStyle(color: Colors.black, height: 1.2),
+              style: const TextStyle(color: Colors.black, height: 1.2),
               children: [
                 TextSpan(
                   text: '${widget.patientName} 보호자님\n',
-                  style: TextStyle(fontSize: 24),
+                  style: const TextStyle(fontSize: 24),
                 ),
-                TextSpan(
+                const TextSpan(
                   text: '안녕하세요?',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 14), // 간격을 추가하여 텍스트와 이미지를 구분
+          const SizedBox(height: 14), // 간격을 추가하여 텍스트와 이미지를 구분
           Row(
             // 이미지를 중앙 정렬하기 위한 Row 위젯
             mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
             children: [
               Image(
-                  image: AssetImage('lib/assets/Atti/standingAtti.png'),
+                  image: const AssetImage('lib/assets/Atti/standingAtti.png'),
                   width: MediaQuery.of(context).size.width * 0.8),
             ],
           ),
-          SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
+          const SizedBox(height: 10), // 간격을 추가하여 이미지와 텍스트를 구분
           Container(
             alignment: Alignment.center,
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.all(10),
+            decoration: const BoxDecoration(
                 color: Color(0xffFFC215),
                 borderRadius: BorderRadius.all(Radius.circular(15))),
             child: Text(
-                '오늘은\n${now.year}년 ${now.month}월 ${now.day}일 ${weekday}',
+                '오늘은\n${now.year}년 ${now.month}월 ${now.day}일 $weekday',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.white, fontFamily: 'UhBee', fontSize: 25)),
           ),
         ],
@@ -286,37 +267,37 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
           Container(
             child: Text(
               '${widget.patientName}님이 진행하고 있어요!',
-              style: TextStyle(fontSize: 28, fontFamily: 'PretendardMedium'),
+              style: const TextStyle(fontSize: 28, fontFamily: 'PretendardMedium'),
             ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Row(
             children: [
               Expanded(
                 child: Container(
                   height: 132,
                   // 정적으로 고정할 것인가?
-                  margin: EdgeInsets.only(right: 8),
-                  padding: EdgeInsets.all(16.0),
+                  margin: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    borderRadius: const BorderRadius.all(Radius.circular(15)),
                     border: Border.all(
-                      color: Color(0xffDDDDDD),
+                      color: const Color(0xffDDDDDD),
                       width: 1,
                     ),
                   ),
                   child: RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.black, fontSize: 24, height: 1.5),
                       children: [
-                        TextSpan(text: '일과 완료\n'),
+                        const TextSpan(text: '일과 완료\n'),
                         TextSpan(
                             text:
                             '${widget.doneRoutineCnt}/${widget.routineCnt}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 30,
                               //fontWeight: FontWeight.bold,
                               //color: Color(0xffFFC215)
@@ -330,27 +311,27 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
                 child: Container(
                   height: 132,
                   // 정적으로 고정할 것인가?
-                  margin: EdgeInsets.only(left: 8),
-                  padding: EdgeInsets.all(16.0),
+                  margin: const EdgeInsets.only(left: 8),
+                  padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    borderRadius: const BorderRadius.all(Radius.circular(15)),
                     border: Border.all(
-                      color: Color(0xffDDDDDD),
+                      color: const Color(0xffDDDDDD),
                       width: 1,
                     ), // 테두리 추가
                   ),
                   child: RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.black, fontSize: 24, height: 1.5),
                       children: [
-                        TextSpan(text: '일정 완료\n'),
+                        const TextSpan(text: '일정 완료\n'),
                         TextSpan(
                             text:
                             '${widget.doneScheduleCnt}/${widget.scheduleCnt}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 30,
                               //fontWeight: FontWeight.bold,
                               //color: Color(0xffFFC215)
@@ -395,7 +376,7 @@ class _HomeReportState extends State<HomeReport> {
   Future<void> _fetchReport() async {
     DateTime now = DateTime.now();
     DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    DateTime endOfWeek = startOfWeek.add(Duration(days: 6));
+    DateTime endOfWeek = startOfWeek.add(const Duration(days: 6));
 
     var fetchedReports = await _authController.carerReports;
 
@@ -435,8 +416,8 @@ class _HomeReportState extends State<HomeReport> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('${startDay.month}월 ${weekOfMonth}주차 기록 보고',
-            style: TextStyle(fontSize: 30, fontFamily: 'PretendardMedium'),
+          Text('${startDay.month}월 $weekOfMonth주차 기록 보고',
+            style: const TextStyle(fontSize: 30, fontFamily: 'PretendardMedium'),
             textAlign: TextAlign.left,
           ),
           SizedBox(
@@ -444,8 +425,8 @@ class _HomeReportState extends State<HomeReport> {
           ),
           Container(
             decoration: BoxDecoration(
-                border: Border.all(color: Color(0xffDDDDDD)),
-                borderRadius: BorderRadius.all(Radius.circular(15))),
+                border: Border.all(color: const Color(0xffDDDDDD)),
+                borderRadius: const BorderRadius.all(Radius.circular(15))),
             child: Column(
               children: [
                 Row(
@@ -453,8 +434,8 @@ class _HomeReportState extends State<HomeReport> {
                     Expanded(
                       // 왼쪽 정렬을 위해 Expanded로 감싸줍니다.
                         child: Container(
-                          margin: EdgeInsets.all(10),
-                          child: Text(
+                          margin: const EdgeInsets.all(10),
+                          child: const Text(
                             '일과 완료율',
                             style: TextStyle(
                                 fontFamily: 'PretendardRegular', fontSize: 24),
@@ -463,13 +444,13 @@ class _HomeReportState extends State<HomeReport> {
                     Expanded(
                       // 오른쪽 정렬을 위해 Expanded로 감싸줍니다.
                         child: Container(
-                          margin: EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(10),
                           child: Text(
                             totalRoutines != 0 ?
                             '${(completedRoutines / totalRoutines * 100).toStringAsFixed(1)} %':
                             "지난 주 일과가 없어요",
                             textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color(0xffA38130),
                                 fontFamily: 'PretendardRegular',
                                 fontSize: 24),
@@ -477,27 +458,27 @@ class _HomeReportState extends State<HomeReport> {
                         ))
                   ],
                 ),
-                Divider(color: Color(0xffDDDDDD)),
+                const Divider(color: Color(0xffDDDDDD)),
                 Row(
                   children: [
                     Expanded(
                       // 왼쪽 정렬
                         child: Container(
-                          margin: EdgeInsets.all(10),
-                          child: Text('일정 완료율',
+                          margin: const EdgeInsets.all(10),
+                          child: const Text('일정 완료율',
                               style: TextStyle(
                                   fontFamily: 'PretendardRegular', fontSize: 24)),
                         )),
                     Expanded(
                       // 오른쪽 정렬
                         child: Container(
-                          margin: EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(10),
                           child: Text(
                             totalSchedules != 0 ?
                             '${(completedSchedules / totalSchedules * 100).toStringAsFixed(1)} %':
                             "지난 주 일정이 없어요",
                             textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color(0xffA38130),
                                 fontFamily: 'PretendardRegular',
                                 fontSize: 24),
@@ -505,25 +486,25 @@ class _HomeReportState extends State<HomeReport> {
                         ))
                   ],
                 ),
-                Divider(color: Color(0xffDDDDDD)),
+                const Divider(color: Color(0xffDDDDDD)),
                 Row(
                   children: [
                     Expanded(
                       // 왼쪽 정렬
                         child: Container(
-                          margin: EdgeInsets.all(10),
-                          child: Text('최다 열람 기억',
+                          margin: const EdgeInsets.all(10),
+                          child: const Text('최다 열람 기억',
                               style: TextStyle(
                                   fontFamily: 'PretendardRegular', fontSize: 24)),
                         )),
                     Expanded(
                       // 오른쪽 정렬
                         child: Container(
-                          margin: EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(10),
                           child: Text(
-                            highestViewedMemory.length > 0 ? "${highestViewedMemory}" : "열람한 기억이 없어요",
+                            highestViewedMemory.length > 0 ? "$highestViewedMemory" : "열람한 기억이 없어요",
                             textAlign: TextAlign.right, // 텍스트를 오른쪽으로 정렬합니다.
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color(0xffA38130),
                                 fontFamily: 'PretendardRegular',
                                 fontSize: 24),
@@ -534,28 +515,28 @@ class _HomeReportState extends State<HomeReport> {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           TextButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ReportDetail(indx: 0); // ============================================================================= 0 맞는지 체크
+                return const ReportDetail(indx: 0); // ============================================================================= 0 맞는지 체크
               }));
             },
-            child: Text(
-              '${startDay.month}월 ${weekOfMonth}주차 기록 보고 보기',
-              style: TextStyle(fontSize: 20, color: Color(0xffA38130)),
-            ),
             style: ButtonStyle(
-              minimumSize: MaterialStateProperty.all(
+              minimumSize: WidgetStateProperty.all(
                   Size(MediaQuery.of(context).size.width, 60)), // 가로 150, 세로 50
-              backgroundColor: MaterialStateProperty.all(Color(0xffFFF5DB)),
-              padding: MaterialStateProperty.all(
-                  EdgeInsets.symmetric(horizontal: 10)),
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+              backgroundColor: WidgetStateProperty.all(const Color(0xffFFF5DB)),
+              padding: WidgetStateProperty.all(
+                  const EdgeInsets.symmetric(horizontal: 10)),
+              shape: WidgetStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               )),
+            ),
+            child: Text(
+              '${startDay.month}월 $weekOfMonth주차 기록 보고 보기',
+              style: const TextStyle(fontSize: 20, color: Color(0xffA38130)),
             ),
           ),
         ],

@@ -15,8 +15,8 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
-  ColorPallet _colorPallet = ColorPallet();
-  AuthController _authController = Get.find<AuthController>();
+  final ColorPallet _colorPallet = ColorPallet();
+  final AuthController _authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +31,11 @@ class _MenuState extends State<Menu> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 45,),
+              const SizedBox(height: 45,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('기억친구 아띠',
+                  const Text('기억친구 아띠',
                       style: TextStyle(
                           fontFamily: 'UhBee', fontSize: 25
                       )
@@ -44,7 +44,7 @@ class _MenuState extends State<Menu> {
                     onTap: () {
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => HomePatient()),
+                        MaterialPageRoute(builder: (context) => const HomePatient()),
                             (Route<dynamic> route) => false, // 모든 이전 페이지를 제거
                       );
                     },
@@ -55,7 +55,7 @@ class _MenuState extends State<Menu> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Row(
@@ -70,17 +70,17 @@ class _MenuState extends State<Menu> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => UserInfoEditPage()),
+                        MaterialPageRoute(builder: (context) => const UserInfoEditPage()),
                       );
                     },
                     child: Container(
                       width: 60, // 버튼의 너비
                       height: 27, // 버튼의 높이
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.all(Radius.circular(25))
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           '수정',
                           style: TextStyle(
@@ -99,13 +99,13 @@ class _MenuState extends State<Menu> {
                   children: [
                     // 사이즈 박스를 두 개 뱌치하기
                     // 그 안에 줄 세우기
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     _infoRow('이름', _authController.userName.value, width*0.43),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     _infoRow('생년월일', _authController.birthDate, width*0.43),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     _infoRow('가족 및\n친한 지인', _authController.familyMember.value.join('\n'), width*0.43),
-                    SizedBox(height: 32),
+                    const SizedBox(height: 32),
                   ],
                 ),
               ),
@@ -114,28 +114,28 @@ class _MenuState extends State<Menu> {
               //   '연결된 계정',
               //   style: TextStyle(fontSize: 24, color: _colorPallet.grey),
               // ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               // _buildAccountRow('최한별', '박민정', '아이디 isldkd', '보호자'),
               // _buildAccountRow('김정연', '', '치매파트너', ''),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
               Center(
                 child: GestureDetector(
                   onTap: () {
                     _authController.logout();
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => IntroPage()),
+                      MaterialPageRoute(builder: (context) => const IntroPage()),
                           (Route<dynamic> route) => false, // 모든 이전 페이지를 제거
                     );
                   },
                   child: Container(
                     width: 111, // 버튼의 너비
                     height: 60, // 버튼의 높이
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.all(Radius.circular(20))
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         '로그아웃',
                         style: TextStyle(
@@ -147,14 +147,14 @@ class _MenuState extends State<Menu> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Center(
                 child: GestureDetector(
                   onTap: () {
                     _authController.logout(); // 임의로 로그아웃되게 만듦
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => IntroPage()),
+                      MaterialPageRoute(builder: (context) => const IntroPage()),
                           (Route<dynamic> route) => false, // 모든 이전 페이지를 제거
                     );
                   },
@@ -181,8 +181,8 @@ class _MenuState extends State<Menu> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title, style: TextStyle(fontSize: 18)),
-        Text(value, style: TextStyle(fontSize: 18)),
+        Text(title, style: const TextStyle(fontSize: 18)),
+        Text(value, style: const TextStyle(fontSize: 18)),
       ],
     );
   }
@@ -194,7 +194,7 @@ class _MenuState extends State<Menu> {
           width: boxSize,
           child: Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 24
             ),
           ),
@@ -203,7 +203,7 @@ class _MenuState extends State<Menu> {
           width: boxSize,
           child: Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 24
             ),
           ),

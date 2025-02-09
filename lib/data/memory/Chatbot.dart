@@ -1,10 +1,5 @@
-import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:http/http.dart' as http;
-import 'dart:io';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../data/report/emotion_controller.dart';
@@ -18,10 +13,6 @@ class Chatbot {
   Stream<String> getResponse(var prompt, DocumentReference docRef) async* {
     await dotenv.load(fileName: '.env');
     final String apiKey = dotenv.env['GEMINI_API_KEY']!;
-    if (apiKey == null) {
-      print('No \$API_KEY environment variable');
-      exit(1);
-    }
 
     final model = GenerativeModel(
       model: 'gemini-1.5-flash',
@@ -36,7 +27,7 @@ class Chatbot {
         SafetySetting(HarmCategory.hateSpeech, HarmBlockThreshold.high),
         SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.high)
       ],
-      requestOptions: RequestOptions(apiVersion: 'v1beta'),
+      requestOptions: const RequestOptions(apiVersion: 'v1beta'),
       systemInstruction: Content.text(
           '''
           You are Ati, a voice bot that interacts with an elderly person with dementia.
@@ -55,12 +46,12 @@ class Chatbot {
 
     // 채팅
     final chat = model.startChat(history: [
-      Content.text("사진의 정보 : ${imgDescription}"),
+      Content.text("사진의 정보 : $imgDescription"),
       Content.model([TextPart('어르신, 어떤 날 찍은 사진인지 기억하시나요? 이 때의 기분은 어떠셨어요?')]),
     ]);
 
     var startTime = DateTime.now();
-    var response = await chat.sendMessageStream(Content.text(prompt));
+    var response = chat.sendMessageStream(Content.text(prompt));
     var endTime = DateTime.now();
     print('챗봇 응답 생성 시간: ${endTime.difference(startTime)}');
     await for (final chunk in response) {
@@ -73,10 +64,6 @@ class Chatbot {
   Future<void> emotionAnalysis(String messages) async {
     await dotenv.load(fileName: '.env');
     final String apiKey = dotenv.env['GEMINI_API_KEY']!;
-    if (apiKey == null) {
-      print('No \$API_KEY environment variable');
-      exit(1);
-    }
 
     final model = GenerativeModel(
       model: 'gemini-1.5-flash',
@@ -85,7 +72,7 @@ class Chatbot {
         maxOutputTokens: 10,
         temperature: 0.7,
       ),
-      requestOptions: RequestOptions(apiVersion: 'v1beta'),
+      requestOptions: const RequestOptions(apiVersion: 'v1beta'),
       systemInstruction: Content.text(
           '''
           Analyze the emotions you felt in this conversation. For example, joy, longing, sadness, happiness, pleasure, and so on.
@@ -107,10 +94,6 @@ class Chatbot {
   Stream<String> getRecollectionResponse(var prompt, String description) async* {
     await dotenv.load(fileName: '.env');
     final String apiKey = dotenv.env['GEMINI_API_KEY']!;
-    if (apiKey == null) {
-      print('No \$API_KEY environment variable');
-      exit(1);
-    }
 
     final model = GenerativeModel(
       model: 'gemini-1.5-flash',
@@ -125,7 +108,7 @@ class Chatbot {
         SafetySetting(HarmCategory.hateSpeech, HarmBlockThreshold.high),
         SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.high)
       ],
-      requestOptions: RequestOptions(apiVersion: 'v1beta'),
+      requestOptions: const RequestOptions(apiVersion: 'v1beta'),
       systemInstruction: Content.text(
           '''
           You are Ati, a voice bot that converses with an elderly person with dementia. You must speak only in Korean. 
@@ -140,12 +123,12 @@ class Chatbot {
 
     // 채팅
     final chat = model.startChat(history: [
-      Content.text("주제 : ${description}"),
+      Content.text("주제 : $description"),
       Content.model([TextPart('어르신, 혹시 이때가 기억나시나요? 이것과 관련된 기억에 남는 일이 있으시다면 말씀해주세요.')]),
     ]);
 
     var startTime = DateTime.now();
-    var response = await chat.sendMessageStream(Content.text(prompt));
+    var response = chat.sendMessageStream(Content.text(prompt));
     var endTime = DateTime.now();
     print('챗봇 응답 생성 시간: ${endTime.difference(startTime)}');
     await for (final chunk in response) {

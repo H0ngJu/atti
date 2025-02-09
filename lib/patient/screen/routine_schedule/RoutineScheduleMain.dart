@@ -1,12 +1,9 @@
 // 새로운 일정/일과 페이지
 import 'package:atti/index.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
-import '../../../main.dart';
-import 'TodayToDo.dart';
 
 // 이미지 파일 이름 목록
 List<String> imageNames = [
@@ -96,30 +93,16 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     todayRoutines = await RoutineService().getRoutinesByDay(todayInWeek);
     todaySchedules = await ScheduleService().getSchedulesByDate(today);
 
-    if (fetchedSchedules != null) {
-      setState(() {
-        schedulesBySelectedDay = fetchedSchedules;
-        numberOfSchedules = schedulesBySelectedDay.length;
-      });
-    } else {
-      setState(() {
-        schedulesBySelectedDay = [];
-        numberOfSchedules = 0;
-      });
-    }
-
-    if (fetchedRoutines != null) {
-      setState(() {
-        routinesBySelectedDay = fetchedRoutines;
-        numberOfRoutines = routinesBySelectedDay.length;
-      });
-    } else {
-      setState(() {
-        routinesBySelectedDay = [];
-        numberOfRoutines = 0;
-      });
-    }
-
+    setState(() {
+      schedulesBySelectedDay = fetchedSchedules;
+      numberOfSchedules = schedulesBySelectedDay.length;
+    });
+  
+    setState(() {
+      routinesBySelectedDay = fetchedRoutines;
+      numberOfRoutines = routinesBySelectedDay.length;
+    });
+  
     // 보유 중인 알림 요청 검색
     // final List<PendingNotificationRequest> pendingNotificationRequests =
     // await flutterLocalNotificationsPlugin.pendingNotificationRequests();
@@ -158,11 +141,8 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
       if (todaySchedules.isNotEmpty) {
         String ttsScheduleMessage = '오늘은 ';
         for (int i = 0; i < todaySchedules.length; i++) {
-          ttsScheduleMessage += DateFormat('a h시 m분', 'ko_KR')
-                  .format(todaySchedules[i].time!.toDate()) +
-              '에 ' +
-              todaySchedules[i].name! +
-              (i == todaySchedules.length - 1 ? ' 일정이 있어요!' : ', ');
+          ttsScheduleMessage += '${DateFormat('a h시 m분', 'ko_KR')
+                  .format(todaySchedules[i].time!.toDate())}에 ${todaySchedules[i].name!}${i == todaySchedules.length - 1 ? ' 일정이 있어요!' : ', '}';
         }
         ttsMessages.add(ttsScheduleMessage);
       }
@@ -229,7 +209,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-                colorScheme: ColorScheme.light(
+                colorScheme: const ColorScheme.light(
                   //surface: Color(0xffFFF5DB), // 배경 색
                   onSurface: Colors.black, // 달력 숫자 색
                   primary: Color(0xffFFE9B3), // 선택된 영역 색
@@ -266,11 +246,9 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
         .where((routine) =>
     routine.isFinished == null ||
         !routine.isFinished!.containsKey(removeZ(
-            _selectedDay.toString().substring(0, 10) +
-                ' 00:00:00.000')) ||
+            '${_selectedDay.toString().substring(0, 10)} 00:00:00.000')) ||
         routine.isFinished![removeZ(
-            _selectedDay.toString().substring(0, 10) +
-                ' 00:00:00.000')]! == false)
+            '${_selectedDay.toString().substring(0, 10)} 00:00:00.000')]! == false)
         .toList();
 
     return Scaffold(
@@ -291,9 +269,9 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${patientName}님의',
+                        '$patientName님의',
                         textAlign: TextAlign.left,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 24,
                         ),
                       ),
@@ -301,7 +279,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                         isEditMode ? '일과 및 일정 편집모드' : '일과 및 일정',
                         textAlign: TextAlign.left,
                         style:
-                        TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                        const TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
                         //textScaler: TextScaler.linear(1.0),
                       ),
                     ],
@@ -388,20 +366,20 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                       '${DateFormat('yyyy년 M월 d일', 'ko_KR').format(_selectedDay)}\n예정된 일정',
                       textAlign: TextAlign.left,
                       style:
-                          TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+                          const TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                     ),
                   ),
 
                   isEditMode
                   ? GestureDetector(
                     onTap: () {
-                      Get.to(ScheduleRegister1());
+                      Get.to(const ScheduleRegister1());
                     },
                       child: Container(
                         width: width * 0.085,
                         height: width * 0.085,
-                        margin: EdgeInsets.only(top: 5),
-                        decoration: BoxDecoration(
+                        margin: const EdgeInsets.only(top: 5),
+                        decoration: const BoxDecoration(
                           color: Colors.black,
                           shape: BoxShape.circle,
                         ),
@@ -417,18 +395,18 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                       await _selectDate(context);
                       await _fetchData();
                     },
-                    child: Text(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.only(
+                          bottom: 6, left: 15, right: 15, top: 4),
+                      minimumSize: const Size(0, 0), // 최소 크기 제거
+                      backgroundColor: Colors.black,
+                    ),
+                    child: const Text(
                       '날짜변경',
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,
                       ),
-                    ),
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.only(
-                          bottom: 6, left: 15, right: 15, top: 4),
-                      minimumSize: Size(0, 0), // 최소 크기 제거
-                      backgroundColor: Colors.black,
                     ),
                   ),
                 ],
@@ -437,7 +415,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
             //SizedBox(height: height * 0.05,),
 
             // 일정 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-            schedulesBySelectedDay.length > 0
+            schedulesBySelectedDay.isNotEmpty
                 ? ListView.builder(
                     primary: false,
                     shrinkWrap: true,
@@ -477,22 +455,22 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     },
                   )
                 : Container(
-                    margin: EdgeInsets.only(top: 15),
+                    margin: const EdgeInsets.only(top: 15),
                     width: MediaQuery.of(context).size.width * 0.9,
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderRadius: const BorderRadius.all(Radius.circular(15)),
                         border: Border.all(
                             style: BorderStyle.solid,
-                            color: Color(0xffDDDDDD))),
-                    child: Text(
+                            color: const Color(0xffDDDDDD))),
+                    child: const Text(
                       '등록된 일정이 없어요',
                       style: TextStyle(fontSize: 24),
                     ),
                   ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
 
             // 일과 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
             SizedBox(
@@ -502,7 +480,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                 children: [
                   Container(
                     alignment: Alignment.centerLeft,
-                    child: Text(
+                    child: const Text(
                       '하루 일과',
                       textAlign: TextAlign.left,
                       style:
@@ -512,13 +490,13 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                   isEditMode
                       ? GestureDetector(
                       onTap: () {
-                        Get.to(RoutineRegister1());
+                        Get.to(const RoutineRegister1());
                         },
                       child: Container(
                         width: width * 0.085,
                         height: width * 0.085,
-                        margin: EdgeInsets.only(top: 5),
-                        decoration: BoxDecoration(
+                        margin: const EdgeInsets.only(top: 5),
+                        decoration: const BoxDecoration(
                           color: Colors.black,
                           shape: BoxShape.circle,
                         ),
@@ -529,11 +507,11 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                         ),
                       )
                     )
-                    : SizedBox(),
+                    : const SizedBox(),
                 ],
               ),
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
 
             // 완료한 일과 접기/펼치기 토글 버튼
             GestureDetector(
@@ -542,12 +520,12 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                   isCompletedVisible = !isCompletedVisible;
                 });
               },
-              child: Container(
+              child: SizedBox(
                 width: width * 0.8,
                 child: Text(
                   isCompletedVisible ? '완료한 일과 접기' : '완료한 일과 펼치기',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Color(0xff868686),
                     fontSize: 24,
                   ),
@@ -566,8 +544,8 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                       bool isFinished =
                           filteredRoutines[index].isFinished != null &&
                               filteredRoutines[index].isFinished!
-                                  .containsKey(removeZ(_selectedDay.toString().substring(0, 10) + ' 00:00:00.000')) &&
-                              filteredRoutines[index].isFinished![removeZ(_selectedDay.toString().substring(0, 10) + ' 00:00:00.000')]!;
+                                  .containsKey(removeZ('${_selectedDay.toString().substring(0, 10)} 00:00:00.000')) &&
+                              filteredRoutines[index].isFinished![removeZ('${_selectedDay.toString().substring(0, 10)} 00:00:00.000')]!;
 
                       return GestureDetector(
                         onTap: () {
@@ -602,17 +580,17 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     },
                   )
                 : Container(
-                    margin: EdgeInsets.only(top: 15, bottom: 15),
+                    margin: const EdgeInsets.only(top: 15, bottom: 15),
                     width: MediaQuery.of(context).size.width * 0.9,
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderRadius: const BorderRadius.all(Radius.circular(15)),
                         border: Border.all(
                             style: BorderStyle.solid,
-                            color: Color(0xffDDDDDD))),
-                    child: Text(
+                            color: const Color(0xffDDDDDD))),
+                    child: const Text(
                       '예정된 일과가 없어요',
                       style: TextStyle(fontSize: 24),
                     ),

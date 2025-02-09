@@ -29,7 +29,7 @@ class _RoutineBoxState extends State<RoutineBox> {
         if (i == days.length - 1) {
           repeatText += days[i];
         } else {
-          repeatText += days[i] + ', ';
+          repeatText += '${days[i]}, ';
         }
       }
       return '$repeatText 반복';
@@ -53,7 +53,7 @@ class _RoutineBoxState extends State<RoutineBox> {
     }
 
     return Container(
-      padding: EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
+      padding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
       width: MediaQuery.of(context).size.width * 0.9,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -65,18 +65,18 @@ class _RoutineBoxState extends State<RoutineBox> {
         children: [
           Text(
             formattedTime,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 24,
               height: 1.2
           ),),
           Text(
             widget.name,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 28,
                 height: 1.2
             ),
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           Container(
             alignment: Alignment.center,
             width: MediaQuery.of(context).size.width * 0.85,
@@ -105,11 +105,11 @@ class _RoutineBoxState extends State<RoutineBox> {
             ),
 
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(),
+              const SizedBox(),
               Text(
                 generateRepeatText(widget.days),
                 style: TextStyle(

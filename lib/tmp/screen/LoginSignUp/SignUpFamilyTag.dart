@@ -13,8 +13,8 @@ class SignUpFamilyTag extends StatefulWidget {
 
 class _SignUpFamilyTagState extends State<SignUpFamilyTag> {
   final SignUpController signUpController = Get.put(SignUpController());
-  ColorPallet _colorPallet = ColorPallet();
-  List<String> _values = [];
+  final ColorPallet _colorPallet = ColorPallet();
+  final List<String> _values = [];
 
   onDelete(index) {
     setState(() {
@@ -42,14 +42,14 @@ class _SignUpFamilyTagState extends State<SignUpFamilyTag> {
 
   Widget AddKeywordTag() {
     final ColorPallet colorPallet = Get.put(ColorPallet());
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.9,
       child: TagEditor(
           tagSpacing: 10,
           length: _values.length,
-          delimiters: [',', ' '],
+          delimiters: const [',', ' '],
           hasAddButton: false,
-          textStyle: TextStyle(fontSize: 20,
+          textStyle: const TextStyle(fontSize: 20,
             fontFamily: 'PretendardRegular',
           ),
           inputDecoration: InputDecoration(
@@ -66,11 +66,11 @@ class _SignUpFamilyTagState extends State<SignUpFamilyTag> {
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: _colorPallet.lightYellow, width: 1)
               ),
-              contentPadding: EdgeInsets.only(top: 15, bottom: 10, left: 15),
+              contentPadding: const EdgeInsets.only(top: 15, bottom: 10, left: 15),
               filled: true,
               fillColor: _colorPallet.lightYellow,
               hintText: '가족 구성원을 입력해주세요',
-              hintStyle: TextStyle(color: Color(0xffA38130), fontSize: 24, fontWeight: FontWeight.normal,
+              hintStyle: const TextStyle(color: Color(0xffA38130), fontSize: 24, fontWeight: FontWeight.normal,
                 fontFamily: 'PretendardRegular',
               )
           ),
@@ -107,18 +107,18 @@ class _Chip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 5,),
+      padding: const EdgeInsets.only(top: 5,),
       child: Chip(
         shape: RoundedRectangleBorder(
-            side: BorderSide(color: Color(0xffA38130), width: 1),
+            side: const BorderSide(color: Color(0xffA38130), width: 1),
             borderRadius: BorderRadius.circular(20)
         ),
         labelPadding: const EdgeInsets.only(left: 5.0, right: 5),
-        label: Text(label, style: TextStyle(
+        label: Text(label, style: const TextStyle(
             fontSize: 20, color: Color(0xffA38130), fontWeight: FontWeight.normal,
             fontFamily: 'PretendardRegular',
         ),),
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         deleteIcon: const Icon(
           Icons.close,
           size: 18,

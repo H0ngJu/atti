@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LogInSignUpMainScreen extends StatefulWidget {
-  LogInSignUpMainScreen({super.key});
+  const LogInSignUpMainScreen({super.key});
 
   @override
   State<LogInSignUpMainScreen> createState() => _LogInSignUpMainScreenState();
@@ -13,7 +13,7 @@ class LogInSignUpMainScreen extends StatefulWidget {
 
 class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
   User? loggedUser;
-  ColorPallet _colorPallet = ColorPallet();
+  final ColorPallet _colorPallet = ColorPallet();
 
   @override
   void initState() {
@@ -27,7 +27,7 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
 
     return Scaffold(
         body: SingleChildScrollView(
-          child: Container(
+          child: SizedBox(
               width: width,
               height: height,
               child: Column(
@@ -47,7 +47,7 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                       // 구분선
                       Padding(
                         padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
-                        child: Divider(
+                        child: const Divider(
                           color: Color(0xffE1E1E1),
                         ),
                       ),
@@ -57,7 +57,7 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                       ),
                       SizedBox(
                         width: width*0.9,
-                        child: Text("반가워요! 저는 아띠에요!",
+                        child: const Text("반가워요! 저는 아띠에요!",
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             letterSpacing: 0.05,
@@ -72,7 +72,7 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                       ),
                       SizedBox(
                         width: width*0.9,
-                      child: Text("서비스 이용을 위해 로그인 해주세요. 만약 앱 사용이 처음이시라면 회원가입을 진행해주세요.",
+                      child: const Text("서비스 이용을 위해 로그인 해주세요. 만약 앱 사용이 처음이시라면 회원가입을 진행해주세요.",
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontSize: 24,
@@ -114,7 +114,7 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                 ),
                                 child: Container(
                                   alignment: Alignment.center,
-                                  child: Text('로그인',
+                                  child: const Text('로그인',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 24,
@@ -138,9 +138,9 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                   );
                                 },
                                 style: ButtonStyle(
-                                  shape: MaterialStateProperty.all(
+                                  shape: WidgetStateProperty.all(
                                       RoundedRectangleBorder(
-                                        side: BorderSide(
+                                        side: const BorderSide(
                                           color: Colors.black,
                                           width: 1,
                                         ),
@@ -149,7 +149,7 @@ class _LogInSignUpMainScreenState extends State<LogInSignUpMainScreen> {
                                 ),
                                 child: Container(
                                   alignment: Alignment.center,
-                                  child: Text('회원가입',
+                                  child: const Text('회원가입',
                                     style: TextStyle(
                                       color: Colors.black,
                                         fontSize: 24,

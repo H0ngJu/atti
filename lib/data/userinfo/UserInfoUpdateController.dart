@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserInfoUpdateController extends GetxController {
-  FirebaseAuth _authentication = FirebaseAuth.instance;
-  FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseAuth _authentication = FirebaseAuth.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   // 사용자 정보
   var userName = "".obs;

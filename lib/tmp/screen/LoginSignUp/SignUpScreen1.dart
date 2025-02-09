@@ -8,14 +8,14 @@ import 'package:get/get.dart';
 
 
 class SignUpScreen1 extends StatefulWidget {
-  SignUpScreen1({super.key});
+  const SignUpScreen1({super.key});
 
   @override
   State<SignUpScreen1> createState() => _SignUpScreen1State();
 }
 
 class _SignUpScreen1State extends State<SignUpScreen1> {
-  ColorPallet _colorPallet = ColorPallet();
+  final ColorPallet _colorPallet = ColorPallet();
   bool _isButtonDisabled = true;
   final SignUpController signUpController = Get.put(SignUpController());
   int isPressed = 0;
@@ -41,7 +41,7 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            DetailPageTitle(
+            const DetailPageTitle(
               title: '회원가입',
               description: '',
               totalStep: 3,
@@ -49,14 +49,14 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
             ),
             Container(
               margin: EdgeInsets.only(top: height*0.13),
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // 상단 안내문
                   Container(
-                    margin: EdgeInsets.only(top: 25),
-                    child: Column(
+                    margin: const EdgeInsets.only(top: 25),
+                    child: const Column(
                       children: [
                         Text(
                           '서비스를 이용할\n회원을 선택해주세요.',
@@ -96,21 +96,21 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                                   width: 1,
                                   color: isPressed == 1 ? _colorPallet.orange : _colorPallet.lightYellow // isPressed 값에 따라 테두리 색상 결정
                               ),
-                            shape: RoundedRectangleBorder(
+                            shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(30),
                               ),
                             ),
                             elevation: 0,
                           ),
-                          child: Container(
+                          child: SizedBox(
                             width: width * 0.4,
                             height: height * 0.3,
                             child: Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
+                                  const Text(
                                     "피보호자",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
@@ -121,7 +121,7 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                                     ),
                                   ),
                                   SizedBox(height: height * 0.01,),
-                                  Text(
+                                  const Text(
                                     "치매 환자\n본인입니다.",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
@@ -141,27 +141,27 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                               signUpController.isPatient.value = false;
                             },
                           style: TextButton.styleFrom(
-                            backgroundColor: Color(0xFFFFE0CC),
+                            backgroundColor: const Color(0xFFFFE0CC),
                             padding: EdgeInsets.zero,
                             side: BorderSide(
                                 width: 1,
-                                color: isPressed == 2 ? _colorPallet.orange : Color(0xFFFFE0CC),
+                                color: isPressed == 2 ? _colorPallet.orange : const Color(0xFFFFE0CC),
                             ),
-                            shape: RoundedRectangleBorder(
+                            shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(30),
                               ),
                             ),
                             elevation: 0,
                           ),
-                          child: Container(
+                          child: SizedBox(
                             width: width * 0.4,
                             height: height * 0.3,
                             child: Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
+                                  const Text(
                                     "보호자",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
@@ -172,7 +172,7 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                                     ),
                                   ),
                                   SizedBox(height: height * 0.01,),
-                                  Text(
+                                  const Text(
                                     "치매 환자의\n보호자입니다.",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(

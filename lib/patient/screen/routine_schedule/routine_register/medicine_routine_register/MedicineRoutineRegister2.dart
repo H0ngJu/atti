@@ -1,12 +1,9 @@
 // 루틴 등록하기1 화면
-import 'package:atti/commons/RegisterTextField.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atti/data/routine/routine_controller.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/BottomNextButton.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import '../../../../../commons/colorPallet.dart';
 import 'MedicineRoutineRegister3.dart';
@@ -35,7 +32,7 @@ class _MedicineRoutineRegister2State extends State<MedicineRoutineRegister2> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: Color(0xffFFE9B3), // 선택된 영역
               onPrimary: Color(0xffA38130), // 선택된 곳 숫자
               onSurface: Colors.black, // 시, 분, 오전/오후 숫자
@@ -86,7 +83,7 @@ class _MedicineRoutineRegister2State extends State<MedicineRoutineRegister2> {
           Expanded(child: SingleChildScrollView(
             child: Column(
               children: [
-                DetailPageTitle(
+                const DetailPageTitle(
                   title: '복약일과 등록하기',
                   description: '복약 시간을 선택해주세요',
                   totalStep: 3,
@@ -95,7 +92,7 @@ class _MedicineRoutineRegister2State extends State<MedicineRoutineRegister2> {
                 SizedBox(height: width * 0.04,),
                 
                 // 시간 선택
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: TextField(
                     controller: _timeController,
@@ -103,18 +100,18 @@ class _MedicineRoutineRegister2State extends State<MedicineRoutineRegister2> {
                     onTap: () async {
                       await _selectTime(context);
                     },
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
                     decoration: InputDecoration(
                       filled: true, // 배경을 채움
-                      fillColor: Color(0xffFFF5DB),
+                      fillColor: const Color(0xffFFF5DB),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: BorderSide.none,
                       ),
                       hintText: '시간 선택',
-                      hintStyle: TextStyle(color: Color(0xffA38130)),
-                      suffixIcon: Icon(Icons.access_time, color: Color(0xffA38130),),
-                      contentPadding: EdgeInsets.all(15),
+                      hintStyle: const TextStyle(color: Color(0xffA38130)),
+                      suffixIcon: const Icon(Icons.access_time, color: Color(0xffA38130),),
+                      contentPadding: const EdgeInsets.all(15),
                     ),
                   ),
                 ),
@@ -124,7 +121,7 @@ class _MedicineRoutineRegister2State extends State<MedicineRoutineRegister2> {
                     //margin: EdgeInsets.only(left: 15),
                     width: MediaQuery.of(context).size.width * 0.9,
                     alignment: Alignment.centerLeft,
-                    child: Text('복약 요일을 선택해주세요', textAlign: TextAlign.left, style: TextStyle(
+                    child: const Text('복약 요일을 선택해주세요', textAlign: TextAlign.left, style: TextStyle(
                         fontSize: 28, fontWeight: FontWeight.w500
                     ),),
                   ),
@@ -139,7 +136,7 @@ class _MedicineRoutineRegister2State extends State<MedicineRoutineRegister2> {
               ],
             ),
           )),
-          BottomNextButton(next: MidicineRoutineRegister3(), content: '다음', isEnabled: routineController.routine.value.repeatDays != null &&
+          BottomNextButton(next: const MidicineRoutineRegister3(), content: '다음', isEnabled: routineController.routine.value.repeatDays != null &&
               routineController.routine.value.time != null,)
         ],
       ),
@@ -156,7 +153,7 @@ class _MedicineRoutineRegister2State extends State<MedicineRoutineRegister2> {
       spacing: 5, // 가로 간격 설정
       runSpacing: 5, // 세로 간격 설정
       children: List.generate(days.length, (index) {
-        return Container(
+        return SizedBox(
           width: width * 0.115,
           height: width * 0.115,
           child: TextButton(
@@ -173,10 +170,9 @@ class _MedicineRoutineRegister2State extends State<MedicineRoutineRegister2> {
                 print(selectedDaysInWeek);
               });
             },
-            child: Text(days[index]),
             style: ButtonStyle(
               textStyle: WidgetStateProperty.all<TextStyle>(
-                TextStyle(fontSize: 23), // 텍스트 크기
+                const TextStyle(fontSize: 23), // 텍스트 크기
               ),
               foregroundColor: WidgetStateProperty.resolveWith<Color>(
                     (states) {
@@ -197,18 +193,19 @@ class _MedicineRoutineRegister2State extends State<MedicineRoutineRegister2> {
                 },
               ),
               padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                EdgeInsets.fromLTRB(0, 2, 0, 5), // 버튼 내부 패딩 설정
+                const EdgeInsets.fromLTRB(0, 2, 0, 5), // 버튼 내부 패딩 설정
               ),
               shape: WidgetStateProperty.all<OutlinedBorder>(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
-                  side: BorderSide(
+                  side: const BorderSide(
                     color: Colors.black,
                     width: 1
                   )// 버튼 모서리 둥글기 설정
                 ),
               ),
             ),
+            child: Text(days[index]),
           ),
         );
       }).toList(),

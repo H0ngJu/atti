@@ -63,7 +63,7 @@ class _MidicineRoutineRegister3State extends State<MidicineRoutineRegister3> {
           Expanded(
             child: Column(
               children: [
-                DetailPageTitle(
+                const DetailPageTitle(
                   title: '복약 일과 등록하기',
                   description: '복약하실 약 또는 관련 사진을\n선택해주세요',
                   totalStep: 3,
@@ -86,7 +86,7 @@ class _MidicineRoutineRegister3State extends State<MidicineRoutineRegister3> {
                         onTap: () {
                           getImage(ImageSource.gallery);
                         },
-                        child: Container(
+                        child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: Image.asset(
                             'lib/assets/images/imgpick.png',
@@ -108,15 +108,15 @@ class _MidicineRoutineRegister3State extends State<MidicineRoutineRegister3> {
 
                       _image = XFile(defaultImagePath); // XFile 객체 생성
 
-                      Get.to(MedicineRoutineRegisterCheck());
+                      Get.to(const MedicineRoutineRegisterCheck());
                     });
                   },
                   child: Align(
                     alignment: Alignment.centerRight, // 텍스트를 오른쪽 정렬
                     child: Padding(
-                      padding:  EdgeInsets.only(right: 15),
+                      padding:  const EdgeInsets.only(right: 15),
                       child: Container(
-                        padding: EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(top: 10),
                         decoration: BoxDecoration(
                           border: Border(
                             bottom: BorderSide(
@@ -152,13 +152,13 @@ class _MidicineRoutineRegister3State extends State<MidicineRoutineRegister3> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MedicineRoutineRegisterCheck()),
+                          builder: (context) => const MedicineRoutineRegisterCheck()),
                     );
                   },
                   onSecondaryPressed: () {
                     getImage(ImageSource.gallery);
                   })
-              : SizedBox(),
+              : const SizedBox(),
         ],
       ),
     );

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atti/data/routine/routine_controller.dart';
 import '../../../../carer/screen/routine_shcedule/CarerRoutineScheduleMain.dart';
-import '../../../../commons/RoutineBox2.dart';
 import '../../../../data/auth_controller.dart';
 import '../../../../patient/screen/routine_schedule/RoutineScheduleMain.dart';
 import 'dart:io';
@@ -50,10 +49,10 @@ class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
                 SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  margin: EdgeInsets.only(left: 15),
+                  margin: const EdgeInsets.only(left: 15),
                   child: Text(
                     '\'${widget.name}\'',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w400,
                         color: Colors.black,
@@ -61,8 +60,8 @@ class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
                     ),),
                 ),Container(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  margin: EdgeInsets.only(left: 15),
-                  child: Text(
+                  margin: const EdgeInsets.only(left: 15),
+                  child: const Text(
                     '일과를 등록했어요!',
                     style: TextStyle(
                         fontSize: 40,
@@ -83,32 +82,32 @@ class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
                       Row(
                         children: [
                           Container(
-                            padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+                            padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Color(0xff737373), width: 1,),
+                              border: Border.all(color: const Color(0xff737373), width: 1,),
                             ),
                             child: Text(
                               formattedTime,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 22,
                                   color: Colors.black
                             ),),
                           ),
-                          SizedBox(),
+                          const SizedBox(),
                         ],
                       ),
-                      SizedBox(height: 5,),
-                      Container(
+                      const SizedBox(height: 5,),
+                      SizedBox(
                           width: width * 0.8,
-                          child: Text(widget.name, style: TextStyle(
+                          child: Text(widget.name, style: const TextStyle(
                             fontSize: 30,
                             color: Colors.black,
                           ),
                           )
                       ),
-                      SizedBox(height: 10,),
+                      const SizedBox(height: 10,),
                       Container(
                         alignment: Alignment.center,
                         width: MediaQuery.of(context).size.width * 0.8,
@@ -137,23 +136,23 @@ class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
           ),
           Container(
             alignment: Alignment.bottomCenter,
-            margin: EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(bottom: 20),
             child: TextButton(
               onPressed: () {
                 if (authController.isPatient) {
-                  Get.to(() => RoutineScheduleMain());
+                  Get.to(() => const RoutineScheduleMain());
                 } else {
-                  Get.to(() => CarerRoutineScheduleMain());
+                  Get.to(() => const CarerRoutineScheduleMain());
                 }
               },
-              child: Text(
-                '일과/일정 돌아가기',
-                style: TextStyle(color: Colors.black, fontSize: 24),),
               style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(Color(0xffFFC215)),
+                backgroundColor: WidgetStateProperty.all(const Color(0xffFFC215)),
                 minimumSize: WidgetStateProperty.all(
                     Size(MediaQuery.of(context).size.width * 0.9, 50)),
               ),
+              child: const Text(
+                '일과/일정 돌아가기',
+                style: TextStyle(color: Colors.black, fontSize: 24),),
             ),
           ),
         ],

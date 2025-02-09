@@ -41,26 +41,14 @@ class _TodayToDoState extends State<TodayToDo> {
     List<RoutineModel> fetchedRoutines = await RoutineService()
         .getRoutinesByDay(DateFormat('E', 'ko-KR').format(DateTime.now()));
 
-    if (fetchedSchedules != null) {
-      setState(() {
-        schedulesByToday = fetchedSchedules;
-      });
-    } else {
-      setState(() {
-        schedulesByToday = [];
-      });
+    setState(() {
+      schedulesByToday = fetchedSchedules;
+    });
+  
+    setState(() {
+      routinesByToday = fetchedRoutines;
+    });
     }
-
-    if (fetchedRoutines != null) {
-      setState(() {
-        routinesByToday = fetchedRoutines;
-      });
-    } else {
-      setState(() {
-        routinesByToday = [];
-      });
-    }
-  }
 
   @override
   void initState() {
@@ -90,7 +78,7 @@ class _TodayToDoState extends State<TodayToDo> {
     final now = DateTime.now();
 
     // 현재 날짜 문자열 생성
-    final todayKey = removeZ(now.toString().substring(0, 10) + ' 00:00:00.000');
+    final todayKey = removeZ('${now.toString().substring(0, 10)} 00:00:00.000');
 
     // 완료 여부와 현재 시간 조건 추가하여 루틴 정렬
     routinesByToday.sort((a, b) {
@@ -127,8 +115,8 @@ class _TodayToDoState extends State<TodayToDo> {
           now.year,
           now.month,
           now.day,
-          nextRoutine!.time![0],
-          nextRoutine!.time![1]);
+          nextRoutine.time![0],
+          nextRoutine.time![1]);
 
       nextRoutine2 = routinesByToday.firstWhere(
             (routine) {
@@ -171,7 +159,7 @@ class _TodayToDoState extends State<TodayToDo> {
 
     // 최상단 텍스트 생성
     String getTopText() {
-      if (nextRoutine != null && nextRoutine!.time != null && nextRoutine.time!.length == 2) {
+      if (nextRoutine != null && nextRoutine.time != null && nextRoutine.time!.length == 2) {
         final int routineHour = nextRoutine.time![0];
         final int routineMinute = nextRoutine.time![1];
 
@@ -189,9 +177,9 @@ class _TodayToDoState extends State<TodayToDo> {
           int minutes = difference.inMinutes % 60; // 남은 분 계산
 
           if (hours > 0) {
-            return '${hours}시간 ${minutes}분 뒤 일과가 있어요';
+            return '$hours시간 $minutes분 뒤 일과가 있어요';
           } else {
-            return '${minutes}분 뒤 일과가 있어요';
+            return '$minutes분 뒤 일과가 있어요';
           }
         }
       }
@@ -215,9 +203,9 @@ class _TodayToDoState extends State<TodayToDo> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${patientName}님',
+                      '$patientName님',
                       textAlign: TextAlign.left,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 24,
                       ),
                     ),
@@ -225,7 +213,7 @@ class _TodayToDoState extends State<TodayToDo> {
                       getTopText(),
                       textAlign: TextAlign.left,
                       style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                          const TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -239,7 +227,7 @@ class _TodayToDoState extends State<TodayToDo> {
             Text(
               DateFormat('yyyy년 M월 d일', 'ko_KR').format(DateTime.now()),
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
             ),
             SizedBox(
               height: width * 0.01,
@@ -247,14 +235,14 @@ class _TodayToDoState extends State<TodayToDo> {
 
             // 일과 시간
             Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 decoration: BoxDecoration(
                     color: colorPallet.lightYellow,
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(color: Colors.black, width: 1)),
                 child: Text(
                   formattedTime1,
-                  style: TextStyle(fontSize: 24),
+                  style: const TextStyle(fontSize: 24),
                 )),
             SizedBox(
               height: width * 0.05,
@@ -267,9 +255,9 @@ class _TodayToDoState extends State<TodayToDo> {
               height: width * 0.68,
               child: Container(
                 child: ClipOval(
-                  child: nextRoutine != null && nextRoutine!.img != null
+                  child: nextRoutine != null && nextRoutine.img != null
                       ? Image.network(
-                    nextRoutine!.img!,
+                    nextRoutine.img!,
                     width: double.infinity,
                     height: double.infinity,
                     fit: BoxFit.cover,
@@ -286,7 +274,7 @@ class _TodayToDoState extends State<TodayToDo> {
             // 일과 이름
             Text(
               nextRoutine?.name ?? '로딩중이에요...',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 28,
               ),
             ),
@@ -328,15 +316,15 @@ class _TodayToDoState extends State<TodayToDo> {
               },
               child: Container(
                   width: width * 0.8,
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                   decoration: BoxDecoration(
-                    color: isButtonTapped ? colorPallet.goldYellow : Color(0xffFFE7A4),
+                    color: isButtonTapped ? colorPallet.goldYellow : const Color(0xffFFE7A4),
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: Text(
                     isButtonTapped ? '완료했어요' : '시간이 되면 알려드릴게요',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 24),
+                    style: const TextStyle(fontSize: 24),
                   )),
             ),
             SizedBox(
@@ -355,13 +343,13 @@ class _TodayToDoState extends State<TodayToDo> {
             Center(
               child: SizedBox(
                 width: width * 0.83,
-                child: Text(
+                child: const Text(
                   '오늘의 일정',
                   style: TextStyle(fontSize: 28),
                 ),
               ),
             ),
-            schedulesByToday.length > 0
+            schedulesByToday.isNotEmpty
                 ? ListView.builder(
                     primary: false,
                     shrinkWrap: true,
@@ -395,17 +383,17 @@ class _TodayToDoState extends State<TodayToDo> {
                     },
                   )
                 : Container(
-                    margin: EdgeInsets.only(top: 15),
+                    margin: const EdgeInsets.only(top: 15),
                     width: MediaQuery.of(context).size.width * 0.83,
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderRadius: const BorderRadius.all(Radius.circular(15)),
                         border: Border.all(
                             style: BorderStyle.solid,
-                            color: Color(0xffDDDDDD))),
-                    child: Text(
+                            color: const Color(0xffDDDDDD))),
+                    child: const Text(
                       '등록된 일정이 없어요',
                       style: TextStyle(fontSize: 24),
                     ),
@@ -416,13 +404,13 @@ class _TodayToDoState extends State<TodayToDo> {
             Center(
               child: SizedBox(
                 width: width * 0.83,
-                child: Text(
+                child: const Text(
                   '다음 일과는?',
                   style: TextStyle(fontSize: 28),
                 ),
               ),
             ),
-            SizedBox(height: 3,),
+            const SizedBox(height: 3,),
 
             // 일과 시간
             Center(
@@ -432,7 +420,7 @@ class _TodayToDoState extends State<TodayToDo> {
                   mainAxisSize: MainAxisSize.min, // Row의 크기를 최소화
                   children: [
                     Container(
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         decoration: BoxDecoration(
                             color: Colors.transparent,
                             borderRadius: BorderRadius.circular(15),
@@ -440,7 +428,7 @@ class _TodayToDoState extends State<TodayToDo> {
                         child: Text(
                           formattedTime2,
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 24),
+                          style: const TextStyle(fontSize: 24),
                         )),
                   ],
                 ),
@@ -453,7 +441,7 @@ class _TodayToDoState extends State<TodayToDo> {
                 width: width * 0.83,
                 child: Text(
                   nextRoutine2?.name ?? '일과 없음',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 28,
                   ),
                 ),
@@ -473,7 +461,7 @@ class _TodayToDoState extends State<TodayToDo> {
                   borderRadius: BorderRadius.circular(15),
                   child: nextRoutine != null && nextRoutine2!.img != null
                       ? Image.network(
-                    nextRoutine2!.img!,
+                    nextRoutine2.img!,
                     width: double.infinity,
                     height: double.infinity,
                     fit: BoxFit.cover,

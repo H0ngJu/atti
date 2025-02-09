@@ -1,8 +1,4 @@
 import 'package:atti/index.dart';
-import 'package:get/get.dart';
-import 'package:atti/data/memory/memory_note_model.dart';
-import 'package:atti/data/memory/memory_note_service.dart';
-import '../auth_controller.dart';
 
 class MemoryNoteController extends GetxController {
   final AuthController authController = Get.put(AuthController());
@@ -26,11 +22,6 @@ class MemoryNoteController extends GetxController {
   void updateMemoryNote(DocumentReference reference) async {
     try {
       // 기존 기억의 도큐먼트 레퍼런스가 있는지 확인
-      if (reference == null) {
-        print("Document reference is null, cannot update memory note.");
-        return;
-      }
-      // 업데이트할 필드만 지정하여 도큐먼트 업데이트
       await memoryNoteService.updateMemoryNote(
         reference,
         {

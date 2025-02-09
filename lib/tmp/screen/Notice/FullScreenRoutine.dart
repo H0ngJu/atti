@@ -45,7 +45,7 @@ class _FullScreenRoutineState extends State<FullScreenRoutine> {
       period = "오후";
       if (hour > 12) hour -= 12;
     }
-    String formattedTime = "$period ${hour}시 ${minute}분";
+    String formattedTime = "$period $hour시 $minute분";
     return formattedTime;
   }
 
@@ -81,7 +81,7 @@ class _FullScreenRoutineState extends State<FullScreenRoutine> {
     String randomImageName = imageNames[random.nextInt(imageNames.length)];
 
     return Scaffold(
-      backgroundColor: Color(0xffFFF7E3),
+      backgroundColor: const Color(0xffFFF7E3),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -103,20 +103,20 @@ class _FullScreenRoutineState extends State<FullScreenRoutine> {
           TextButton(
             onPressed: () {
             },
+            style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.all(const Color(0xffFFECB5)),
+              overlayColor: WidgetStateProperty.all(Colors.transparent), // 클릭 시 효과나 모션 없애기
+              shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              )),
+              visualDensity: const VisualDensity(vertical: -1),
+            ),
             child: Text(formatTime(routine?.time ?? [0,0]),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 color: Color(0xffA38130),
                 fontWeight: FontWeight.w500
               ),
-            ),
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Color(0xffFFECB5)),
-              overlayColor: MaterialStateProperty.all(Colors.transparent), // 클릭 시 효과나 모션 없애기
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              )),
-              visualDensity: VisualDensity(vertical: -1),
             ),
           ),
           SizedBox(height: height * 0.02,),
@@ -124,11 +124,11 @@ class _FullScreenRoutineState extends State<FullScreenRoutine> {
             child: Column(
               children: [
                 //SizedBox(height: height * 0.02,),
-                Text('일과를 할 시간이에요',
+                const Text('일과를 할 시간이에요',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                 ),
                 Text('\'${routine?.name ?? ''}\'',
-                  style: TextStyle(fontSize: 28, color: Color(0xffA38130), fontWeight: FontWeight.w600),
+                  style: const TextStyle(fontSize: 28, color: Color(0xffA38130), fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: height * 0.02,),
                 Container(
@@ -170,12 +170,12 @@ class _FullScreenRoutineState extends State<FullScreenRoutine> {
                      MaterialPageRoute(builder: (context) => RoutineFinish(name: '\'${routine?.name ?? ''}\'\n일과를 완료했어요!')),
                    );
                 },
-                    child: Text('완료했어요', style: TextStyle(
-                        color: Colors.white, fontSize: 24, ),),
                     style: ButtonStyle(
-                      backgroundColor:  MaterialStateProperty.all(Color(0xffFFC215)),
-                      minimumSize: MaterialStateProperty.all(Size(width * 0.55, 40)),
+                      backgroundColor:  WidgetStateProperty.all(const Color(0xffFFC215)),
+                      minimumSize: WidgetStateProperty.all(Size(width * 0.55, 40)),
                     ),
+                    child: const Text('완료했어요', style: TextStyle(
+                        color: Colors.white, fontSize: 24, ),),
                 ),
                 SizedBox(height: height * 0.02,)
 

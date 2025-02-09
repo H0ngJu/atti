@@ -1,4 +1,3 @@
-import 'package:atti/tmp/screen/HomePatient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../data/notification/notification_controller.dart';
@@ -7,8 +6,6 @@ import 'package:atti/data/schedule/schedule_service.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
-import '../memory/register/MemoryRegister2.dart';
 import 'package:atti/data/memory/memory_note_controller.dart';
 import 'dart:math';
 
@@ -80,7 +77,7 @@ class _FullScreenSchedule2State extends State<FullScreenSchedule2> {
     String randomImageName = imageNames[random.nextInt(imageNames.length)];
 
     return Scaffold(
-      backgroundColor: Color(0xffFFF7E3),
+      backgroundColor: const Color(0xffFFF7E3),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -102,20 +99,20 @@ class _FullScreenSchedule2State extends State<FullScreenSchedule2> {
           TextButton(
             onPressed: () {
             },
+            style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.all(const Color(0xffFFECB5)),
+              overlayColor: WidgetStateProperty.all(Colors.transparent), // 클릭 시 효과나 모션 없애기
+              shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              )),
+              visualDensity: const VisualDensity(vertical: -1),
+            ),
             child: Text(getFormattedTime(),
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 24,
                   color: Color(0xffA38130),
                   fontWeight: FontWeight.w500
               ),
-            ),
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Color(0xffFFECB5)),
-              overlayColor: MaterialStateProperty.all(Colors.transparent), // 클릭 시 효과나 모션 없애기
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              )),
-              visualDensity: VisualDensity(vertical: -1),
             ),
           ),
           SizedBox(height: height * 0.02,),
@@ -124,12 +121,12 @@ class _FullScreenSchedule2State extends State<FullScreenSchedule2> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: height * 0.02,),
-                Text('일정을 진행하고 있나요?',
+                const Text('일정을 진행하고 있나요?',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                 ),
                 //SizedBox(height: height * 0.01,),
                 Text('\'${schedule?.name}\'',
-                  style: TextStyle(fontSize: 28, color: Color(0xffA38130), fontWeight: FontWeight.w600),
+                  style: const TextStyle(fontSize: 28, color: Color(0xffA38130), fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: height * 0.07,),
 
@@ -153,41 +150,41 @@ class _FullScreenSchedule2State extends State<FullScreenSchedule2> {
                               false);
 
                           SystemNavigator.pop();
-                        }, child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5),
-                          child: Text('네', style: TextStyle(
-                            fontSize: 24, color: Colors.white, fontWeight: FontWeight.normal
-                          ),),
-                        ),
+                        },
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
-                            shape: MaterialStateProperty.all(
+                            backgroundColor: WidgetStateProperty.all(const Color(0xffFFC215)),
+                            shape: WidgetStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15), // 모서리를 더 작게 조정
                               ),
 
                             ),
-                          ),
+                          ), child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: Text('네', style: TextStyle(
+                            fontSize: 24, color: Colors.white, fontWeight: FontWeight.normal
+                          ),),
+                        ),
                         ),
                       ),
                       SizedBox(width: width * 0.03,),
                       Expanded(
                         child: TextButton(onPressed: () {
                           SystemNavigator.pop();
-                        }, child: Padding(
+                        },
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(const Color(0xffFFECB5)),
+                            shape: WidgetStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15), // 모서리를 더 작게 조정
+                              ),
+                            ),
+                          ), child: const Padding(
                           padding: EdgeInsets.symmetric(vertical: 5),
                           child: Text('아니요', style: TextStyle(
                             fontSize: 24, color: Colors.black, fontWeight: FontWeight.normal
                           ),),
                         ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Color(0xffFFECB5)),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15), // 모서리를 더 작게 조정
-                              ),
-                            ),
-                          ),
                         ),
                       )
                     ],
