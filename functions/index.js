@@ -5,6 +5,11 @@ const functions = require('firebase-functions');
 const admin = require("firebase-admin");
 admin.initializeApp();
 
+const sharp = require('sharp');
+const path = require('path');
+const os = require('os');
+const fs = require('fs');
+
 // ====================================================================================
 // 2024.04.28~ 수정사항
 // 1. 리포트 일정 완료율 가공
@@ -646,3 +651,65 @@ exports.sendScheduledNotifications = onSchedule(
     }
   }
 );
+
+
+// ===================================================================================
+
+// 스토리지에 이미지 저장되면 이미지 파일을 webp 형식으로 변환하는 함수
+
+exports.convertToWebp = functions.storage.object().onFinalize(async (object) => {
+  const bucket = admin.storage().bucket(object.bucket);
+  const filePath = object.name; // 업로드된 파일의 경로 (예: images/filename.jpg)
+  const contentType = object.contentType;
+
+  // 이미지 파일이 아니거나 JPG, PNG가 아닌 경우 무시
+  if (!contentType || (!contentType.startsWith('image/jpeg') && !contentType.startsWith('image/png'))) {
+    console.log('This is not a supported JPG/PNG image.');
+    return null;
+  }
+
+  // 원본 파일 다운로드를 위한 임시 경로 설정
+  const fileName = path.basename(filePath);
+  const tempFilePath = path.join(os.tmpdir(), fileName);
+  await bucket.file(filePath).download({ destination: tempFilePath });
+  console.log(`Downloaded ${filePath} to ${tempFilePath}`);
+
+  // 파일명에서 확장자를 제거하고 .webp 확장자로 변경
+  const parsedPath = path.parse(filePath);
+  const newFileName = parsedPath.name + '.webp';
+  // 원본 파일과 동일한 폴더에 저장 (예: images/filename.webp)
+  const webpDestination = path.join(parsedPath.dir, newFileName);
+  const tempWebpPath = path.join(os.tmpdir(), newFileName);
+
+  try {
+    // Sharp를 사용하여 WebP로 변환 (품질 80)
+    await sharp(tempFilePath)
+      .webp({ quality: 80 })
+      .toFile(tempWebpPath);
+    console.log(`Converted image to WebP format: ${tempWebpPath}`);
+
+    // 변환된 WebP 파일을 원본과 동일한 경로에 업로드
+    await bucket.upload(tempWebpPath, {
+      destination: webpDestination,
+      metadata: { contentType: 'image/webp' },
+    });
+    console.log(`Uploaded WebP image to ${webpDestination}`);
+
+    // 변환이 완료되었으므로 원본 파일 삭제
+    await bucket.file(filePath).delete();
+    console.log(`Deleted original file: ${filePath}`);
+
+  } catch (error) {
+    console.error('Error during image conversion:', error);
+  } finally {
+    // 임시 파일 삭제
+    if (fs.existsSync(tempFilePath)) {
+      fs.unlinkSync(tempFilePath);
+    }
+    if (fs.existsSync(tempWebpPath)) {
+      fs.unlinkSync(tempWebpPath);
+    }
+  }
+
+  return null;
+});
