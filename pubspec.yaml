@@ -74,6 +74,7 @@ dependencies:
   firebase_messaging: ^14.7.19
   collection: ^1.17.1
   path_provider:
+  flutter_image_compress: ^2.3.0
 
 
 

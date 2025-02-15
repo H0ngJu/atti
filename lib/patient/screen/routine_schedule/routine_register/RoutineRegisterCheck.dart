@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:atti/commons/YesNoActionButtonsAsync.dart';
 import 'package:atti/data/notification/notification.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/data/routine/routine_controller.dart';
@@ -38,10 +41,19 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
     return repeatDays.map((day) => dayMapping[day]!).toList();
   }
 
-  @override
-  void initState() {
-    print("환자 도큐먼트 레퍼런스 여기여기!!!!!!!!!!!!");
-    print(authController.patientDocRef);
+  Future<XFile?> convertImageToWebp(File file) async {
+    // 원본 파일 경로에서 확장자 부분을 제거하고 .webp를 붙임
+    final targetPath = file.path.substring(0, file.path.lastIndexOf('.')) + '.webp';
+
+    // flutter_image_compress를 사용해 이미지 변환 수행
+    final result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      targetPath,
+      quality: 70, // 압축 품질 (0~100)
+      format: CompressFormat.webp, // 변환할 포맷을 WebP로 지정
+    );
+
+    return result != null ? XFile(result.path) : null;
   }
 
   @override
@@ -96,8 +108,20 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
                     List<int> repeatDaysToNumList = mapDaysToNumbers(
                         routineController.routine.value.repeatDays!);
 
+                    // 이미지 WebP 변환 시작
+                    File originalFile = File(tmpImg); // 기존 이미지 파일
+                    XFile? webpFile = await convertImageToWebp(originalFile);
+
+                    if (webpFile != null) {
+                      tmpImg = webpFile.path; // 변환된 이미지 경로 저장
+                      routineController.routine.update((val) {
+                        val!.img = tmpImg; // 변환된 이미지 경로 업데이트
+                      });
+                    }
+
                     final updatedRoutine = await routineController.addRoutine();
 
+                    // 환자라면 알림 설정
                     if (authController.isPatient) {
                       await notificationService.showWeeklyNotification(
                         tmpName,
@@ -107,6 +131,7 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
                         updatedRoutine.reference!.id,
                       );
                     }
+
 
                     Navigator.push(
                       context,

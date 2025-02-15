@@ -27,7 +27,10 @@ class _MidicineRoutineRegister3State extends State<MidicineRoutineRegister3> {
   //이미지를 가져오는 함수
   Future getImage(ImageSource imageSource) async {
     //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
-    final XFile? pickedFile = await picker.pickImage(source: imageSource);
+    final XFile? pickedFile = await picker.pickImage(
+        source: imageSource,
+        imageQuality: 75
+    );
     if (pickedFile != null) {
       setState(() {
         _image = XFile(pickedFile.path); //가져온 이미지를 _image에 저장

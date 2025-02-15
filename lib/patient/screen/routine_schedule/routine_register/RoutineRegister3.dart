@@ -10,6 +10,7 @@ import '../../../../commons/colorPallet.dart';
 import 'RoutineRegisterCheck.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class RoutineRegister3 extends StatefulWidget {
   const RoutineRegister3({super.key});
@@ -28,10 +29,10 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
   Future getImage(ImageSource imageSource) async {
     //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
     final XFile? pickedFile = await picker.pickImage(
-      source: imageSource,
-      maxHeight: 400,
-      maxWidth: 250,
-      imageQuality: 80
+        source: imageSource,
+        // maxHeight: 400,
+        // maxWidth: 250,
+        imageQuality: 75
     );
     if (pickedFile != null) {
       setState(() {
@@ -85,7 +86,7 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
                                 MediaQuery.of(context).size.height * 0.4),
                         width: MediaQuery.of(context).size.width * 0.9,
                         //height: 280,
-                        child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄움
+                        child: Image.file(File(_image!.path)), // 변환된 이미지 표시... 과연!!?
                       )
                     : GestureDetector(
                         onTap: () {

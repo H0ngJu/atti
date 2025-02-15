@@ -1,5 +1,6 @@
 
 import 'package:atti/data/notification/notification.dart';
+import 'package:atti/patient/screen/routine_schedule/RoutineScheduleMain.dart';
 
 import 'package:atti/tmp/screen/routine/RoutineMain.dart';
 import 'package:atti/tmp/screen/schedule/ScheduleMain.dart';
@@ -13,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'firebase_options.dart';
+import 'login_signUp/IntroPage.dart';
 import 'login_signUp/LogInScreen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -119,9 +121,9 @@ class MyApp extends StatelessWidget {
       },
 
       routes: {
-        '/': (context) => const LogInScreen(),
-        '/schedule': (context) => const ScheduleMain(),
-        '/routine': (context) => const RoutineMain(),
+        '/': (context) => const IntroPage(),
+        '/schedule': (context) => const RoutineScheduleMain(),
+        '/routine': (context) => const RoutineScheduleMain(),
       },
     );
   }
