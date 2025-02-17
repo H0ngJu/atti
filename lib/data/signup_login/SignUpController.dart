@@ -1,12 +1,11 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpController extends GetxController {
-  FirebaseAuth _authentication = FirebaseAuth.instance;
-  FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseAuth _authentication = FirebaseAuth.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   // 가입 시 사용하는 데이터
   RxInt isPressed = 0.obs;
@@ -20,6 +19,12 @@ class SignUpController extends GetxController {
   var userName = "".obs;
   var userPhoneNumber = "".obs;
   String? userFCMToken = "";
+  var userSex = 0.obs;
+  var scrn3_isValid = false.obs;
+  var scrn4_isValid = false.obs;
+  var scrn4_btnIsValid = false.obs;
+  var scrn4_codeIsValid = false.obs;
+  var authCode = "".obs;
 
   // 보호자 전용 데이터
   late DocumentReference patientDocId;
@@ -49,7 +54,7 @@ class SignUpController extends GetxController {
           .where('userEmail', isEqualTo: userPatientEmail.value)
           .where('isPatient', isEqualTo: true)
           .get();
-      if (snapshot.docs.length > 0) {
+      if (snapshot.docs.isNotEmpty) {
         patientDocId = snapshot.docs[0].reference;
       } else {
         print('일치하는 피보호자가 없습니다');

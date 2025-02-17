@@ -1,23 +1,21 @@
-import 'package:atti/screen/HomeCarer.dart';
-import 'package:atti/screen/HomePatient.dart';
-import 'package:atti/screen/memory/gallery/MainGallery.dart';
+import 'package:atti/patient/screen/memory/gallery/MainMemory.dart';
+import 'package:atti/tmp/screen/HomeCarer.dart';
+import 'package:atti/patient/screen/HomePatient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
+import '../carer/screen/memory/gallery/CarerMainMemory.dart';
+import '../carer/screen/routine_shcedule/CarerRoutineScheduleMain.dart';
 import '../data/auth_controller.dart';
-import '../screen/RoutineScheduleMain.dart';
-import '../screen/memory/register/MemoryRegister1.dart';
-import '../screen/routine/RoutineMain.dart';
-import '../screen/schedule/ScheduleMain.dart';
+import '../patient/screen/routine_schedule/RoutineScheduleMain.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final AuthController authController = Get.put(AuthController());
   final int currentIndex;
   final Function(int) onTap;
 
-  CustomBottomNavigationBar({required this.currentIndex, required this.onTap});
+  CustomBottomNavigationBar({super.key, required this.currentIndex, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +27,21 @@ class CustomBottomNavigationBar extends StatelessWidget {
       type: BottomNavigationBarType.fixed,
       items: [
         _buildBottomNavigationBarItem(
-          tappedIcon: 'lib/assets/icons/memory_black.svg',
-          untappedIcon: 'lib/assets/icons/memory_white.svg',
+          tappedIcon: 'lib/assets/icons/memory_orange.svg',
+          untappedIcon: 'lib/assets/icons/memory_black.svg',
           label: '내 기억',
           isSelected: currentIndex == 0,
 
         ),
         _buildBottomNavigationBarItem(
-          tappedIcon: 'lib/assets/icons/home_black.svg',
-          untappedIcon: 'lib/assets/icons/home_white.svg',
+          tappedIcon: 'lib/assets/icons/home_orange.svg',
+          untappedIcon: 'lib/assets/icons/home_black.svg',
           label: '홈',
           isSelected: currentIndex == 1,
         ),
         _buildBottomNavigationBarItem(
-          tappedIcon: 'lib/assets/icons/RShome_black.svg',
-          untappedIcon: 'lib/assets/icons/RShome_white.svg',
+          tappedIcon: 'lib/assets/icons/RShome_orange.svg',
+          untappedIcon: 'lib/assets/icons/RShome_black.svg',
           label: '일과/일정',
           isSelected: currentIndex == 2,
         ),
@@ -74,14 +72,18 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   // 추가한 부분
   void _onItemTapped(int index) {
-    if (index == 0) {
-      Get.to(MainGallery());
+    if (index == 0 && authController.isPatient) {
+      Get.to(const MainMemory());
+    } else if (index == 0 && !authController.isPatient) {
+      Get.to(const CarerMainMemory());
     } else if (index == 1 && authController.isPatient ) {
-      Get.to(HomePatient());
+      Get.to(const HomePatient());
     } else if(index == 1 && !authController.isPatient){
-      Get.to(HomeCarer());
-    }else if (index == 2) {
-      Get.to(RoutineScheduleMain());
+      Get.to(const HomeCarer());
+    } else if (index == 2 && authController.isPatient) {
+      Get.to(const RoutineScheduleMain());
+    } else if (index == 2 && !authController.isPatient) {
+      Get.to(const CarerRoutineScheduleMain());
     } else {
       onTap(index);
     }

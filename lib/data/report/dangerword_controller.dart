@@ -29,7 +29,7 @@ class DangerWordModel {
 
   DangerWordModel.fromQuerySnapshot(
       QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : this.fromJson(snapshot.data()!, snapshot.reference);
+      : this.fromJson(snapshot.data(), snapshot.reference);
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -50,7 +50,7 @@ class DangerWordService {
     // 현재 주의 시작 및 끝 날짜 계산 (월요일부터 일요일까지의 날짜)
     DateTime now = DateTime.now();
     DateTime monday = now.subtract(Duration(days: now.weekday - 1));
-    DateTime sunday = monday.add(Duration(days: 6));
+    DateTime sunday = monday.add(const Duration(days: 6));
 
     // 해당 주의 시작 및 끝을 Timestamp로 변환
     Timestamp startOfWeek = Timestamp.fromDate(monday);

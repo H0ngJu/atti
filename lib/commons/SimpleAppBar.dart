@@ -14,9 +14,11 @@ class SimpleAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title),
+      backgroundColor: Colors.white,
+      title: Text(title, textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'PretendardMedium', fontSize: 24),),
+      centerTitle: true,
       leading: IconButton(
-        icon: Icon(Icons.arrow_back),
+        icon: const Icon(Icons.arrow_back_ios),
         onPressed: onBackPressed ??
                 () {
               Get.back();
@@ -26,5 +28,5 @@ class SimpleAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

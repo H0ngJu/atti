@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:atti/data/routine/routine_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'dart:io';
+import '../../main.dart';
 import '../auth_controller.dart';
 import 'dart:core';
 
@@ -29,13 +29,16 @@ class RoutineService {
   }
 
   // 루틴 등록
-  Future<void> addRoutine(RoutineModel routine) async {
+  Future<RoutineModel> addRoutine(RoutineModel routine) async {
     try {
       String imageUrl = await uploadImage(routine.img!);
       routine.img = imageUrl; // 업로드된 이미지 url로 img필드 업데이트
       routine.createdAt = Timestamp.now();
       routine.patientId = authController.patientDocRef;
       routine.isPatient = authController.isPatient;
+
+      print("addRoutine 함수 안!!!!");
+      print(authController.patientDocRef);
 
       // // 추가 *************************
       routine.isFinished = createTimeMap(routine.repeatDays);
@@ -45,8 +48,10 @@ class RoutineService {
           await firestore.collection('routine').add(routine.toJson());
       routine.reference = docRef;
       await docRef.update(routine.toJson());
+      return routine;
     } catch (e) {
       print('Error adding notification : $e!!!!!!!!!!!!!!!!!!');
+      throw Future.error('Error adding routine : $e');
     }
   }
 
@@ -200,5 +205,32 @@ class RoutineService {
       return [];
     }
   }
+
+  // 특정 루틴 삭제
+  Future<void> deleteRoutine(DocumentReference docRef) async {
+    try {
+      // 먼저 도큐먼트를 읽어서 이미지 URL을 가져옴
+      DocumentSnapshot docSnapshot = await docRef.get();
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data() as Map<String, dynamic>;
+        final String? imageUrl = data['img'];
+
+        if (imageUrl != null && imageUrl.isNotEmpty) {
+          // Firebase Storage에서 해당 URL의 파일 참조를 얻어 삭제
+          final Reference storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+          await storageRef.delete();
+          print('Image deleted from Storage successfully!');
+        }
+      }
+
+      // Firestore 도큐먼트 삭제
+      await docRef.delete();
+      await flutterLocalNotificationsPlugin.cancel(docRef.id.hashCode);
+      print('Routine deleted successfully!');
+    } catch (e) {
+      print('Error deleting routine: $e');
+    }
+  }
+
 
 }

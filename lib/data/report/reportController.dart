@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
-import '../auth_controller.dart';
 import 'dart:core';
 
 class ReportController {
@@ -20,7 +18,7 @@ class ReportController {
         userSnapshot = await _db.collection('user')
             .where('userId', isEqualTo: user.uid)
             .get();
-        if (userSnapshot.docs.length > 0) {
+        if (userSnapshot.docs.isNotEmpty) {
           // 보호자 도큐먼트 내 patientId로 레포트 쿼리
           DocumentReference patientRef = _db.doc("user/"+userSnapshot.docs[0]["patientDocId"]);
           QuerySnapshot reportsSnapshot = await _db.collection('report')

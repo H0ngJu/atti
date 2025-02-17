@@ -1,28 +1,9 @@
-import 'dart:ffi';
 
-import 'package:atti/data/auth_controller.dart';
 import 'package:atti/data/notification/notification.dart';
-import 'package:atti/screen/LogInSignUp/LogInScreen.dart';
-import 'package:atti/screen/LogInSignUp/LogInSignUpMainScreen.dart';
+import 'package:atti/patient/screen/routine_schedule/RoutineScheduleMain.dart';
 
-import 'package:atti/screen/LogInSignUp/SignUpScreen1.dart';
-import 'package:atti/screen/LogInSignUp/SignUpScreen2.dart';
-import 'package:atti/screen/LogInSignUp/SignUpScreen3.dart';
-import 'package:atti/screen/LoginSignUp/IntroPage.dart';
-import 'package:atti/screen/Notice/NoticeMain.dart';
-import 'package:atti/screen/report/ReportHistory.dart';
-import 'package:atti/screen/routine/RoutineMain.dart';
-import 'package:atti/screen/routine/register/RoutineRegister1.dart';
-import 'package:atti/screen/memory/chat/Chat.dart';
-import 'package:atti/screen/memory/gallery/GalleryOption.dart';
-import 'package:atti/screen/memory/register/MemoryRegister1.dart';
-import 'package:atti/screen/memory/register/MemoryRegister2.dart';
-import 'package:atti/screen/LoginSignUp/FinishSignUpScreen.dart';
-import 'package:atti/screen/LoginSignUp/SignUpFamilyTag.dart';
-import 'package:atti/screen/chatbot/Chatbot.dart';
-import 'package:atti/screen/memory/gallery/MemoryDetail.dart';
-import 'package:atti/screen/schedule/ScheduleMain.dart';
-import 'package:atti/screen/memory/gallery/MainGallery.dart';
+import 'package:atti/tmp/screen/routine/RoutineMain.dart';
+import 'package:atti/tmp/screen/schedule/ScheduleMain.dart';
 
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -33,6 +14,8 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'firebase_options.dart';
+import 'login_signUp/IntroPage.dart';
+import 'login_signUp/LogInScreen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -98,27 +81,49 @@ void main() async {
 class MyApp extends StatelessWidget {
   final NotificationService notificationService;
   final String initialRoute;
-  MyApp({super.key, required this.notificationService, required this.initialRoute});
+  const MyApp({super.key, required this.notificationService, required this.initialRoute});
 
   @override
   Widget build(BuildContext context) {
     notificationService.init(context);
     return GetMaterialApp(
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('ko', 'KR'), // Korean
+      supportedLocales: const [
+        Locale('ko', 'KR'), // Korean
       ],
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(),
+      theme: ThemeData(
+        // Material3 사용 시
+        useMaterial3: true,
+        // Material3의 경우 ColorScheme에 surfaceTint을 지정할 수 있습니다.
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue).copyWith(
+          surfaceTint: Colors.transparent,
+        ),
+        // AlertDialog 등 모달의 배경을 변경하려면 dialogTheme을 설정
+        dialogTheme: const DialogTheme(
+          backgroundColor: Colors.white,
+        ),
+      ),
       initialRoute: initialRoute,
+
+      // 앱 전체 글자 크기 고정하기 !!
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaler: const TextScaler.linear(1.0), // 글자 크기를 고정
+          ),
+          child: child!,
+        );
+      },
+
       routes: {
-        '/': (context) => IntroPage(),
-        '/schedule': (context) => ScheduleMain(),
-        '/routine': (context) => RoutineMain(),
+        '/': (context) => const IntroPage(),
+        '/schedule': (context) => const RoutineScheduleMain(),
+        '/routine': (context) => const RoutineScheduleMain(),
       },
     );
   }

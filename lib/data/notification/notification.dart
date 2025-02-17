@@ -1,21 +1,15 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:typed_data';
-import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:atti/data/notification/notification_controller.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import '../routine/routine_model.dart';
-import '../routine/routine_service.dart';
 import '../schedule/schedule_model.dart';
 import '../schedule/schedule_service.dart';
-import 'package:get/get.dart';
 import 'package:atti/main.dart';
 
 // 로컬 푸시 알림을 사용하기 위한 플러그인 인스턴스 생성
@@ -81,7 +75,7 @@ class NotificationService {
         .get();
     String userName = userDocSnapshot['userName'];
 
-    final AndroidNotificationDetails androidNotificationDetails =
+    const AndroidNotificationDetails androidNotificationDetails =
     AndroidNotificationDetails(
       'daily_channel',
       'Daily Notification Channel',
@@ -95,14 +89,14 @@ class NotificationService {
       '아띠',
       '오늘의 일과와 일정을 확인해보세요!',
       makeDate(7,0,0),
-      NotificationDetails(android: androidNotificationDetails),
+      const NotificationDetails(android: androidNotificationDetails),
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
       payload: 'home'
     );
 
-    await addNotification('매일 알림', '오늘 ${userName}님의 일과와 일정을 확인해보세요!', dailyTime, authController.isPatient);
+    await addNotification('매일 알림', '오늘 $userName님의 일과와 일정을 확인해보세요!', dailyTime, authController.isPatient);
   }
 
   // (보호자) 매주 월요일 아침에 알림 보내기 ======================================================
@@ -115,7 +109,7 @@ class NotificationService {
         .get();
     String userName = userDocSnapshot['userName'];
 
-    final AndroidNotificationDetails androidNotificationDetails =
+    const AndroidNotificationDetails androidNotificationDetails =
     AndroidNotificationDetails(
       'weekly_channel',
       'Weekly Notification Channel',
@@ -131,16 +125,16 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.zonedSchedule(
       1, //createUniqueId(),
       '아띠',
-      '저번 주 ${userName}님의 보고서가 도착했어요!',
+      '저번 주 $userName님의 보고서가 도착했어요!',
       nextMonday,
-      NotificationDetails(android: androidNotificationDetails),
+      const NotificationDetails(android: androidNotificationDetails),
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
       payload: 'home',
     );
 
-    await addNotification('주간 알림', '저번 주 ${userName}님의 보고서가 도착했어요!', nextMonday, false);
+    await addNotification('주간 알림', '저번 주 $userName님의 보고서가 도착했어요!', nextMonday, false);
   }
 
 
@@ -148,6 +142,8 @@ class NotificationService {
   Future<void> showDateTimeNotification(int id, String title, String body, DateTime dateTime, String payload) async {
     tz.initializeTimeZones();
     tz.TZDateTime scheduledDate = tz.TZDateTime.from(dateTime, tz.getLocation('Asia/Seoul'));
+
+    print('showDateTimeNotification 함수 내부');
 
     final AndroidNotificationDetails androidNotificationDetails =
     AndroidNotificationDetails(
@@ -160,25 +156,31 @@ class NotificationService {
       vibrationPattern: Int64List.fromList([0, 1000, 500, 1000]),
     );
 
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduledDate,
-      const NotificationDetails(android: AndroidNotificationDetails(
-        'channel id',
-        'channel name',
-        channelDescription: 'full screen channel description',
-        priority: Priority.high,
-        importance: Importance.high,
-        fullScreenIntent: true,
-      )),
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.absoluteTime,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      payload: payload
-    );
+    try {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        id,
+        title,
+        body,
+        scheduledDate,
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'channel id',
+            'channel name',
+            channelDescription: 'full screen channel description',
+            priority: Priority.high,
+            importance: Importance.high,
+            fullScreenIntent: true,
+          ),
+        ),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        payload: payload,
+      );
+      print('알림 예약 성공');
+    } catch (e) {
+      print('알림 예약 실패: $e');
+    }
 
     await addNotification(title, body, dateTime, authController.isPatient); // 알림 보낸 후 파이어베이스에 저장
   }
@@ -186,64 +188,119 @@ class NotificationService {
   // 일정 30분 전 알림 예약 =========================================================================
   Future<void> scheduleNotifications() async {
     List<ScheduleModel>? allSchedule = await ScheduleService().getAllSchedules();
-    if (allSchedule != null) {
-      for (ScheduleModel schedule in allSchedule) {
-        DateTime notificationTime = schedule.time!.toDate().subtract(Duration(hours: 1));
+    for (ScheduleModel schedule in allSchedule) {
+      DateTime notificationTime = schedule.time!.toDate().subtract(const Duration(hours: 1));
 
-        //현재 시간 이후의 알림에 대해서만 예약
-        if (notificationTime.isAfter(DateTime.now())) {
-          //notificationTime = DateTime.now().add(Duration(seconds: 10));
-          await showDateTimeNotification(
-              2,
-              '일정 알림',
-              '곧 \'${schedule.name}\'을(를) 하실 시간이에요!',
-              notificationTime,
-              '/schedule/${schedule.reference!.id}'
-          );
-        }
+      //현재 시간 이후의 알림에 대해서만 예약
+      if (notificationTime.isAfter(DateTime.now())) {
+        //notificationTime = DateTime.now().add(Duration(seconds: 10));
+        await showDateTimeNotification(
+            2,
+            '일정 알림',
+            '곧 \'${schedule.name}\'을(를) 하실 시간이에요!',
+            notificationTime,
+            '/schedule/${schedule.reference!.id}'
+        );
       }
     }
-  }
+    }
 
   // 오늘의 루틴 시각에 알림 예약 =============================================================
-  Future<void> routineNotifications() async {
-    print("ㅡㅡㅡㅡㅡㅡㅡroutineNotificationsㅡㅡㅡㅡㅡㅡㅡ");
-    RoutineService routineService = RoutineService();
-    String today = DateFormat('E', 'ko-KR').format(DateTime.now());
-    List<RoutineModel> routines = await routineService.getRoutinesByDay(today);
+  // Future<void> routineNotifications() async {
+  //   print("ㅡㅡㅡㅡㅡㅡㅡroutineNotificationsㅡㅡㅡㅡㅡㅡㅡ");
+  //   RoutineService routineService = RoutineService();
+  //   String today = DateFormat('E', 'ko-KR').format(DateTime.now());
+  //   List<RoutineModel> routines = await routineService.getRoutinesByDay(today);
+  //
+  //   DateTime now = DateTime.now();
+  //   // 각 루틴에 대해 알림 예약
+  //   for (RoutineModel routine in routines) {
+  //
+  //     // if (routine.time != null && !routine.isFinished.contains(now.toString())) {
+  //     if (routine.time != null) {
+  //       final int hour = routine.time![0];
+  //       final int minute = routine.time![1];
+  //
+  //       //DateTime routineTime = DateTime(now.year, now.month, now.day, hour, minute);
+  //       DateTime routineTime = makeDate(hour, minute, 0);
+  //
+  //       //현재 시간 이후의 알림에 대해서만 예약
+  //       if (routineTime.isAfter(now)) {
+  //        //routineTime = now.add(Duration(seconds: 10));
+  //         await showDateTimeNotification(
+  //             3,
+  //             '하루 일과 알림',
+  //             '\'${routine.name}\' 일과를 완료하셨나요?',
+  //             routineTime,
+  //             '/routine/${routine.reference!.id}'
+  //         );
+  //         print("루틴 알림 예약 완료");
+  //       }
+  //     }
+  //   }
+  // }
 
-    DateTime now = DateTime.now();
-    // 각 루틴에 대해 알림 예약
-    for (RoutineModel routine in routines) {
+  // 루틴 등록할 때, 매주 정해진 요일과 시간에 알림 예약 =======================================
+  Future<void> showWeeklyNotification(String name, List<int> daysOfWeek, int hour, int minute, String payload) async {
+    tz.initializeTimeZones();
+    final location = tz.getLocation('Asia/Seoul');
 
-      // if (routine.time != null && !routine.isFinished.contains(now.toString())) {
-      if (routine.time != null) {
-        final int hour = routine.time![0];
-        final int minute = routine.time![1];
+    const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+      'weekly_channel',
+      'Weekly Notification Channel',
+      channelDescription: 'This channel is used for weekly notifications',
+      importance: Importance.high,
+      color: Color(0xffFFE9B3),
+      fullScreenIntent: true,
+    );
 
-        //DateTime routineTime = DateTime(now.year, now.month, now.day, hour, minute);
-        DateTime routineTime = makeDate(hour, minute, 0);
+    for (int dayOfWeek in daysOfWeek) {
+      final scheduledTime = makeWeeklyDate(dayOfWeek, hour, minute, location);
 
-        //현재 시간 이후의 알림에 대해서만 예약
-        if (routineTime.isAfter(now)) {
-         //routineTime = now.add(Duration(seconds: 10));
-          await showDateTimeNotification(
-              3,
-              '하루 일과 알림',
-              '\'${routine.name}\' 일과를 완료하셨나요?',
-              routineTime,
-              '/routine/${routine.reference!.id}'
-          );
-        }
-      }
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        payload.hashCode, // Unique ID for each notification
+        '일과 알림',
+        '\'$name\' 일과를 완료하셨나요?',
+        scheduledTime,
+        const NotificationDetails(android: androidNotificationDetails),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+        payload: '/routine/$payload',
+      );
+
+      await addNotification(
+        '일과 알림',
+        '\'$name\' 일과를 완료하셨나요?',
+        scheduledTime,
+        authController.isPatient,
+      );
     }
+    print("루틴 알림 예약 성공 !!!!!");
   }
+
+  tz.TZDateTime makeWeeklyDate(int dayOfWeek, int hour, int minute, tz.Location location) {
+    final now = tz.TZDateTime.now(location);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(location, now.year, now.month, now.day, hour, minute);
+
+    while (scheduledDate.weekday != dayOfWeek) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+
+    // Ensure the scheduled time is in the future
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 7));
+    }
+
+    return scheduledDate;
+  }
+
 
   makeDate(hour, min, sec){  // tz로 날짜, 시간 변환
     var now = tz.TZDateTime.now(tz.getLocation('Asia/Seoul'));
     var when = tz.TZDateTime(tz.getLocation('Asia/Seoul'), now.year, now.month, now.day, hour, min, sec);
     if (when.isBefore(now)) {
-      return when.add(Duration(seconds: 10));
+      return when.add(const Duration(seconds: 10));
     } else {
       return when;
     }

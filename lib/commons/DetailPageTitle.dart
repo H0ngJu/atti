@@ -1,19 +1,17 @@
 // 상세 페이지 윗부분 (뒤로가기 아이콘, 제목과 설명, 진행도)
-// 사용법 :
-// DetailPageTitle(
-//                   title: '일정 등록하기',
-//                   description: '일정 이름을 입력해주세요',
-//                   totalStep: 6,
-//                   currentStep: 1,
-//                 ),
 
 import 'package:flutter/material.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class DetailPageTitle extends StatefulWidget {
-  const DetailPageTitle({super.key, this.title, this.description, this.totalStep, this.currentStep});
+  const DetailPageTitle(
+      {super.key,
+      required this.title,
+      this.description,
+      required this.totalStep,
+      required this.currentStep});
+
   final title;
-  final description;
+  final String? description;
   final totalStep;
   final currentStep;
 
@@ -24,57 +22,84 @@ class DetailPageTitle extends StatefulWidget {
 class _DetailPageTitleState extends State<DetailPageTitle> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: EdgeInsets.only(top: 40),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container( // 뒤로가기 아이콘
-                    //margin: EdgeInsets.only(top: 50, left: 5),
-                    child: IconButton(onPressed: (){
-                      Navigator.of(context).pop();
-                    }, icon: Icon(Icons.arrow_back_ios_outlined, size: 25))),
-                //SizedBox(height: 30.0),
-                Container(
-                  margin: EdgeInsets.only(left: 15),
-                  child: Text(widget.title, style: TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.w500
-                  ),),
-                ),
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
 
-                if (widget.totalStep != 0)
-                Container(
-                  margin: EdgeInsets.only(right: 15),
-                  width: 12.toDouble() * widget.totalStep,
-                  child: StepProgressIndicator(
-                    totalSteps: widget.totalStep,
-                    currentStep: widget.currentStep,
-                    size: 6,
-                    padding: 3,
-                    selectedColor: Color(0xffFFC215),
-                    unselectedColor: Color(0xffCDCDCD)
-                  ),
-                )
-                else SizedBox(width: 60,),
-              ],
+    return SizedBox(
+      width: double.infinity,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Container(
+          margin: const EdgeInsets.only(top: 40),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // 뒤로가기 아이콘
+              SizedBox(
+                  width: width * 0.048,
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(Icons.arrow_back_ios_outlined, size: 25))),
+              //SizedBox(height: 30.0),
+
+              // 상단바 제목
+              Container(
+                margin: const EdgeInsets.only(left: 15),
+                child: Text(
+                  widget.title,
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+                ),
+              ),
+              Container(
+                width: width * 0.13,
+              )
+            ],
+          ),
+        ),
+
+        // 진행도 바
+        if (widget.totalStep != 0)
+          Center(
+            child: Container(
+              margin: const EdgeInsets.only(right: 15),
+              width: width * 0.41,
+              height: 6,
+              // LinearProgressIndicator의 높이와 동일하게 설정
+              decoration: BoxDecoration(
+                color: const Color(0xffE9E9E9), // 미선택된 색상
+                borderRadius: BorderRadius.circular(3), // 둥근 모서리 설정
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(3), // 진행도 바 모서리 둥글게
+                child: LinearProgressIndicator(
+                  value: widget.currentStep / widget.totalStep, // 진행률 계산
+                  backgroundColor: Colors.transparent, // 배경 투명
+                  valueColor: const AlwaysStoppedAnimation<Color>(
+                      Color(0xffFFC215)), // 선택된 색상
+                ),
+              ),
+            ),
+          )
+        else
+          const SizedBox(width: 60,),
+
+        // 설명
+        if (widget.description != null) ...[
+          SizedBox(height: width * 0.06,),
+          Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                widget.description!,
+                style: const TextStyle(
+                    fontSize: 28, fontWeight: FontWeight.w500, height: 1.2),
+              ),
             ),
           ),
-          SizedBox(height: 20,),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            margin: EdgeInsets.only(left: 20),
-            //alignment: Alignment.centerLeft,
-            child: Text(widget.description, style: TextStyle(
-              fontSize: 28, fontWeight: FontWeight.w500
-            ),),
-          ),
         ],
-      ),
+      ]),
     );
   }
 }

@@ -1,8 +1,15 @@
 // The Cloud Functions for Firebase SDK to set up triggers and logging.
 const { onSchedule } = require("firebase-functions/v2/scheduler");
+const { onDocumentCreated } = require("firebase-functions/v2/firestore");
 const functions = require('firebase-functions');
 const admin = require("firebase-admin");
+const sharp = require('sharp');
+const path = require('path');
+const os = require('os');
+const fs = require('fs');
+
 admin.initializeApp();
+
 
 // ====================================================================================
 // 2024.04.28~ 수정사항
@@ -325,44 +332,466 @@ exports.weeklyReport = onSchedule(
   }
 );
 
-//======================================================================
+// ======================================================================
+// 환자가 일정/일과 완료 시 보호자 계정으로 알림을 보내는 함수
+//exports.sendNotificationOnFinish = functions.firestore
+//    .document('notification_finish/{documentId}')
+//    .onCreate((snap, context) => {
+//        const documentData = snap.data();
+//        const title = documentData.title; // 알림 제목
+//        const message = documentData.message; // 알림 본문
+//        const patientDocRefPath = documentData.patientDocRef.path;
+//
+//        // patientDocRef를 이용하여 환자 문서에서 보호자의 레퍼런스를 가져옴
+//        return admin.firestore().doc(patientDocRefPath).get().then(patientDoc => {
+//            const carerRef = patientDoc.data().carerRef.path;
+//
+//            // 보호자 레퍼런스를 이용하여 보호자 문서에서 FCM 토큰을 가져옴
+//            return admin.firestore().doc(carerRef).get().then(carerDoc => {
+//                const userFCMToken = carerDoc.data().userFCMToken;
+//
+//                // FCM 메시지 구성
+//                const notificationMessage = {
+//                    notification: {
+//                        title: title, // 알림 제목
+//                        body: message, // 알림 본문
+//                    },
+//                    token: userFCMToken, // 보호자의 FCM 토큰
+//                };
+//
+//                // FCM을 이용하여 알림 메시지 전송
+//                return admin.messaging().send(notificationMessage);
+//            });
+//        }).catch(error => {
+//            console.log('Error sending notification:', error);
+//            return null;
+//        });
+//    });
 
-exports.sendNotificationOnFinish = functions.firestore
-    .document('notification_finish/{documentId}')
-    .onCreate((snap, context) => {
-        const documentData = snap.data();
-        const title = documentData.title; // 알림 제목
-        const message = documentData.message; // 알림 본문
-        console.log(message);
+exports.sendNotificationOnFinish = onDocumentCreated(
+  { document: "notification_finish/{documentId}",  region: "asia-northeast3" },
+  async (event) => {
+    try {
+      const documentData = event.data;
+      const title = documentData.title;
+      const message = documentData.message;
+      const patientDocRefPath = documentData.patientDocRef.path;
 
-        // patientDocRef를 이용하여 환자 문서에서 보호자의 레퍼런스를 가져옴
-        const patientDocRefPath = documentData.patientDocRef.path;
-        console.log(patientDocRefPath);
+      const patientDoc = await admin.firestore().doc(patientDocRefPath).get();
+      if (!patientDoc.exists) {
+        throw new Error("Patient document does not exist.");
+      }
+      const carerRefPath = patientDoc.data().carerRef.path;
 
-        // patientDocRef를 이용하여 환자 문서에서 보호자의 레퍼런스를 가져옴
-        return admin.firestore().doc(patientDocRefPath).get().then(patientDoc => {
-            const carerRef = patientDoc.data().carerRef.path;
+      const carerDoc = await admin.firestore().doc(carerRefPath).get();
+      if (!carerDoc.exists) {
+        throw new Error("Carer document does not exist.");
+      }
+      const userFCMToken = carerDoc.data().userFCMToken;
+      if (!userFCMToken) {
+        throw new Error("FCM token is missing.");
+      }
 
-            console.log(carerRef);
+      const notificationMessage = {
+        notification: {
+          title: title,
+          body: message,
+        },
+        token: userFCMToken,
+      };
 
-            // 보호자 레퍼런스를 이용하여 보호자 문서에서 FCM 토큰을 가져옴
-            return admin.firestore().doc(carerRef).get().then(carerDoc => {
-                const userFCMToken = carerDoc.data().userFCMToken;
+      await admin.messaging().send(notificationMessage);
+      console.log("Notification sent successfully.");
+    } catch (error) {
+      console.error("Error in sendNotificationOnFinish:", error);
+    }
+  }
+);
 
-                // FCM 메시지 구성
-                const notificationMessage = {
-                    notification: {
-                        title: title, // 알림 제목
-                        body: message, // 알림 본문
-                    },
-                    token: userFCMToken, // 보호자의 FCM 토큰
-                };
 
-                // FCM을 이용하여 알림 메시지 전송
-                return admin.messaging().send(notificationMessage);
-            });
-        }).catch(error => {
-            console.log('Error sending notification:', error);
-            return null;
-        });
-    });
+
+// ======================================================================
+// 요일 문자열을 숫자로 변환
+const dayToCron = {
+  일: 0, // Sunday
+  월: 1, // Monday
+  화: 2,
+  수: 3,
+  목: 4,
+  금: 5,
+  토: 6, // Saturday
+};
+
+// Firestore 객체 생성
+const _firestore = admin.firestore();
+
+
+// 보호자가 일과 등록했을 때 환자에게 FCM 알림 전송 -> 스케쥴러 없이 FCM만 보내는건 잘됨!!!
+//exports.sendRoutineFCMToPatient = onDocumentCreated(
+//  { document: "routine/{documentId}", region: "asia-northeast3" },
+//  async (event) => {
+//    const snapshot = event.data;
+//    if (!snapshot) {
+//      console.log("No data associated with the event");
+//      return;
+//    }
+//    const data = snapshot.data();
+//    if (!data || data.isPatient) {
+//      console.log("Skipping notification as the routine was created by a patient.");
+//      return;
+//    }
+//
+//    const { name, time, repeatDays, patientId } = data;
+//    console.log("Routine Name:", name);
+//    console.log("Routine Time:", time);
+//    console.log("Repeat Days:", repeatDays);
+//    console.log("Patient ID:", patientId);
+//
+//    try {
+//      // Firestore에서 환자의 FCM 토큰 가져오기
+//      const patientDoc = await _firestore.doc(patientId.path).get();
+//      if (!patientDoc.exists) {
+//        console.error("Patient document not found:", patientId);
+//        return;
+//      }
+//
+//      const patientFCMToken = patientDoc.data().userFCMToken;
+//      if (!patientFCMToken) {
+//        console.error("FCM Token not found for patient:", patientId);
+//        return;
+//      }
+//      console.log("Patient FCM Token:", patientFCMToken);
+//
+//      // FCM 메시지 전송
+//      const notificationMessage = {
+//        notification: {
+//          title: "일과 알림",
+//          body: `'${name}' 일과를 완료하셨나요?`,
+//        },
+//        token: patientFCMToken,
+//      };
+//
+//      try {
+//        await admin.messaging().send(notificationMessage);
+//        console.log(`✅ FCM Notification sent for '${name}' to ${patientFCMToken}`);
+//      } catch (error) {
+//        console.error("🔥 Error sending FCM notification:", error.message);
+//        console.error("Stack trace:", error.stack);
+//      }
+//    } catch (error) {
+//      console.error("🔥 Error accessing Firestore document:", error);
+//    }
+//  }
+//);
+
+exports.createRoutineScheduler = onDocumentCreated(
+  { document: "routine/{documentId}", region: "asia-northeast3" },
+  async (event) => {
+    console.log("🔥 [START] createRoutineScheduler 실행됨");
+
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log("❌ No data associated with the event");
+      return;
+    }
+
+    const data = snapshot.data();
+    if (!data || data.isPatient) {
+      console.log("⏭️ Skipping: 환자가 등록한 루틴이므로 스케줄 생성하지 않음");
+      return;
+    }
+
+    const { name, time, repeatDays, patientId } = data;
+    console.log("✅ Routine Name:", name);
+    console.log("⏰ Routine Time (hour, minute):", time[0], time[1]);
+    console.log("📅 Repeat Days:", repeatDays);
+    console.log("👤 Patient ID:", patientId);
+
+    try {
+      console.log("🔍 Firestore에서 환자 정보 조회 시작...");
+      const patientDoc = await _firestore.doc(patientId.path).get();
+      if (!patientDoc.exists) {
+        console.error("❌ Patient document not found:", patientId);
+        return;
+      }
+
+      const patientFCMToken = patientDoc.data().userFCMToken;
+      if (!patientFCMToken) {
+        console.error("❌ FCM Token not found for patient:", patientId);
+        return;
+      }
+      console.log("✅ Patient FCM Token:", patientFCMToken);
+
+      // repeatDays 배열에 있는 모든 요일을 Cron 요일 숫자로 변환
+      console.log("🔄 repeatDays -> cronDays 변환 시작...");
+      const cronDays = repeatDays
+        .map((day) => dayToCron[day])
+        .filter((val) => val !== undefined)
+        .join(",");
+
+      if (!cronDays) {
+        console.error("❌ No valid repeat days found:", repeatDays);
+        return;
+      }
+      console.log("✅ cronDays:", cronDays);
+
+      const schedulerName = `routine-${event.params.documentId}`;
+      console.log("🛠️ Scheduler Name:", schedulerName);
+
+      // ** 스케줄러 생성 **
+      console.log("📅 Scheduling routine notification...");
+      onSchedule(
+        {
+          name: schedulerName,
+          schedule: `${time[1]} ${time[0]} * * ${cronDays}`,
+          timeZone: "Asia/Seoul",
+          region: "asia-northeast3",
+        },
+        async () => {
+          console.log("🔥 [Scheduler Triggered] 알림을 전송합니다.");
+
+          const notificationMessage = {
+            notification: {
+              title: "일과 알림",
+              body: `${name} 일과를 완료하셨나요?`,
+            },
+            token: patientFCMToken,
+          };
+          console.log("📢 FCM NotificationMessage:", notificationMessage);
+
+          try {
+            await admin.messaging().send(notificationMessage);
+            console.log(`✅ Routine notification sent for '${name}' to ${patientFCMToken}`);
+          } catch (error) {
+            console.error("❌ Error sending FCM notification:", error.message);
+            console.error("Stack trace:", error.stack);
+          }
+        }
+      );
+      console.log("✅ Routine schedulers created successfully.");
+    } catch (error) {
+      console.error("🔥 Error accessing Firestore document:", error);
+    }
+  }
+);
+
+// 보호자 계정으로 일과 등록 시 해당 시각에 환자 계정으로 알림을 보내는 함수
+//exports.sendRoutineNotiFromCarerToPatient
+//    .document('Routine/{documentId}')
+//    .onCreate((snapshot, context) => {
+//        const documentData = snap.data();
+//
+//        // 보호자일 때만 실행
+//        if (documentData && documentData.isPatient === false) {
+//            const name = documentData.name; // 일과 이름
+//            const time = documentData.time; // 일과 시간. [14, 30] 형식
+//            const repeatDays = documentData.repeatDays; // 반복 요일. ['금', '토', '일'] 형식
+//            const patientDocRefPath = documentData.patientId.path; // 보호자와 연결된 환자의 도큐먼트 레퍼런스
+//
+//            // patientDocRefPath 이용하여 환자 도큐먼트 불러옴
+//            return admin.firestore().doc(patientDocRefPath).get().then(
+//                patientDoc => {
+//                    const userFCMToken = patientDoc.data().userFCMToken; // 환자의 FCM 토큰
+//
+//                    // FCM 메시지 구성
+//                    const notificationMessage = {
+//                        notification: {
+//                            title: '일과 알림',
+//                            message: '\'${name}\' 일과를 완료하셨나요?'
+//                        },
+//                        token: userFCMToken
+//                    }
+//
+//                }
+//            )
+//        }
+//
+//    });
+
+// ======================================================================
+
+// 보호자가 일정 등록했을 때 환자에게 FCM 전송하기 위한 매 분 실행되는 스케쥴러
+exports.sendScheduledNotifications = onSchedule(
+  {
+    schedule: "every 1 minutes", // 매 분 실행 (테스트 후 "*/5 * * * *"로 변경 가능)
+    timeZone: "Asia/Seoul",
+    region: "asia-northeast3",
+  },
+  async (event) => {
+    const now = new Date();
+
+    // 현재 분의 시작과 끝을 구함
+    const currentStart = new Date(now);
+    const currentEnd = new Date(now);
+    currentStart.setSeconds(0, 0);
+    currentEnd.setSeconds(59, 999);
+
+    // 1시간 후의 시점을 계산
+    const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
+    const oneHourStart = new Date(oneHourLater);
+    const oneHourEnd = new Date(oneHourLater);
+    oneHourStart.setSeconds(0, 0);
+    oneHourEnd.setSeconds(59, 999);
+
+    try {
+      // 현재 시간에 실행할 알림(정확한 알림 시각)을 조회
+      const querySnapshotOnTime = await _firestore
+        .collection("schedule")
+        .where("time", ">=", currentStart.toISOString())
+        .where("time", "<=", currentEnd.toISOString())
+        .where("notified", "==", false) // 아직 알림이 전송되지 않은 일정
+        .get();
+
+      // 1시간 후에 실행할 알림(1시간 전 알림)을 조회
+      // (이때 별도의 플래그 notifiedOneHour를 사용)
+      const querySnapshotOneHour = await _firestore
+        .collection("schedule")
+        .where("time", ">=", oneHourStart.toISOString())
+        .where("time", "<=", oneHourEnd.toISOString())
+        .where("notifiedOneHour", "==", false)
+        .get();
+
+      // 두 쿼리 모두 결과가 없으면 알림이 없다는 로그를 남기고 종료
+      if (querySnapshotOnTime.empty && querySnapshotOneHour.empty) {
+        console.log("No notifications to send at this time.");
+        return;
+      }
+
+      const batch = _firestore.batch();
+
+      // [1] 정각 알림: "일정을 진행하고 있나요?"
+      querySnapshotOnTime.forEach((doc) => {
+        const data = doc.data();
+        const { name, patientFCMToken } = data;
+        console.log("정각 알림", name);
+
+        if (!patientFCMToken) {
+          console.error("FCM Token not found for document:", doc.id);
+          return;
+        }
+
+        const notificationMessage = {
+          notification: {
+            title: "일정 알림",
+            body: `'${name}' 일정을 진행하고 있나요?`,
+          },
+          token: patientFCMToken,
+        };
+
+        admin
+          .messaging()
+          .send(notificationMessage)
+          .then((response) => {
+            console.log(`On-time notification sent: ${response}`);
+          })
+          .catch((error) => {
+            console.error("Error sending on-time notification:", error);
+          });
+
+        // 알림 발송 후 플래그 업데이트
+        batch.update(doc.ref, { notified: true });
+      });
+
+      // [2] 1시간 전 알림: "1시간 뒤 '${name}'을(를) 하실 시간이에요!"
+      querySnapshotOneHour.forEach((doc) => {
+        const data = doc.data();
+        const { name, patientFCMToken } = data;
+
+        console.log("1시간 전 알림", name);
+
+        if (!patientFCMToken) {
+          console.error("FCM Token not found for document:", doc.id);
+          return;
+        }
+
+        const notificationMessage = {
+          notification: {
+            title: "일정 알림",
+            body: `1시간 뒤 '${name}'을(를) 하실 시간이에요!`,
+          },
+          token: patientFCMToken,
+        };
+
+        admin
+          .messaging()
+          .send(notificationMessage)
+          .then((response) => {
+            console.log(`1-hour prior notification sent: ${response}`);
+          })
+          .catch((error) => {
+            console.error("Error sending 1-hour prior notification:", error);
+          });
+
+        // 알림 발송 후 플래그 업데이트
+        batch.update(doc.ref, { notifiedOneHour: true });
+      });
+
+      // Firestore 배치 업데이트 커밋 (알림이 있을 때만 커밋)
+      await batch.commit();
+      console.log("Notifications sent and updated successfully.");
+    } catch (error) {
+      console.error("Error processing notifications:", error);
+    }
+  }
+);
+
+
+// ===================================================================================
+
+// 스토리지에 이미지 저장되면 이미지 파일을 webp 형식으로 변환하는 함수
+//exports.convertToWebp = functions.storage.object().onFinalize(async (object) => {
+//  const bucket = admin.storage().bucket(object.bucket);
+//  const filePath = object.name; // 업로드된 파일의 경로 (예: images/filename.jpg)
+//  const contentType = object.contentType;
+//
+//  // 이미지 파일이 아니거나 JPG, PNG가 아닌 경우 무시
+//  if (!contentType || (!contentType.startsWith('image/jpeg') && !contentType.startsWith('image/png'))) {
+//    console.log('This is not a supported JPG/PNG image.');
+//    return null;
+//  }
+//
+//  // 원본 파일 다운로드를 위한 임시 경로 설정
+//  const fileName = path.basename(filePath);
+//  const tempFilePath = path.join(os.tmpdir(), fileName);
+//  await bucket.file(filePath).download({ destination: tempFilePath });
+//  console.log(`Downloaded ${filePath} to ${tempFilePath}`);
+//
+//  // 파일명에서 확장자를 제거하고 .webp 확장자로 변경
+//  const parsedPath = path.parse(filePath);
+//  const newFileName = parsedPath.name + '.webp';
+//  // 원본 파일과 동일한 폴더에 저장 (예: images/filename.webp)
+//  const webpDestination = path.join(parsedPath.dir, newFileName);
+//  const tempWebpPath = path.join(os.tmpdir(), newFileName);
+//
+//  try {
+//    // Sharp를 사용하여 WebP로 변환 (품질 80)
+//    await sharp(tempFilePath)
+//      .webp({ quality: 80 })
+//      .toFile(tempWebpPath);
+//    console.log(`Converted image to WebP format: ${tempWebpPath}`);
+//
+//    // 변환된 WebP 파일을 원본과 동일한 경로에 업로드
+//    await bucket.upload(tempWebpPath, {
+//      destination: webpDestination,
+//      metadata: { contentType: 'image/webp' },
+//    });
+//    console.log(`Uploaded WebP image to ${webpDestination}`);
+//
+//    // 변환이 완료되었으므로 원본 파일 삭제
+//    await bucket.file(filePath).delete();
+//    console.log(`Deleted original file: ${filePath}`);
+//
+//  } catch (error) {
+//    console.error('Error during image conversion:', error);
+//  } finally {
+//    // 임시 파일 삭제
+//    if (fs.existsSync(tempFilePath)) {
+//      fs.unlinkSync(tempFilePath);
+//    }
+//    if (fs.existsSync(tempWebpPath)) {
+//      fs.unlinkSync(tempWebpPath);
+//    }
+//  }
+//
+//  return null;
+//});

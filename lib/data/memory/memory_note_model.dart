@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 /// patientId : "patientId"
 /// img : "imgUrl"
 /// imgTitle : "돌잔치"
@@ -15,32 +16,41 @@ class MemoryNoteModel {
   String? imgTitle;
   int? era;
   String? chat;
-  Map<String, dynamic>? selectedFamilyMember;
+  List<String>? selectedFamilyMember;
   List<String>? keyword;
   Timestamp? createdAt;
   DocumentReference? reference; // document 식별자
 
   // 생성자
-  MemoryNoteModel({
-    this.patientId,
-    this.img,
-    this.imgTitle,
-    this.era,
-    this.chat,
-    this.selectedFamilyMember,
-    this.keyword,
-    this.createdAt,
-    this.reference
-  });
+  MemoryNoteModel(
+      {this.patientId,
+      this.img,
+      this.imgTitle,
+      this.era,
+      this.chat,
+      this.selectedFamilyMember,
+      this.keyword,
+      this.createdAt,
+      this.reference});
 
   // json -> object (Firestore -> Flutter)
   MemoryNoteModel.fromJson(dynamic json, this.reference) {
     patientId = json['patientId'];
     img = json['img'];
     imgTitle = json['imgTitle'];
-    era = json['era'] is int ? json['era'] : int.tryParse(json['era'] ?? ''); // 수정된 부분
+    era = json['era'] is int
+        ? json['era']
+        : int.tryParse(json['era'] ?? ''); // 수정된 부분
     chat = json['chat'];
-    selectedFamilyMember = json['selectedFamilyMember'];
+    //print("JSON received: $json");
+    // selectedFamilyMember = json['selectedFamilyMember'];
+    // selectedFamilyMember 변환
+    selectedFamilyMember = json['selectedFamilyMember'] != null
+        ? List<String>.from(json['selectedFamilyMember'])
+        : [];
+
+    //keyword = json['keyword'] != null ? List<String>.from(json['keyword']) : [];
+    // keyword 변환
     keyword = json['keyword'] != null
         ? List<String>.from(json['keyword'])
         : [];
@@ -57,7 +67,7 @@ class MemoryNoteModel {
   // 컬렉션 내에 특정 조건을 만족하는 데이터를 다 가지고 올때 사용
   MemoryNoteModel.fromQuerySnapshot(
       QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : this.fromJson(snapshot.data()!, snapshot.reference);
+      : this.fromJson(snapshot.data(), snapshot.reference);
 
   // object -> json (Flutter -> Firebase)
   Map<String, dynamic> toJson() {
@@ -72,5 +82,22 @@ class MemoryNoteModel {
     map['createdAt'] = createdAt;
     map['reference'] = reference;
     return map;
+  }
+
+  @override
+  String toString() {
+    return '''
+MemoryNoteModel(
+  patientId: $patientId,
+  img: $img,
+  imgTitle: $imgTitle,
+  era: $era,
+  chat: $chat,
+  selectedFamilyMember: $selectedFamilyMember,
+  keyword: $keyword,
+  createdAt: $createdAt,
+  reference: $reference
+)
+''';
   }
 }

@@ -1,7 +1,4 @@
-import 'package:get/get.dart';
-import 'package:atti/data/memory/memory_note_model.dart';
-import 'package:atti/data/memory/memory_note_service.dart';
-import '../auth_controller.dart';
+import 'package:atti/index.dart';
 
 class MemoryNoteController extends GetxController {
   final AuthController authController = Get.put(AuthController());
@@ -18,6 +15,25 @@ class MemoryNoteController extends GetxController {
       clear();
     } catch (e) {
       print('Error adding memory note: $e');
+    }
+  }
+
+  // 새로운 updateMemoryNote() 함수
+  void updateMemoryNote(DocumentReference reference) async {
+    try {
+      // 기존 기억의 도큐먼트 레퍼런스가 있는지 확인
+      await memoryNoteService.updateMemoryNote(
+        reference,
+        {
+          'era': memoryNote.value.era,
+          'imgTitle': memoryNote.value.imgTitle,
+          'keyword': memoryNote.value.keyword,
+          'selectedFamilyMember': memoryNote.value.selectedFamilyMember,
+        },
+      );
+      print("Memory note updated successfully.");
+    } catch (e) {
+      print('Error updating memory note: $e');
     }
   }
 

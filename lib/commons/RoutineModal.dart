@@ -3,8 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../data/routine/routine_service.dart';
-import '../screen/routine/RoutineFinish.dart';
-import '../screen/schedule/finish/ScheduleFinish1.dart';
+import '../patient/screen/routine_schedule/RoutineShceduleFinish.dart';
 
 class RoutineModal extends StatelessWidget {
   final Function onCompleted; // 콜백 함수 추가
@@ -32,7 +31,7 @@ class RoutineModal extends StatelessWidget {
     var height = MediaQuery.of(context).size.height;
 
     String formattedTime = '';
-    if (time != null && time.length == 2) {
+    if (time.length == 2) {
       final int hour = time[0];
       final int minute = time[1];
       final bool isPM = hour >= 12; // 오후 여부 확인
@@ -42,7 +41,7 @@ class RoutineModal extends StatelessWidget {
     }
 
     return AlertDialog(
-      contentPadding: EdgeInsets.fromLTRB(20, 5, 20, 0),
+      contentPadding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.zero,
       content: SizedBox(
@@ -53,10 +52,10 @@ class RoutineModal extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(),
+                const SizedBox(),
                 IconButton(onPressed: (){
                   Navigator.pop(context);
-                }, icon: Icon(Icons.close, color: Color(0xffB8B8B8),),
+                }, icon: const Icon(Icons.close, color: Color(0xffB8B8B8),),
                   padding: EdgeInsets.zero,
                 )
               ],
@@ -84,8 +83,8 @@ class RoutineModal extends StatelessWidget {
               alignment: Alignment.center,
               child: Column(
                 children: [
-                  Text(formattedTime, style: TextStyle(fontSize: 24),),
-                  Text(name, style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),),
+                  Text(formattedTime, style: const TextStyle(fontSize: 24),),
+                  Text(name, style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w500),),
                 ],
               ),
             ),
@@ -99,14 +98,14 @@ class RoutineModal extends StatelessWidget {
                     await RoutineService().completeRoutine(docRef, date);
                     await addNotification(
                         '하루 일과 알림',
-                        '${authController.userName}님이 \'${name}\' 일과를 완료하셨어요!',
+                        '${authController.userName}님이 \'$name\' 일과를 완료하셨어요!',
                         DateTime.now(),
                         false
                     );
 
                     await addFinishNotification(
                         '하루 일과 알림',
-                        '${authController.userName}님이 \'${name}\' 일과를 완료하셨어요!',
+                        '${authController.userName}님이 \'$name\' 일과를 완료하셨어요!',
                         DateTime.now(),
                         false
                     );
@@ -115,15 +114,20 @@ class RoutineModal extends StatelessWidget {
 
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => RoutineFinish(name: '\'${name}\'\n일과를 완료했어요!')),
+                      MaterialPageRoute(builder: (context) =>
+                          RoutineScheduleFinish(
+                            name: name,
+                            category: 'routine',
+                          )
+                      ),
                     );
                   },
-                  child: Text('완료했어요', style: TextStyle(color: Colors.white, fontSize: 20),),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
-                    minimumSize: MaterialStateProperty.all(
+                    backgroundColor: WidgetStateProperty.all(const Color(0xffFFC215)),
+                    minimumSize: WidgetStateProperty.all(
                         Size(MediaQuery.of(context).size.width * 0.8, 50)),
                   ),
+                  child: const Text('완료했어요', style: TextStyle(color: Colors.white, fontSize: 20),),
                 ),
               ),
 
