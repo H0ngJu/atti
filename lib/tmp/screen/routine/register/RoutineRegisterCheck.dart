@@ -1,8 +1,6 @@
 import 'package:atti/data/notification/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/data/routine/routine_controller.dart';
 import '../../../../commons/RoutineBox.dart';
@@ -29,17 +27,17 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
           Expanded(child: SingleChildScrollView(
             child: Column(
               children: [
-                DetailPageTitle(
+                const DetailPageTitle(
                   title: '일과 등록하기  ',
                   description: '다음과 같이 등록할까요?',
                   totalStep: 0, currentStep: 0,
                 ),
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
                 RoutineBox(
-                  time: routineController.routine.value?.time ?? '',
-                  name: routineController.routine.value?.name ?? '',
-                  img: routineController.routine.value?.img ?? '',
-                  days: (routineController.routine.value?.repeatDays ?? []).map<String>((day) => day.toString()).toList(), // 형 변환 및 기본값 할당
+                  time: routineController.routine.value.time ?? '',
+                  name: routineController.routine.value.name ?? '',
+                  img: routineController.routine.value.img ?? '',
+                  days: (routineController.routine.value.repeatDays ?? []).map<String>((day) => day.toString()).toList(), // 형 변환 및 기본값 할당
                 ),
 
               ],
@@ -47,7 +45,7 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
           )),
 
           Container(
-            margin: EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(bottom: 20),
             child: TextButton(
               onPressed: isButtonEnabled ? () async {
                 setState(() {
@@ -74,13 +72,13 @@ class _RoutineRegisterCheckState extends State<RoutineRegisterCheck> {
                     name: tmpName, time: tmpTime, img: tmpImg,
                   )),
                 );
-              } : null, // 버튼이 비활성화되면 onPressed를 null로 설정하여 클릭이 불가능하도록 함
-              child: Text('등록', style: TextStyle(color: Colors.white, fontSize: 20),),
+              } : null,
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
-                minimumSize: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(const Color(0xffFFC215)),
+                minimumSize: WidgetStateProperty.all(
                     Size(MediaQuery.of(context).size.width * 0.9, 50)),
-              ),
+              ), // 버튼이 비활성화되면 onPressed를 null로 설정하여 클릭이 불가능하도록 함
+              child: const Text('등록', style: TextStyle(color: Colors.white, fontSize: 20),),
             ),
           ),
         ],

@@ -1,25 +1,21 @@
 import 'package:atti/patient/screen/memory/gallery/MainMemory.dart';
 import 'package:atti/tmp/screen/HomeCarer.dart';
 import 'package:atti/patient/screen/HomePatient.dart';
-import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
+import '../carer/screen/memory/gallery/CarerMainMemory.dart';
 import '../carer/screen/routine_shcedule/CarerRoutineScheduleMain.dart';
 import '../data/auth_controller.dart';
 import '../patient/screen/routine_schedule/RoutineScheduleMain.dart';
-import '../tmp/screen/memory/register/MemoryRegister1.dart';
-import '../tmp/screen/routine/RoutineMain.dart';
-import '../tmp/screen/schedule/ScheduleMain.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final AuthController authController = Get.put(AuthController());
   final int currentIndex;
   final Function(int) onTap;
 
-  CustomBottomNavigationBar({required this.currentIndex, required this.onTap});
+  CustomBottomNavigationBar({super.key, required this.currentIndex, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -76,16 +72,18 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   // 추가한 부분
   void _onItemTapped(int index) {
-    if (index == 0) {
-      Get.to(MainMemory());
+    if (index == 0 && authController.isPatient) {
+      Get.to(const MainMemory());
+    } else if (index == 0 && !authController.isPatient) {
+      Get.to(const CarerMainMemory());
     } else if (index == 1 && authController.isPatient ) {
-      Get.to(HomePatient());
+      Get.to(const HomePatient());
     } else if(index == 1 && !authController.isPatient){
-      Get.to(HomeCarer());
+      Get.to(const HomeCarer());
     } else if (index == 2 && authController.isPatient) {
-      Get.to(RoutineScheduleMain());
+      Get.to(const RoutineScheduleMain());
     } else if (index == 2 && !authController.isPatient) {
-      Get.to(CarerRoutineScheduleMain());
+      Get.to(const CarerRoutineScheduleMain());
     } else {
       onTap(index);
     }

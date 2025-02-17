@@ -1,9 +1,7 @@
 // 루틴 등록하기1 화면
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atti/data/routine/routine_controller.dart';
-import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/BottomNextButton.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
@@ -32,7 +30,7 @@ class _RoutineRegister2State extends State<RoutineRegister2> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: Color(0xffFFE9B3), // 선택된 영역
               onPrimary: Color(0xffA38130), // 선택된 곳 숫자
               onSurface: Colors.black, // 시, 분, 오전/오후 숫자
@@ -85,7 +83,7 @@ class _RoutineRegister2State extends State<RoutineRegister2> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(top: 50),
+                    margin: const EdgeInsets.only(top: 50),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -93,18 +91,18 @@ class _RoutineRegister2State extends State<RoutineRegister2> {
                           //margin: EdgeInsets.only(top: 50, left: 5),
                             child: IconButton(onPressed: (){
                               Navigator.of(context).pop();
-                            }, icon: Icon(Icons.arrow_back_ios_outlined, size: 25))),
+                            }, icon: const Icon(Icons.arrow_back_ios_outlined, size: 25))),
                         //SizedBox(height: 30.0),
                         Container(
-                          margin: EdgeInsets.only(left: 15),
-                          child: Text('일과 등록하기  ', style: TextStyle(
+                          margin: const EdgeInsets.only(left: 15),
+                          child: const Text('일과 등록하기  ', style: TextStyle(
                               fontSize: 24, fontWeight: FontWeight.w500
                           ),),
                         ),
                         Container(
-                          margin: EdgeInsets.only(right: 15),
+                          margin: const EdgeInsets.only(right: 15),
                           width: 12.toDouble() * 3,
-                          child: StepProgressIndicator(
+                          child: const StepProgressIndicator(
                               totalSteps: 3,
                               currentStep: 2,
                               size: 6,
@@ -119,17 +117,17 @@ class _RoutineRegister2State extends State<RoutineRegister2> {
                 ],
               ),
             ),
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
                 Container(
-                  margin: EdgeInsets.only(left: 15),
+                  margin: const EdgeInsets.only(left: 15),
                   width: MediaQuery.of(context).size.width * 0.9,
                   alignment: Alignment.centerLeft,
-                  child: Text('반복할 시간을 선택해주세요', textAlign: TextAlign.left, style: TextStyle(
+                  child: const Text('반복할 시간을 선택해주세요', textAlign: TextAlign.left, style: TextStyle(
                     fontSize: 28, fontWeight: FontWeight.w500
                   ),),
                 ),
-                SizedBox(height: 10,),
-                Container(
+                const SizedBox(height: 10,),
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: TextField(
                     controller: _timeController,
@@ -137,32 +135,32 @@ class _RoutineRegister2State extends State<RoutineRegister2> {
                     onTap: () async {
                       await _selectTime(context);
                     },
-                    style: TextStyle(fontSize: 24),
+                    style: const TextStyle(fontSize: 24),
                     decoration: InputDecoration(
                       filled: true, // 배경을 채움
-                      fillColor: Color(0xffFFF5DB),
+                      fillColor: const Color(0xffFFF5DB),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: BorderSide.none,
                       ),
                       hintText: '시간 선택',
-                      hintStyle: TextStyle(color: Color(0xffA38130)),
-                      suffixIcon: Icon(Icons.access_time, color: Color(0xffA38130),),
-                      contentPadding: EdgeInsets.all(15),
+                      hintStyle: const TextStyle(color: Color(0xffA38130)),
+                      suffixIcon: const Icon(Icons.access_time, color: Color(0xffA38130),),
+                      contentPadding: const EdgeInsets.all(15),
                     ),
                   ),
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 Container(
-                  margin: EdgeInsets.only(left: 15),
+                  margin: const EdgeInsets.only(left: 15),
                   width: MediaQuery.of(context).size.width * 0.9,
                   alignment: Alignment.centerLeft,
-                  child: Text('반복할 요일을 선택해주세요', textAlign: TextAlign.left, style: TextStyle(
+                  child: const Text('반복할 요일을 선택해주세요', textAlign: TextAlign.left, style: TextStyle(
                       fontSize: 28, fontWeight: FontWeight.w500
                   ),),
                 ),
-                SizedBox(height: 10,),
-                Container(
+                const SizedBox(height: 10,),
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
                     child: SelectDaysButtons()),
 
@@ -170,7 +168,7 @@ class _RoutineRegister2State extends State<RoutineRegister2> {
               ],
             ),
           )),
-          BottomNextButton(next: RoutineRegister3(), content: '다음', isEnabled: routineController.routine.value.repeatDays != null &&
+          BottomNextButton(next: const RoutineRegister3(), content: '다음', isEnabled: routineController.routine.value.repeatDays != null &&
               routineController.routine.value.time != null,)
         ],
       ),
@@ -198,38 +196,38 @@ class _RoutineRegister2State extends State<RoutineRegister2> {
               print(selectedDaysInWeek);
             });
           },
-          child: Text(days[index]),
           style: ButtonStyle(
-            textStyle: MaterialStateProperty.all<TextStyle>(
-              TextStyle(fontSize: 24), // 텍스트 크기
+            textStyle: WidgetStateProperty.all<TextStyle>(
+              const TextStyle(fontSize: 24), // 텍스트 크기
             ),
-            foregroundColor: MaterialStateProperty.resolveWith<Color>(
+            foregroundColor: WidgetStateProperty.resolveWith<Color>(
                   (states) {
                 if (selectedDays[index]) {
                   return Colors.white; // 선택됐을 때 텍스트 색상
                 } else {
-                  return Color(0xffA38130); // 선택되지 않았을 때 텍스트 색상
+                  return const Color(0xffA38130); // 선택되지 않았을 때 텍스트 색상
                 }
               },
             ),
-            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            backgroundColor: WidgetStateProperty.resolveWith<Color>(
                   (states) {
                 if (selectedDays[index]) {
-                  return Color(0xffFFC215); // 선택됐을 때 배경색
+                  return const Color(0xffFFC215); // 선택됐을 때 배경색
                 } else {
-                  return Color(0xffFFF5DB); // 선택되지 않았을 때 배경색
+                  return const Color(0xffFFF5DB); // 선택되지 않았을 때 배경색
                 }
               },
             ),
-            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-              EdgeInsets.all(5), // 버튼 내부 패딩 설정
+            padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+              const EdgeInsets.all(5), // 버튼 내부 패딩 설정
             ),
-            shape: MaterialStateProperty.all<OutlinedBorder>(
+            shape: WidgetStateProperty.all<OutlinedBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25), // 버튼 모서리 둥글기 설정
               ),
             ),
           ),
+          child: Text(days[index]),
         );
       }).toList(),
     );

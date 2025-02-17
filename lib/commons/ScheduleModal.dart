@@ -1,11 +1,4 @@
 import 'package:atti/index.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import '../data/notification/notification_controller.dart';
-import '../data/schedule/schedule_service.dart';
-import '../tmp/screen/schedule/finish/ScheduleFinish1.dart';
-import '../tmp/screen/schedule/finish/ScheduleFinish2.dart';
 
 class ScheduleModal extends StatelessWidget {
   const ScheduleModal(
@@ -30,7 +23,7 @@ class ScheduleModal extends StatelessWidget {
     final AuthController authController = Get.put(AuthController());
 
     return AlertDialog(
-      contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+      contentPadding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.zero,
       content: SizedBox(
@@ -41,17 +34,17 @@ class ScheduleModal extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(),
+                const SizedBox(),
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.close,
                     color: Color(0xffB8B8B8),
                   ),
                   padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(),
+                  constraints: const BoxConstraints(),
                   visualDensity: VisualDensity.compact,
                 )
               ],
@@ -60,24 +53,24 @@ class ScheduleModal extends StatelessWidget {
             Container(
                 child: Text(
               name,
-              style: TextStyle(fontSize: 30),
+              style: const TextStyle(fontSize: 30),
             )),
             SizedBox(height: height * 0.03,),
 
             Container(
               width: MediaQuery.of(context).size.width * 0.75,
-              padding: EdgeInsets.fromLTRB(0,0,0,0),
+              padding: const EdgeInsets.fromLTRB(0,0,0,0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: Color(0xffDDDDDD),
+                  color: const Color(0xffDDDDDD),
                   width: 1,
                 ),
               ),
               child: Row(
                 children: [
                   SizedBox(width: width * 0.04,),
-                  Text(
+                  const Text(
                     '시간',
                     style: TextStyle(fontSize: 24),
                   ),
@@ -86,12 +79,12 @@ class ScheduleModal extends StatelessWidget {
                   Container(
                     width: 1, // 선의 두께
                     height: 50, // 선의 높이
-                    color: Color(0xffDDDDDD), // 선의 색상
+                    color: const Color(0xffDDDDDD), // 선의 색상
                     //margin: EdgeInsets.symmetric(horizontal: 12), // 좌우 여백
                   ),
 
                   SizedBox(width: width * 0.05,),
-                  Text(time, style: TextStyle(fontSize: 24)),
+                  Text(time, style: const TextStyle(fontSize: 24)),
                 ],
               ),
             ),
@@ -99,18 +92,18 @@ class ScheduleModal extends StatelessWidget {
             SizedBox(height: height * 0.03),
             Container(
               width: MediaQuery.of(context).size.width * 0.75,
-              padding: EdgeInsets.fromLTRB(0,0,0,0),
+              padding: const EdgeInsets.fromLTRB(0,0,0,0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: Color(0xffDDDDDD),
+                  color: const Color(0xffDDDDDD),
                   width: 1,
                 ),
               ),
               child: Row(
                 children: [
                   SizedBox(width: width * 0.04,),
-                  Text(
+                  const Text(
                     '장소',
                     style: TextStyle(fontSize: 24),
                   ),
@@ -119,12 +112,12 @@ class ScheduleModal extends StatelessWidget {
                   Container(
                     width: 1, // 선의 두께
                     height: 50, // 선의 높이
-                    color: Color(0xffDDDDDD), // 선의 색상
+                    color: const Color(0xffDDDDDD), // 선의 색상
                     //margin: EdgeInsets.symmetric(horizontal: 12), // 좌우 여백
                   ),
 
                   SizedBox(width: width * 0.05,),
-                  Text(location, style: TextStyle(fontSize: 24)),
+                  Text(location, style: const TextStyle(fontSize: 24)),
                 ],
               ),
             ),
@@ -132,18 +125,18 @@ class ScheduleModal extends StatelessWidget {
             SizedBox(height: height * 0.03),
             Container(
               width: MediaQuery.of(context).size.width * 0.75,
-              padding: EdgeInsets.all(0),
+              padding: const EdgeInsets.all(0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: Color(0xffDDDDDD),
+                  color: const Color(0xffDDDDDD),
                   width: 1,
                 ),
               ),
               child: Row(
                 children: [
                   SizedBox(width: width * 0.04,),
-                  Text(
+                  const Text(
                     '메모',
                     style: TextStyle(fontSize: 24),
                   ),
@@ -152,12 +145,12 @@ class ScheduleModal extends StatelessWidget {
                   Container(
                     width: 1, // 선의 두께
                     height: 100, // 선의 높이
-                    color: Color(0xffDDDDDD), // 선의 색상
+                    color: const Color(0xffDDDDDD), // 선의 색상
                     //margin: EdgeInsets.symmetric(horizontal: 12), // 좌우 여백
                   ),
 
                   SizedBox(width: width * 0.05,),
-                  Text(memo ?? '-', style: TextStyle(fontSize: 24)),
+                  Text(memo ?? '-', style: const TextStyle(fontSize: 24)),
                 ],
               ),
             ),

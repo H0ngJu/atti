@@ -19,7 +19,7 @@ class NextBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    ColorPallet _colorPallet = ColorPallet();
+    ColorPallet colorPallet = ColorPallet();
 
     return Container(
         margin: EdgeInsets.only(top: height*0.3),
@@ -38,10 +38,10 @@ class NextBtn extends StatelessWidget {
             }
           },
           style: TextButton.styleFrom(
-              backgroundColor: isButtonDisabled ? Colors.white : _colorPallet.goldYellow,
+              backgroundColor: isButtonDisabled ? Colors.white : colorPallet.goldYellow,
               shape: RoundedRectangleBorder(
                   side: BorderSide(
-                    color: isButtonDisabled ? Colors.black : _colorPallet.goldYellow,
+                    color: isButtonDisabled ? Colors.black : colorPallet.goldYellow,
                     width: 1,
                   ),
                   borderRadius: BorderRadius.circular(30)

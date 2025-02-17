@@ -1,6 +1,5 @@
 import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/tmp/screen/LogInSignUp/LogInScreen.dart';
-import 'package:atti/tmp/screen/LoginSignUp/NextBtn.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -27,7 +26,7 @@ class _FinishSignUpScreenState extends State<FinishSignUpScreen> {
           ),
           Container(
             margin: EdgeInsets.only(top: height*0.1, left: 20),
-            child: Text(
+            child: const Text(
               '회원가입이\n완료되었어요!',
               style: TextStyle(
                 letterSpacing: 0.1,
@@ -57,7 +56,7 @@ class _FinishSignUpScreenState extends State<FinishSignUpScreen> {
                     width: width*0.9,
                     height: height*0.06,
                     alignment: Alignment.center,
-                    child: Text('로그인',
+                    child: const Text('로그인',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,

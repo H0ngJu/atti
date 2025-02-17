@@ -1,15 +1,10 @@
-import 'package:atti/data/notification/notification_controller.dart';
 import 'package:atti/data/report/viewsController.dart';
-import 'package:atti/commons/BottomNextButton.dart';
-import 'package:atti/commons/SimpleAppBar.dart';
 import 'package:atti/tmp/screen/memory/chat/Chat.dart';
 import 'package:atti/tmp/screen/memory/gallery/GalleryOption.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../data/memory/memory_note_model.dart';
 import '../chat/ChatHistory.dart';
@@ -26,11 +21,11 @@ class MemoryDetail extends StatelessWidget {
         children: [
           Text(
             '${memory.era}년대',
-            style: TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
+            style: const TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
           ),
           Text(
             '\'${memory.imgTitle}\' 기억',
-            style: TextStyle(fontSize: 30, fontFamily: 'PretendardMedium'),
+            style: const TextStyle(fontSize: 30, fontFamily: 'PretendardMedium'),
           )
         ]);
   }
@@ -39,22 +34,22 @@ class MemoryDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('기억 한 조각'),
+          title: const Text('기억 한 조각'),
           actions: <Widget>[
             Container(
-              margin: EdgeInsets.only(right: 20, top: 10),
+              margin: const EdgeInsets.only(right: 20, top: 10),
               child: TextButton(
                 onPressed: () {
-                  Get.to(GalleryOption());
+                  Get.to(const GalleryOption());
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.white,
                   shape:
-                      CircleBorder(side: BorderSide(color: Color(0xffB3B3B3))),
-                  minimumSize: Size(48, 48),
+                      const CircleBorder(side: BorderSide(color: Color(0xffB3B3B3))),
+                  minimumSize: const Size(48, 48),
                   elevation: 0,
                 ),
-                child: Text(
+                child: const Text(
                   '수정',
                   style: TextStyle(fontSize: 12, color: Color(0xff7E7E7E)),
                 ),
@@ -64,12 +59,12 @@ class MemoryDetail extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.all(16),
+            margin: const EdgeInsets.all(16),
             child: Column(
               children: [
                 Column(children: [
                   Container(
-                    margin: EdgeInsets.only(top: 20),
+                    margin: const EdgeInsets.only(top: 20),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(30),
                       child: Image.network(
@@ -80,19 +75,19 @@ class MemoryDetail extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   MemoryDetailTitle(),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Divider(),
-                  SizedBox(
+                  const Divider(),
+                  const SizedBox(
                     height: 10,
                   ),
                   MemoryWords(memory: memory),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   GestureDetector(
@@ -101,11 +96,11 @@ class MemoryDetail extends StatelessWidget {
                           )),
                       child: Container(
                         height: 62,
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                            color: Color(0xffF3F3F3),
+                            color: const Color(0xffF3F3F3),
                             borderRadius: BorderRadius.circular(15)),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
@@ -134,8 +129,8 @@ class MemoryDetail extends StatelessWidget {
                           Get.to(Chat(memory: memory));
                         },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xffFFC215)),
-                        child: Text(
+                            backgroundColor: const Color(0xffFFC215)),
+                        child: const Text(
                           '회상 대화 시작하기',
                           style: TextStyle(fontSize: 24, color: Colors.white),
                         )))
@@ -176,13 +171,13 @@ class _MemoryWordsState extends State<MemoryWords> {
 
   Widget TagContainer(tag) {
     return Container(
-      margin: EdgeInsets.only(top: 10, right: 10), // 각 태그 사이의 간격을 조절합니다.
+      margin: const EdgeInsets.only(top: 10, right: 10), // 각 태그 사이의 간격을 조절합니다.
       decoration: BoxDecoration(
-          color: Color(0xffFFF5DB), borderRadius: BorderRadius.circular(25)),
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+          color: const Color(0xffFFF5DB), borderRadius: BorderRadius.circular(25)),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
       child: Text(
         tag,
-        style: TextStyle(fontSize: 24, color: Color(0xffA38130)),
+        style: const TextStyle(fontSize: 24, color: Color(0xffA38130)),
       ),
     );
   }
@@ -197,7 +192,7 @@ class _MemoryWordsState extends State<MemoryWords> {
           children: [
             Container(
               //margin: EdgeInsets.only(top: 5, left: 10),
-              child: Text(
+              child: const Text(
                 '기억단어 보기',
                 style: TextStyle(
                     color: Colors.black,

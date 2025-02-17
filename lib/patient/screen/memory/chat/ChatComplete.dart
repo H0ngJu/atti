@@ -2,6 +2,7 @@ import 'package:atti/patient/screen/memory/gallery/MemoryInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:math' as math;
+import '../../../../carer/screen/memory/gallery/CarerMainMemory.dart';
 import '../../../../data/auth_controller.dart';
 import '../../../../data/memory/memory_note_controller.dart';
 import '../../../../data/memory/memory_note_model.dart';
@@ -51,7 +52,7 @@ class _ChatCompleteState extends State<ChatComplete> {
       child: Container(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: 150, // 고정 높이 지정
               width: 150, // 고정 너비 지정
               child: ClipRRect(
@@ -66,7 +67,7 @@ class _ChatCompleteState extends State<ChatComplete> {
               alignment: Alignment.center,
               child: Text(
                 '${memory.imgTitle}',
-                style: TextStyle(fontSize: 24),
+                style: const TextStyle(fontSize: 24),
               ),
             ),
           ],
@@ -94,22 +95,22 @@ class _ChatCompleteState extends State<ChatComplete> {
             children: [
               Container(
                 child: Text(
-                  '\'${this.widget.memory.imgTitle}\' 대화 기록이\n저장되었어요!',
-                  style: TextStyle(
+                  '\'${widget.memory.imgTitle}\' 대화 기록이\n저장되었어요!',
+                  style: const TextStyle(
                       fontSize: 35,
                       color: Colors.black,
                       fontFamily: 'PretendardMedium'),
                 ),
               ),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
               Container(
-                child: Text(
+                child: const Text(
                   '다른 기억도 열람해보세요!',
                   style:
                       TextStyle(fontSize: 24, fontFamily: 'PretendardRegular'),
                 ),
               ),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
               // 기존의 GalleryContent(memoryNotes[0]), 부분을 아래의 코드로 대체하세요.
               if (randomMemoryNotes.length >= 2)
                 Column(
@@ -120,7 +121,7 @@ class _ChatCompleteState extends State<ChatComplete> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(child: GalleryContent(randomMemoryNotes[0])),
-                        SizedBox(width: 16), // 간격 조정
+                        const SizedBox(width: 16), // 간격 조정
                         Expanded(child: GalleryContent(randomMemoryNotes[1])),
                       ],
                     ),
@@ -128,23 +129,27 @@ class _ChatCompleteState extends State<ChatComplete> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(child: GalleryContent(randomMemoryNotes[2])),
-                        SizedBox(width: 16), // 간격 조정
+                        const SizedBox(width: 16), // 간격 조정
                         Expanded(child: GalleryContent(randomMemoryNotes[3])),
                       ],
                     ),
                   ],
                 ),
-              SizedBox(height: 80),
+              const SizedBox(height: 80),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: 60,
                 child: TextButton(
                   onPressed: () {
-                    Get.to(MainMemory());
+                    if (authController.isPatient) {
+                      Get.to(() => const MainMemory());
+                    } else {
+                      Get.to(() => const CarerMainMemory());
+                    }
                   },
                   style:
-                      TextButton.styleFrom(backgroundColor: Color(0xffFFC215)),
-                  child: Text(
+                      TextButton.styleFrom(backgroundColor: const Color(0xffFFC215)),
+                  child: const Text(
                     '내 기억으로 돌아가기',
                     style: TextStyle(fontSize: 24, color: Colors.white),
                   ),

@@ -24,7 +24,7 @@ class _NextBtnState extends State<NextBtn> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    ColorPallet _colorPallet = ColorPallet();
+    ColorPallet colorPallet = ColorPallet();
 
     return Container(
         margin: EdgeInsets.only(top: height*0.3),
@@ -43,10 +43,10 @@ class _NextBtnState extends State<NextBtn> {
             }
           },
           style: TextButton.styleFrom(
-              backgroundColor: widget.isButtonDisabled ? Colors.white : _colorPallet.goldYellow,
+              backgroundColor: widget.isButtonDisabled ? Colors.white : colorPallet.goldYellow,
               shape: RoundedRectangleBorder(
                   side: BorderSide(
-                    color: widget.isButtonDisabled ? Colors.black : _colorPallet.goldYellow,
+                    color: widget.isButtonDisabled ? Colors.black : colorPallet.goldYellow,
                     width: 1,
                   ),
                   borderRadius: BorderRadius.circular(30)

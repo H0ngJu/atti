@@ -51,7 +51,7 @@ class ScheduleModel {
   // Named Constructor with Initializer
   ScheduleModel.fromQuerySnapshot(
       QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : this.fromJson(snapshot.data()!, snapshot.reference);
+      : this.fromJson(snapshot.data(), snapshot.reference);
 
   // object -> json (Flutter -> Firebase)
   Map<String, dynamic> toJson() {

@@ -1,18 +1,10 @@
 // 피그마 '일정 등록하기 2 - 일정 날짜, 시간' 화면
 import 'package:atti/commons/RegisterTextField.dart';
 import 'package:atti/index.dart';
-import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import 'package:atti/data/schedule/schedule_controller.dart';
-import 'package:atti/commons/DetailPageTitle.dart';
-import 'package:atti/commons/BottomNextButton.dart';
 
-import 'package:atti/tmp/screen/schedule/register/ScheduleRegister3.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../commons/colorPallet.dart';
 
 class ScheduleRegister2 extends StatefulWidget {
   const ScheduleRegister2({super.key});
@@ -44,7 +36,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               //surface: Color(0xffFFF5DB), // 배경 색
               onSurface: Colors.black, // 달력 숫자 색
               primary: Color(0xffFFE9B3), // 선택된 영역 색
@@ -79,7 +71,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-                colorScheme: ColorScheme.light(
+                colorScheme: const ColorScheme.light(
                   primary: Color(0xffFFE9B3), // 선택된 영역
                   onPrimary: Color(0xffA38130), // 선택된 곳 숫자
                   //surface: Color(0xffFFF5DB), // 전체 배경
@@ -154,7 +146,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  DetailPageTitle(
+                  const DetailPageTitle(
                     title: '일정 등록하기',
                     description: '일정 시작 날짜와\n시간을 선택해주세요',
                     totalStep: 3,
@@ -163,7 +155,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
                   SizedBox(height: width * 0.03,),
 
                   // 날짜 선택
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: TextField(
                       controller: _dateController,
@@ -173,26 +165,26 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
                         print(_dateController);
                         await _selectDate(context);
                         },
-                      style: TextStyle(fontSize: 24),
+                      style: const TextStyle(fontSize: 24),
                       decoration: InputDecoration(
                         filled: true, // 배경을 채움
-                        fillColor: Color(0xffFFF5DB),
+                        fillColor: const Color(0xffFFF5DB),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: BorderSide.none,
                         ),
                         hintText: '날짜 선택',
-                        hintStyle: TextStyle(color: Color(0xffA38130)),
-                        suffixIcon: Icon(Icons.calendar_today, color: Color(0xffA38130)),
-                        contentPadding: EdgeInsets.all(15),
+                        hintStyle: const TextStyle(color: Color(0xffA38130)),
+                        suffixIcon: const Icon(Icons.calendar_today, color: Color(0xffA38130)),
+                        contentPadding: const EdgeInsets.all(15),
 
                       ),
                     ),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // 시간 선택
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: TextField(
                       controller: _timeController,
@@ -202,18 +194,18 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
                         print(_timeController.text);
                         await _selectTime(context);
                         },
-                      style: TextStyle(fontSize: 24),
+                      style: const TextStyle(fontSize: 24),
                       decoration: InputDecoration(
                         filled: true, // 배경을 채움
-                        fillColor: Color(0xffFFF5DB),
+                        fillColor: const Color(0xffFFF5DB),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: BorderSide.none,
                         ),
                         hintText: '시간 선택',
-                        hintStyle: TextStyle(color: Color(0xffA38130)),
-                        suffixIcon: Icon(Icons.access_time, color: Color(0xffA38130),),
-                        contentPadding: EdgeInsets.all(15),
+                        hintStyle: const TextStyle(color: Color(0xffA38130)),
+                        suffixIcon: const Icon(Icons.access_time, color: Color(0xffA38130),),
+                        contentPadding: const EdgeInsets.all(15),
                       ),
                     ),
                   ),
@@ -223,7 +215,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       alignment: Alignment.centerLeft,
-                      child: Text(
+                      child: const Text(
                       '일정 장소를 입력해주세요'
                       , style: TextStyle(
                           fontSize: 28,
@@ -248,7 +240,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
           ),
 
           BottomNextButton(
-              next: ScheduleRegister4(),
+              next: const ScheduleRegister4(),
               content: '다음',
               isEnabled: isButtonEnabled()),
         ],

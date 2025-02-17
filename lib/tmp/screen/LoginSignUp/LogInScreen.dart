@@ -8,7 +8,7 @@ import 'package:atti/commons/colorPallet.dart';
 import 'package:get/get.dart';
 
 class LogInScreen extends StatefulWidget {
-  LogInScreen({super.key});
+  const LogInScreen({super.key});
 
   @override
   State<LogInScreen> createState() => _LogInScreenState();
@@ -34,7 +34,7 @@ class _LogInScreenState extends State<LogInScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             onPressed: (){
               Navigator.push(
                   context,
@@ -47,7 +47,7 @@ class _LogInScreenState extends State<LogInScreen> {
               size: 40,
             )
         ),
-        title: Text('로그인',
+        title: const Text('로그인',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w700,
@@ -62,11 +62,11 @@ class _LogInScreenState extends State<LogInScreen> {
         child: Stack(
           children: [
             Container(
-              margin: EdgeInsets.only(top: 25, left: 20, right: 20),
+              margin: const EdgeInsets.only(top: 25, left: 20, right: 20),
               child: Form(
                 // key: _formKey,
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Column(
                     children: [
                       LoginEntryField(
@@ -90,7 +90,7 @@ class _LogInScreenState extends State<LogInScreen> {
                       SizedBox(height: height*0.01,),
                       Row(
                         children: [
-                          TextButton(onPressed: (){}, child: Text('아이디 찾기',
+                          TextButton(onPressed: (){}, child: const Text('아이디 찾기',
                             style: TextStyle(
                               color: Color(0xffB3B3B3),
                               fontSize: 20,
@@ -98,14 +98,14 @@ class _LogInScreenState extends State<LogInScreen> {
                             ),
                           )
                           ),
-                          Text('|',
+                          const Text('|',
                               style: TextStyle(
                                 color: Color(0xffB3B3B3),
                                 fontSize: 20,
                                 fontFamily: 'PretendardRegular',
                               )
                           ),
-                          TextButton(onPressed: (){}, child: Text('비밀번호 찾기',
+                          TextButton(onPressed: (){}, child: const Text('비밀번호 찾기',
                               style: TextStyle(
                                 color: Color(0xffB3B3B3),
                                 fontSize: 20,
@@ -123,7 +123,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         onButtonClick: () async {
                           loginSuccess = await _loginController.login(); // 로그인 시도 후 결과 저장
                           if (loginSuccess) {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => IntroPage())); // 로그인 성공 시 페이지 이동
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const IntroPage())); // 로그인 성공 시 페이지 이동
                           }
                         },
                       ),

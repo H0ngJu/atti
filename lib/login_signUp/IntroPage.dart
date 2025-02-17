@@ -1,6 +1,5 @@
 import 'package:atti/data/auth_controller.dart';
 import 'package:atti/login_signUp/LogInSignUpMainScreen.dart';
-import 'package:atti/tmp/screen/HomeCarer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,13 +19,13 @@ class _IntroPageState extends State<IntroPage> {
     super.initState();
     AuthController authController = Get.put(AuthController());
     authController.init();
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (authController.loggedUser != null) {
         // 로그인한 유저가 있는 경우
-        Get.off(() => authController.isPatient ? HomePatient() : CarerRoutineScheduleMain());
+        Get.off(() => authController.isPatient ? const HomePatient() : const CarerRoutineScheduleMain());
       } else {
         // 로그인한 유저가 없는 경우
-        Get.off(() => LogInSignUpMainScreen());
+        Get.off(() => const LogInSignUpMainScreen());
       }
     });
   }
@@ -36,7 +35,7 @@ class _IntroPageState extends State<IntroPage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         width: width,
         child: Align(
           alignment: Alignment.center,

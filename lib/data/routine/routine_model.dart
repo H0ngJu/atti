@@ -47,7 +47,7 @@ class RoutineModel with ChangeNotifier {
 
   RoutineModel.fromQuerySnapshot(
       QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : this.fromJson(snapshot.data()!, snapshot.reference);
+      : this.fromJson(snapshot.data(), snapshot.reference);
 
   // object -> json (Flutter -> Firebase)
   Map<String, dynamic> toJson() {
@@ -72,7 +72,7 @@ class RoutineModel with ChangeNotifier {
   }
 
   void updateIsFinished(String dateString, Map<String, bool> isFinished) {
-    if (isFinished != null && isFinished.containsKey(dateString)) {
+    if (isFinished.containsKey(dateString)) {
       isFinished[dateString] = true;
       notifyListeners(); // 완료 여부가 변경될 때 리스너들에게 알림
     }

@@ -1,7 +1,6 @@
 import 'package:atti/tmp/screen/memory/gallery/MainGallery.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../data/memory/memory_note_controller.dart';
 import '../../../../data/memory/memory_note_model.dart';
@@ -41,21 +40,21 @@ class _GalleryOptionState extends State<GalleryOption> {
     List<String> allKeywords = [];
 
     // 모든 메모에서 키워드를 추출하여 리스트에 추가
-    fetchedNotes.forEach((memoryNote) {
+    for (var memoryNote in fetchedNotes) {
       if (memoryNote.keyword != null) {
         allKeywords.addAll(memoryNote.keyword!);
       }
-    });
+    }
 
     // 중복 제거를 위해 Set으로 변환 후 다시 리스트로 변환
     List<String> uniqueKeywords = allKeywords.toSet().toList();
 
     // tagList에 선택된 태그가 포함되어 있지 않으면 추가
-    uniqueKeywords.forEach((keyword) {
+    for (var keyword in uniqueKeywords) {
       if (!tagList.contains(keyword)) {
         tagList.add(keyword);
       }
-    });
+    }
 
     setState(() {
       memoryNotes = fetchedNotes;
@@ -70,19 +69,19 @@ class _GalleryOptionState extends State<GalleryOption> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          child: Text(
+          child: const Text(
             '현재 단어',
             style: TextStyle(fontSize: 24),
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: 10),
+          margin: const EdgeInsets.only(top: 10),
           decoration: BoxDecoration(
-              color: Color(0xffFFF5DB), borderRadius: BorderRadius.circular(25)),
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+              color: const Color(0xffFFF5DB), borderRadius: BorderRadius.circular(25)),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
           child: Text(
-            '${tagController.selectedTag.value}',
-            style: TextStyle(fontSize: 24, color: Color(0xffA38130)),
+            tagController.selectedTag.value,
+            style: const TextStyle(fontSize: 24, color: Color(0xffA38130)),
           ),
         )
       ],
@@ -93,7 +92,7 @@ class _GalleryOptionState extends State<GalleryOption> {
     return Column(
       children: [
         Container(
-          child: Text(
+          child: const Text(
             '변경할 단어',
             style: TextStyle(fontSize: 24),
           ),
@@ -106,12 +105,12 @@ class _GalleryOptionState extends State<GalleryOption> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('기억 순서 변경'),
+        title: const Text('기억 순서 변경'),
         leading: TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back_ios_rounded,
           ),
         ),
@@ -122,9 +121,9 @@ class _GalleryOptionState extends State<GalleryOption> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: EdgeInsets.all(16),
+              margin: const EdgeInsets.all(16),
               child: RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 30,
@@ -149,28 +148,28 @@ class _GalleryOptionState extends State<GalleryOption> {
                 ),
               ),
             ),
-            Container(margin: EdgeInsets.all(16), child: CurrentTag()),
+            Container(margin: const EdgeInsets.all(16), child: CurrentTag()),
             Container(
-              margin: EdgeInsets.all(16),
+              margin: const EdgeInsets.all(16),
               child: NewTag(),
             ),
             Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(left: 15),
+                margin: const EdgeInsets.only(left: 15),
                 child: SelectFamilyMemberButtons()),
             Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
                 child: ElevatedButton(
                     onPressed: () {
-                      Get.to(MainGallery());
+                      Get.to(const MainGallery());
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xffFFC215),
+                      backgroundColor: const Color(0xffFFC215),
                       minimumSize: Size(MediaQuery.of(context).size.width * 0.9, 50),
                     ),
-                    child: Text(
+                    child: const Text(
                       '사진 나열하기',
                       style: TextStyle(
                           color: Colors.white,
@@ -203,12 +202,11 @@ class _GalleryOptionState extends State<GalleryOption> {
                   tagController.selectedTag.value = selectedTag; // 선택된 태그를 업데이트합니다.
                 });
               },
-              child: Text(displayTags[index]),
               style: ButtonStyle(
-                textStyle: MaterialStateProperty.all<TextStyle>(
-                  TextStyle(fontSize: 24, inherit: true), // inherit 속성 추가
+                textStyle: WidgetStateProperty.all<TextStyle>(
+                  const TextStyle(fontSize: 24, inherit: true), // inherit 속성 추가
                 ),
-                foregroundColor: MaterialStateProperty.resolveWith<Color>(
+                foregroundColor: WidgetStateProperty.resolveWith<Color>(
                       (states) {
                     if (displayTags[index] == selectedTag) {
                       return Colors.white; // 선택됐을 때 텍스트 색상
@@ -217,33 +215,34 @@ class _GalleryOptionState extends State<GalleryOption> {
                     }
                   },
                 ),
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                backgroundColor: WidgetStateProperty.resolveWith<Color>(
                       (states) {
                     if (displayTags[index] == selectedTag) {
-                      return Color(0xffFFC215); // 선택됐을 때 배경색
+                      return const Color(0xffFFC215); // 선택됐을 때 배경색
                     } else {
                       return Colors.white; // 선택되지 않았을 때 배경색
                     }
                   },
                 ),
-                side: MaterialStateProperty.resolveWith<BorderSide>(
+                side: WidgetStateProperty.resolveWith<BorderSide>(
                       (states) {
                     if (displayTags[index] == selectedTag) {
-                      return BorderSide(color: Colors.white); // 선택됐을 때 테두리 색상 및 두께
+                      return const BorderSide(color: Colors.white); // 선택됐을 때 테두리 색상 및 두께
                     } else {
-                      return BorderSide(color: Colors.black, width: 1.0); // 선택되지 않았을 때
+                      return const BorderSide(color: Colors.black, width: 1.0); // 선택되지 않았을 때
                     }
                   },
                 ),
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 18.0), // 버튼 내부 패딩 설정
+                padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 18.0), // 버튼 내부 패딩 설정
                 ),
-                shape: MaterialStateProperty.all<OutlinedBorder>(
+                shape: WidgetStateProperty.all<OutlinedBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25), // 버튼 모서리 둥글기 설정
                   ),
                 ),
               ),
+              child: Text(displayTags[index]),
             );
           }),
         ),
@@ -255,15 +254,15 @@ class _GalleryOptionState extends State<GalleryOption> {
                 showAllTags = !showAllTags;
               });
             },
+            style: ButtonStyle(
+              padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+                EdgeInsets.zero,
+              ),
+            ),
             child: Icon(
               showAllTags ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
               color: Colors.blue,
               size: 30,
-            ),
-            style: ButtonStyle(
-              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                EdgeInsets.zero,
-              ),
             ),
           ),
       ],

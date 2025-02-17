@@ -28,14 +28,14 @@ class _RoutineRegister1State extends State<RoutineRegister1> {
             Expanded(child: SingleChildScrollView(
               child: Column(
                 children: [
-                  DetailPageTitle(
+                  const DetailPageTitle(
                     title: '일과 등록하기  ',
                     description: '일과 이름을 입력해주세요',
                     totalStep: 3,
                     currentStep: 1,
                   ),
-                  SizedBox(height: 20,),
-                  Container(
+                  const SizedBox(height: 20,),
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: TextField(
                       onChanged: (value) {
@@ -43,17 +43,17 @@ class _RoutineRegister1State extends State<RoutineRegister1> {
                         //print(scheduleController.name.value);
                       },
                       cursorColor: Colors.black,
-                      style: TextStyle(fontSize: 24),
+                      style: const TextStyle(fontSize: 24),
                       decoration: InputDecoration(
                         hintText: '일과 이름이 무엇인가요?',
-                        hintStyle: TextStyle(fontSize: 24, color: Color(0xffA38130)),
+                        hintStyle: const TextStyle(fontSize: 24, color: Color(0xffA38130)),
                         filled: true, // 배경을 채움
-                        fillColor: Color(0xffFFF5DB),
+                        fillColor: const Color(0xffFFF5DB),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: BorderSide.none,
                         ),
-                        contentPadding: EdgeInsets.all(15), // 위아래 여백 조절
+                        contentPadding: const EdgeInsets.all(15), // 위아래 여백 조절
                       ),
                     ),
                   ),
@@ -61,7 +61,7 @@ class _RoutineRegister1State extends State<RoutineRegister1> {
               ),
             )),
 
-            BottomNextButton(next: RoutineRegister2(), content: '다음', isEnabled: routineController.routine.value.name != null,)
+            BottomNextButton(next: const RoutineRegister2(), content: '다음', isEnabled: routineController.routine.value.name != null,)
           ],
         ),
       ),

@@ -3,17 +3,13 @@ import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:atti/commons/colorPallet.dart';
 import 'package:atti/patient/screen/routine_schedule/TodayToDo.dart';
 import 'package:atti/tmp/screen/Menu.dart';
-import 'package:atti/tmp/screen/Notice/FullScreenRoutine.dart';
-import 'package:atti/tmp/screen/Notice/FullScreenSchedule1.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import '../../data/auth_controller.dart';
 import '../../data/notification/notification.dart';
@@ -55,7 +51,7 @@ class _HomePatientState extends State<HomePatient> {
   final List<String> topImg = [];
   late String selectedImage = '';
 
-  DateTime _selectedDay = DateTime.now();
+  final DateTime _selectedDay = DateTime.now();
   List<ScheduleModel> schedulesBySelectedDay = []; // 선택된 날짜의 일정들이 반환되는 리스트
   int? numberOfSchedules; // 선택된 날짜의 일정 개수
 
@@ -123,21 +119,13 @@ class _HomePatientState extends State<HomePatient> {
         await ScheduleService().getSchedulesByDate(_selectedDay);
     List<RoutineModel> fetchedRoutines =
         await RoutineService().getRoutinesByDay(selectedDayInWeek);
-    if (fetchedSchedules != null) {
-      setState(() {
-        schedulesBySelectedDay = fetchedSchedules;
-        routinesBySelectedDay = fetchedRoutines;
-        numberOfSchedules = schedulesBySelectedDay.length;
-        numberOfRoutines = routinesBySelectedDay.length;
-      });
-    } else {
-      setState(() {
-        schedulesBySelectedDay = [];
-        numberOfSchedules = 0;
-        numberOfRoutines = 0;
-      });
+    setState(() {
+      schedulesBySelectedDay = fetchedSchedules;
+      routinesBySelectedDay = fetchedRoutines;
+      numberOfSchedules = schedulesBySelectedDay.length;
+      numberOfRoutines = routinesBySelectedDay.length;
+    });
     }
-  }
 
   void _requestNotificationPermissions() async {
     NotificationService notificationService = NotificationService();
@@ -152,7 +140,7 @@ class _HomePatientState extends State<HomePatient> {
 
   Future<void> _fetchAndSpeakWeather() async {
     // 요일을 반환하는 함수
-    String _getWeekday(int weekday) {
+    String getWeekday(int weekday) {
       switch (weekday) {
         case 1:
           return '월요일';
@@ -173,10 +161,10 @@ class _HomePatientState extends State<HomePatient> {
       }
     }
 
-    String weekday = _getWeekday(_selectedDay.weekday);
+    String weekday = getWeekday(_selectedDay.weekday);
     final List<String> greetings = [
       '안녕하세요',
-      '오늘은 ${_selectedDay.year}년 ${_selectedDay.month}월 ${_selectedDay.day}일 ${weekday}이에요',
+      '오늘은 ${_selectedDay.year}년 ${_selectedDay.month}월 ${_selectedDay.day}일 $weekday이에요',
       '오늘의 기분은 어떠신가요?',
       '내 기억에서 과거 기억을 열람해볼까요?',
       '오늘의 일정을 확인해보세요',
@@ -266,7 +254,7 @@ class _HomePatientState extends State<HomePatient> {
       return;
     }
 
-    final city = 'Seoul';
+    const city = 'Seoul';
     final url = Uri.parse(
         'http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$tmpapiKey&units=metric');
     final response = await http.get(url);
@@ -277,7 +265,7 @@ class _HomePatientState extends State<HomePatient> {
       final temperature = data['main']['temp'];
       final humidity = data['main']['humidity'];
       weatherStatus = data['weather'][0]['description'];
-      print("weather " + weatherStatus);
+      print("weather $weatherStatus");
       selectedImage = updateImagesBasedOnWeather(weatherStatus);
       final weatherTranslation =
           weatherTranslations[weatherStatus.toLowerCase()];
@@ -312,7 +300,7 @@ class _HomePatientState extends State<HomePatient> {
     // 계절 이미지를 가져옵니다.
     String seasonImage = getSeason();
 
-    print("1 " + weatherStatus);
+    print("1 $weatherStatus");
     // 날씨에 따라 특정 이미지를 추가합니다.
     if (weatherStatus.contains('rain') ||
         weatherStatus.contains('mist') ||
@@ -328,7 +316,7 @@ class _HomePatientState extends State<HomePatient> {
 
     // 기본 이미지 리스트에 topImg 리스트를 추가합니다.
     List<String> updatedImgList = List.from(defaultImg)..addAll(topImg);
-    print("here" + '${updatedImgList}');
+    print("here" '$updatedImgList');
     // 업데이트된 리스트에서 랜덤 이미지를 선택합니다.
     final random = Random();
     int index = random.nextInt(updatedImgList.length);
@@ -353,11 +341,8 @@ class _HomePatientState extends State<HomePatient> {
       final user = _authentication.currentUser;
       print("loggedUser: ${user!.uid}");
       print("check: ${authController.userName.value}");
-      if (user != null) {
-        loggedUser = user as User?;
-      }
-      ;
-    } catch (e) {
+      loggedUser = user as User?;
+        } catch (e) {
       print(e);
     }
   }
@@ -388,11 +373,11 @@ class _HomePatientState extends State<HomePatient> {
               children: [
                 Container(
                     height: 45,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.white,
                     )),
                 Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(30),
@@ -424,13 +409,13 @@ class _HomePatientState extends State<HomePatient> {
           // 하단 버튼
           Container(
             width: width * 0.9,
-            margin: EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(bottom: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 TextButton(
                   onPressed: () {
-                    Get.to(TodayToDo());
+                    Get.to(const TodayToDo());
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.black,
@@ -438,7 +423,7 @@ class _HomePatientState extends State<HomePatient> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     '지금 할 일을 알려줘',
                     style: TextStyle(
                         color: Colors.white,
@@ -450,7 +435,7 @@ class _HomePatientState extends State<HomePatient> {
                 SizedBox(height: width * 0.02),
                 TextButton(
                   onPressed: () {
-                    Get.to(MainMemory());
+                    Get.to(const MainMemory());
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: colorPallet.goldYellow, // 배경색
@@ -458,7 +443,7 @@ class _HomePatientState extends State<HomePatient> {
                       borderRadius: BorderRadius.circular(15), // 모서리 둥글기
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     '기억 대화를 나눌래',
                     style: TextStyle(
                       color: Colors.black,
@@ -521,12 +506,12 @@ class _HomePatientTopState extends State<HomePatientTop> {
     DateTime now = DateTime.now();
     String weekday = _getWeekday(now.weekday);
     // String formattedTime = DateFormat('a h시 mm분이에요', 'ko_KR').format(now);
-    ColorPallet _colorPallet = ColorPallet();
+    ColorPallet colorPallet = ColorPallet();
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
     return Container(
-      margin: EdgeInsets.only(left: 16, right: 16),
+      margin: const EdgeInsets.only(left: 16, right: 16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start, // 열을 위에서부터 시작하도록 정렬
         crossAxisAlignment: CrossAxisAlignment.start, // 자식 위젯을 왼쪽 정렬
@@ -536,17 +521,17 @@ class _HomePatientTopState extends State<HomePatientTop> {
             children: [
               RichText(
                 text: TextSpan(
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.black,
                       height: 1.2,
                       fontFamily: 'PretendardRegular'),
                   children: [
                     TextSpan(
                       text: '${widget.userName}님\n',
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 24, fontFamily: 'PretendardRegular'),
                     ),
-                    TextSpan(
+                    const TextSpan(
                       text: '만나서 반가워요!',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -560,17 +545,17 @@ class _HomePatientTopState extends State<HomePatientTop> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Menu()),
+                    MaterialPageRoute(builder: (context) => const Menu()),
                   );
                 },
                 child: Container(
                   width: width * 0.1, // 버튼의 너비
                   height: width * 0.1, // 버튼의 높이
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.black,
                     shape: BoxShape.circle,
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       '나',
                       style: TextStyle(
@@ -586,7 +571,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
           ),
 
           SizedBox(height: width * 0.065), //
-          Center(
+          const Center(
             child: Text('오늘은요',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontFamily: 'UhBee', fontSize: 25)),
@@ -598,7 +583,7 @@ class _HomePatientTopState extends State<HomePatientTop> {
             mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
             children: [
               widget.selectedImage.isNotEmpty // selectedImage가 비어있지 않다면 이미지를 표시
-                  ? Container(
+                  ? SizedBox(
                       //width: MediaQuery.of(context).size.width * 0.55,
                       height: height * 0.25, // 고정 크기 설정
                       child: Image(
@@ -606,11 +591,11 @@ class _HomePatientTopState extends State<HomePatientTop> {
                         fit: BoxFit.cover, // 이미지를 고정된 크기에 맞게 자르기
                       ),
                     )
-                  : Container(
+                  : SizedBox(
                       width: MediaQuery.of(context).size.width * 0.55,
                       height:
                           MediaQuery.of(context).size.width * 0.55, // 고정 크기 설정
-                      child: Center(
+                      child: const Center(
                         child: CircularProgressIndicator(), // 로딩 인디케이터 표시
                       ),
                     ),
@@ -620,10 +605,10 @@ class _HomePatientTopState extends State<HomePatientTop> {
 
           Container(
             alignment: Alignment.center,
-            padding: EdgeInsets.all(10),
-            child: Text('${now.year}년\n${now.month}월 ${now.day}일 ${weekday}',
+            padding: const EdgeInsets.all(10),
+            child: Text('${now.year}년\n${now.month}월 ${now.day}일 $weekday',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'UhBee', fontSize: 28)),
+                style: const TextStyle(fontFamily: 'UhBee', fontSize: 28)),
           ),
           // SizedBox(
           //   height: width * 0.03,
@@ -732,17 +717,17 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
           child: Container(
             //height: 132,
             // 정적으로 고정할 것인가?
-            margin: EdgeInsets.only(right: 8),
-            padding: EdgeInsets.symmetric(vertical: 25),
+            margin: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.symmetric(vertical: 25),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderRadius: const BorderRadius.all(Radius.circular(15)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1), // 그림자 색상 및 불투명도 설정
                   spreadRadius: 2, // 그림자의 확산 범위
                   blurRadius: 7, // 그림자의 흐림 정도
-                  offset: Offset(2, 2), // 그림자의 위치 (가로, 세로)
+                  offset: const Offset(2, 2), // 그림자의 위치 (가로, 세로)
                 ),
               ], // 테두리 추가
             ),
@@ -750,12 +735,12 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
               textAlign: TextAlign.center,
               text: TextSpan(
                 style:
-                    TextStyle(color: Colors.black, fontSize: 24, height: 1.5),
+                    const TextStyle(color: Colors.black, fontSize: 24, height: 1.5),
                 children: [
-                  TextSpan(text: '예정된 일정\n'),
+                  const TextSpan(text: '예정된 일정\n'),
                   TextSpan(
                       text: '${widget.scheduleCnt}',
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                           color: Color(0xffFFC215))),
@@ -768,17 +753,17 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
           child: Container(
             //height: 132,
             // 정적으로 고정할 것인가?
-            margin: EdgeInsets.only(left: 8),
-            padding: EdgeInsets.symmetric(vertical: 25),
+            margin: const EdgeInsets.only(left: 8),
+            padding: const EdgeInsets.symmetric(vertical: 25),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderRadius: const BorderRadius.all(Radius.circular(15)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1), // 그림자 색상 및 불투명도 설정
                   spreadRadius: 2, // 그림자의 확산 범위
                   blurRadius: 7, // 그림자의 흐림 정도
-                  offset: Offset(2, 2), // 그림자의 위치 (가로, 세로)
+                  offset: const Offset(2, 2), // 그림자의 위치 (가로, 세로)
                 ),
               ], // 테두리 추가
             ),
@@ -786,12 +771,12 @@ class _HomeTodaySummaryState extends State<HomeTodaySummary> {
               textAlign: TextAlign.center,
               text: TextSpan(
                 style:
-                    TextStyle(color: Colors.black, fontSize: 24, height: 1.5),
+                    const TextStyle(color: Colors.black, fontSize: 24, height: 1.5),
                 children: [
-                  TextSpan(text: '오늘의 일과\n'),
+                  const TextSpan(text: '오늘의 일과\n'),
                   TextSpan(
                       text: '${widget.routineCnt}',
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                           color: Color(0xffFFC215))),

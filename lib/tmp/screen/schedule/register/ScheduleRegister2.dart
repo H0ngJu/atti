@@ -38,7 +38,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               //surface: Color(0xffFFF5DB), // 배경 색
               onSurface: Colors.black, // 달력 숫자 색
               primary: Color(0xffFFE9B3), // 선택된 영역 색
@@ -72,7 +72,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-                colorScheme: ColorScheme.light(
+                colorScheme: const ColorScheme.light(
                   primary: Color(0xffFFE9B3), // 선택된 영역
                   onPrimary: Color(0xffA38130), // 선택된 곳 숫자
                   //surface: Color(0xffFFF5DB), // 전체 배경
@@ -129,14 +129,14 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  DetailPageTitle(
+                  const DetailPageTitle(
                     title: '일정 등록하기',
                     description: '일정 시간을 선택해주세요',
                     totalStep: 4,
                     currentStep: 2,
                   ),
-                  SizedBox(height: 20),
-                  Container(
+                  const SizedBox(height: 20),
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: TextField(
                       controller: _dateController,
@@ -146,24 +146,24 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
                         print(_dateController);
                         await _selectDate(context);
                         },
-                      style: TextStyle(fontSize: 24),
+                      style: const TextStyle(fontSize: 24),
                       decoration: InputDecoration(
                         filled: true, // 배경을 채움
-                        fillColor: Color(0xffFFF5DB),
+                        fillColor: const Color(0xffFFF5DB),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: BorderSide.none,
                         ),
                         hintText: '날짜 선택',
-                        hintStyle: TextStyle(color: Color(0xffA38130)),
-                        suffixIcon: Icon(Icons.calendar_today, color: Color(0xffA38130)),
-                        contentPadding: EdgeInsets.all(15),
+                        hintStyle: const TextStyle(color: Color(0xffA38130)),
+                        suffixIcon: const Icon(Icons.calendar_today, color: Color(0xffA38130)),
+                        contentPadding: const EdgeInsets.all(15),
 
                       ),
                     ),
                   ),
-                  SizedBox(height: 25),
-                  Container(
+                  const SizedBox(height: 25),
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: TextField(
                       controller: _timeController,
@@ -173,18 +173,18 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
                         print(_timeController.text);
                         await _selectTime(context);
                         },
-                      style: TextStyle(fontSize: 24),
+                      style: const TextStyle(fontSize: 24),
                       decoration: InputDecoration(
                         filled: true, // 배경을 채움
-                        fillColor: Color(0xffFFF5DB),
+                        fillColor: const Color(0xffFFF5DB),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: BorderSide.none,
                         ),
                         hintText: '시간 선택',
-                        hintStyle: TextStyle(color: Color(0xffA38130)),
-                        suffixIcon: Icon(Icons.access_time, color: Color(0xffA38130),),
-                        contentPadding: EdgeInsets.all(15),
+                        hintStyle: const TextStyle(color: Color(0xffA38130)),
+                        suffixIcon: const Icon(Icons.access_time, color: Color(0xffA38130),),
+                        contentPadding: const EdgeInsets.all(15),
                       ),
                     ),
                   ),
@@ -193,7 +193,7 @@ class _ScheduleRegister2State extends State<ScheduleRegister2> {
             ),
           ),
 
-          BottomNextButton(next: ScheduleRegister3(), content: '다음', isEnabled: isButtonEnabled()),
+          BottomNextButton(next: const ScheduleRegister3(), content: '다음', isEnabled: isButtonEnabled()),
         ],
       ),
 

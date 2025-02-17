@@ -2,7 +2,6 @@
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/Tag.dart';
 import 'package:atti/commons/colorPallet.dart';
-import 'package:atti/tmp/screen/memory/register/MemoryRegisterAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atti/commons/BottomNextButton.dart';
@@ -20,7 +19,7 @@ class MemoryRegister3 extends StatefulWidget {
 class _MemoryRegister3State extends State<MemoryRegister3> {
   final MemoryNoteController memoryNoteController = Get.put(MemoryNoteController());
   final AuthController authController = Get.put(AuthController());
-  TextEditingController _addedMemberController = TextEditingController();
+  final TextEditingController _addedMemberController = TextEditingController();
 
   final _era = ['1900년대', '1910년대', '1920년대', '1930년대', '1940년대', '1950년대',
     '1960년대', '1970년대', '1980년대', '1990년대', '2000년대', '2010년대', '2020년대',];
@@ -50,7 +49,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    ColorPallet _colorPallet = ColorPallet();
+    ColorPallet colorPallet = ColorPallet();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -60,7 +59,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
         },
         child: Column(
           children: [
-            DetailPageTitle(
+            const DetailPageTitle(
               title: '기억 남기기',
               totalStep: 3,
               currentStep: 2,
@@ -72,20 +71,20 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                 children: [
                   SizedBox(height: height * 0.02,),
                   SelectEraDropDownButton(),
-                  SizedBox(height: 35,),
+                  const SizedBox(height: 35,),
                   Container(
-                    margin: EdgeInsets.only(left: 15),
+                    margin: const EdgeInsets.only(left: 15),
                     width: MediaQuery.of(context).size.width * 0.9,
                     alignment: Alignment.centerLeft,
-                    child: Text('기억과 함께한 사람을 \n선택 및 입력해주세요', textAlign: TextAlign.left, style: TextStyle(
+                    child: const Text('기억과 함께한 사람을 \n선택 및 입력해주세요', textAlign: TextAlign.left, style: TextStyle(
                       fontSize: 30,
                     ),),
                   ),
-                  SizedBox(height: 10,),
+                  const SizedBox(height: 10,),
                   Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.only(left: 15),
+                      margin: const EdgeInsets.only(left: 15),
                       child: SelectFamilyMemberButtons()),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: width*0.05),
@@ -97,10 +96,10 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     margin: EdgeInsets.all(width*0.05),
                     decoration: BoxDecoration(
-                      color: _colorPallet.lightYellow,
+                      color: colorPallet.lightYellow,
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Row(
@@ -113,12 +112,12 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: '그 외 사람을 입력하세요',
-                                hintStyle: TextStyle(color: _colorPallet.khaki, fontSize: 20),
+                                hintStyle: TextStyle(color: colorPallet.khaki, fontSize: 20),
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         ElevatedButton(
                           onPressed: () {
                             String memberName = _addedMemberController.text;
@@ -130,13 +129,13 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: _addedMemberController.text.isNotEmpty ? _colorPallet.goldYellow : Colors.white,
+                            backgroundColor: _addedMemberController.text.isNotEmpty ? colorPallet.goldYellow : Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+                            padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
                           ),
-                          child: Text(
+                          child: const Text(
                             '등록',
                             style: TextStyle(
                                 color: Colors.black,
@@ -146,13 +145,13 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
-                  SizedBox(height: 30,),
+                  const SizedBox(height: 30,),
                 ],
               ),
             )),
-            BottomNextButton(next: MemoryRegister4(), content: '다음', isEnabled: true),
+            const BottomNextButton(next: MemoryRegister4(), content: '다음', isEnabled: true),
           ],
         ),
       ),
@@ -160,10 +159,10 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
   }
 
   Widget SelectEraDropDownButton() {
-    ColorPallet _colorPallet = ColorPallet();
+    ColorPallet colorPallet = ColorPallet();
     return Container(
       //alignment: Alignment.centerLeft,
-      margin: EdgeInsets.only(left: 15),
+      margin: const EdgeInsets.only(left: 15),
       width: MediaQuery.of(context).size.width * 0.5,
       child: DropdownButtonFormField(
         menuMaxHeight: 250,
@@ -171,7 +170,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
         items: _era
             .map((e) => DropdownMenuItem(
           value: e,
-          child: Text(e, style: TextStyle(fontSize: 24, fontWeight: FontWeight.normal, color: _colorPallet.textColor),),
+          child: Text(e, style: TextStyle(fontSize: 24, fontWeight: FontWeight.normal, color: colorPallet.textColor),),
         ))
             .toList(),
         onChanged: (value) {
@@ -183,24 +182,24 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: _colorPallet.textColor, width: 2)
+              borderSide: BorderSide(color: colorPallet.textColor, width: 2)
           ),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: _colorPallet.textColor, width: 1)
+              borderSide: BorderSide(color: colorPallet.textColor, width: 1)
           ),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: _colorPallet.textColor, width: 2)
+              borderSide: BorderSide(color: colorPallet.textColor, width: 2)
           ),
           filled: true,
-          fillColor: _colorPallet.lightYellow,
-          iconColor: _colorPallet.textColor,
-          contentPadding: EdgeInsets.only(top:5, bottom: 5, left: 15),
+          fillColor: colorPallet.lightYellow,
+          iconColor: colorPallet.textColor,
+          contentPadding: const EdgeInsets.only(top:5, bottom: 5, left: 15),
         ),
-        dropdownColor:_colorPallet.lightYellow,
-        iconDisabledColor: _colorPallet.textColor,
-        iconEnabledColor: _colorPallet.textColor,
+        dropdownColor:colorPallet.lightYellow,
+        iconDisabledColor: colorPallet.textColor,
+        iconEnabledColor: colorPallet.textColor,
         iconSize: 50,
       ),
     );
@@ -209,7 +208,7 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
   Widget SelectFamilyMemberButtons() {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    ColorPallet _colorPallet = ColorPallet();
+    ColorPallet colorPallet = ColorPallet();
 
     return Wrap(
       direction: Axis.horizontal,
@@ -232,10 +231,9 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
               }
             });
           },
-          child: Text(familyMembers[index]),
           style: ButtonStyle(
             textStyle: WidgetStateProperty.all<TextStyle>(
-              TextStyle(fontSize: 24), // 텍스트 크기
+              const TextStyle(fontSize: 24), // 텍스트 크기
             ),
             foregroundColor: WidgetStateProperty.resolveWith<Color>(
                   (states) {
@@ -245,25 +243,26 @@ class _MemoryRegister3State extends State<MemoryRegister3> {
             backgroundColor: WidgetStateProperty.resolveWith<Color>(
                   (states) {
                 if (memberIsSelected[index]) {
-                  return _colorPallet.goldYellow; // 선택됐을 때 배경색
+                  return colorPallet.goldYellow; // 선택됐을 때 배경색
                 } else {
                   return Colors.white; // 선택되지 않았을 때 배경색
                 }
               },
             ),
             padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-              EdgeInsets.symmetric(vertical: 10, horizontal: 18.0), // 버튼 내부 패딩 설정
+              const EdgeInsets.symmetric(vertical: 10, horizontal: 18.0), // 버튼 내부 패딩 설정
             ),
             shape: WidgetStateProperty.all<OutlinedBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25), // 버튼 모서리 둥글기 설정
-                side: BorderSide(
+                side: const BorderSide(
                   color: Colors.black, // 테두리 색상
                   width: 1, // 테두리 두께
                 ),
               ),
             ),
           ),
+          child: Text(familyMembers[index]),
         );
       }).toList(),
     );

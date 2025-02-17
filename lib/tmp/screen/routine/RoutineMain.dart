@@ -2,7 +2,6 @@
 import 'package:atti/tmp/screen/routine/register/RoutineRegister1.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:atti/commons/AttiBottomNavi.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:timelines/timelines.dart';
@@ -48,18 +47,11 @@ class _RoutineMainState extends State<RoutineMain> {
   Future<void> _fetchData() async {
     List<RoutineModel> fetchedRoutines =
         await RoutineService().getRoutinesByDay(selectedDayInWeek);
-    if (fetchedRoutines != null) {
-      setState(() {
-        routinesBySelectedDay = fetchedRoutines;
-        numberOfRoutines = routinesBySelectedDay.length;
-      });
-    } else {
-      setState(() {
-        routinesBySelectedDay = [];
-        numberOfRoutines = 0;
-      });
+    setState(() {
+      routinesBySelectedDay = fetchedRoutines;
+      numberOfRoutines = routinesBySelectedDay.length;
+    });
     }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +68,7 @@ class _RoutineMainState extends State<RoutineMain> {
               child: Text(
                 '${authController.userName.value}님의',
                 textAlign: TextAlign.left,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 24,
                 ),
               ),
@@ -84,26 +76,26 @@ class _RoutineMainState extends State<RoutineMain> {
             Container(
               width: MediaQuery.of(context).size.width * 0.9,
               alignment: Alignment.centerLeft,
-              child: Text(
+              child: const Text(
                 '하루 일과',
                 textAlign: TextAlign.left,
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             RoutineCalendar(),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
               width: MediaQuery.of(context).size.width,
-              color: Color(0xffFFFAEF),
+              color: const Color(0xffFFFAEF),
               child: Column(
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
-                    margin: EdgeInsets.only(top: 10),
+                    margin: const EdgeInsets.only(top: 10),
                     child: Text(
                       DateFormat('yyyy년 MM월 dd일', 'ko_KR').format(_selectedDay),
-                      style: TextStyle(fontSize: 24),
+                      style: const TextStyle(fontSize: 24),
                     ),
                   ),
                   numberOfRoutines != null && numberOfRoutines! >= 1
@@ -111,16 +103,16 @@ class _RoutineMainState extends State<RoutineMain> {
                       : Container(
                           height: MediaQuery.of(context).size.height * 0.5,
                           alignment: Alignment.center,
-                          child: Text(
+                          child: const Text(
                             '오늘은 일과가 없네요!',
                             style: TextStyle(
                                 fontSize: 30, fontWeight: FontWeight.w600),
                           ),
                         ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  BottomNextButton(
+                  const BottomNextButton(
                     next: RoutineRegister1(),
                     content: '하루 일과 등록하기',
                     isEnabled: true,
@@ -163,25 +155,25 @@ class _RoutineMainState extends State<RoutineMain> {
       headerVisible: false,
       calendarStyle: CalendarStyle(
         outsideDaysVisible: false,
-        defaultTextStyle: TextStyle(color: Color(0xff737373), fontSize: 20),
-        weekendTextStyle: TextStyle(color: Color(0xff737373), fontSize: 20),
-        todayTextStyle: TextStyle(color: Color(0xff737373), fontSize: 20),
-        selectedDecoration: BoxDecoration(
+        defaultTextStyle: const TextStyle(color: Color(0xff737373), fontSize: 20),
+        weekendTextStyle: const TextStyle(color: Color(0xff737373), fontSize: 20),
+        todayTextStyle: const TextStyle(color: Color(0xff737373), fontSize: 20),
+        selectedDecoration: const BoxDecoration(
           color: Color(0xffFFC215),
           shape: BoxShape.circle,
         ),
-        selectedTextStyle: TextStyle(
+        selectedTextStyle: const TextStyle(
             fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
         todayDecoration: BoxDecoration(
             color: Colors.transparent,
             shape: BoxShape.circle,
-            border: Border.all(color: Color(0xffFFC215), width: 1.5)),
+            border: Border.all(color: const Color(0xffFFC215), width: 1.5)),
       ),
     );
   }
 
   Widget RoutineTimeline() {
-    return Container(
+    return SizedBox(
       height: numberOfRoutines != null && numberOfRoutines! <= 1
           ? MediaQuery.of(context).size.height * 0.6
           : (numberOfRoutines != null
@@ -192,10 +184,10 @@ class _RoutineMainState extends State<RoutineMain> {
         data: TimelineThemeData(
             nodePosition: 0,
             indicatorPosition: 0,
-            color: Color(0xffFFC215),
-            connectorTheme: ConnectorThemeData(
+            color: const Color(0xffFFC215),
+            connectorTheme: const ConnectorThemeData(
                 color: Color(0xff9C9C9C), indent: 5, thickness: 1.5),
-            indicatorTheme: IndicatorThemeData(
+            indicatorTheme: const IndicatorThemeData(
               size: 17,
             )),
         child: Timeline.tileBuilder(
@@ -206,9 +198,9 @@ class _RoutineMainState extends State<RoutineMain> {
                   routinesBySelectedDay[index].isFinished != null &&
                       routinesBySelectedDay[index]
                           .isFinished!
-                          .containsKey(removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')) &&
+                          .containsKey(removeZ('${_selectedDay.toString().substring(0, 10)} 00:00:00.000')) &&
                       routinesBySelectedDay[index]
-                          .isFinished![removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')]!;
+                          .isFinished![removeZ('${_selectedDay.toString().substring(0, 10)} 00:00:00.000')]!;
               //print('here : ${isFinished}');
               return (isFinished
                   ? IndicatorStyle.dot
@@ -249,18 +241,18 @@ class _RoutineMainState extends State<RoutineMain> {
                 routinesBySelectedDay[index].isFinished != null &&
                 routinesBySelectedDay[index]
                         .isFinished!
-                        .containsKey(removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')) &&
+                        .containsKey(removeZ('${_selectedDay.toString().substring(0, 10)} 00:00:00.000')) &&
                 routinesBySelectedDay[index]
-                    .isFinished![removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')]!)
+                    .isFinished![removeZ('${_selectedDay.toString().substring(0, 10)} 00:00:00.000')]!)
                           ? '완료됨'
                           : '완료되지 않음',
                       textAlign: TextAlign.start,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Color(0xff737373),
                         fontSize: 18,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     RoutineBox(
@@ -275,7 +267,7 @@ class _RoutineMainState extends State<RoutineMain> {
             ),
             itemCount: numberOfRoutines ?? 0,
           ),
-          physics: NeverScrollableScrollPhysics(), // 타임라인 빌더 내 스크롤 막기
+          physics: const NeverScrollableScrollPhysics(), // 타임라인 빌더 내 스크롤 막기
         ),
       ),
     );

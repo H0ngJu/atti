@@ -36,8 +36,8 @@ class _EntryFieldState extends State<EntryField> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    ColorPallet _colorPallet = ColorPallet();
-    SignUpController _signUpController = Get.find<SignUpController>();
+    ColorPallet colorPallet = ColorPallet();
+    SignUpController signUpController = Get.find<SignUpController>();
 
     return Container(
       child: Column(
@@ -45,27 +45,27 @@ class _EntryFieldState extends State<EntryField> {
         children: [
           Text(
             widget.fieldName,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 24,
               fontFamily: 'PretendardRegular',
             ),
           ),
           Container(
             margin: EdgeInsets.only(top: height*0.01),
-            padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 7.0, left: 9.0),
+            padding: const EdgeInsets.only(top: 2.0, bottom: 2.0, right: 7.0, left: 9.0),
             decoration: BoxDecoration(
-              color: _colorPallet.lightYellow,
+              color: colorPallet.lightYellow,
               borderRadius: BorderRadius.circular(15.0),
               border: Border.all(
-                color: _signUpController.isPressed.value == widget.fieldId ? _colorPallet.textColor : _colorPallet.lightYellow,
+                color: signUpController.isPressed.value == widget.fieldId ? colorPallet.textColor : colorPallet.lightYellow,
               ),
             ),
             child: TextFormField(
               onTap: () {
                   setState(() {
-                    _signUpController.isPressed.value = widget.fieldId;
+                    signUpController.isPressed.value = widget.fieldId;
                   });
-                  print("isPressed = ${ _signUpController.isPressed.value}\nfieldId = ${widget.fieldId}");
+                  print("isPressed = ${ signUpController.isPressed.value}\nfieldId = ${widget.fieldId}");
               },
               obscureText: widget.isPassword,
               onChanged: widget.onChanged,
@@ -75,17 +75,17 @@ class _EntryFieldState extends State<EntryField> {
                 hintText: widget.hintText,
                 hintStyle: TextStyle(
                   fontSize: 24,
-                  color: _colorPallet.textColor,
+                  color: colorPallet.textColor,
                   fontFamily: 'PretendardRegular',
                 ),
               ),
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 24,
                   fontFamily: 'PretendardRegular',
               ),
             ),
           ),
-          if (_signUpController.isPressed.value == widget.fieldId && !widget.isValid)
+          if (signUpController.isPressed.value == widget.fieldId && !widget.isValid)
             ErrorMessageWidget(message: widget.errorMessage)
         ],
       ),

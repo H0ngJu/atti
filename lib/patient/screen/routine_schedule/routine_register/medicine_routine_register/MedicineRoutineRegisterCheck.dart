@@ -1,9 +1,9 @@
-import 'package:atti/commons/YesNoActionButtons.dart';
+import 'dart:io';
+
 import 'package:atti/data/notification/notification.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
 import 'package:atti/data/routine/routine_controller.dart';
 import '../../../../../commons/RoutineBox.dart';
@@ -47,6 +47,22 @@ class _MedicineRoutineRegisterCheckState
     return repeatDays.map((day) => dayMapping[day]!).toList();
   }
 
+  Future<XFile?> convertImageToWebp(File file) async {
+    // 원본 파일 경로에서 확장자 부분을 제거하고 .webp를 붙임
+    final targetPath =
+        file.path.substring(0, file.path.lastIndexOf('.')) + '.webp';
+
+    // flutter_image_compress를 사용해 이미지 변환 수행
+    final result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      targetPath,
+      quality: 70, // 압축 품질 (0~100)
+      format: CompressFormat.webp, // 변환할 포맷을 WebP로 지정
+    );
+
+    return result != null ? XFile(result.path) : null;
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -62,20 +78,20 @@ class _MedicineRoutineRegisterCheckState
                   child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    DetailPageTitle(
+                    const DetailPageTitle(
                       title: '일과 등록하기',
                       description: '다음과 같이 등록할까요?',
                       totalStep: 0,
                       currentStep: 0,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     RoutineBox(
-                      time: routineController.routine.value?.time ?? '',
-                      name: routineController.routine.value?.name ?? '',
-                      img: routineController.routine.value?.img ?? '',
-                      days: (routineController.routine.value?.repeatDays ?? [])
+                      time: routineController.routine.value.time ?? '',
+                      name: routineController.routine.value.name ?? '',
+                      img: routineController.routine.value.img ?? '',
+                      days: (routineController.routine.value.repeatDays ?? [])
                           .map<String>((day) => day.toString())
                           .toList(), // 형 변환 및 기본값 할당
                     ),
@@ -104,9 +120,19 @@ class _MedicineRoutineRegisterCheckState
                             List<int> repeatDaysToNumList = mapDaysToNumbers(
                                 routineController.routine.value.repeatDays!);
 
+                            // 이미지 WebP 변환 시작
+                            File originalFile = File(tmpImg); // 기존 이미지 파일
+                            XFile? webpFile = await convertImageToWebp(originalFile);
+
+                            if (webpFile != null) {
+                              tmpImg = webpFile.path; // 변환된 이미지 경로 저장
+                              routineController.routine.update((val) {
+                                val!.img = tmpImg; // 변환된 이미지 경로 업데이트
+                              });
+                            }
+
                             //print(routineController.routine.value.repeatDays);
-                            final updatedRoutine = await routineController
-                                .addRoutine(); // 컨트롤러 초기화 로직 들어있음
+                            final updatedRoutine = await routineController.addRoutine(); // 컨트롤러 초기화 로직 들어있음
 
                             if (authController.isPatient) {
                               //notificationService.showWeeklyNotification();
@@ -115,7 +141,7 @@ class _MedicineRoutineRegisterCheckState
                                   repeatDaysToNumList,
                                   tmpTime[0],
                                   tmpTime[1],
-                                  '${updatedRoutine.reference!.id}');
+                                  updatedRoutine.reference!.id);
                             }
                             // setState(() {
                             //   isButtonEnabled = true; // 버튼 다시 활성화
@@ -186,7 +212,8 @@ class _MedicineRoutineRegisterCheckState
               color: Colors.black.withOpacity(0.5),
               child: Center(
                 child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(colorPallet.goldYellow),
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(colorPallet.goldYellow),
                 ),
               ),
             ),

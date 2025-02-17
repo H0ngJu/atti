@@ -1,11 +1,9 @@
 // 피그마 '일정 등록하기 5 - 입력한 일정 확인' 화면
-import 'package:atti/data/notification/notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:atti/data/schedule/schedule_controller.dart';
 import 'package:atti/commons/DetailPageTitle.dart';
-import 'package:atti/commons/ScheduleBox.dart';
 import 'package:atti/tmp/screen/schedule/register/ScheduleRegisterFinish.dart';
 import '../../../../data/notification/notification.dart';
 
@@ -32,17 +30,17 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                DetailPageTitle(
+                const DetailPageTitle(
                   title: '일정 등록하기',
                   description: '다음과 같이 등록할까요?',
                   totalStep: 0,
                   currentStep: 0,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 //SizedBox(height: 10,),
                 Container(
-                  padding: EdgeInsets.only(top: 15, bottom: 15, left: 20),
+                  padding: const EdgeInsets.only(top: 15, bottom: 15, left: 20),
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
@@ -51,27 +49,27 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (scheduleController.schedule.value.time != null) Text('${formattedDate} ${formattedTime}', style: TextStyle(
+                      if (scheduleController.schedule.value.time != null) Text('$formattedDate $formattedTime', style: const TextStyle(
                           fontSize: 22
                       ),),
-                      if (scheduleController.schedule.value.name != null) Text(scheduleController.schedule.value.name!, style: TextStyle(
+                      if (scheduleController.schedule.value.name != null) Text(scheduleController.schedule.value.name!, style: const TextStyle(
                         fontSize: 30, fontWeight: FontWeight.w500
                       ),),
-                      SizedBox(height: 15,),
+                      const SizedBox(height: 15,),
                       Row(
                         children: [
-                          Text('장소', style: TextStyle(fontSize: 22, color: Color(0xff737373)),),
-                          SizedBox(width: 20),
-                          if (scheduleController.schedule.value.location != null) Text(scheduleController.schedule.value.location!, style: TextStyle(
+                          const Text('장소', style: TextStyle(fontSize: 22, color: Color(0xff737373)),),
+                          const SizedBox(width: 20),
+                          if (scheduleController.schedule.value.location != null) Text(scheduleController.schedule.value.location!, style: const TextStyle(
                               fontSize: 24,
                           ),),
                         ],
                       ),
                       Row(
                         children: [
-                          Text('메모', style: TextStyle(fontSize: 22, color: Color(0xff737373)),),
-                          SizedBox(width: 20),
-                          Text(scheduleController.schedule.value.memo ?? '-', style: TextStyle(
+                          const Text('메모', style: TextStyle(fontSize: 22, color: Color(0xff737373)),),
+                          const SizedBox(width: 20),
+                          Text(scheduleController.schedule.value.memo ?? '-', style: const TextStyle(
                             fontSize: 24,
                           ),),
                         ],
@@ -79,7 +77,7 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
 
                 // Container(
                 //   width: MediaQuery.of(context).size.width * 0.9,
@@ -119,19 +117,19 @@ class _ScheduleRegisterCheckState extends State<ScheduleRegisterCheck> {
         ),
 
         Container(
-          margin: EdgeInsets.only(bottom: 20),
+          margin: const EdgeInsets.only(bottom: 20),
           child: TextButton(
             onPressed: () async {
               scheduleController.tmpScheduleName.value = scheduleController.schedule.value.name!;
 
-              Get.to(ScheduleRegisterFinish());
+              Get.to(const ScheduleRegisterFinish());
             },
-            child: Text('등록하기', style: TextStyle(color: Colors.white, fontSize: 20),),
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
-              minimumSize: MaterialStateProperty.all(
+              backgroundColor: WidgetStateProperty.all(const Color(0xffFFC215)),
+              minimumSize: WidgetStateProperty.all(
                   Size(MediaQuery.of(context).size.width * 0.9, 50)),
             ),
+            child: const Text('등록하기', style: TextStyle(color: Colors.white, fontSize: 20),),
           ),
         ),
       ]),

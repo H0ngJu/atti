@@ -2,7 +2,6 @@ import 'package:atti/patient/screen/memory/memory_register/MemoryRegister1.dart'
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class AddButton extends StatelessWidget {
   const AddButton({super.key});
@@ -10,18 +9,18 @@ class AddButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: ElevatedButton(
             onPressed: () {
-              Get.to(MemoryRegister1());
+              Get.to(const MemoryRegister1());
             },
             style: ElevatedButton.styleFrom(
               elevation: 0,
-              backgroundColor: Color(0xffFFC215),
-              shape: CircleBorder(),
-              padding: EdgeInsets.all(10),
+              backgroundColor: const Color(0xffFFC215),
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(10),
             ),
-            child: Icon(CupertinoIcons.plus, color: Colors.white,size: 40,)
+            child: const Icon(CupertinoIcons.plus, color: Colors.white,size: 40,)
         ),
       );
     }

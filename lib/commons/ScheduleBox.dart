@@ -6,14 +6,9 @@
 //                   location: scheduleController.location.value,
 //                 ),
 import 'package:atti/index.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 
 import '../patient/screen/routine_schedule/CustomModal.dart';
-import '../patient/screen/routine_schedule/RoutineShceduleFinish.dart';
-import 'colorPallet.dart';
 
 class ScheduleBox extends StatefulWidget {
   final Function onCompleted; // 콜백 함수 추가
@@ -57,7 +52,7 @@ class _ScheduleBoxState extends State<ScheduleBox> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return Container(
-        padding: EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
+        padding: const EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -89,7 +84,7 @@ class _ScheduleBoxState extends State<ScheduleBox> {
                   color: colorPallet.orange,
                   shape: BoxShape.circle
                 ),
-                child: Center(
+                child: const Center(
                   child: Icon(
                     Icons.close,
                     color: Colors.white,
@@ -126,7 +121,7 @@ class _ScheduleBoxState extends State<ScheduleBox> {
                                 title: "'${widget.name}'을\n내 기억에 남길까요?",
                                 yesButtonColor: colorPallet.goldYellow,
                                 onYesPressed: () {
-                                  Get.to(MemoryRegister1());
+                                  Get.to(const MemoryRegister1());
                                 },
                                 onNoPressed: () {
                                   Navigator.push(
@@ -182,12 +177,12 @@ class _ScheduleBoxState extends State<ScheduleBox> {
                 borderRadius: BorderRadius.circular(15), // 외곽선을 15만큼 둥글게
               ),
               padding: widget.isEditMode
-                  ? EdgeInsets.fromLTRB(8, 7, 8, 7)
+                  ? const EdgeInsets.fromLTRB(8, 7, 8, 7)
                   : EdgeInsets.zero,
               child: Text(
                 DateFormat('a hh:mm', 'ko_KR').format(widget.time!) ?? '-',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 28,
                 ),
               ),
@@ -202,12 +197,12 @@ class _ScheduleBoxState extends State<ScheduleBox> {
                   borderRadius: BorderRadius.circular(15), // 외곽선을 15만큼 둥글게
                 ),
                 padding: widget.isEditMode
-                    ? EdgeInsets.fromLTRB(8, 7, 8, 7)
+                    ? const EdgeInsets.fromLTRB(8, 7, 8, 7)
                     : EdgeInsets.zero,
                 child: Text(
                   widget.name ?? '',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 28,
                   ),
                   overflow: TextOverflow.ellipsis, // overflow 발생 시 ... 표시

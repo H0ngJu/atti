@@ -30,15 +30,15 @@ class _ScheduleRegister4State extends State<ScheduleRegister4> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  DetailPageTitle(
+                  const DetailPageTitle(
                     title: '일정 등록하기',
                     description: '일정 메모를 입력해주세요',
                     totalStep: 4,
                     currentStep: 4,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: TextField(
                       onChanged: (value) {
@@ -46,17 +46,17 @@ class _ScheduleRegister4State extends State<ScheduleRegister4> {
                         //print(scheduleController.name.value);
                       },
                       cursorColor: Colors.black,
-                      style: TextStyle(fontSize: 24),
+                      style: const TextStyle(fontSize: 24),
                       decoration: InputDecoration(
                         hintText: '추가로 기록할 내용이 있나요?',
-                        hintStyle: TextStyle(fontSize: 24, color: Color(0xffA38130)),
+                        hintStyle: const TextStyle(fontSize: 24, color: Color(0xffA38130)),
                         filled: true, // 배경을 채움
-                        fillColor: Color(0xffFFF5DB),
+                        fillColor: const Color(0xffFFF5DB),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: BorderSide.none,
                         ),
-                        contentPadding: EdgeInsets.all(15),
+                        contentPadding: const EdgeInsets.all(15),
                       ),
                     ),
                   ),
@@ -65,7 +65,7 @@ class _ScheduleRegister4State extends State<ScheduleRegister4> {
             ),
           ),
 
-          BottomNextButton(next: ScheduleRegisterCheck(), content: '다음', isEnabled: true,),
+          const BottomNextButton(next: ScheduleRegisterCheck(), content: '다음', isEnabled: true,),
         ]),
       ),
     );

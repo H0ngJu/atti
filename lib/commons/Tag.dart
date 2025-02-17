@@ -7,7 +7,7 @@ class Tag extends StatelessWidget {
   final double fontsize; // 태그 글자 크기 (기본값: 16)
   final VoidCallback onDelete; // 삭제 아이콘 클릭 시 실행될 함수
 
-  Tag({
+  const Tag({super.key, 
     required this.name,
     this.backgroundColor = Colors.white,
     this.fontsize = 24,
@@ -19,12 +19,12 @@ class Tag extends StatelessWidget {
     return Container(
       // 태그 컨테이너의 여백 설정
       margin: fontsize != 24
-          ? EdgeInsets.only(top: 12) // 기본 글자 크기가 아닌 경우 위쪽 여백 12
-          : EdgeInsets.symmetric(vertical: 5), // 기본 글자 크기일 경우 위아래 여백 5
+          ? const EdgeInsets.only(top: 12) // 기본 글자 크기가 아닌 경우 위쪽 여백 12
+          : const EdgeInsets.symmetric(vertical: 5), // 기본 글자 크기일 경우 위아래 여백 5
       height: fontsize + 20, // 태그 높이: 글자 크기 + 14
       padding: fontsize != 16
-          ? EdgeInsets.fromLTRB(12, 0, 8, 0) // 기본 글자 크기가 아닌 경우 좌우 여백 10
-          : EdgeInsets.symmetric(horizontal: 5), // 기본 글자 크기일 경우 좌우 여백 5
+          ? const EdgeInsets.fromLTRB(12, 0, 8, 0) // 기본 글자 크기가 아닌 경우 좌우 여백 10
+          : const EdgeInsets.symmetric(horizontal: 5), // 기본 글자 크기일 경우 좌우 여백 5
       decoration: BoxDecoration(
         color: backgroundColor, // 태그 배경색 설정
         border: Border.all(
@@ -38,7 +38,7 @@ class Tag extends StatelessWidget {
         children: [
           // 태그 이름 텍스트
           Container(
-            padding: EdgeInsets.only(bottom: 3),
+            padding: const EdgeInsets.only(bottom: 3),
             child: Text(
               name, // 전달받은 태그 이름 표시
               style: TextStyle(fontSize: fontsize), // 글자 크기 설정
@@ -48,9 +48,9 @@ class Tag extends StatelessWidget {
             width: fontsize != 24 ? 10 : 6, // 텍스트와 구분선 사이 간격
           ),
           // 태그 안의 구분선 (세로선)
-          Container(
+          SizedBox(
             height: fontsize + 20, // 구분선 높이: 태그 높이와 동일
-            child: VerticalDivider(
+            child: const VerticalDivider(
               width: 1, // 구분선의 너비
               thickness: 0.5, // 구분선의 두께
               color: Colors.black, // 구분선 색상: 검정색

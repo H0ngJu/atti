@@ -4,7 +4,6 @@ import 'package:atti/data/notification/notification_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class NoticeMain extends StatefulWidget {
   const NoticeMain({Key? key}) : super(key: key);
@@ -52,7 +51,7 @@ class _NoticeMainState extends State<NoticeMain> {
               notificationTime.isBefore(now);
         })
             .toList();
-        print("here" + '${todayNotifications}');
+        print("here" '$todayNotifications');
 
         DateTime todayStart = DateTime(now.year, now.month, now.day);
         pastNotifications = allNotifications
@@ -77,16 +76,16 @@ class _NoticeMainState extends State<NoticeMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SimpleAppBar(
+      appBar: const SimpleAppBar(
         title: '알림',
       ),
       body: SingleChildScrollView(
           child: Container(
-        margin: EdgeInsets.all(16),
+        margin: const EdgeInsets.all(16),
         child: Column(
           children: [
             TodayNotice(notifications: todayNotifications),
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
             PastNotice(notifications : pastNotifications),
           ],
         ),
@@ -104,29 +103,29 @@ class TodayNoticeContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     String formattedTime = notifications.time != null ? _formatTimestamp(notifications.time!) : '';
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      padding: EdgeInsets.all(10),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          color: Color(0xffFFE9B3), borderRadius: BorderRadius.circular(15)),
+          color: const Color(0xffFFE9B3), borderRadius: BorderRadius.circular(15)),
       child: Row(
         //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
-          Container(
+          SizedBox(
               width: MediaQuery.of(context).size.width * 0.75,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    '${notifications.title}   ${formattedTime}',
-                    style: TextStyle(fontSize: 16, color: Color(0xffA38130)),
+                    '${notifications.title}   $formattedTime',
+                    style: const TextStyle(fontSize: 16, color: Color(0xffA38130)),
                   ),
                   Text(
                     '${notifications.message}',
-                    style: TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 20),
                   )
                 ],
               ))
@@ -162,38 +161,38 @@ class _TodayNoticeState extends State<TodayNotice> {
       children: [
         Row(
           children: [
-            Text(
+            const Text(
               '오늘 받은 알림  ',
               style: TextStyle(fontSize: 24),
             ),
             Text(
               '${widget.notifications.length}',
-              style: TextStyle(fontSize: 24, color: Color(0xffFFC215)),
+              style: const TextStyle(fontSize: 24, color: Color(0xffFFC215)),
             )
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         ListView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: widget.notifications.isNotEmpty ?
           (widget.notifications.length <= 2 ? widget.notifications.length : _visibleItemCount) :
           1,
           itemBuilder: (context, index) {
-            if (widget.notifications.length > 0) {
+            if (widget.notifications.isNotEmpty) {
               return TodayNoticeContainer(
                   notifications: widget.notifications[index]);
             } else {
-              return Center(
+              return const Center(
                 child: Text("데이터가 없습니다."), // 데이터가 없는 경우 메시지를 출력합니다.
               );
             }
           }
 
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         TextButton(
@@ -208,9 +207,9 @@ class _TodayNoticeState extends State<TodayNotice> {
             });
           },
           style: TextButton.styleFrom(
-            backgroundColor: Color(0xffFFE9B3)
+            backgroundColor: const Color(0xffFFE9B3)
           ),
-          child: Text('더 보기', style: TextStyle(color: Color(0xffA38130)),),
+          child: const Text('더 보기', style: TextStyle(color: Color(0xffA38130)),),
         ),
       ],
     );
@@ -226,8 +225,8 @@ class PastNoticeContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     String formattedTime = notifications.time != null ? _formatTimestamp(notifications.time!) : '';
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      padding: EdgeInsets.all(10),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           color: Colors.grey[200], borderRadius: BorderRadius.circular(15)),
       child: Row(
@@ -242,22 +241,22 @@ class PastNoticeContainer extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),*/
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
-          Container(
+          SizedBox(
               width: MediaQuery.of(context).size.width * 0.75,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    '${notifications.title}   ${formattedTime}',
+                    '${notifications.title}   $formattedTime',
                     style: TextStyle(fontSize: 16, color: Colors.grey[500]),
                   ),
                   Text(
                     '${notifications.message}',
-                    style: TextStyle(fontSize: 20, color: Colors.grey),
+                    style: const TextStyle(fontSize: 20, color: Colors.grey),
                   )
                 ],
               ))
@@ -328,17 +327,17 @@ class _PastNoticeState extends State<PastNotice> {
       children: [
         Row(
           children: [
-            Text(
+            const Text(
               '이전에 받은 알림  ',
               style: TextStyle(fontSize: 24),
             ),
             Text(
               '${widget.notifications.length}',
-              style: TextStyle(fontSize: 24, color: Color(0xffFFC215)),
+              style: const TextStyle(fontSize: 24, color: Color(0xffFFC215)),
             )
           ],
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Row(
           children: allCategories.map((category) {
             return Padding(
@@ -356,17 +355,17 @@ class _PastNoticeState extends State<PastNotice> {
                   });
                 },
                 backgroundColor: Colors.white,
-                selectedColor: Color(0xffFFC215),
+                selectedColor: const Color(0xffFFC215),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 showCheckmark: false,
               ),
             );
           }).toList(),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         ListView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: filteredData.isNotEmpty ?
           (filteredData.length <= 2 ? filteredData.length : _visibleItemCount) :
           1,
@@ -374,13 +373,13 @@ class _PastNoticeState extends State<PastNotice> {
             if (filteredData.isNotEmpty) {
               return PastNoticeContainer(notifications: filteredData[index]);
             } else {
-              return Center(
+              return const Center(
                 child: Text("데이터가 없습니다."), // 데이터가 없는 경우 메시지를 출력합니다.
               );
             }
           }
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         TextButton(
@@ -395,9 +394,9 @@ class _PastNoticeState extends State<PastNotice> {
             });
           },
           style: TextButton.styleFrom(
-              backgroundColor: Color(0xffFFE9B3)
+              backgroundColor: const Color(0xffFFE9B3)
           ),
-          child: Text('더 보기', style: TextStyle(color: Color(0xffA38130)),),
+          child: const Text('더 보기', style: TextStyle(color: Color(0xffA38130)),),
         ),
       ],
     );

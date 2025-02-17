@@ -10,6 +10,7 @@ import '../../../../commons/colorPallet.dart';
 import 'RoutineRegisterCheck.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class RoutineRegister3 extends StatefulWidget {
   const RoutineRegister3({super.key});
@@ -27,7 +28,12 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
   //이미지를 가져오는 함수
   Future getImage(ImageSource imageSource) async {
     //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
-    final XFile? pickedFile = await picker.pickImage(source: imageSource);
+    final XFile? pickedFile = await picker.pickImage(
+        source: imageSource,
+        // maxHeight: 400,
+        // maxWidth: 250,
+        imageQuality: 75
+    );
     if (pickedFile != null) {
       setState(() {
         _image = XFile(pickedFile.path); //가져온 이미지를 _image에 저장
@@ -63,7 +69,7 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
           Expanded(
             child: Column(
               children: [
-                DetailPageTitle(
+                const DetailPageTitle(
                   title: '일과 등록하기',
                   description: '해당 일과와 관련된 사진을 \n선택해주세요',
                   totalStep: 3,
@@ -80,13 +86,13 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
                                 MediaQuery.of(context).size.height * 0.4),
                         width: MediaQuery.of(context).size.width * 0.9,
                         //height: 280,
-                        child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄움
+                        child: Image.file(File(_image!.path)), // 변환된 이미지 표시... 과연!!?
                       )
                     : GestureDetector(
                         onTap: () {
                           getImage(ImageSource.gallery);
                         },
-                        child: Container(
+                        child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: Image.asset(
                             'lib/assets/images/imgpick.png',
@@ -108,15 +114,15 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
 
                       _image = XFile(defaultImagePath); // XFile 객체 생성
 
-                      Get.to(RoutineRegisterCheck());
+                      Get.to(const RoutineRegisterCheck());
                     });
                   },
                   child: Align(
                     alignment: Alignment.centerRight, // 텍스트를 오른쪽 정렬
                     child: Padding(
-                      padding:  EdgeInsets.only(right: 15),
+                      padding:  const EdgeInsets.only(right: 15),
                       child: Container(
-                        padding: EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(top: 10),
                         decoration: BoxDecoration(
                           border: Border(
                             bottom: BorderSide(
@@ -152,13 +158,13 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => RoutineRegisterCheck()),
+                          builder: (context) => const RoutineRegisterCheck()),
                     );
                   },
                   onSecondaryPressed: () {
                     getImage(ImageSource.gallery);
                   })
-              : SizedBox(),
+              : const SizedBox(),
         ],
       ),
     );

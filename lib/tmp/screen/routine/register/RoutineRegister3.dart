@@ -35,12 +35,12 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
       body: Column(
         children: [
           Expanded(child: Column(children: [
-            DetailPageTitle(
+            const DetailPageTitle(
               title: '일과 등록하기  ',
               description: '해당 일과와 관련된 사진을 \n선택해주세요',
               totalStep: 3, currentStep: 3,
             ),
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
             _image != null
                 ? Container(
               constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.4),
@@ -52,7 +52,7 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
               onTap: () {
                 getImage(ImageSource.gallery);
               },
-                  child: Container(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: Image.asset(
                     'lib/assets/images/imgpick.png',
@@ -66,7 +66,7 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
           _image != null
               ? Container(
             width: MediaQuery.of(context).size.width * 0.9,
-            margin: EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(bottom: 20),
             alignment: Alignment.center,
             child: Row(
               children: [
@@ -79,18 +79,18 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => RoutineRegisterCheck()),
+                          builder: (context) => const RoutineRegisterCheck()),
                     );
                   },
-                  child: Text(
-                    '다음',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
                   style: ButtonStyle(
                     backgroundColor:
-                    MaterialStateProperty.all(Color(0xffFFC215)),
-                    minimumSize: MaterialStateProperty.all(
+                    WidgetStateProperty.all(const Color(0xffFFC215)),
+                    minimumSize: WidgetStateProperty.all(
                         Size(MediaQuery.of(context).size.width * 0.43, 50)),
+                  ),
+                  child: const Text(
+                    '다음',
+                    style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                 ),
                 SizedBox(
@@ -100,22 +100,22 @@ class _RoutineRegister3State extends State<RoutineRegister3> {
                   onPressed: () {
                     getImage(ImageSource.gallery);
                   },
-                  child: Text(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(Colors.white),
+                    minimumSize: WidgetStateProperty.all(
+                        Size(MediaQuery.of(context).size.width * 0.43, 50)),
+                    side: WidgetStateProperty.all(const BorderSide(color: Colors.black, width: 1.0)),
+                  ),
+                  child: const Text(
                     '다시 선택',
                     style:
                     TextStyle(color: Colors.black, fontSize: 20),
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    minimumSize: MaterialStateProperty.all(
-                        Size(MediaQuery.of(context).size.width * 0.43, 50)),
-                    side: MaterialStateProperty.all(BorderSide(color: Colors.black, width: 1.0)),
                   ),
                 ),
               ],
             ),
           )
-              : SizedBox(),
+              : const SizedBox(),
 
 
         ],

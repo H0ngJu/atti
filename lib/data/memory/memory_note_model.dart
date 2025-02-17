@@ -67,7 +67,7 @@ class MemoryNoteModel {
   // 컬렉션 내에 특정 조건을 만족하는 데이터를 다 가지고 올때 사용
   MemoryNoteModel.fromQuerySnapshot(
       QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : this.fromJson(snapshot.data()!, snapshot.reference);
+      : this.fromJson(snapshot.data(), snapshot.reference);
 
   // object -> json (Flutter -> Firebase)
   Map<String, dynamic> toJson() {

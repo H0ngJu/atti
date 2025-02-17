@@ -14,7 +14,7 @@ class LoginEntryField extends StatefulWidget {
   final Function(String) onChanged;
   final bool isPassword;
 
-  LoginEntryField({
+  const LoginEntryField({
     super.key,
     required this.fieldName,
     required this.fieldId,
@@ -37,8 +37,8 @@ class _LoginEntryFieldState extends State<LoginEntryField> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    ColorPallet _colorPallet = ColorPallet();
-    LoginController _loginController = Get.find<LoginController>();
+    ColorPallet colorPallet = ColorPallet();
+    LoginController loginController = Get.find<LoginController>();
 
     return Container(
       child: Column(
@@ -46,27 +46,27 @@ class _LoginEntryFieldState extends State<LoginEntryField> {
         children: [
           Text(
             widget.fieldName,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 24,
               fontFamily: 'PretendardRegular',
             ),
           ),
           Container(
             margin: EdgeInsets.only(top: height*0.01),
-            padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 7.0, left: 9.0),
+            padding: const EdgeInsets.only(top: 2.0, bottom: 2.0, right: 7.0, left: 9.0),
             decoration: BoxDecoration(
-              color: _colorPallet.lightYellow,
+              color: colorPallet.lightYellow,
               borderRadius: BorderRadius.circular(15.0),
               border: Border.all(
-                color: _loginController.isPressed.value == widget.fieldId ? _colorPallet.textColor : _colorPallet.lightYellow,
+                color: loginController.isPressed.value == widget.fieldId ? colorPallet.textColor : colorPallet.lightYellow,
               ),
             ),
             child: TextFormField(
               onTap: () {
                 setState(() {
-                  _loginController.isPressed.value = widget.fieldId;
+                  loginController.isPressed.value = widget.fieldId;
                 });
-                print("isPressed = ${_loginController.isPressed.value}\nfieldId = ${widget.fieldId}");
+                print("isPressed = ${loginController.isPressed.value}\nfieldId = ${widget.fieldId}");
               },
               obscureText: widget.isPassword,
               onChanged: widget.onChanged,
@@ -76,17 +76,17 @@ class _LoginEntryFieldState extends State<LoginEntryField> {
                 hintText: widget.hintText,
                 hintStyle: TextStyle(
                   fontSize: 24,
-                  color: _colorPallet.textColor,
+                  color: colorPallet.textColor,
                   fontFamily: 'PretendardRegular',
                 ),
               ),
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 24,
                   fontFamily: 'PretendardRegular',
               ),
             ),
           ),
-          if ( _loginController.isPressed.value == widget.fieldId && !widget.isValid)
+          if ( loginController.isPressed.value == widget.fieldId && !widget.isValid)
             ErrorMessageWidget(message: widget.errorMessage)
         ],
       ),

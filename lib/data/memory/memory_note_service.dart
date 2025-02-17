@@ -52,6 +52,18 @@ class MemoryNoteService {
     }
   }
 
+  // 업데이트 함수: 도큐먼트 레퍼런스와 업데이트할 데이터 맵을 받아 Firestore 도큐먼트를 업데이트합니다.
+  Future<void> updateMemoryNote(DocumentReference docRef, Map<String, dynamic> updateData)
+  async {
+    try {
+      // 해당 도큐먼트의 id를 사용하여 업데이트
+      await firestore.collection('memoryNote').doc(docRef.id).update(updateData);
+    } catch (e) {
+      print('Error updating memory note: $e');
+      rethrow;
+    }
+  }
+
   // 이미지 URL을 다운로드하고 바이트 데이터로 반환
   Future<List<int>> _downloadImage(String url) async {
     final response = await http.get(Uri.parse(url));
@@ -66,10 +78,6 @@ class MemoryNoteService {
   Future<void> callGeminiAPI(MemoryNoteModel memoryNote, DocumentReference docRef) async {
     await dotenv.load(fileName: '.env');
     final String apiKey = dotenv.env['GEMINI_API_KEY']!;
-    if (apiKey == null) {
-      print('No \$API_KEY environment variable');
-      exit(1);
-    }
     print('callGeminiAPI 함수');
 
     // 이미지 처리
@@ -111,9 +119,9 @@ class MemoryNoteService {
           .get();
 
       List<MemoryNoteModel> memoryNotes = [];
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
         memoryNotes.add(MemoryNoteModel.fromSnapShot(doc as DocumentSnapshot<Map<String, dynamic>>));
-      });
+      }
       return memoryNotes;
     } catch (e) {
       print('Error getting memory note : $e');
@@ -121,14 +129,29 @@ class MemoryNoteService {
     }
   }
 
-  // 특정 기억 삭제
+  // 특정 기억 삭제 (Storage 이미지도 함께 삭제)
   Future<void> deleteMemory(DocumentReference docRef) async {
     try {
-      // Firestore에서 문서를 삭제
+      // 먼저 도큐먼트를 읽어 이미지 URL을 가져옴
+      DocumentSnapshot docSnapshot = await docRef.get();
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data() as Map<String, dynamic>;
+        final String? imageUrl = data['img'];
+        if (imageUrl != null && imageUrl.isNotEmpty) {
+          // Firebase Storage에서 해당 URL의 파일 참조를 얻어 삭제
+          final Reference storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+          await storageRef.delete();
+          print('Image deleted from Storage successfully!');
+        }
+      }
+
+      // Firestore 도큐먼트 삭제
       await docRef.delete();
       print('Memory deleted successfully!');
     } catch (e) {
       print('Error deleting memory: $e');
     }
   }
+
+
 }

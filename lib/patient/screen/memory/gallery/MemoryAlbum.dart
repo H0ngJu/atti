@@ -42,7 +42,7 @@ class _MemoryAlbumState extends State<MemoryAlbum> {
       body: Stack(
         children: [
           Center(
-            child: Container(
+            child: SizedBox(
               width: width * 0.9,
               child: Column(
                 children: [
@@ -58,7 +58,7 @@ class _MemoryAlbumState extends State<MemoryAlbum> {
           Positioned(
             bottom: height * 0.2,
             right: 0,
-            child: AddButton(),
+            child: const AddButton(),
           ),
         ],
       ),

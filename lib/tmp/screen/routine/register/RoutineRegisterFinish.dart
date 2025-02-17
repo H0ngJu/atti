@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:atti/data/routine/routine_controller.dart';
-import '../../../../commons/RoutineBox2.dart';
 import '../../../../patient/screen/routine_schedule/RoutineScheduleMain.dart';
-import '../RoutineMain.dart';
 import 'dart:io';
 
 class RoutineRegisterFinish extends StatefulWidget {
@@ -48,16 +46,16 @@ class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
                 SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  margin: EdgeInsets.only(left: 15),
+                  margin: const EdgeInsets.only(left: 15),
                   child: Text('\'${widget.name}\'\n일과를 등록했어요!',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 34, fontWeight: FontWeight.w500, color: Colors.black
                     ),),
                 ),
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
 
                 Container(
-                  padding: EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
+                  padding: const EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
                   width: MediaQuery.of(context).size.width * 0.9,
                   color: Colors.white,
                   alignment: Alignment.center,
@@ -66,36 +64,36 @@ class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
                       Row(
                         children: [
                           Container(
-                            padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+                            padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Color(0xff737373), width: 1,),
+                              border: Border.all(color: const Color(0xff737373), width: 1,),
                             ),
-                            child: Text(formattedTime, style: TextStyle(
+                            child: Text(formattedTime, style: const TextStyle(
                               fontSize: 22,
                               color: Colors.black
                             ),),
                           ),
-                          SizedBox(width: 10,),
+                          const SizedBox(width: 10,),
                           Expanded(
                             child: Container(
-                              color: Color(0xffE1E1E1),
+                              color: const Color(0xffE1E1E1),
                               height: 1,
                             ),
                           )
                         ],
                       ),
-                      SizedBox(height: 10,),
-                      Container(
+                      const SizedBox(height: 10,),
+                      SizedBox(
                           width: width * 0.8,
-                          child: Text(widget.name, style: TextStyle(
+                          child: Text(widget.name, style: const TextStyle(
                             fontSize: 30,
                             color: Colors.black,
                           ),
                           )
                       ),
-                      SizedBox(height: 5,),
+                      const SizedBox(height: 5,),
                       Container(
                         alignment: Alignment.center,
                         width: MediaQuery.of(context).size.width * 0.8,
@@ -124,20 +122,20 @@ class _RoutineRegisterFinishState extends State<RoutineRegisterFinish> {
           ),
           Container(
             alignment: Alignment.bottomCenter,
-            margin: EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(bottom: 20),
             child: TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RoutineScheduleMain()),
+                  MaterialPageRoute(builder: (context) => const RoutineScheduleMain()),
                 );
               },
-              child: Text('하루 일과로 돌아가기', style: TextStyle(color: Colors.white, fontSize: 20),),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xffFFC215)),
-                minimumSize: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(const Color(0xffFFC215)),
+                minimumSize: WidgetStateProperty.all(
                     Size(MediaQuery.of(context).size.width * 0.9, 50)),
               ),
+              child: const Text('하루 일과로 돌아가기', style: TextStyle(color: Colors.white, fontSize: 20),),
             ),
           ),
         ],

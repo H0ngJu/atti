@@ -23,7 +23,7 @@ class Message {
 
   static Future<List<Message>> getMessage(String path) async {
     String chatString = await ChatController.getChat(path);
-    chatString = "[" + chatString + "]";
+    chatString = "[$chatString]";
     List<dynamic> chatList = jsonDecode(chatString);
     List<Message> chat =
     chatList.map((json) => Message.fromJson(json)).toList();
@@ -44,12 +44,12 @@ class ChatHistory extends StatelessWidget {
         if (snapshot.hasData) {
           List<Message> messages = snapshot.data!;
           return Scaffold(
-            appBar: SimpleAppBar(
+            appBar: const SimpleAppBar(
               title: '아띠와 회상 대화 기록',
             ),
             body: SingleChildScrollView(
               child: Container(
-                margin: EdgeInsets.all(16),
+                margin: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -59,14 +59,14 @@ class ChatHistory extends StatelessWidget {
                       children: [
                         Text(
                           '\'${memory.imgTitle}\' 기억',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 30, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                     ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: messages.length,
                       itemBuilder: (BuildContext context, int index) {
                         return ChatMessage(
@@ -81,7 +81,7 @@ class ChatHistory extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       },
     );
   }
@@ -91,12 +91,12 @@ class ChatMessage extends StatelessWidget {
   final Message message;
   final List<Message> messages;
 
-  ChatMessage({required this.message, required this.messages});
+  const ChatMessage({super.key, required this.message, required this.messages});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
+        margin: const EdgeInsets.symmetric(vertical: 10),
         child: Column(
           crossAxisAlignment: message.sender == 'I'
               ? CrossAxisAlignment.end
@@ -106,10 +106,10 @@ class ChatMessage extends StatelessWidget {
               Container(
                 child: Container(
                   alignment: Alignment.centerRight,
-                  margin: EdgeInsets.symmetric(vertical: 20),
+                  margin: const EdgeInsets.symmetric(vertical: 20),
                   child: Text(
-                    _formatDate(message.date)+"대화",
-                    style: TextStyle(
+                    "${_formatDate(message.date)}대화",
+                    style: const TextStyle(
                       fontSize: 20,
                       color: Colors.grey,
                     ),
@@ -122,34 +122,34 @@ class ChatMessage extends StatelessWidget {
                   : MainAxisAlignment.start,
               children: <Widget>[
                 if (message.sender == 'Atti')
-                  CircleAvatar(
+                  const CircleAvatar(
                     backgroundImage: AssetImage('lib/assets/Atti/AttiFace.png'),
                   ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Container(
                   constraints: BoxConstraints(
                     maxWidth: MediaQuery.of(context).size.width * 0.7,
                   ),
-                  padding: EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
                     color: message.sender == 'I'
-                        ? Color(0xffFFE9B3)
+                        ? const Color(0xffFFE9B3)
                         : Colors.white,
                     border: Border.all(
                         color: message.sender == 'I'
                             ? Colors.white
                             : Colors.black),
                     borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
+                        topLeft: const Radius.circular(15),
                         bottomRight: message.sender == 'I'
-                            ? Radius.circular(0)
-                            : Radius.circular(15),
-                        bottomLeft: message.sender == 'I' ? Radius.circular(15) : Radius.circular(0),
-                        topRight: Radius.circular(15)),
+                            ? const Radius.circular(0)
+                            : const Radius.circular(15),
+                        bottomLeft: message.sender == 'I' ? const Radius.circular(15) : const Radius.circular(0),
+                        topRight: const Radius.circular(15)),
                   ),
                   child: Text(
                     message.text, // 메시지 출력
-                    style: TextStyle(fontSize: 16.0),
+                    style: const TextStyle(fontSize: 16.0),
                   ),
                 ),
               ],

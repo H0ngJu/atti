@@ -4,11 +4,10 @@ import 'dart:math';
 import 'package:atti/data/memory/memory_note_model.dart';
 import 'package:atti/data/report/dangerword_controller.dart';
 import 'package:atti/data/report/emotion_controller.dart';
-import 'package:atti/tmp/screen/chatbot/Chatbot.dart';
+import 'package:atti/data/memory/Chatbot.dart';
 import 'package:atti/patient/screen/memory/chat/BeforeSave.dart';
 import 'package:atti/patient/screen/memory/chat/ChatBubble.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -157,7 +156,7 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Stack(children: [
         isAttiView
             ? Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -196,7 +195,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 .of(context)
                 .size
                 .width * 0.05,
-            child: Container(
+            child: SizedBox(
               width: MediaQuery
                   .of(context)
                   .size
@@ -212,7 +211,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 .of(context)
                 .size
                 .width * 0.05,
-            child: Container(
+            child: SizedBox(
               width: MediaQuery
                   .of(context)
                   .size
@@ -303,10 +302,10 @@ class VoiceButton extends StatefulWidget {
 class _VoiceButtonState extends State<VoiceButton> {
   String _screenMessage = '대화를 시작하려면\n마이크 버튼을 누르세요';
   final _chatbot = Chatbot();
-  stt.SpeechToText _speech = stt.SpeechToText();
+  final stt.SpeechToText _speech = stt.SpeechToText();
   String _spokenText = '버튼을 누르고 음성을 입력';
   bool _isListening = false;
-  int _staticTimeout = 5; // 정적 상태 타임아웃 (2초)
+  final int _staticTimeout = 5; // 정적 상태 타임아웃 (2초)
   int _elapsedTime = 0;
   late List<ChatMessage> chatMessages = []; // 대화 리스트
   late List<String> onlyUserMessages = []; // 사용자 응답만 저장
@@ -354,7 +353,7 @@ class _VoiceButtonState extends State<VoiceButton> {
           String message = result.recognizedWords ?? "";
 
           // 일정 시간 동안 아무런 결과가 없으면 음성 인식 종료로 판단하고 API 호출
-          Future.delayed(Duration(seconds: 2), () async {
+          Future.delayed(const Duration(seconds: 2), () async {
             if (_spokenText == message) {
               // 1초 동안 결과가 변하지 않았다면
               try {
@@ -362,7 +361,7 @@ class _VoiceButtonState extends State<VoiceButton> {
                 _onUserMessage(message);
 
                 updateTTSEnabled(false);
-                Stream<String> responseStream = await _chatbot.getResponse(
+                Stream<String> responseStream = _chatbot.getResponse(
                     message, widget.memory.reference!); // Chatbot으로부터 응답 받기
                 String fullResponse = ""; // 전체 응답
 
@@ -434,7 +433,7 @@ class _VoiceButtonState extends State<VoiceButton> {
   void _startStaticTimer() {
     _resetStaticTimer();
     // 1초마다 정적 시간을 증가 -> 타이머 시작.
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _elapsedTime++;
         if (_elapsedTime >= _staticTimeout) {
@@ -600,13 +599,13 @@ class _VoiceButtonState extends State<VoiceButton> {
                 onTap: widget.toggleView,
                 child: Text(
                   widget.isAttiView ? '사진 보기' : '아띠 보기',
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.black,
                       fontSize: 24,
                       fontFamily: 'PretendardSemibold'),
                 )),
           ),
-          Container(
+          SizedBox(
             height: MediaQuery
                 .of(context)
                 .size
@@ -615,8 +614,8 @@ class _VoiceButtonState extends State<VoiceButton> {
               onPressed: _isListening ? _stopListening : _toggleListening,
               style: ElevatedButton.styleFrom(
                   backgroundColor:
-                  _isListening ? Color(0xffFF6200) : Colors.black,
-                  shape: CircleBorder()),
+                  _isListening ? const Color(0xffFF6200) : Colors.black,
+                  shape: const CircleBorder()),
               child: Icon(
                 _isListening ? Icons.stop : Icons.mic,
                 size: 40,
@@ -647,7 +646,7 @@ class _VoiceButtonState extends State<VoiceButton> {
                       chat: chat,
                       albumList: widget.albumList));
                 },
-                child: Text(
+                child: const Text(
                   '대화 종료',
                   style: TextStyle(
                       color: Colors.black,

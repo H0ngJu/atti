@@ -28,6 +28,7 @@ class _RoutineRegister1State extends State<RoutineRegister1> {
     print(authController.patientDocRef);
   }
 
+  @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
@@ -43,7 +44,7 @@ class _RoutineRegister1State extends State<RoutineRegister1> {
             Expanded(child: SingleChildScrollView(
               child: Column(
                 children: [
-                  DetailPageTitle(
+                  const DetailPageTitle(
                     title: '일과 등록하기',
                     description: '일과 이름을 입력해주세요',
                     totalStep: 3,
@@ -61,7 +62,7 @@ class _RoutineRegister1State extends State<RoutineRegister1> {
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       alignment: Alignment.centerLeft,
-                      child: Text(
+                      child: const Text(
                         '복약 일과라면\n아래의 초록 버튼을 눌러주세요'
                         , style: TextStyle(
                           fontSize: 28,
@@ -76,15 +77,15 @@ class _RoutineRegister1State extends State<RoutineRegister1> {
                       SizedBox(width: width * 0.05,),
                       GestureDetector(
                         onTap: () {
-                          Get.to(MedicineRoutineRegister1());
+                          Get.to(const MedicineRoutineRegister1());
                         },
                         child: Container(
-                          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                           decoration: BoxDecoration(
-                            color: Color(0xff64A94C),
+                            color: const Color(0xff64A94C),
                             borderRadius: BorderRadius.circular(15)
                           ),
-                          child: Text(
+                          child: const Text(
                             '복약일과 등록하기',
                             style: TextStyle(
                               color: Colors.white,
@@ -101,7 +102,7 @@ class _RoutineRegister1State extends State<RoutineRegister1> {
               ),
             )),
 
-            BottomNextButton(next: RoutineRegister2(), content: '다음', isEnabled: routineController.routine.value.name != null,)
+            BottomNextButton(next: const RoutineRegister2(), content: '다음', isEnabled: routineController.routine.value.name != null,)
           ],
         ),
       ),

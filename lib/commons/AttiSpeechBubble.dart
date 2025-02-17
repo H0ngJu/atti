@@ -6,9 +6,10 @@ Widget AttiSpeechBubble({
   required Color color,
 }) =>
     ClipPath(
+      clipper: MyClipper(),
       child: Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           top: 30,
           left: 20,
           right: 20,
@@ -18,7 +19,7 @@ Widget AttiSpeechBubble({
         child: Text(
           comment,
           textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.black,
                 fontFamily: 'UhBee',
                 fontSize: 24,
@@ -26,7 +27,6 @@ Widget AttiSpeechBubble({
             )
         ),
       ),
-      clipper: MyClipper(),
     );
 
 class MyClipper extends CustomClipper<Path> {

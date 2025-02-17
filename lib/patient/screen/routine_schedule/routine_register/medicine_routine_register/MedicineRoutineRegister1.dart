@@ -35,7 +35,7 @@ class _MedicineRoutineRegister1State extends State<MedicineRoutineRegister1> {
             Expanded(child: SingleChildScrollView(
               child: Column(
                 children: [
-                  DetailPageTitle(
+                  const DetailPageTitle(
                     title: '복약 일과 등록하기',
                     description: '복약 일과를 입력해주세요',
                     totalStep: 3,
@@ -66,7 +66,7 @@ class _MedicineRoutineRegister1State extends State<MedicineRoutineRegister1> {
               ),
             )),
 
-            BottomNextButton(next: MedicineRoutineRegister2(), content: '다음', isEnabled: routineController.routine.value.name != null,)
+            BottomNextButton(next: const MedicineRoutineRegister2(), content: '다음', isEnabled: routineController.routine.value.name != null,)
           ],
         ),
       ),

@@ -1,9 +1,5 @@
-import 'package:atti/commons/BottomNextButton.dart';
 import 'package:atti/index.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
 
-import 'colorPallet.dart';
 
 class CarerRoutineModal extends StatelessWidget {
   const CarerRoutineModal({
@@ -20,7 +16,7 @@ class CarerRoutineModal extends StatelessWidget {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    final ColorPallet _colorPallet = Get.put(ColorPallet());
+    final ColorPallet colorPallet = Get.put(ColorPallet());
 
     // 이번 달의 날짜 수를 구함
     DateTime now = DateTime.now();
@@ -42,11 +38,11 @@ class CarerRoutineModal extends StatelessWidget {
       }
     });
     double percent = totalRoutines > 0 ? (completedRoutines / totalRoutines * 100) : 0;
-    String percentString = percent.toStringAsFixed(0) + "%";
+    String percentString = "${percent.toStringAsFixed(0)}%";
     String countText = "$completedRoutines/$totalRoutines";
 
     return AlertDialog(
-      contentPadding: EdgeInsets.fromLTRB(15, 10, 15, 0),
+      contentPadding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.zero,
 
@@ -59,18 +55,18 @@ class CarerRoutineModal extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(),
+                const SizedBox(),
                 // 상단 닫기 버튼
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.close,
                     color: Color(0xffB8B8B8),
                   ),
                   padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(),
+                  constraints: const BoxConstraints(),
                   visualDensity: VisualDensity.compact,
                 )
               ],
@@ -80,10 +76,10 @@ class CarerRoutineModal extends StatelessWidget {
             Container(
                 child: Text(
                   name,
-                  style: TextStyle(fontSize: 30),
+                  style: const TextStyle(fontSize: 30),
                 )),
             SizedBox(height: height * 0.01,),
-            Text(
+            const Text(
               '이번달 일과 완료율',
               style: TextStyle(fontSize: 24),
             ),
@@ -92,21 +88,21 @@ class CarerRoutineModal extends StatelessWidget {
               children: [
                 Text(
                   percentString,
-                  style: TextStyle(fontSize: 22),
+                  style: const TextStyle(fontSize: 22),
                 ),
-                SizedBox(width: 30,),
+                const SizedBox(width: 30,),
                 Text(
                   countText,
-                  style: TextStyle(fontSize: 22),
+                  style: const TextStyle(fontSize: 22),
                 )
               ],
             ),
-            SizedBox(height: 20 ),
+            const SizedBox(height: 20 ),
             // 캘린더 그리드 (가로 7개씩)
             Expanded(
                 child: GridView.builder(
                     padding: EdgeInsets.zero,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 7,
                         crossAxisSpacing: 0,
                         mainAxisSpacing: 5,
@@ -126,7 +122,7 @@ class CarerRoutineModal extends StatelessWidget {
                         // 오늘 이후의 날짜: 아이콘이나 채우기 없이 점선 원만 표시
                         content = CustomPaint(
                           painter: RoutineDottedCirclePainter(),
-                          child: Container(
+                          child: const SizedBox(
                             width: 30,
                             height: 30,
                           ),
@@ -140,13 +136,13 @@ class CarerRoutineModal extends StatelessWidget {
                               width: 30,
                               height: 30,
                               decoration: BoxDecoration(
-                                color: _colorPallet.lightGrey,
+                                color: colorPallet.lightGrey,
                                 shape: BoxShape.circle,
                               ),
                             ),
                             CustomPaint(
                               painter: RoutineDottedCirclePainter(),
-                              child: Container(
+                              child: const SizedBox(
                                 width: 30,
                                 height: 30,
                               ),
@@ -179,7 +175,7 @@ class CarerRoutineModal extends StatelessWidget {
                             child: Icon(
                               Icons.close,
                               size: 20,
-                              color: _colorPallet.orange,
+                              color: colorPallet.orange,
                             ),
                           ),
                         );
@@ -188,7 +184,7 @@ class CarerRoutineModal extends StatelessWidget {
                       return Column(
                         children: [
                           content,
-                          SizedBox(height: 3,),
+                          const SizedBox(height: 3,),
                           Text(
                             '$day',
                             style: TextStyle(

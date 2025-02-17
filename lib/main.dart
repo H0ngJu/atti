@@ -1,9 +1,6 @@
-import 'dart:ffi';
 
 import 'package:atti/data/notification/notification.dart';
-import 'package:atti/login_signUp/IntroPage.dart';
-import 'package:atti/login_signUp/LogInSignUpMainScreen.dart';
-import 'package:atti/tmp/screen/HomeCarer.dart';
+import 'package:atti/patient/screen/routine_schedule/RoutineScheduleMain.dart';
 
 import 'package:atti/tmp/screen/routine/RoutineMain.dart';
 import 'package:atti/tmp/screen/schedule/ScheduleMain.dart';
@@ -17,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'firebase_options.dart';
+import 'login_signUp/IntroPage.dart';
 import 'login_signUp/LogInScreen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -83,19 +81,19 @@ void main() async {
 class MyApp extends StatelessWidget {
   final NotificationService notificationService;
   final String initialRoute;
-  MyApp({super.key, required this.notificationService, required this.initialRoute});
+  const MyApp({super.key, required this.notificationService, required this.initialRoute});
 
   @override
   Widget build(BuildContext context) {
     notificationService.init(context);
     return GetMaterialApp(
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('ko', 'KR'), // Korean
+      supportedLocales: const [
+        Locale('ko', 'KR'), // Korean
       ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -116,16 +114,16 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(
-            textScaler: TextScaler.linear(1.0), // 글자 크기를 고정
+            textScaler: const TextScaler.linear(1.0), // 글자 크기를 고정
           ),
           child: child!,
         );
       },
 
       routes: {
-        '/': (context) => IntroPage(),
-        '/schedule': (context) => ScheduleMain(),
-        '/routine': (context) => RoutineMain(),
+        '/': (context) => const IntroPage(),
+        '/schedule': (context) => const RoutineScheduleMain(),
+        '/routine': (context) => const RoutineScheduleMain(),
       },
     );
   }

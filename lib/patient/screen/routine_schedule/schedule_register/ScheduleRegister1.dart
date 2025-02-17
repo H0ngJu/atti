@@ -36,13 +36,13 @@ class _ScheduleRegister1State extends State<ScheduleRegister1> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  DetailPageTitle(
+                  const DetailPageTitle(
                     title: '일정 등록하기',
                     description: '일정 이름을 입력해주세요',
                     totalStep: 3,
                     currentStep: 1,
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   RegisterTextField(
                     hintText: '어떤 일정인가요?',
@@ -55,7 +55,7 @@ class _ScheduleRegister1State extends State<ScheduleRegister1> {
             ),
           ),
         
-         BottomNextButton(next: ScheduleRegister2(), content: '다음', isEnabled: scheduleController.schedule.value.name != null,),
+         BottomNextButton(next: const ScheduleRegister2(), content: '다음', isEnabled: scheduleController.schedule.value.name != null,),
         ]),
       ),
     );

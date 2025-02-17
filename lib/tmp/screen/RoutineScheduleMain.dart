@@ -1,13 +1,8 @@
 import 'package:atti/tmp/screen/routine/register/RoutineRegister1.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:atti/commons/AttiBottomNavi.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
-import 'package:timelines/timelines.dart';
-import '../../commons/BottomNextButton.dart';
-import '../../commons/RoutineBox.dart';
 import '../../commons/RoutineModal.dart';
 import '../../data/auth_controller.dart';
 import '../../data/routine/routine_controller.dart';
@@ -17,9 +12,7 @@ import 'package:atti/tmp/screen/schedule/register/ScheduleRegister1.dart';
 import '../../commons/ScheduleBox.dart';
 import '../../commons/ScheduleModal.dart';
 import '../../data/schedule/schedule_model.dart';
-import 'package:atti/tmp/screen/schedule/register/ScheduleRegister1.dart';
 import 'dart:math';
-import '../../commons/RoutineBox2.dart';
 import '../../data/schedule/schedule_service.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
@@ -95,30 +88,16 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
     todayRoutines = await RoutineService().getRoutinesByDay(todayInWeek);
     todaySchedules = await ScheduleService().getSchedulesByDate(today);
 
-    if (fetchedSchedules != null) {
-      setState(() {
-        schedulesBySelectedDay = fetchedSchedules;
-        numberOfSchedules = schedulesBySelectedDay.length;
-      });
-    } else {
-      setState(() {
-        schedulesBySelectedDay = [];
-        numberOfSchedules = 0;
-      });
+    setState(() {
+      schedulesBySelectedDay = fetchedSchedules;
+      numberOfSchedules = schedulesBySelectedDay.length;
+    });
+  
+    setState(() {
+      routinesBySelectedDay = fetchedRoutines;
+      numberOfRoutines = routinesBySelectedDay.length;
+    });
     }
-
-    if (fetchedRoutines != null) {
-      setState(() {
-        routinesBySelectedDay = fetchedRoutines;
-        numberOfRoutines = routinesBySelectedDay.length;
-      });
-    } else {
-      setState(() {
-        routinesBySelectedDay = [];
-        numberOfRoutines = 0;
-      });
-    }
-  }
 
   Future<void> _makeTTsMessage() async {
     List<String> ttsMessages = ['오늘은 어떤 일정이 있으신가요?', '일정과 일과를 할 시간이 되면 아띠가 알려드릴게요!'];
@@ -131,10 +110,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
       if (todaySchedules.isNotEmpty) {
         String ttsScheduleMessage = '오늘은 ';
         for (int i = 0; i < todaySchedules.length; i++) {
-          ttsScheduleMessage += DateFormat('a h시 m분', 'ko_KR').format(todaySchedules[i].time!.toDate()) +
-              '에 ' +
-              todaySchedules[i].name! +
-              (i == todaySchedules.length - 1 ? ' 일정이 있어요!' : ', ');
+          ttsScheduleMessage += '${DateFormat('a h시 m분', 'ko_KR').format(todaySchedules[i].time!.toDate())}에 ${todaySchedules[i].name!}${i == todaySchedules.length - 1 ? ' 일정이 있어요!' : ', '}';
         }
         ttsMessages.add(ttsScheduleMessage);
       }
@@ -195,7 +171,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-                colorScheme: ColorScheme.light(
+                colorScheme: const ColorScheme.light(
                   //surface: Color(0xffFFF5DB), // 배경 색
                   onSurface: Colors.black, // 달력 숫자 색
                   primary: Color(0xffFFE9B3), // 선택된 영역 색
@@ -239,9 +215,9 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
               width: width * 0.9,
               alignment: Alignment.centerLeft,
               child: Text(
-                '${patientName}님의',
+                '$patientName님의',
                 textAlign: TextAlign.left,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 24,
                 ),
               ),
@@ -254,7 +230,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                   Container(
                     //width: MediaQuery.of(context).size.width * 0.9,
                     alignment: Alignment.centerLeft,
-                    child: Text(
+                    child: const Text(
                       '일과 및 일정',
                       textAlign: TextAlign.left,
                       style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
@@ -264,10 +240,10 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     await _selectDate(context);
                     await _fetchData();
                   },
-                      child: Text('날짜변경', style: TextStyle(fontSize: 18, color: Colors.black),),
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Color(0xffECECEC)),
+                        backgroundColor: WidgetStateProperty.all(const Color(0xffECECEC)),
                       ),
+                      child: const Text('날짜변경', style: TextStyle(fontSize: 18, color: Colors.black),),
                   ),
                 ],
               ),
@@ -285,14 +261,14 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
             Container(
               width: width * 0.9,
               alignment: Alignment.center,
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.all(20),
+              decoration: const BoxDecoration(
                   color: Color(0xffFFC215),
                   borderRadius: BorderRadius.all(Radius.circular(15))),
               child: Text(
                   selectedMessage ?? '',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.white, fontFamily: 'UhBee', fontSize: 25)),
             ),
             SizedBox(height: height * 0.03,),
@@ -307,16 +283,16 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     child: Text(
                       '${DateFormat('M월 d일 EEEE', 'ko_KR').format(_selectedDay)} 일과',
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+                      style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
                     ),
                   ),
                   TextButton(onPressed: () {
-                    Get.to(RoutineRegister1());
+                    Get.to(const RoutineRegister1());
                   },
-                    child: Text('일과등록', style: TextStyle(fontSize: 18, color: Color(0xffA38130)),),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Color(0xffFFE9B3)),
+                      backgroundColor: WidgetStateProperty.all(const Color(0xffFFE9B3)),
                     ),
+                    child: const Text('일과등록', style: TextStyle(fontSize: 18, color: Color(0xffA38130)),),
                   ),
                 ],
               ),
@@ -324,7 +300,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
             //SizedBox(height: height * 0.05,),
 
             // 여기에 seletexDay에 해당하는 루틴들을 추가
-            routinesBySelectedDay.length > 0
+            routinesBySelectedDay.isNotEmpty
             ? ListView.builder(
               primary: false,
               shrinkWrap: true,
@@ -334,9 +310,9 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     routinesBySelectedDay[index].isFinished != null &&
                         routinesBySelectedDay[index]
                             .isFinished!
-                            .containsKey(removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')) &&
+                            .containsKey(removeZ('${_selectedDay.toString().substring(0, 10)} 00:00:00.000')) &&
                         routinesBySelectedDay[index]
-                            .isFinished![removeZ(_selectedDay.toString().substring(0, 10)+ ' 00:00:00.000')]!;
+                            .isFinished![removeZ('${_selectedDay.toString().substring(0, 10)} 00:00:00.000')]!;
 
                 return GestureDetector(
                   onTap: () {
@@ -364,16 +340,16 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
               },
             )
             : Container(
-              margin: EdgeInsets.only(top: 15, bottom: 15),
+              margin: const EdgeInsets.only(top: 15, bottom: 15),
               width: MediaQuery.of(context).size.width * 0.9,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderRadius: const BorderRadius.all(Radius.circular(15)),
                   border: Border.all(
-                      style: BorderStyle.solid, color: Color(0xffDDDDDD))),
-              child: Text(
+                      style: BorderStyle.solid, color: const Color(0xffDDDDDD))),
+              child: const Text(
                 '예정된 일과가 없어요',
                 style: TextStyle(fontSize: 24),
               ),
@@ -381,7 +357,7 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
             SizedBox(height: height * 0.01,),
             SizedBox(
               width: width * 0.9,
-              child: Divider(
+              child: const Divider(
                 color: Color(0xffE1E1E1),
                 thickness: 1,
               ),
@@ -398,22 +374,22 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                     child: Text(
                       '${DateFormat('M월 d일 EEEE', 'ko_KR').format(_selectedDay)} 일정',
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+                      style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
                     ),
                   ),
                   TextButton(onPressed: () {
-                    Get.to(ScheduleRegister1());
+                    Get.to(const ScheduleRegister1());
                   },
-                    child: Text('일정등록', style: TextStyle(fontSize: 18, color: Color(0xffA38130)),),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Color(0xffFFE9B3)),
+                      backgroundColor: WidgetStateProperty.all(const Color(0xffFFE9B3)),
                     ),
+                    child: const Text('일정등록', style: TextStyle(fontSize: 18, color: Color(0xffA38130)),),
                   ),
                 ],
               ),
             ),
             //SizedBox(height: height * 0.03,),
-            schedulesBySelectedDay.length > 0
+            schedulesBySelectedDay.isNotEmpty
                 ? ListView.builder(
                     primary: false,
                     shrinkWrap: true,
@@ -446,16 +422,16 @@ class _RoutineScheduleMainState extends State<RoutineScheduleMain> {
                   },
             )
                 : Container(
-              margin: EdgeInsets.only(top: 15),
+              margin: const EdgeInsets.only(top: 15),
                   width: MediaQuery.of(context).size.width * 0.9,
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderRadius: const BorderRadius.all(Radius.circular(15)),
                       border: Border.all(
-                          style: BorderStyle.solid, color: Color(0xffDDDDDD))),
-                  child: Text(
+                          style: BorderStyle.solid, color: const Color(0xffDDDDDD))),
+                  child: const Text(
                     '등록된 일정이 없어요',
                     style: TextStyle(fontSize: 24),
                   ),

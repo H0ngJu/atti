@@ -14,7 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:atti/commons/colorPallet.dart';
 
 class SignUpScreen3 extends StatefulWidget {
-  SignUpScreen3({super.key});
+  const SignUpScreen3({super.key});
 
   @override
   State<SignUpScreen3> createState() => _SignUpScreen3State();
@@ -34,7 +34,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
   void _openDatePicker(BuildContext context) {
     BottomPicker.date(
       minDateTime: DateTime(1900),
-      pickerTitle: Text(
+      pickerTitle: const Text(
         '생년월일을 입력해 주세요',
         style: TextStyle(
           fontSize: 24, fontWeight: FontWeight.normal,
@@ -57,7 +57,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
           });
         }
       },
-      buttonContent: Padding(
+      buttonContent: const Padding(
         padding: EdgeInsets.symmetric(
           horizontal: 10,
         ),
@@ -69,7 +69,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
       ),
       bottomPickerTheme: BottomPickerTheme.plumPlate,
       buttonStyle: BoxDecoration(
-        color: Color(0xffFFC215),
+        color: const Color(0xffFFC215),
         borderRadius: BorderRadius.circular(15),
       ),
       buttonWidth: MediaQuery.of(context).size.width * 0.5,
@@ -95,7 +95,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
         },
         child: Stack(
           children: [
-            DetailPageTitle(
+            const DetailPageTitle(
               title: '회원가입',
               description: '',
               totalStep: 3,
@@ -106,7 +106,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
               child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Column(
                     children: [
                       EntryField(
@@ -123,7 +123,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                       if (_signUpController.isPatient.value)
                         Container(
                           alignment: Alignment.topLeft,
-                          child: Text('생년월일',
+                          child: const Text('생년월일',
                             style: TextStyle(
                               fontSize: 24,
                               fontFamily: 'PretendardRegular',
@@ -135,7 +135,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                         Container(
                           alignment: Alignment.topLeft,
                           margin: EdgeInsets.only(top: height*0.01),
-                          padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 5.0),
+                          padding: const EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 5.0),
                           decoration: BoxDecoration(
                             color: colorPallet.lightYellow,
                             borderRadius: BorderRadius.circular(15.0),
@@ -153,7 +153,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                     _signUpController.isPressed.value = 5;
                                   });
                                 },
-                                child: Text("${formattedDate}",
+                                child: Text(formattedDate,
                                   style: TextStyle(
                                     fontSize: 24,
                                     color: formattedDate == "연도 / 월 / 일을 선택해 주세요" ? colorPallet.textColor : Colors.black,
@@ -195,7 +195,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('가족 구성원',
+                              const Text('가족 구성원',
                                 style: TextStyle(
                                     fontSize: 24,
                                     fontFamily: 'PretendardRegular',
@@ -204,7 +204,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                           // TagTest(),
                               Container(
                                 margin: EdgeInsets.only(top: height*0.01),
-                                padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 5.0),
+                                padding: const EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 5.0),
                                 decoration: BoxDecoration(
                                   // color: colorPallet.yellow,
                                   borderRadius: BorderRadius.circular(15.0),
@@ -215,10 +215,10 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                                 ),
                                 child: Container(
                                     margin: EdgeInsets.only(top: height*0.01),
-                                    padding: EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 5.0),
+                                    padding: const EdgeInsets.only(top: 2.0, bottom: 2.0, right: 5.0, left: 5.0),
                                     width: width*0.9,
                                     height: height*0.2,
-                                    child: SignUpFamilyTag()
+                                    child: const SignUpFamilyTag()
                                 ),
                               )
                             ],
@@ -228,7 +228,7 @@ class _SignUpScreen3State extends State<SignUpScreen3> {
                       // SizedBox(height: height * 0.1,),
                     NextBtn(
                         isButtonDisabled: !isValid,
-                        nextPage: FinishSignUpScreen(),
+                        nextPage: const FinishSignUpScreen(),
                         onButtonClick: _signUpController.signUp,
                         buttonName: "회원가입",
                       )

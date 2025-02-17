@@ -1,8 +1,6 @@
 import 'package:atti/tmp/screen/Notice/NoticeMain.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../tmp/screen/Menu.dart';
 
@@ -12,7 +10,7 @@ class AttiAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showNotificationsIcon;
   final bool showMenu;
 
-  AttiAppBar({
+  const AttiAppBar({super.key, 
     this.title,
     this.actions,
     this.showNotificationsIcon = true,
@@ -20,7 +18,7 @@ class AttiAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +26,12 @@ class AttiAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (showNotificationsIcon) {
       appBarActions.add(
         Container(
-          margin: EdgeInsets.only(left: 16),
+          margin: const EdgeInsets.only(left: 16),
           child: IconButton(
             onPressed: () {
-              Get.to(NoticeMain());
+              Get.to(const NoticeMain());
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.notifications,
               color: Colors.grey,
               size: 40,
@@ -45,7 +43,7 @@ class AttiAppBar extends StatelessWidget implements PreferredSizeWidget {
     appBarActions.addAll(actions ?? []);
 
     return PreferredSize(
-      preferredSize: Size.fromHeight(412),
+      preferredSize: const Size.fromHeight(412),
       child: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
@@ -53,12 +51,12 @@ class AttiAppBar extends StatelessWidget implements PreferredSizeWidget {
         title: title,
         leading: showMenu
         ? Container(
-          margin: EdgeInsets.only(right: 16),
+          margin: const EdgeInsets.only(right: 16),
           child : IconButton(
             onPressed: () {
-              Get.to(Menu());
+              Get.to(const Menu());
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.menu,
               color: Colors.grey,
               size: 40,

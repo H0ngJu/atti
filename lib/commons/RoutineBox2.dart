@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:io';
 import '../data/auth_controller.dart';
 import '../data/notification/notification_controller.dart';
 import '../data/routine/routine_controller.dart';
 import '../data/routine/routine_service.dart';
-import '../data/schedule/schedule_service.dart';
 import '../patient/screen/routine_schedule/CustomModal.dart';
 import 'colorPallet.dart';
 
@@ -97,7 +95,7 @@ class _RoutineBox2State extends State<RoutineBox2> {
     var width = MediaQuery.of(context).size.width;
 
     return Container(
-      padding: EdgeInsets.only(top: 0, bottom: 20, left: 20, right: 20),
+      padding: const EdgeInsets.only(top: 0, bottom: 20, left: 20, right: 20),
       width: MediaQuery.of(context).size.width * 0.9,
       color: Colors.white,
       alignment: Alignment.center,
@@ -127,12 +125,12 @@ class _RoutineBox2State extends State<RoutineBox2> {
                             }));
                   },
                   child: Container(
-                    margin: EdgeInsets.only(top: 5),
+                    margin: const EdgeInsets.only(top: 5),
                     width: 30,
                     height: 30,
                     decoration: BoxDecoration(
                         color: colorPallet.orange, shape: BoxShape.circle),
-                    child: Center(
+                    child: const Center(
                       child: Icon(Icons.close, color: Colors.white, size: 18),
                     ),
                   ),
@@ -200,7 +198,7 @@ class _RoutineBox2State extends State<RoutineBox2> {
                   children: [
                     // 일과 시간
                     Container(
-                      padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+                      padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
                       decoration: BoxDecoration(
                         color: widget.isEditMode
                             ? colorPallet.lightGrey
@@ -214,7 +212,7 @@ class _RoutineBox2State extends State<RoutineBox2> {
                       ),
                       child: Text(
                         formattedTime,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 24,
                           color: Colors.black,
                         ),
@@ -230,7 +228,7 @@ class _RoutineBox2State extends State<RoutineBox2> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
 
@@ -238,7 +236,7 @@ class _RoutineBox2State extends State<RoutineBox2> {
               Container(
                   width: width * 0.75,
                   padding: widget.isEditMode
-                      ? EdgeInsets.fromLTRB(10, 2, 10, 2)
+                      ? const EdgeInsets.fromLTRB(10, 2, 10, 2)
                       : EdgeInsets.zero,
                   decoration: BoxDecoration(
                     color: widget.isEditMode
@@ -248,12 +246,12 @@ class _RoutineBox2State extends State<RoutineBox2> {
                   ),
                   child: Text(
                     widget.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 28,
                       color: Colors.black,
                     ),
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
 

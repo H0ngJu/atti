@@ -19,7 +19,7 @@ class _MemoryRegister5State extends State<MemoryRegister5> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    ColorPallet _colorPallet = ColorPallet();
+    ColorPallet colorPallet = ColorPallet();
 
     return Scaffold(
         appBar: MemoryRegisterAppBar(context),
@@ -27,18 +27,18 @@ class _MemoryRegister5State extends State<MemoryRegister5> {
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.only(left: 15),
+                margin: const EdgeInsets.only(left: 15),
                 width: MediaQuery.of(context).size.width * 0.9,
                 alignment: Alignment.centerLeft,
-                child: Text('다음과 같이 등록할까요?', textAlign: TextAlign.left, style: TextStyle(
+                child: const Text('다음과 같이 등록할까요?', textAlign: TextAlign.left, style: TextStyle(
                   fontSize: 30,
                 ),),
               ),
               Container(
-                margin: EdgeInsets.only(left: 15),
+                margin: const EdgeInsets.only(left: 15),
                 width: MediaQuery.of(context).size.width * 0.9,
                 alignment: Alignment.centerLeft,
-                child: Column(
+                child: const Column(
                   children: [
                     // Text('${memoryNoteController.}', textAlign: TextAlign.left, style: TextStyle(
                     //   fontSize: 30,
@@ -58,7 +58,7 @@ class _MemoryRegister5State extends State<MemoryRegister5> {
                         File(memoryNoteController.memoryNote.value.img!),
                           fit: BoxFit.cover,
                         )
-                    : SizedBox(),
+                    : const SizedBox(),
               ),
             ],
           ),

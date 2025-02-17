@@ -1,17 +1,13 @@
 import 'package:atti/patient/screen/routine_schedule/RoutineScheduleMain.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../../../commons/ScheduleModal.dart';
 import '../../../commons/colorPallet.dart';
-import '../../../data/notification/notification_controller.dart';
 import '../../../data/schedule/schedule_model.dart';
-import 'package:atti/data/schedule/schedule_service.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import '../../../data/notification/notification.dart';
-import 'package:atti/data/notification/notification_controller.dart';
 import 'dart:math';
 
 // 이미지 파일 이름 목록
@@ -47,7 +43,7 @@ class _ScheduleNoti1State extends State<ScheduleNoti1> {
   String getFormattedTime(String mode) {
     DateTime dateTime;
     if (mode == 'future') {
-      dateTime = DateTime.now().add(Duration(hours: 1));
+      dateTime = DateTime.now().add(const Duration(hours: 1));
     } else {
       dateTime = schedule?.time?.toDate() ?? DateTime.now();
     }
@@ -68,7 +64,7 @@ class _ScheduleNoti1State extends State<ScheduleNoti1> {
     String period = now.hour >= 12 ? "오후" : "오전";
     int hour = now.hour > 12 ? now.hour - 12 : (now.hour == 0 ? 12 : now.hour);
     String minute = now.minute.toString().padLeft(2, '0');
-    return "$period ${hour.toString().padLeft(2, '0')}:${minute}";
+    return "$period ${hour.toString().padLeft(2, '0')}:$minute";
   }
 
   Future<void> _fetchData() async {
@@ -107,7 +103,7 @@ class _ScheduleNoti1State extends State<ScheduleNoti1> {
     String randomImageName = imageNames[random.nextInt(imageNames.length)];
 
     return Scaffold(
-      backgroundColor: Color(0xffFFF7E3),
+      backgroundColor: const Color(0xffFFF7E3),
       body: Stack(children: [
         Positioned.fill(
           child: Image.asset(
@@ -135,14 +131,14 @@ class _ScheduleNoti1State extends State<ScheduleNoti1> {
             // 현재 시간
             Text(
               getCurrentFormattedTime(),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 43,
                 //height: 1.0
               ),
             ),
             Text(
               DateFormat('MM월 dd일 EEEE', 'ko').format(DateTime.now()),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 height: 1.0
               ),
@@ -160,7 +156,7 @@ class _ScheduleNoti1State extends State<ScheduleNoti1> {
               child: Column(
                 children: [
                   SizedBox(height: height * 0.02,),
-                  Text(
+                  const Text(
                     '1시간 뒤',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                   ),
@@ -168,14 +164,14 @@ class _ScheduleNoti1State extends State<ScheduleNoti1> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '${getFormattedTime('future')}',
+                        getFormattedTime('future'),
                         style:
-                        TextStyle(fontSize: 24, color: Colors.black),
+                        const TextStyle(fontSize: 24, color: Colors.black),
                       ),
                       SizedBox(width: width * 0.06,),
                       Text(
                         '\'${schedule?.name}\'',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 28,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
@@ -213,7 +209,7 @@ class _ScheduleNoti1State extends State<ScheduleNoti1> {
               ),
             ),
             SizedBox(height: width * 0.05,),
-            Container(
+            SizedBox(
               width: width * 0.52,
               child: TextButton(
                 onPressed: () {
@@ -233,18 +229,18 @@ class _ScheduleNoti1State extends State<ScheduleNoti1> {
 
                   //SystemNavigator.pop();
                 },
-                child: Text(
-                  '자세히 알려줘',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                  ),
-                ),
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all(colorPallet.goldYellow),
                   minimumSize: WidgetStateProperty.all(Size(width * 0.55, 40)),
                   padding: WidgetStateProperty.all(
-                    EdgeInsets.symmetric(vertical: 10), // 위아래 패딩 추가
+                    const EdgeInsets.symmetric(vertical: 10), // 위아래 패딩 추가
+                  ),
+                ),
+                child: const Text(
+                  '자세히 알려줘',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
                   ),
                 ),
               ),
@@ -256,15 +252,11 @@ class _ScheduleNoti1State extends State<ScheduleNoti1> {
                 height: width * 0.13,
                 child: TextButton(
                     onPressed: () {
-                      Get.to(RoutineScheduleMain());
+                      Get.to(const RoutineScheduleMain());
                     },
-                    child: Icon(
-                      Icons.close,
-                      color: Colors.black
-                    ),
                   style: ButtonStyle(
                     shape: WidgetStateProperty.all(
-                      CircleBorder(
+                      const CircleBorder(
                         side: BorderSide(
                           color: Colors.black,
                           width: 1
@@ -275,6 +267,10 @@ class _ScheduleNoti1State extends State<ScheduleNoti1> {
                       Colors.white.withOpacity(0.5),
                     )
                   ),
+                    child: const Icon(
+                      Icons.close,
+                      color: Colors.black
+                    ),
                 ),
               ),
             )
